@@ -1,0 +1,16 @@
+name: FTSEngine
+author: halberfan aka. DoubleTropple
+main: de.ftscraft.personalausweis.main.Engine
+version: 0.3
+
+commands:
+    ausweis:
+    würfel:
+    countdown:
+    roleplay:
+    reiten:
+    taube:
+    schlagen:
+    removearmorstand:
+        premission: ftsengine.armorstand
+    pferd:
