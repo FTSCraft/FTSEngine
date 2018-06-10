@@ -1,4 +1,4 @@
-package de.ftscraft.personalausweis.commands;
+package de.ftscraft.personalausweis.listener;
 
 import de.ftscraft.personalausweis.main.Engine;
 import org.bukkit.Material;

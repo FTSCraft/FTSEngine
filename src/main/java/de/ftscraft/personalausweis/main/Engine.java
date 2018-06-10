@@ -1,6 +1,6 @@
 package de.ftscraft.personalausweis.main;
 
-import com.google.common.collect.ImmutableList;
+import de.ftscraft.personalausweis.backpacks.BackpackType;
 import de.ftscraft.personalausweis.chat.ChatChannels;
 import de.ftscraft.personalausweis.commands.*;
 import de.ftscraft.personalausweis.listener.*;
@@ -31,8 +31,6 @@ import org.bukkit.scoreboard.Team;
 import java.util.*;
 import java.util.List;
 import java.util.logging.Logger;
-
-import static com.google.common.collect.ImmutableList.*;
 
 public class Engine extends JavaPlugin implements Listener
 {
@@ -322,7 +320,7 @@ public class Engine extends JavaPlugin implements Listener
         LeatherArmorMeta bptlm = (LeatherArmorMeta) bptli.getItemMeta();
         bptlm.setColor(Color.GREEN);
         bptlm.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
-        bptlm.setDisplayName("§2Kleiner Rucksack");
+        bptlm.setDisplayName(BackpackType.TINY.getName());
         bptlm.setLore(Arrays.asList("§7Dieser nützliche Rucksack hat Platz für viele Sachen", "ID: -1"));
         bptli.setItemMeta(bptlm);
 
@@ -339,7 +337,7 @@ public class Engine extends JavaPlugin implements Listener
         LeatherArmorMeta bpllm = (LeatherArmorMeta) bplli.getItemMeta();
         bpllm.setColor(Color.RED);
         bpllm.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
-        bpllm.setDisplayName("§4Großer Rucksack");
+        bpllm.setDisplayName(BackpackType.LARGE.getName());
         bpllm.setLore(Arrays.asList("§7In diesen Rucksack passen viele, weitere Dinge rein", "ID: -1"));
         bplli.setItemMeta(bpllm);
 
