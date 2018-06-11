@@ -1,17 +1,19 @@
 package de.ftscraft.ftsengine.utils;
 
+import de.ftscraft.ftsengine.backpacks.Backpack;
+import de.ftscraft.ftsengine.backpacks.BackpackType;
 import de.ftscraft.ftsengine.main.Engine;
 import de.ftscraft.ftsengine.pferd.Pferd;
 import org.bukkit.Bukkit;
 import org.bukkit.World;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.inventory.Inventory;
+import org.bukkit.inventory.ItemStack;
+import org.yaml.snakeyaml.Yaml;
 
 import java.io.File;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.Objects;
-import java.util.UUID;
+import java.util.*;
 
 public class UserIO
 {
@@ -25,6 +27,7 @@ public class UserIO
         this.plugin = plugin;
         folder = plugin.getDataFolder();
         getAusweise();
+        getBackpacks();
         getPferde();
     }
 
@@ -77,6 +80,11 @@ public class UserIO
     {
         File aFolder = new File(folder + "//pferde//");
 
+        if (!aFolder.exists())
+        {
+            aFolder.mkdirs();
+        }
+
         try
         {
 
@@ -109,6 +117,37 @@ public class UserIO
 
         }
 
+    }
+
+    public void getBackpacks()
+    {
+        File aFolder = new File(folder + "//backpacks//");
+
+        try
+        {
+            for (File aFile : Objects.requireNonNull(aFolder.listFiles()))
+            {
+                FileConfiguration c = YamlConfiguration.loadConfiguration(aFile);
+                int id;
+                Inventory inv;
+                BackpackType type;
+
+                type = BackpackType.valueOf(c.getString("type"));
+
+                List itemsList = c.getList("inventory");
+                ItemStack[] items = (ItemStack[])itemsList.toArray(new ItemStack[itemsList.size()]);
+                inv = Bukkit.createInventory(null, type.getSize(), type.getName());
+                inv.setContents(items);
+
+                id = c.getInt("id");
+
+                new Backpack(plugin, type, id, inv);
+
+            }
+        } catch (NullPointerException e)
+        {
+            e.printStackTrace();
+        }
     }
 
 

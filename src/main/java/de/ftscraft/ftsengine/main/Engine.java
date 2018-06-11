@@ -187,6 +187,10 @@ public class Engine extends JavaPlugin implements Listener
             a.safe();
         }
 
+        for(Backpack a : backpacks.values()) {
+            a.safe();
+        }
+
     }
 
     private void init()

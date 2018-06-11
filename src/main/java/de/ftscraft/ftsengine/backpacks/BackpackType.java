@@ -3,17 +3,19 @@ package de.ftscraft.ftsengine.backpacks;
 public enum BackpackType
 {
 
-    TINY("§2Kleiner Rucksack", 3 * 9),
-    LARGE("§4Großer Rucksack", 6 * 9),
-    ENDER("", 0);
+    TINY("§2Kleiner Rucksack", 3 * 9, "§7In diesen Rucksack passen viele, weitere Dinge rein"),
+    LARGE("§4Großer Rucksack", 6 * 9, "§7Dieser nützliche Rucksack hat Platz für viele Sachen"),
+    ENDER("", 0, "");
 
     private String name;
     private int size;
+    private String lore;
 
-    BackpackType(String name, int size)
+    BackpackType(String name, int size, String lore)
     {
         this.name = name;
         this.size = size;
+        this.lore = lore;
     }
 
     public String getName()
@@ -33,5 +35,10 @@ public enum BackpackType
         return null;
     }
 
+
+    public String getLore()
+    {
+        return lore;
+    }
 
 }

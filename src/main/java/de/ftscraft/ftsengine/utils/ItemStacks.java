@@ -9,6 +9,7 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.LeatherArmorMeta;
 
 import java.util.Arrays;
+import java.util.List;
 
 public class ItemStacks
 {
@@ -43,7 +44,7 @@ public class ItemStacks
         bp_key = new ItemStack(Material.FEATHER, 1);
         ItemMeta bp_keyM = bp_key.getItemMeta();
         bp_keyM.setDisplayName("§5Rucksack Schlüssel");
-        bp_key.setItemMeta(big_bpM);
+        bp_key.setItemMeta(bp_keyM);
 
     }
 
@@ -61,4 +62,5 @@ public class ItemStacks
     {
         return bp_key;
     }
+
 }
