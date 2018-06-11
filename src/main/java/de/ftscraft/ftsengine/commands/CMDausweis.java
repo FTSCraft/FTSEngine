@@ -4,6 +4,8 @@ import de.ftscraft.ftsengine.main.Engine;
 import de.ftscraft.ftsengine.utils.Ausweis;
 import de.ftscraft.ftsengine.utils.Gender;
 import de.ftscraft.ftsengine.utils.Messages;
+import org.bukkit.Bukkit;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -13,6 +15,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.UUID;
 
 public class CMDausweis implements CommandExecutor
 {
@@ -177,16 +180,19 @@ public class CMDausweis implements CommandExecutor
                         String name = args[1];
                         if(plugin.getEcon().has(p, 5))
                         {
-                            plugin.getEcon().withdrawPlayer(p, 5);
-
                             if (plugin.hasAusweis(name))
                             {
                                 p.getInventory().addItem(plugin.getAusweis(name).getAsItem());
                                 p.sendMessage(msgs.SUCC_COPY_AUSWEIS.replace("%s", name));
+                                plugin.getEcon().withdrawPlayer(p, 5);
                             } else p.sendMessage(plugin.msgs.PREFIX+"Dieser Spieler hat kein Ausweis");
                         } else p.sendMessage(plugin.msgs.PREFIX + "Du hast nicht genug Geld!");
                     }
                     break;
+                case "list":
+                    for(Ausweis a : plugin.ausweis.values()) {
+                        p.sendMessage("§e"+ Bukkit.getOfflinePlayer(UUID.fromString(a.getUUID())).getName());
+                    }
                 default:
                     plugin.getVar().sendHelpMsg(p);
                     break;

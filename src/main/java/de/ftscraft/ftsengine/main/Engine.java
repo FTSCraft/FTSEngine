@@ -36,7 +36,7 @@ import java.util.logging.Logger;
 public class Engine extends JavaPlugin implements Listener
 {
 
-    private HashMap<String, Ausweis> ausweis;
+    public HashMap<String, Ausweis> ausweis;
     private HashMap<Player, FTSUser> player;
     private Team team;
     private UUIDFetcher uF;
