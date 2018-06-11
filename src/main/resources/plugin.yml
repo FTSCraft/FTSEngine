@@ -1,6 +1,6 @@
 name: FTSEngine
 author: halberfan aka. DoubleTropple
-main: de.ftscraft.personalausweis.main.Engine
+main: de.ftscraft.ftsengine.main.Engine
 version: 0.3
 
 commands:

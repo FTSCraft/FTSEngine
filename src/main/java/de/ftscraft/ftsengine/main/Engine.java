@@ -1,5 +1,6 @@
 package de.ftscraft.ftsengine.main;
 
+import de.ftscraft.ftsengine.backpacks.Backpack;
 import de.ftscraft.ftsengine.backpacks.BackpackType;
 import de.ftscraft.ftsengine.chat.ChatChannels;
 import de.ftscraft.ftsengine.commands.*;
@@ -41,10 +42,12 @@ public class Engine extends JavaPlugin implements Listener
     private UUIDFetcher uF;
     private Var var;
     public int highestId;
+    private int biggestBpId;
     private HashMap<Player, ChatChannels> chats;
     private ArrayList<Player> reiter;
     public HashMap<FTSUser, ArmorStand> sitting;
     public HashMap<UUID, Pferd> pferde;
+    public HashMap<Integer, Backpack> backpacks;
 
     private static Economy econ = null;
     private static final Logger log = Logger.getLogger("Minecraft");
@@ -194,8 +197,10 @@ public class Engine extends JavaPlugin implements Listener
         team.setOption(Team.Option.NAME_TAG_VISIBILITY, Team.OptionStatus.NEVER);
         chats = new HashMap<>();
         highestId = 0;
+        biggestBpId = 0;
         sitting = new HashMap<>();
         msgs = new Messages();
+        backpacks = new HashMap<>();
         ausweis = new HashMap<>();
         uF = new UUIDFetcher();
         reiter = new ArrayList<>();
@@ -367,6 +372,11 @@ public class Engine extends JavaPlugin implements Listener
     public HashMap<Player, FTSUser> getPlayer()
     {
         return player;
+    }
+
+    public HashMap<Integer, Backpack> getBackpacks()
+    {
+        return backpacks;
     }
 
     public boolean horseIsDa(UUID horse)
