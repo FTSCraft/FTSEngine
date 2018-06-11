@@ -91,6 +91,7 @@ public class CMDpferd implements CommandExecutor
                         }
                         if(!pferd.getOwner().toString().equalsIgnoreCase(p.getUniqueId().toString())) {
                             p.sendMessage("§eDir muss das Pferd gehören!");
+                            return true;
                         }
 
                         pferd.setPrice(price);

@@ -25,5 +25,13 @@ public enum BackpackType
         return size;
     }
 
+    public static BackpackType getBackpackByName(String name) {
+        for(BackpackType bt : BackpackType.values()) {
+            if(bt.getName().equalsIgnoreCase(name))
+                return bt;
+        }
+        return null;
+    }
+
 
 }

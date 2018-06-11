@@ -3,6 +3,8 @@ package de.ftscraft.ftsengine.utils;
 import de.ftscraft.ftsengine.main.Engine;
 import org.bukkit.block.BlockFace;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 
 import java.util.UUID;
 
@@ -87,6 +89,22 @@ public class Var
         }
 
         return yaw;
+    }
+
+    public int getBackpackID(ItemStack backpack) {
+
+        String lore = backpack.getItemMeta().getLore().get(1);
+        String idS = lore.replaceAll(".*#", "");
+
+        Integer id = -1;
+
+        try {
+            id = Integer.valueOf(idS);
+        } catch (NumberFormatException e) {
+            return -1;
+        }
+
+        return id;
     }
 
 }

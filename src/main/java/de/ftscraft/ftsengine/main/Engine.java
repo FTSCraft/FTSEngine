@@ -41,8 +41,9 @@ public class Engine extends JavaPlugin implements Listener
     private Team team;
     private UUIDFetcher uF;
     private Var var;
+    public ItemStacks itemStacks;
     public int highestId;
-    private int biggestBpId;
+    public int biggestBpId;
     private HashMap<Player, ChatChannels> chats;
     private ArrayList<Player> reiter;
     public HashMap<FTSUser, ArmorStand> sitting;
@@ -203,6 +204,7 @@ public class Engine extends JavaPlugin implements Listener
         backpacks = new HashMap<>();
         ausweis = new HashMap<>();
         uF = new UUIDFetcher();
+        itemStacks = new ItemStacks();
         reiter = new ArrayList<>();
         player = new HashMap<>();
         pferde = new HashMap<>();
@@ -321,15 +323,8 @@ public class Engine extends JavaPlugin implements Listener
         //TINY BACKPACK
 
         NamespacedKey tbpkey = new NamespacedKey(this, "FTStinybackpack");
-        ItemStack bptli = new ItemStack(Material.LEATHER_CHESTPLATE, 1);
-        LeatherArmorMeta bptlm = (LeatherArmorMeta) bptli.getItemMeta();
-        bptlm.setColor(Color.GREEN);
-        bptlm.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
-        bptlm.setDisplayName(BackpackType.TINY.getName());
-        bptlm.setLore(Arrays.asList("§7Dieser nützliche Rucksack hat Platz für viele Sachen", "ID: -1"));
-        bptli.setItemMeta(bptlm);
 
-        ShapedRecipe tiny_backpack = new ShapedRecipe(tbpkey, bptli);
+        ShapedRecipe tiny_backpack = new ShapedRecipe(tbpkey, itemStacks.getTiny_bp());
         tiny_backpack.shape("LLL","L*L","LLL");
         tiny_backpack.setIngredient('L', Material.LEATHER);
         tiny_backpack.setIngredient('*', Material.AIR);
@@ -338,15 +333,7 @@ public class Engine extends JavaPlugin implements Listener
         //LARGE BACKPACK
 
         NamespacedKey lbpkey = new NamespacedKey(this, "FTSlargebackpack");
-        ItemStack bplli = new ItemStack(Material.LEATHER_CHESTPLATE, 1);
-        LeatherArmorMeta bpllm = (LeatherArmorMeta) bplli.getItemMeta();
-        bpllm.setColor(Color.RED);
-        bpllm.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
-        bpllm.setDisplayName(BackpackType.LARGE.getName());
-        bpllm.setLore(Arrays.asList("§7In diesen Rucksack passen viele, weitere Dinge rein", "ID: -1"));
-        bplli.setItemMeta(bpllm);
-
-        ShapedRecipe large_backpack = new ShapedRecipe(lbpkey, bplli);
+        ShapedRecipe large_backpack = new ShapedRecipe(lbpkey, itemStacks.getBig_bp());
         large_backpack.shape("LLL", "LCL", "LLL");
         large_backpack.setIngredient('L', Material.LEATHER);
         large_backpack.setIngredient('C', Material.CHEST);
@@ -355,12 +342,8 @@ public class Engine extends JavaPlugin implements Listener
         //BACKPACK KEY
 
         NamespacedKey bpkkey = new NamespacedKey(this, "FTSbackpackkey");
-        ItemStack bpkey = new ItemStack(Material.FEATHER, 1);
-        ItemMeta bpkeym = bpkey.getItemMeta();
-        bpkeym.setDisplayName("§5Rucksack Schlüssel");
-        bpkey.setItemMeta(bpkeym);
 
-        ShapedRecipe backpack_key = new ShapedRecipe(bpkkey, bpkey);
+        ShapedRecipe backpack_key = new ShapedRecipe(bpkkey, itemStacks.getBp_key());
         backpack_key.shape("I*I", "*F*", "I*I");
         backpack_key.setIngredient('I', Material.IRON_INGOT);
         backpack_key.setIngredient('*', Material.AIR);
