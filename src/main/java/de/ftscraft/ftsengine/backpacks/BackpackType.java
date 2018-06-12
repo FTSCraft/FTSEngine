@@ -5,7 +5,7 @@ public enum BackpackType
 
     TINY("§2Kleiner Rucksack", 3 * 9, "§7In diesen Rucksack passen viele, weitere Dinge rein"),
     LARGE("§4Großer Rucksack", 6 * 9, "§7Dieser nützliche Rucksack hat Platz für viele Sachen"),
-    ENDER("", 0, "");
+    ENDER("§6Ender Rucksack", -1, "§7Öffne mit diesem Rucksack deine Ender-Kiste");
 
     private String name;
     private int size;

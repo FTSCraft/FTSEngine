@@ -175,7 +175,7 @@ public class Engine extends JavaPlugin implements Listener
     }
 
 
-    private void safeAll()
+    public void safeAll()
     {
         for (Ausweis a : ausweis.values())
         {
@@ -342,6 +342,15 @@ public class Engine extends JavaPlugin implements Listener
         large_backpack.setIngredient('L', Material.LEATHER);
         large_backpack.setIngredient('C', Material.CHEST);
         getServer().addRecipe(large_backpack);
+
+        //ENDER BACKPACK
+
+        NamespacedKey ebpkey = new NamespacedKey(this, "FTSenderbackpack");
+        ShapedRecipe ender_backpack = new ShapedRecipe(ebpkey, itemStacks.getEnder_bp());
+        ender_backpack.shape("LLL","LEL","LLL");
+        ender_backpack.setIngredient('L', Material.LEATHER);
+        ender_backpack.setIngredient('E', Material.ENDER_CHEST);
+        getServer().addRecipe(ender_backpack);
 
         //BACKPACK KEY
 

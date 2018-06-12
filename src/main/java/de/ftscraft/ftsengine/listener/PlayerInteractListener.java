@@ -26,33 +26,39 @@ public class PlayerInteractListener implements Listener
     {
         if (e.getPlayer().getInventory().getChestplate() != null && e.getPlayer().getInventory().getChestplate().getType() == Material.LEATHER_CHESTPLATE)
         {
-            if (e.getPlayer().getInventory().getItemInMainHand().getItemMeta().getDisplayName() != null && e.getPlayer().getInventory().getItemInMainHand().getType() != Material.AIR)
-            {
-                if (e.getPlayer().getInventory().getItemInMainHand().getItemMeta().getDisplayName().equalsIgnoreCase("§5Rucksack Schlüssel"))
+            if (e.getPlayer().getInventory().getItemInMainHand() != null)
+                if (e.getPlayer().getInventory().getItemInMainHand().getType() != Material.AIR && e.getPlayer().getInventory().getItemInMainHand().getItemMeta().getDisplayName() != null)
                 {
-                    Player p = e.getPlayer();
-                    ItemStack chest = e.getPlayer().getInventory().getChestplate();
-                    if(BackpackType.getBackpackByName(chest.getItemMeta().getDisplayName()) != null)
+                    if (e.getPlayer().getInventory().getItemInMainHand().getItemMeta().getDisplayName().equalsIgnoreCase("§5Rucksack Schlüssel"))
                     {
-                        int id = plugin.getVar().getBackpackID(chest);
-
-                        if (id == -1)
+                        Player p = e.getPlayer();
+                        ItemStack chest = e.getPlayer().getInventory().getChestplate();
+                        if (BackpackType.getBackpackByName(chest.getItemMeta().getDisplayName()) != null && BackpackType.getBackpackByName(chest.getItemMeta().getDisplayName()) != BackpackType.ENDER)
                         {
-                            new Backpack(plugin, BackpackType.getBackpackByName(chest.getItemMeta().getDisplayName()), p);
-                        } else {
-                            Backpack bp = plugin.backpacks.get(id);
+                            int id = plugin.getVar().getBackpackID(chest);
 
-                            if(bp == null) {
-                                p.sendMessage("§eDieser Rucksack ist (warum auch immer) nicht regestriert?");
-                                return;
+                            if (id == -1)
+                            {
+                                new Backpack(plugin, BackpackType.getBackpackByName(chest.getItemMeta().getDisplayName()), p);
+                            } else
+                            {
+                                Backpack bp = plugin.backpacks.get(id);
+
+                                if (bp == null)
+                                {
+                                    p.sendMessage("§eDieser Rucksack ist (warum auch immer) nicht regestriert?");
+                                    return;
+                                }
+
+                                bp.open(p);
+
                             }
-
-                            bp.open(p);
-
+                        } else if (BackpackType.getBackpackByName(chest.getItemMeta().getDisplayName()) == BackpackType.ENDER)
+                        {
+                            p.openInventory(p.getEnderChest());
                         }
                     }
                 }
-            }
         }
     }
 

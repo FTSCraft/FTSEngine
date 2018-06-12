@@ -14,7 +14,7 @@ import java.util.List;
 public class ItemStacks
 {
 
-    private ItemStack big_bp, tiny_bp, bp_key;
+    private ItemStack big_bp, tiny_bp, bp_key, ender_bp;
 
     public ItemStacks() {
         init();
@@ -40,6 +40,15 @@ public class ItemStacks
         tiny_bpM.setLore(Arrays.asList("§7Dieser nützliche Rucksack hat Platz für viele Sachen", "ID: #-1"));
         tiny_bp.setItemMeta(tiny_bpM);
 
+        //ENDER BP
+        ender_bp = new ItemStack(Material.LEATHER_CHESTPLATE, 1);
+        LeatherArmorMeta ender_bpM = (LeatherArmorMeta) ender_bp.getItemMeta();
+        ender_bpM.setColor(Color.PURPLE);
+        ender_bpM.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
+        ender_bpM.setDisplayName(BackpackType.ENDER.getName());
+        tiny_bpM.setLore(Arrays.asList(BackpackType.ENDER.getLore()));
+        ender_bp.setItemMeta(ender_bpM);
+
         //BP KEY
         bp_key = new ItemStack(Material.FEATHER, 1);
         ItemMeta bp_keyM = bp_key.getItemMeta();
@@ -63,4 +72,8 @@ public class ItemStacks
         return bp_key;
     }
 
+    public ItemStack getEnder_bp()
+    {
+        return ender_bp;
+    }
 }

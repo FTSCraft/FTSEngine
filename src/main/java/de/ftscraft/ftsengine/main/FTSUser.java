@@ -45,6 +45,12 @@ public class FTSUser
     private int lanzenschlaege;
 
     public void setSitting(Block block) {
+
+        Location loc = block.getLocation();
+        if(player.getLocation().distance(loc) > 1) {
+            return;
+        }
+
         ArmorStand seat;
         if(block.getType() != Material.GRASS_PATH)
         {

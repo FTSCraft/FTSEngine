@@ -5,12 +5,14 @@ import org.bukkit.World;
 import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.Entity;
 
+import java.util.logging.Level;
+
 public class Runner implements Runnable
 {
 
     private Engine plugin;
 
-    private int seconds_armorstand = 0;
+    private int seconds = 1600;
 
     public Runner(Engine plugin)
     {
@@ -22,9 +24,9 @@ public class Runner implements Runnable
     public void run()
     {
 
-        seconds_armorstand++;
+        seconds++;
 
-        if(seconds_armorstand == 180) {
+        if(seconds == 1800) {
 
             for(World w : plugin.getServer().getWorlds()) {
                 for(Entity e : w.getEntitiesByClass(ArmorStand.class)) {
@@ -34,9 +36,13 @@ public class Runner implements Runnable
                         }
                     }
                 }
+
             }
 
-            System.out.println("[FTSEngine INFO] Removed Armorstands");
+            plugin.safeAll();
+
+            seconds = 0;
+            plugin.getLogger().log(Level.INFO, "Speierete Pferde, Rucksäcke und Ausweise");
 
         }
 
