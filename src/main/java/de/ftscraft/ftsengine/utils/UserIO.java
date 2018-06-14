@@ -2,10 +2,14 @@ package de.ftscraft.ftsengine.utils;
 
 import de.ftscraft.ftsengine.backpacks.Backpack;
 import de.ftscraft.ftsengine.backpacks.BackpackType;
+import de.ftscraft.ftsengine.brett.Brett;
 import de.ftscraft.ftsengine.main.Engine;
 import de.ftscraft.ftsengine.pferd.Pferd;
 import org.bukkit.Bukkit;
+import org.bukkit.Location;
 import org.bukkit.World;
+import org.bukkit.block.BlockState;
+import org.bukkit.block.Sign;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.inventory.Inventory;
@@ -28,6 +32,7 @@ public class UserIO
         folder = plugin.getDataFolder();
         getAusweise();
         getBackpacks();
+        getBretter();
         getPferde();
     }
 
@@ -147,6 +152,48 @@ public class UserIO
         } catch (NullPointerException e)
         {
             e.printStackTrace();
+        }
+    }
+
+    public void getBretter() {
+        File aFolder = new File(folder + "//bretter");
+
+        if(!aFolder.exists())
+            aFolder.mkdirs();
+
+        try
+        {
+
+            for (File files : aFolder.listFiles())
+            {
+                YamlConfiguration cfg = YamlConfiguration.loadConfiguration(files);
+
+                String creator = cfg.getString("brett.creator");
+                String name = files.getName().replace(".yml", "");
+                int loc_X = cfg.getInt("brett.location.X");
+                int loc_Y = cfg.getInt("brett.location.Y");
+                int loc_Z = cfg.getInt("brett.location.Z");
+                String world = cfg.getString("brett.location.world");
+                Location locaton = new Location(Bukkit.getWorld(world), loc_X, loc_Y, loc_Z);
+
+                BlockState bs = Bukkit.getWorld(world).getBlockAt(locaton).getState();
+                Sign sign = (Sign) bs;
+
+                Brett brett = new Brett(sign, locaton, creator, name, plugin, true);
+
+                for (String keys : cfg.getConfigurationSection("brett.note").getKeys(false))
+                {
+                    String title = cfg.getString("brett.note." + keys + ".title");
+                    String content = cfg.getString("brett.note." + keys + ".content");
+                    String note_creator = cfg.getString("brett.note." + keys + ".creator");
+                    long time = cfg.getLong("brett.note." + keys + ".creation");
+                    if (!title.equalsIgnoreCase("null"))
+                        brett.addNote(title, content, note_creator, time, Integer.valueOf(keys));
+                }
+
+            }
+        } catch (Exception ignored) {
+
         }
     }
 

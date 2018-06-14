@@ -14,3 +14,4 @@ commands:
     removearmorstand:
         premission: ftsengine.armorstand
     pferd:
+    brief:

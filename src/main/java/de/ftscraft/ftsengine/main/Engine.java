@@ -1,7 +1,8 @@
 package de.ftscraft.ftsengine.main;
 
 import de.ftscraft.ftsengine.backpacks.Backpack;
-import de.ftscraft.ftsengine.backpacks.BackpackType;
+import de.ftscraft.ftsengine.brett.Brett;
+import de.ftscraft.ftsengine.brett.BrettNote;
 import de.ftscraft.ftsengine.chat.ChatChannels;
 import de.ftscraft.ftsengine.commands.*;
 import de.ftscraft.ftsengine.listener.*;
@@ -9,7 +10,7 @@ import de.ftscraft.ftsengine.pferd.Pferd;
 import de.ftscraft.ftsengine.utils.*;
 import net.milkbowl.vault.economy.Economy;
 import org.bukkit.Bukkit;
-import org.bukkit.Color;
+import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.entity.ArmorStand;
@@ -19,11 +20,10 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
-import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.ShapedRecipe;
 import org.bukkit.inventory.meta.ItemMeta;
-import org.bukkit.inventory.meta.LeatherArmorMeta;
+import org.bukkit.inventory.meta.MapMeta;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scoreboard.Scoreboard;
@@ -49,6 +49,9 @@ public class Engine extends JavaPlugin implements Listener
     public HashMap<FTSUser, ArmorStand> sitting;
     public HashMap<UUID, Pferd> pferde;
     public HashMap<Integer, Backpack> backpacks;
+    public ArrayList<String> briefMsg;
+    public HashMap<Location, Brett> bretter;
+    public HashMap<Player, BrettNote> playerBrettNote;
 
     private static Economy econ = null;
     private static final Logger log = Logger.getLogger("Minecraft");
@@ -203,11 +206,14 @@ public class Engine extends JavaPlugin implements Listener
         chats = new HashMap<>();
         highestId = 0;
         biggestBpId = 0;
+        playerBrettNote = new HashMap<>();
+        bretter = new HashMap<>();
         sitting = new HashMap<>();
         msgs = new Messages();
         backpacks = new HashMap<>();
         ausweis = new HashMap<>();
         uF = new UUIDFetcher();
+        briefMsg = new ArrayList<>();
         itemStacks = new ItemStacks();
         reiter = new ArrayList<>();
         player = new HashMap<>();
@@ -221,8 +227,10 @@ public class Engine extends JavaPlugin implements Listener
         //new CMDchannel(this);
         new CMDtaube(this);
         new CMDschlagen(this);
+        new MapLoadListener(this);
         new CMDremovearmorstand(this);
         new CMDpferd(this);
+        new CMDbrief(this);
         new CMDcountdown(this);
         new CMDroleplay(this);
         new UserIO(this);
@@ -232,7 +240,10 @@ public class Engine extends JavaPlugin implements Listener
         new SneakListener(this);
         new HorseListener(this);
         new PlayerJoinListener(this);
+        new SignWriteListener(this);
+        new BlockBreakListener(this);
         new PlayerInteractListener(this);
+        new InventoryClickListener(this);
         new PlayerQuitListener(this);
         new PlayerChatListener(this);
 

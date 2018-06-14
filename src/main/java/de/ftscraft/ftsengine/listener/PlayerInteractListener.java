@@ -2,11 +2,13 @@ package de.ftscraft.ftsengine.listener;
 
 import de.ftscraft.ftsengine.backpacks.Backpack;
 import de.ftscraft.ftsengine.backpacks.BackpackType;
+import de.ftscraft.ftsengine.brett.Brett;
 import de.ftscraft.ftsengine.main.Engine;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 
@@ -24,6 +26,20 @@ public class PlayerInteractListener implements Listener
     @EventHandler
     public void onClick(PlayerInteractEvent e)
     {
+
+        if(e.getAction().equals(Action.RIGHT_CLICK_BLOCK))
+        {
+            if (e.getClickedBlock().getType().equals(Material.SIGN) || e.getClickedBlock().getType().equals(Material.SIGN_POST) || e.getClickedBlock().getType().equals(Material.WALL_SIGN) )
+            {
+                if(plugin.bretter.containsKey(e.getClickedBlock().getLocation()))
+                {
+                    plugin.bretter.get(e.getClickedBlock().getLocation()).getGui().open(e.getPlayer());
+                    Brett brett = plugin.bretter.get(e.getClickedBlock().getLocation());
+                    brett.checkForRunOut();
+                }
+            }
+        }
+
         if (e.getPlayer().getInventory().getChestplate() != null && e.getPlayer().getInventory().getChestplate().getType() == Material.LEATHER_CHESTPLATE)
         {
             if (e.getPlayer().getInventory().getItemInMainHand() != null)

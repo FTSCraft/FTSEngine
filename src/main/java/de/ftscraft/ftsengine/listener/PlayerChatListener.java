@@ -1,9 +1,11 @@
 package de.ftscraft.ftsengine.listener;
 
+import de.ftscraft.ftsengine.brett.BrettNote;
 import de.ftscraft.ftsengine.chat.ChatChannels;
 import de.ftscraft.ftsengine.main.Engine;
 import de.ftscraft.ftsengine.utils.Ausweis;
 import org.bukkit.Bukkit;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -24,6 +26,43 @@ public class PlayerChatListener implements Listener
     @EventHandler
     public void onChat(AsyncPlayerChatEvent e) {
 
+
+        if (plugin.playerBrettNote.containsKey(e.getPlayer()))
+        {
+            Player p = e.getPlayer();
+
+            if (plugin.playerBrettNote.get(p) != null)
+            {
+                if (!(plugin.playerBrettNote.get(p).isTitle()))
+                {
+                    e.setCancelled(true);
+                    if (e.getMessage().length() < 51 && e.getMessage().length() > 4)
+                    {
+                        BrettNote bn = plugin.playerBrettNote.get(p);
+                        bn.setTitle(e.getMessage());
+                        p.sendMessage("§7[§bSchwarzes Brett§7] Perfekt! Jetzt bitte die Beschreibung (max. 150, mind. 10 Zeichen)");
+                    } else
+                        p.sendMessage("§7[§bSchwarzes Brett§7] Der Titel muss mind. 5 Zeichen haben und darf max. 50 Zeichen haben");
+                } else if (!(plugin.playerBrettNote.get(p).isContent()))
+                {
+                    e.setCancelled(true);
+                    if (e.getMessage().length() < 151 && e.getMessage().length() > 9)
+                    {
+                        BrettNote bn = plugin.playerBrettNote.get(p);
+                        bn.setContent(e.getMessage());
+                        p.sendMessage("§7[§bSchwarzes Brett§7] Ok! Die Notitz wurde erstellt");
+                        bn.addToBrett();
+                        //Geld
+                        OfflinePlayer op = Bukkit.getOfflinePlayer(p.getUniqueId());
+                        if(plugin.getEcon().has(op, 5))
+                        {
+                            plugin.getEcon().withdrawPlayer(op, 5);
+                            p.sendMessage("§eDu hast die Notitz erfolgreich erstellt!");
+                        } else p.sendMessage("§7Du hast nicht genug Geld!");
+                    }
+                }
+            }
+        }
 
         if(e.getMessage().startsWith(String.valueOf('*'))) {
 

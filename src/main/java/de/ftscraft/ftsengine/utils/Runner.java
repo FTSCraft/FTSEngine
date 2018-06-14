@@ -26,7 +26,7 @@ public class Runner implements Runnable
 
         seconds++;
 
-        if(seconds == 1800) {
+        if(seconds == 60 * 15) {
 
             for(World w : plugin.getServer().getWorlds()) {
                 for(Entity e : w.getEntitiesByClass(ArmorStand.class)) {
