@@ -1,5 +1,6 @@
 package de.ftscraft.ftsengine.main;
 
+import de.ftscraft.ftsengine.courier.Briefkasten;
 import de.ftscraft.ftsengine.pferd.Pferd;
 import de.ftscraft.ftsengine.utils.Ausweis;
 import org.bukkit.Location;
@@ -38,11 +39,15 @@ public class FTSUser
             }
         }
 
+        if(plugin.briefkasten.containsKey(player.getUniqueId()))
+            this.briefkasten = plugin.briefkasten.get(player.getUniqueId());
+
     }
 
     private Ausweis ausweis;
+    private Briefkasten briefkasten;
     private boolean sits;
-    private ArmorStand sit_stand;
+    ArmorStand sit_stand;
     private int lanzenschlaege;
 
     public void setSitting(Block block) {
@@ -52,7 +57,14 @@ public class FTSUser
             return;
         }
 
-        ArmorStand seat;
+        if(sits)
+            return;
+
+        if(sit_stand != null) {
+            sit_stand.remove();
+            sit_stand = null;
+        }
+
         if(block.getType() != Material.GRASS_PATH)
         {
             BlockState state = block.getState();
@@ -65,16 +77,16 @@ public class FTSUser
                 return;
             Location loc2 = block.getLocation().clone().subtract(-0.5D, 1.2D, -0.4D);
             loc2.setYaw(plugin.getVar().getYawByBlockFace(face));
-            seat = block.getLocation().getWorld().spawn(loc2, ArmorStand.class);
-            player.teleport(seat);
+            sit_stand = block.getLocation().getWorld().spawn(loc2, ArmorStand.class);
+            player.teleport(sit_stand);
         }
         else {
-            seat = block.getLocation().getWorld().spawn(block.getLocation().clone().add(0.25D, 0.0D, 0.5D).subtract(0,0.75D,0), ArmorStand.class);
+            sit_stand = block.getLocation().getWorld().spawn(block.getLocation().clone().add(0.25D, 0.0D, 0.5D).subtract(0,0.75D,0), ArmorStand.class);
         }
-        seat.setGravity(false);
-        seat.setVisible(false);
-        seat.addPassenger(player);
-        this.sit_stand = seat;
+        sit_stand.setGravity(false);
+        sit_stand.setVisible(false);
+        sit_stand.addPassenger(player);
+
         this.sits = true;
     }
 
@@ -84,7 +96,6 @@ public class FTSUser
 
     public void abortSitting() {
         sit_stand.remove();
-        sit_stand = null;
         sits = false;
     }
 

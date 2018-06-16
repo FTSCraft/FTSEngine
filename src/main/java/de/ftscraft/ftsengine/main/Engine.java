@@ -6,6 +6,8 @@ import de.ftscraft.ftsengine.brett.BrettNote;
 import de.ftscraft.ftsengine.chat.ChatChannels;
 import de.ftscraft.ftsengine.commands.*;
 import de.ftscraft.ftsengine.courier.Brief;
+import de.ftscraft.ftsengine.courier.BriefLieferung;
+import de.ftscraft.ftsengine.courier.Briefkasten;
 import de.ftscraft.ftsengine.listener.*;
 import de.ftscraft.ftsengine.pferd.Pferd;
 import de.ftscraft.ftsengine.utils.*;
@@ -47,11 +49,13 @@ public class Engine extends JavaPlugin implements Listener
     public int biggestBriefId;
     private HashMap<Player, ChatChannels> chats;
     private ArrayList<Player> reiter;
-    public HashMap<FTSUser, ArmorStand> sitting;
+    //public HashMap<FTSUser, ArmorStand> sitting;
     public HashMap<UUID, Pferd> pferde;
     public HashMap<Integer, Backpack> backpacks;
     public HashMap<Integer, Brief> briefe;
     public HashMap<Location, Brett> bretter;
+    public HashMap<UUID, Briefkasten> briefkasten;
+    public ArrayList<BriefLieferung> lieferungen;
     public HashMap<Player, BrettNote> playerBrettNote;
 
     private static Economy econ = null;
@@ -90,15 +94,17 @@ public class Engine extends JavaPlugin implements Listener
         biggestBriefId = 0;
         playerBrettNote = new HashMap<>();
         bretter = new HashMap<>();
-        sitting = new HashMap<>();
+        //sitting = new HashMap<>();
         msgs = new Messages();
         backpacks = new HashMap<>();
         ausweis = new HashMap<>();
         uF = new UUIDFetcher();
         briefe = new HashMap<>();
+        briefkasten = new HashMap<>();
         itemStacks = new ItemStacks();
         reiter = new ArrayList<>();
         player = new HashMap<>();
+        lieferungen = new ArrayList<>();
         pferde = new HashMap<>();
         var = new Var(this);
 
@@ -122,6 +128,7 @@ public class Engine extends JavaPlugin implements Listener
         new HorseListener(this);
         new PlayerJoinListener(this);
         new SignWriteListener(this);
+        new ItemMoveListener(this);
         new BlockBreakListener(this);
         new ItemSwitchListener(this);
         new PlayerInteractListener(this);
@@ -138,8 +145,6 @@ public class Engine extends JavaPlugin implements Listener
     public void onItemInteract(PlayerInteractEvent e)
     {
 
-        // try
-        // {
         if (e.getAction() == Action.RIGHT_CLICK_BLOCK || e.getAction() == Action.RIGHT_CLICK_AIR)
         {
             if (e.getAction() == Action.RIGHT_CLICK_BLOCK)
@@ -194,10 +199,6 @@ public class Engine extends JavaPlugin implements Listener
                 }
             }
         }
-        //} catch(Exception ex) {
-
-        //}
-
 
     }
 
