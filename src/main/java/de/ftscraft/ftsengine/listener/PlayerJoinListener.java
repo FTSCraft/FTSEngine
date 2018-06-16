@@ -1,10 +1,15 @@
 package de.ftscraft.ftsengine.listener;
 
+import de.ftscraft.ftsengine.courier.Brief;
 import de.ftscraft.ftsengine.main.Engine;
 import de.ftscraft.ftsengine.main.FTSUser;
+import org.bukkit.Material;
+import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
+import org.bukkit.inventory.ItemStack;
 
 public class PlayerJoinListener implements Listener
 {
@@ -17,10 +22,22 @@ public class PlayerJoinListener implements Listener
         plugin.getServer().getPluginManager().registerEvents(this, plugin);
     }
 
-    @EventHandler
+    @EventHandler(priority = EventPriority.LOW)
     public void onJoin(PlayerJoinEvent e) {
-        FTSUser user = new FTSUser(plugin, e.getPlayer());
+        Player p = e.getPlayer();
+        FTSUser user = new FTSUser(plugin, p);
         plugin.getPlayer().put(e.getPlayer(), user);
+
+        //Map
+        if(p.getInventory().getItemInMainHand() != null) {
+            if(p.getInventory().getItemInMainHand().getType() == Material.MAP) {
+                ItemStack itemMap = p.getInventory().getItemInMainHand();
+                Brief brief = plugin.briefe.get((int) itemMap.getDurability());
+                if(brief != null) {
+                    brief.loadMap(itemMap);
+                }
+            }
+        }
     }
 
 }

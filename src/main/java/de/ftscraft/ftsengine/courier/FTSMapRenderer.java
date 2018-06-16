@@ -1,0 +1,64 @@
+package de.ftscraft.ftsengine.courier;
+
+import de.ftscraft.ftsengine.main.Engine;
+import org.bukkit.Color;
+import org.bukkit.entity.Player;
+import org.bukkit.map.*;
+
+import java.util.Calendar;
+
+public class FTSMapRenderer extends org.bukkit.map.MapRenderer
+{
+
+    private String msg;
+    private String date;
+    private Engine plugin;
+
+    public FTSMapRenderer(int id, Engine plugin)
+    {
+        Brief brief = plugin.briefe.get(id);
+        this.msg = brief.msg;
+        Calendar cal = Calendar.getInstance();
+        cal.setTimeInMillis(brief.creation);
+        date = cal.get(Calendar.DAY_OF_MONTH) + "." + (cal.get(Calendar.MONTH) + 1);
+        this.plugin = plugin;
+    }
+
+    @Override
+    public void render(MapView mapView, MapCanvas mapCanvas, Player player)
+    {
+
+        for (int x = 0; x < 150; x++) {
+            for (int y = 0; y < 150; y++) {
+                mapCanvas.setPixel(x, y, (byte) 145);
+                if(y == 10)
+                    mapCanvas.setPixel(x,y, (byte) 120);
+            }
+        }
+
+        mapCanvas.drawText(100, 2, MinecraftFont.Font, date);
+
+        final int SPACE = 12;
+
+        String[] wörter = msg.split(" ");
+        String text = "";
+        int zeilen = 0;
+
+        for (int i = 0; i < wörter.length; i++)
+        {
+            if (wörter[i].length() + text.length() < 20) {
+                text = text + " " + wörter[i];
+                if(i + 1 == wörter.length)
+                    mapCanvas.drawText(1,zeilen * 10 + SPACE, MinecraftFont.Font, text);
+            } else {
+                text = text + " " + wörter[i];
+                mapCanvas.drawText(1,zeilen * 10 + SPACE, MinecraftFont.Font, text);
+                zeilen++;
+                text = " ";
+            }
+        }
+
+        mapCanvas.setCursors(new MapCursorCollection());
+    }
+
+}

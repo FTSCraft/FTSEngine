@@ -5,6 +5,7 @@ import de.ftscraft.ftsengine.brett.Brett;
 import de.ftscraft.ftsengine.brett.BrettNote;
 import de.ftscraft.ftsengine.chat.ChatChannels;
 import de.ftscraft.ftsengine.commands.*;
+import de.ftscraft.ftsengine.courier.Brief;
 import de.ftscraft.ftsengine.listener.*;
 import de.ftscraft.ftsengine.pferd.Pferd;
 import de.ftscraft.ftsengine.utils.*;
@@ -23,7 +24,6 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.ShapedRecipe;
 import org.bukkit.inventory.meta.ItemMeta;
-import org.bukkit.inventory.meta.MapMeta;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scoreboard.Scoreboard;
@@ -44,19 +44,20 @@ public class Engine extends JavaPlugin implements Listener
     public ItemStacks itemStacks;
     public int highestId;
     public int biggestBpId;
+    public int biggestBriefId;
     private HashMap<Player, ChatChannels> chats;
     private ArrayList<Player> reiter;
     public HashMap<FTSUser, ArmorStand> sitting;
     public HashMap<UUID, Pferd> pferde;
     public HashMap<Integer, Backpack> backpacks;
-    public ArrayList<String> briefMsg;
+    public HashMap<Integer, Brief> briefe;
     public HashMap<Location, Brett> bretter;
     public HashMap<Player, BrettNote> playerBrettNote;
 
     private static Economy econ = null;
     private static final Logger log = Logger.getLogger("Minecraft");
 
-    private List<Material> mats = new ArrayList<>();
+    public List<Material> mats = new ArrayList<>();
 
     @Override
     public void onEnable()
@@ -76,27 +77,66 @@ public class Engine extends JavaPlugin implements Listener
         safeAll();
     }
 
+    private void init()
+    {
+        Scoreboard scoreboard = Bukkit.getScoreboardManager().getMainScoreboard();
+        if (scoreboard.getTeam("roleplay_modus") == null)
+            team = scoreboard.registerNewTeam("roleplay_modus");
+        else team = scoreboard.getTeam("roleplay_modus");
+        team.setOption(Team.Option.NAME_TAG_VISIBILITY, Team.OptionStatus.NEVER);
+        chats = new HashMap<>();
+        highestId = 0;
+        biggestBpId = 0;
+        biggestBriefId = 0;
+        playerBrettNote = new HashMap<>();
+        bretter = new HashMap<>();
+        sitting = new HashMap<>();
+        msgs = new Messages();
+        backpacks = new HashMap<>();
+        ausweis = new HashMap<>();
+        uF = new UUIDFetcher();
+        briefe = new HashMap<>();
+        itemStacks = new ItemStacks();
+        reiter = new ArrayList<>();
+        player = new HashMap<>();
+        pferde = new HashMap<>();
+        var = new Var(this);
+
+        recipie();
+        new CMDausweis(this);
+        new CMDwürfel(this);
+        new CMDreiten(this);
+        //new CMDchannel(this);
+        new CMDtaube(this);
+        new CMDschlagen(this);
+        new CMDremovearmorstand(this);
+        new CMDpferd(this);
+        new CMDbrief(this);
+        new CMDcountdown(this);
+        new CMDroleplay(this);
+        new UserIO(this);
+
+        new EntityClickListener(this);
+        new DamageListener(this);
+        new SneakListener(this);
+        new HorseListener(this);
+        new PlayerJoinListener(this);
+        new SignWriteListener(this);
+        new BlockBreakListener(this);
+        new ItemSwitchListener(this);
+        new PlayerInteractListener(this);
+        new InventoryClickListener(this);
+        new PlayerQuitListener(this);
+        new PlayerChatListener(this);
+
+        new Runner(this);
+        getServer().getPluginManager().registerEvents(this, this);
+
+    }
+
     @EventHandler
     public void onItemInteract(PlayerInteractEvent e)
     {
-
-        if (e.getAction() == Action.RIGHT_CLICK_BLOCK)
-        {
-            if(e.getPlayer().getVehicle() != null) {
-                if(mats.contains(e.getClickedBlock().getType()))
-                {
-                    if (e.getPlayer().getVehicle() instanceof ArmorStand)
-                    {
-                        if (!((ArmorStand) e.getPlayer().getVehicle()).isVisible())
-                        {
-                            e.setCancelled(true);
-                            e.getPlayer().sendMessage("§cBitte steht erst auf");
-                            return;
-                        }
-                    }
-                }
-            }
-        }
 
         // try
         // {
@@ -190,65 +230,12 @@ public class Engine extends JavaPlugin implements Listener
             a.safe();
         }
 
-        for(Backpack a : backpacks.values()) {
+        for (Backpack a : backpacks.values())
+        {
             a.safe();
         }
 
-    }
-
-    private void init()
-    {
-        Scoreboard scoreboard = Bukkit.getScoreboardManager().getMainScoreboard();
-        if (scoreboard.getTeam("roleplay_modus") == null)
-            team = scoreboard.registerNewTeam("roleplay_modus");
-        else team = scoreboard.getTeam("roleplay_modus");
-        team.setOption(Team.Option.NAME_TAG_VISIBILITY, Team.OptionStatus.NEVER);
-        chats = new HashMap<>();
-        highestId = 0;
-        biggestBpId = 0;
-        playerBrettNote = new HashMap<>();
-        bretter = new HashMap<>();
-        sitting = new HashMap<>();
-        msgs = new Messages();
-        backpacks = new HashMap<>();
-        ausweis = new HashMap<>();
-        uF = new UUIDFetcher();
-        briefMsg = new ArrayList<>();
-        itemStacks = new ItemStacks();
-        reiter = new ArrayList<>();
-        player = new HashMap<>();
-        pferde = new HashMap<>();
-        var = new Var(this);
-
-        recipie();
-        new CMDausweis(this);
-        new CMDwürfel(this);
-        new CMDreiten(this);
-        //new CMDchannel(this);
-        new CMDtaube(this);
-        new CMDschlagen(this);
-        new MapLoadListener(this);
-        new CMDremovearmorstand(this);
-        new CMDpferd(this);
-        new CMDbrief(this);
-        new CMDcountdown(this);
-        new CMDroleplay(this);
-        new UserIO(this);
-
-        new EntityClickListener(this);
-        new DamageListener(this);
-        new SneakListener(this);
-        new HorseListener(this);
-        new PlayerJoinListener(this);
-        new SignWriteListener(this);
-        new BlockBreakListener(this);
-        new PlayerInteractListener(this);
-        new InventoryClickListener(this);
-        new PlayerQuitListener(this);
-        new PlayerChatListener(this);
-
-        new Runner(this);
-        getServer().getPluginManager().registerEvents(this, this);
+        new UserIO(this, true);
 
     }
 
@@ -340,7 +327,7 @@ public class Engine extends JavaPlugin implements Listener
         NamespacedKey tbpkey = new NamespacedKey(this, "FTStinybackpack");
 
         ShapedRecipe tiny_backpack = new ShapedRecipe(tbpkey, itemStacks.getTiny_bp());
-        tiny_backpack.shape("LLL","L*L","LLL");
+        tiny_backpack.shape("LLL", "L*L", "LLL");
         tiny_backpack.setIngredient('L', Material.LEATHER);
         tiny_backpack.setIngredient('*', Material.AIR);
         getServer().addRecipe(tiny_backpack);
@@ -358,7 +345,7 @@ public class Engine extends JavaPlugin implements Listener
 
         NamespacedKey ebpkey = new NamespacedKey(this, "FTSenderbackpack");
         ShapedRecipe ender_backpack = new ShapedRecipe(ebpkey, itemStacks.getEnder_bp());
-        ender_backpack.shape("LLL","LEL","LLL");
+        ender_backpack.shape("LLL", "LEL", "LLL");
         ender_backpack.setIngredient('L', Material.LEATHER);
         ender_backpack.setIngredient('E', Material.ENDER_CHEST);
         getServer().addRecipe(ender_backpack);

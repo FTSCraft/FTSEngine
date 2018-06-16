@@ -1,12 +1,19 @@
 package de.ftscraft.ftsengine.commands;
 
+import de.ftscraft.ftsengine.courier.Brief;
 import de.ftscraft.ftsengine.main.Engine;
+import de.ftscraft.ftsengine.courier.FTSMapRenderer;
 import org.bukkit.Material;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.map.MapRenderer;
+import org.bukkit.map.MapView;
 
 public class CMDbrief implements CommandExecutor
 {
@@ -27,9 +34,13 @@ public class CMDbrief implements CommandExecutor
             return true;
         }
 
+        /*if(cs instanceof Player) {
+            cs.sendMessage("§eDieser Command ist noch in Arbeit!");
+            return true;
+        }*/
+
         Player p = (Player)cs;
 
-        ItemStack mapItem = new ItemStack(Material.EMPTY_MAP, 1);
         String msg = "";
         for(int i = 0; i < args.length; i++) {
             msg += " " + args[i];
@@ -38,8 +49,9 @@ public class CMDbrief implements CommandExecutor
         msg = msg.replaceAll("ü", "ue");
         msg = msg.replaceAll("ß", "ss");
         msg = msg.replaceAll("ö", "oe");
-        plugin.briefMsg.add(msg);
-        p.getInventory().addItem(mapItem);
+
+        Brief brief = new Brief(plugin, p.getName(), msg, p.getWorld().getName());
+        p.getInventory().addItem(brief.getMap(p.getWorld()));
 
         return false;
     }

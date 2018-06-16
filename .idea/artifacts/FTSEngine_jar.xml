@@ -1,7 +1,7 @@
 <component name="ArtifactManager">
   <artifact type="jar" name="FTSEngine:jar">
     <output-path>$USER_HOME$/Desktop/AfG/Minecraft Server Test/Server Test/plugins</output-path>
-    <root id="archive" name="Personalausweis.jar">
+    <root id="archive" name="FTSEngine.jar">
       <element id="module-output" name="FTSEngine" />
     </root>
   </artifact>

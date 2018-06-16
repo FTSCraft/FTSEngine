@@ -3,6 +3,7 @@ package de.ftscraft.ftsengine.utils;
 import de.ftscraft.ftsengine.backpacks.Backpack;
 import de.ftscraft.ftsengine.backpacks.BackpackType;
 import de.ftscraft.ftsengine.brett.Brett;
+import de.ftscraft.ftsengine.courier.Brief;
 import de.ftscraft.ftsengine.main.Engine;
 import de.ftscraft.ftsengine.pferd.Pferd;
 import org.bukkit.Bukkit;
@@ -17,6 +18,7 @@ import org.bukkit.inventory.ItemStack;
 import org.yaml.snakeyaml.Yaml;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.*;
 
 public class UserIO
@@ -34,6 +36,12 @@ public class UserIO
         getBackpacks();
         getBretter();
         getPferde();
+        loadBriefe();
+    }
+
+    public UserIO(Engine plugin, boolean safe) {
+        this.plugin = plugin;
+        safeBriefe();
     }
 
     public void getAusweise()
@@ -46,7 +54,7 @@ public class UserIO
 
         try
         {
-            for (File aFile : aFolder.listFiles())
+            for (File aFile : Objects.requireNonNull(aFolder.listFiles()))
             {
                 FileConfiguration cfg = YamlConfiguration.loadConfiguration(aFile);
 
@@ -62,7 +70,7 @@ public class UserIO
                 String desc = cfg.getString("desc");
                 long millis = cfg.getLong("birthday");
                 Integer id = cfg.getInt("id");
-                Calendar cal = null;
+                Calendar cal;
                 Date date = new Date();
                 date.setTime(millis);
                 cal = Calendar.getInstance();
@@ -81,7 +89,7 @@ public class UserIO
 
     }
 
-    public void getPferde()
+    private void getPferde()
     {
         File aFolder = new File(folder + "//pferde//");
 
@@ -117,14 +125,14 @@ public class UserIO
                 new Pferd(plugin, UUID.fromString(uuid), w, UUID.fromString(owner), locked, price, persID, name, chosed);
             }
 
-        } catch (NullPointerException e)
+        } catch (NullPointerException ignored)
         {
 
         }
 
     }
 
-    public void getBackpacks()
+    private void getBackpacks()
     {
         File aFolder = new File(folder + "//backpacks//");
 
@@ -155,7 +163,7 @@ public class UserIO
         }
     }
 
-    public void getBretter() {
+    private void getBretter() {
         File aFolder = new File(folder + "//bretter");
 
         if(!aFolder.exists())
@@ -164,7 +172,7 @@ public class UserIO
         try
         {
 
-            for (File files : aFolder.listFiles())
+            for (File files : Objects.requireNonNull(aFolder.listFiles()))
             {
                 YamlConfiguration cfg = YamlConfiguration.loadConfiguration(files);
 
@@ -194,6 +202,41 @@ public class UserIO
             }
         } catch (Exception ignored) {
 
+        }
+    }
+
+    private void loadBriefe() {
+        File file = new File(plugin.getDataFolder() + "//briefe.yml");
+        YamlConfiguration cfg = YamlConfiguration.loadConfiguration(file);
+
+        for(String keys : cfg.getKeys(false)) {
+            String message = cfg.getString(keys+".message");
+            String creator = cfg.getString(keys+".creator");
+            long creation = cfg.getLong(keys+".creation");
+            int id = Integer.valueOf(keys);
+            new Brief(plugin, creator, message, creation, id);
+            if(id > plugin.biggestBriefId)
+                plugin.biggestBriefId = id;
+        }
+    }
+
+    public void safeBriefe() {
+        File file = new File(plugin.getDataFolder() + "//briefe.yml");
+        YamlConfiguration cfg = YamlConfiguration.loadConfiguration(file);
+
+        for(Brief brief : plugin.briefe.values()) {
+            String id = String.valueOf(brief.id);
+            cfg.set(id+".message", brief.msg);
+            cfg.set(id+".creator", brief.creator);
+            cfg.set(id+".creation", brief.creation);
+        }
+
+        try
+        {
+            cfg.save(file);
+        } catch (IOException e)
+        {
+            e.printStackTrace();
         }
     }
 

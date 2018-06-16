@@ -7,6 +7,7 @@ import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.block.BlockState;
+import org.bukkit.craftbukkit.v1_12_R1.entity.CraftArmorStand;
 import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.Horse;
 import org.bukkit.entity.Player;
@@ -47,7 +48,7 @@ public class FTSUser
     public void setSitting(Block block) {
 
         Location loc = block.getLocation();
-        if(player.getLocation().distance(loc) > 1) {
+        if(player.getLocation().distance(loc) >= 2) {
             return;
         }
 
