@@ -39,8 +39,8 @@ public class FTSUser
             }
         }
 
-        if(plugin.briefkasten.containsKey(player.getUniqueId()))
-            this.briefkasten = plugin.briefkasten.get(player.getUniqueId());
+        if(plugin.briefkasten.containsKey(player.getUniqueId().toString()))
+            this.briefkasten = plugin.briefkasten.get(player.getUniqueId().toString());
 
     }
 
@@ -86,6 +86,8 @@ public class FTSUser
         sit_stand.setGravity(false);
         sit_stand.setVisible(false);
         sit_stand.addPassenger(player);
+
+        briefkasten = plugin.briefkasten.get(player.getUniqueId().toString());
 
         this.sits = true;
     }
@@ -175,5 +177,14 @@ public class FTSUser
     {
         if(pferde.contains(pferd))
             pferde.remove(pferd);
+    }
+
+    public Briefkasten getBriefkasten()
+    {
+        return briefkasten;
+    }
+
+    public boolean hasBriefkasten() {
+        return briefkasten != null;
     }
 }

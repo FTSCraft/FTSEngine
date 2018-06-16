@@ -1,14 +1,18 @@
 package de.ftscraft.ftsengine.listener;
 
 import de.ftscraft.ftsengine.brett.Brett;
+import de.ftscraft.ftsengine.courier.Briefkasten;
 import de.ftscraft.ftsengine.main.Engine;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
+import org.bukkit.block.Chest;
+import org.bukkit.craftbukkit.v1_12_R1.block.CraftChest;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.SignChangeEvent;
+import org.bukkit.metadata.MetadataValue;
 
 import java.util.logging.Level;
 
@@ -28,11 +32,19 @@ public class SignWriteListener implements Listener
     {
 
         if(event.getLine(0).equalsIgnoreCase("[Briefkasten]")) {
+            if(plugin.getPlayer().get(event.getPlayer()).hasBriefkasten()) {
+                event.getPlayer().sendMessage("§eDu hast schon ein Briefkasten! Trottel.. Spaß!");
+                return;
+            }
             org.bukkit.material.Sign s = (org.bukkit.material.Sign) event.getBlock().getState().getData();
             Block chest = event.getBlock().getRelative(s.getAttachedFace());
             if(chest.getType() == Material.CHEST) {
+                Chest chestState = (Chest) chest.getState();
+                chestState.setCustomName("My Chest Inventory Title!");
+
                 event.setLine(0, "§b[Briefkasten]");
                 event.setLine(1, ChatColor.DARK_RED+event.getPlayer().getName());
+                new Briefkasten(plugin, event.getPlayer().getUniqueId().toString(), chest.getLocation());
                 event.getPlayer().sendMessage(plugin.msgs.PREFIX+"Du hast erfolgreich ein Briefkasten erstellt JUHU!");
                 plugin.getLogger().log(Level.INFO, event.getPlayer().getName() + " hat einen Briefkasten erstellt");
             }

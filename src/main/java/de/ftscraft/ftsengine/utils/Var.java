@@ -1,11 +1,21 @@
 package de.ftscraft.ftsengine.utils;
 
 import de.ftscraft.ftsengine.main.Engine;
+import net.minecraft.server.v1_12_R1.TileEntity;
+import net.minecraft.server.v1_12_R1.TileEntityChest;
+import org.bukkit.Bukkit;
+import org.bukkit.Material;
+import org.bukkit.World;
+import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
+import org.bukkit.block.Chest;
+import org.bukkit.craftbukkit.v1_12_R1.CraftWorld;
+import org.bukkit.craftbukkit.v1_12_R1.block.CraftChest;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
+import java.lang.reflect.Field;
 import java.util.UUID;
 
 public class Var
@@ -20,21 +30,23 @@ public class Var
         this.uF = new UUIDFetcher();
     }
 
-    public void sendAusweisMsg(Player p, Ausweis a) {
+    public void sendAusweisMsg(Player p, Ausweis a)
+    {
         p.sendMessage(" ");
-        p.sendMessage("§c------ Ausweis von §e"+uF.getName(UUID.fromString(a.getUUID()))+" §c------");
-        p.sendMessage("§cNachname: §e"+a.getLastName());
-        p.sendMessage("§cVorname: §e"+a.getFirstName());
-        p.sendMessage("§cGeschlecht: §e"+(a.getGender() == Gender.MALE ? "Mann" : a.getGender() == Gender.FEMALE ? "Frau" : "N/A"));
-        p.sendMessage("§cGeburtstag: §e"+a.getBirthdayString());
-        p.sendMessage("§cRasse: §e"+(a.getRace() != null ? a.getRace() : "N/A"));
-        p.sendMessage("§cNation: §e"+(a.getNation() != null ? a.getNation() : "N/A"));
-        p.sendMessage("§cBeschreibung: §e"+(a.getDesc() != null ? a.getDesc() : "N/A"));
-        p.sendMessage("§cReligion: §e"+(a.getReligion() != null ? a.getReligion() : "N/A"));
-        p.sendMessage("§7ID: #"+a.id);
+        p.sendMessage("§c------ Ausweis von §e" + uF.getName(UUID.fromString(a.getUUID())) + " §c------");
+        p.sendMessage("§cNachname: §e" + a.getLastName());
+        p.sendMessage("§cVorname: §e" + a.getFirstName());
+        p.sendMessage("§cGeschlecht: §e" + (a.getGender() == Gender.MALE ? "Mann" : a.getGender() == Gender.FEMALE ? "Frau" : "N/A"));
+        p.sendMessage("§cGeburtstag: §e" + a.getBirthdayString());
+        p.sendMessage("§cRasse: §e" + (a.getRace() != null ? a.getRace() : "N/A"));
+        p.sendMessage("§cNation: §e" + (a.getNation() != null ? a.getNation() : "N/A"));
+        p.sendMessage("§cBeschreibung: §e" + (a.getDesc() != null ? a.getDesc() : "N/A"));
+        p.sendMessage("§cReligion: §e" + (a.getReligion() != null ? a.getReligion() : "N/A"));
+        p.sendMessage("§7ID: #" + a.id);
     }
 
-    public void sendHelpMsg(Player p) {
+    public void sendHelpMsg(Player p)
+    {
         p.sendMessage("§c----- §e/ausweis §c-----");
         p.sendMessage("§e/ausweis name [Vorname] [Nachname] §bÄndert deinen Namen und erstellt beim 1. Mal einen Ausweis");
         p.sendMessage("§e/ausweis alter [DD-MM] §bSetzt das Geburtsdatum");
@@ -47,7 +59,8 @@ public class Var
         p.sendMessage("§6FTSEngine von §5halberfan §6für FTS-Craft");
     }
 
-    public void sendPferdHelpMsg(Player p) {
+    public void sendPferdHelpMsg(Player p)
+    {
         p.sendMessage("§c----- §e/pferd §c-----");
         p.sendMessage("§e/pferd beanspruchen [Name] §bBeansprucht ein Pferd");
         p.sendMessage("§e/pferd teleportieren §bTeleportiert dein Ausgewähltes Pferd");
@@ -59,52 +72,64 @@ public class Var
         p.sendMessage("§6FTSEngine von §5halberfan §6für FTS-Craft");
     }
 
-    public void ChatInRoleplay(Player p, String msg) {
+    public void ChatInRoleplay(Player p, String msg)
+    {
 
     }
 
-    public void ChatInHandel(Player p, String msg) {
+    public void ChatInHandel(Player p, String msg)
+    {
 
     }
 
-    public void ChatInFlüster(Player p, String msg) {
+    public void ChatInFlüster(Player p, String msg)
+    {
 
     }
 
-    public void ChatInRufen(Player p, String msg) {
+    public void ChatInRufen(Player p, String msg)
+    {
 
     }
 
-    public float getYawByBlockFace(BlockFace bf) {
+    public float getYawByBlockFace(BlockFace bf)
+    {
         float yaw = 0;
 
-        if(bf == BlockFace.NORTH) {
+        if (bf == BlockFace.NORTH)
+        {
             return -180;
-        } else if(bf == BlockFace.EAST) {
+        } else if (bf == BlockFace.EAST)
+        {
             return -90;
-        } else if(bf == BlockFace.SOUTH) {
+        } else if (bf == BlockFace.SOUTH)
+        {
             return 0;
-        } else if(bf == BlockFace.WEST) {
+        } else if (bf == BlockFace.WEST)
+        {
             return 90;
         }
 
         return yaw;
     }
 
-    public int getBackpackID(ItemStack backpack) {
+
+    public int getBackpackID(ItemStack backpack)
+    {
 
         String lore = backpack.getItemMeta().getLore().get(1);
         String idS = lore.replaceAll(".*#", "");
 
         Integer id = -1;
 
-        try {
+        try
+        {
             id = Integer.valueOf(idS);
-        } catch (NumberFormatException e) {
+        } catch (NumberFormatException e)
+        {
             return -1;
         }
 
         return id;
     }
-
 }

@@ -22,6 +22,25 @@ public class BlockBreakListener implements Listener
     @EventHandler
     public void onBreak(BlockBreakEvent event)
     {
+
+        if(event.getBlock().getType() == Material.SIGN || event.getBlock().getType() == Material.WALL_SIGN || event.getBlock().getType() == Material.SIGN_POST) {
+            Sign sign = (Sign) event.getBlock().getState();
+            if(sign.getLine(0).equalsIgnoreCase("§b[Briefkasten]")) {
+                if(sign.getLine(1).contains(event.getPlayer().getName())) {
+                    plugin.briefkasten.get(event.getPlayer().getUniqueId().toString()).destory();
+                    event.getPlayer().sendMessage(plugin.msgs.PREFIX+"Du hast erfolgreich dein Briefkasten zerstört. Herzlichen Glückwunsch! (das kannst du bezahlen)");
+                } else {
+                    if(event.getPlayer().hasPermission("ftsengine.destroy")) {
+                        event.setCancelled(false);
+                        return;
+                    }
+                    event.setCancelled(true);
+                    event.getPlayer().sendMessage("§eDu kannst kein Briefkasten von jemand anderen zerstören. Falls du dich umbenannt hast, sag einem Admin gescheid");
+                }
+            }
+        }
+
+        //Schwarzes Brett
         if (event.getBlock().getType() == Material.SIGN || event.getBlock().getType() == Material.WALL_SIGN || event.getBlock().getType() == Material.SIGN_POST)
         {
             Sign sign = (Sign) event.getBlock().getState();

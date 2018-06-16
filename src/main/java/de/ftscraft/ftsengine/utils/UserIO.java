@@ -4,6 +4,7 @@ import de.ftscraft.ftsengine.backpacks.Backpack;
 import de.ftscraft.ftsengine.backpacks.BackpackType;
 import de.ftscraft.ftsengine.brett.Brett;
 import de.ftscraft.ftsengine.courier.Brief;
+import de.ftscraft.ftsengine.courier.Briefkasten;
 import de.ftscraft.ftsengine.main.Engine;
 import de.ftscraft.ftsengine.pferd.Pferd;
 import org.bukkit.Bukkit;
@@ -19,6 +20,7 @@ import org.yaml.snakeyaml.Yaml;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
 import java.util.*;
 
 public class UserIO
@@ -37,9 +39,11 @@ public class UserIO
         getBretter();
         getPferde();
         loadBriefe();
+        getBriefkasten();
     }
 
-    public UserIO(Engine plugin, boolean safe) {
+    public UserIO(Engine plugin, boolean safe)
+    {
         this.plugin = plugin;
         safeBriefe();
     }
@@ -148,7 +152,7 @@ public class UserIO
                 type = BackpackType.valueOf(c.getString("type"));
 
                 List itemsList = c.getList("inventory");
-                ItemStack[] items = (ItemStack[])itemsList.toArray(new ItemStack[itemsList.size()]);
+                ItemStack[] items = (ItemStack[]) itemsList.toArray(new ItemStack[itemsList.size()]);
                 inv = Bukkit.createInventory(null, type.getSize(), type.getName());
                 inv.setContents(items);
 
@@ -163,10 +167,11 @@ public class UserIO
         }
     }
 
-    private void getBretter() {
+    private void getBretter()
+    {
         File aFolder = new File(folder + "//bretter");
 
-        if(!aFolder.exists())
+        if (!aFolder.exists())
             aFolder.mkdirs();
 
         try
@@ -200,35 +205,71 @@ public class UserIO
                 }
 
             }
-        } catch (Exception ignored) {
+        } catch (Exception ignored)
+        {
 
         }
     }
 
-    private void loadBriefe() {
+    private void getBriefkasten()
+    {
+        File aFolder = new File(folder + "//briefkasten//");
+        if (!aFolder.exists())
+            aFolder.mkdirs();
+
+        try
+        {
+
+            for (File files : Objects.requireNonNull(aFolder.listFiles()))
+            {
+                YamlConfiguration cfg = YamlConfiguration.loadConfiguration(files);
+
+                String owner = cfg.getString("owner");
+                int x = cfg.getInt("location.x");
+                int y = cfg.getInt("location.y");
+                int z = cfg.getInt("location.z");
+                String world = cfg.getString("location.world");
+
+                Location loc = new Location(Bukkit.getWorld(world), x, y, z);
+
+                new Briefkasten(plugin, owner, loc);
+
+            }
+
+        } catch (Exception ignored)
+        {
+
+        }
+    }
+
+    private void loadBriefe()
+    {
         File file = new File(plugin.getDataFolder() + "//briefe.yml");
         YamlConfiguration cfg = YamlConfiguration.loadConfiguration(file);
 
-        for(String keys : cfg.getKeys(false)) {
-            String message = cfg.getString(keys+".message");
-            String creator = cfg.getString(keys+".creator");
-            long creation = cfg.getLong(keys+".creation");
+        for (String keys : cfg.getKeys(false))
+        {
+            String message = cfg.getString(keys + ".message");
+            String creator = cfg.getString(keys + ".creator");
+            long creation = cfg.getLong(keys + ".creation");
             int id = Integer.valueOf(keys);
             new Brief(plugin, creator, message, creation, id);
-            if(id > plugin.biggestBriefId)
+            if (id > plugin.biggestBriefId)
                 plugin.biggestBriefId = id;
         }
     }
 
-    public void safeBriefe() {
+    public void safeBriefe()
+    {
         File file = new File(plugin.getDataFolder() + "//briefe.yml");
         YamlConfiguration cfg = YamlConfiguration.loadConfiguration(file);
 
-        for(Brief brief : plugin.briefe.values()) {
+        for (Brief brief : plugin.briefe.values())
+        {
             String id = String.valueOf(brief.id);
-            cfg.set(id+".message", brief.msg);
-            cfg.set(id+".creator", brief.creator);
-            cfg.set(id+".creation", brief.creation);
+            cfg.set(id + ".message", brief.msg);
+            cfg.set(id + ".creator", brief.creator);
+            cfg.set(id + ".creation", brief.creation);
         }
 
         try
@@ -239,6 +280,5 @@ public class UserIO
             e.printStackTrace();
         }
     }
-
 
 }

@@ -49,12 +49,11 @@ public class Engine extends JavaPlugin implements Listener
     public int biggestBriefId;
     private HashMap<Player, ChatChannels> chats;
     private ArrayList<Player> reiter;
-    //public HashMap<FTSUser, ArmorStand> sitting;
     public HashMap<UUID, Pferd> pferde;
     public HashMap<Integer, Backpack> backpacks;
     public HashMap<Integer, Brief> briefe;
     public HashMap<Location, Brett> bretter;
-    public HashMap<UUID, Briefkasten> briefkasten;
+    public HashMap<String, Briefkasten> briefkasten;
     public ArrayList<BriefLieferung> lieferungen;
     public HashMap<Player, BrettNote> playerBrettNote;
 
@@ -236,6 +235,10 @@ public class Engine extends JavaPlugin implements Listener
             a.safe();
         }
 
+        for(Briefkasten a : briefkasten.values()) {
+            a.safe();
+        }
+
         new UserIO(this, true);
 
     }
@@ -392,6 +395,14 @@ public class Engine extends JavaPlugin implements Listener
             {
                 return true;
             }
+        }
+        return false;
+    }
+
+    public boolean BriefkastenExists(Location loc) {
+        for(Briefkasten a : briefkasten.values()) {
+            if(a.getChest().getLocation() == loc)
+                return true;
         }
         return false;
     }

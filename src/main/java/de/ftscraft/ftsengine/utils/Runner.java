@@ -1,5 +1,6 @@
 package de.ftscraft.ftsengine.utils;
 
+import de.ftscraft.ftsengine.courier.BriefLieferung;
 import de.ftscraft.ftsengine.main.Engine;
 import org.bukkit.World;
 import org.bukkit.entity.ArmorStand;
@@ -46,6 +47,15 @@ public class Runner implements Runnable
 
         }
 
+        try
+        {
+            for (BriefLieferung lieferung : plugin.lieferungen)
+            {
+                lieferung.setSeconds(lieferung.getSeconds() - 1);
+            }
+        } catch (Exception ignored) {
+
+        }
 
     }
 
