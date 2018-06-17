@@ -12,10 +12,7 @@ import de.ftscraft.ftsengine.listener.*;
 import de.ftscraft.ftsengine.pferd.Pferd;
 import de.ftscraft.ftsengine.utils.*;
 import net.milkbowl.vault.economy.Economy;
-import org.bukkit.Bukkit;
-import org.bukkit.Location;
-import org.bukkit.Material;
-import org.bukkit.NamespacedKey;
+import org.bukkit.*;
 import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.Horse;
 import org.bukkit.entity.Player;
@@ -147,26 +144,52 @@ public class Engine extends JavaPlugin implements Listener
     private void setupScoreboad()
     {
         sb = Bukkit.getScoreboardManager().getNewScoreboard();
-        sb.registerNewTeam("0000Admin");
-        sb.registerNewTeam("0001Moderator");
-        sb.registerNewTeam("0002Helfer");
-        sb.registerNewTeam("0003Spieler");
-        sb.getTeam("0000Admin").setPrefix("§4Kaiser §7| §7");
-        sb.getTeam("0001Moderator").setPrefix("§3Mod §7| §7");
-        sb.getTeam("0002Helfer").setPrefix("§bHelfer §7| §7");
-        sb.getTeam("0003Spieler").setPrefix("§7");
+        sb.registerNewTeam("0000Admin").setPrefix("§dKaiser §7");
+        sb.registerNewTeam("0002Helfer").setPrefix("§bHelfer §7");
+        sb.registerNewTeam("0003Herzog").setPrefix("§2Herzog §7");
+        sb.registerNewTeam("0004König").setPrefix("§2König §7");
+        sb.registerNewTeam("0005Fürst").setPrefix("§2Fürst §7");
+        sb.registerNewTeam("0006Stadtherr").setPrefix("§2Stadtherr §7");
+        sb.registerNewTeam("0007Bürgermeister").setPrefix("§2Bürgermeister ");
+        sb.registerNewTeam("0008Siedler").setPrefix("§2Siedler §7");
+        sb.registerNewTeam("0009Erzmeister").setPrefix("§9Erzmeister §7");
+        sb.registerNewTeam("0010Meister").setPrefix("§9Meister §7");
+        sb.registerNewTeam("0011Walküre").setPrefix("§4Walküre §7");
+        sb.registerNewTeam("0012Einherjer").setPrefix("§4Einherjer §7");
+        sb.registerNewTeam("0013Bürger").setPrefix("§6Bürger §7");
+        sb.registerNewTeam("0014Reisender").setPrefix("§6Reisender §7");
     }
 
     public void setPrefix(Player p) {
         String team;
         if(p.hasPermission("ftsengine.admin")) {
             team = "0000Admin";
-        } else if(p.hasPermission("ftsengine.moderator")) {
-            team = "0001Moderator";
         } else if(p.hasPermission("ftsengine.helfer")) {
             team = "0002Helfer";
+        } else if(p.hasPermission("ftsengine.herzog")) {
+            team = "0003Herzog";
+        } else if(p.hasPermission("ftsengine.konig")) {
+            team = "0004König";
+        } else if(p.hasPermission("ftsengine.furst")) {
+            team = "0005Fürst";
+        } else if(p.hasPermission("ftsengine.stadtherr")) {
+            team = "0006Bürgermeister";
+        } else if(p.hasPermission("ftsengine.burgermeister")) {
+            team = "0007Bürgermeister";
+        } else if(p.hasPermission("ftsengine.siedler")) {
+            team = "0008Siedler";
+        } else if(p.hasPermission("ftsengine.erzmeister")) {
+            team = "0009Erzmeister";
+        } else if(p.hasPermission("ftsengine.meister")) {
+            team = "0010Meister";
+        } else if(p.hasPermission("ftsengine.walkure")) {
+            team = "0011Walküre";
+        } else if(p.hasPermission("ftsengine.einherjer")) {
+            team = "0012Einherjer";
+        } else if(p.hasPermission("ftsengine.burger")) {
+            team = "0013Bürger";
         } else {
-            team = "0003Spieler";
+            team ="0014Reisender";
         }
         sb.getTeam(team).addPlayer(p);
         for(Player a : Bukkit.getOnlinePlayers()) {
