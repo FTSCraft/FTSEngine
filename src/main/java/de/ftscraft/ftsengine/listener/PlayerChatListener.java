@@ -54,9 +54,11 @@ public class PlayerChatListener implements Listener
                         bn.addToBrett();
                         //Geld
                         OfflinePlayer op = Bukkit.getOfflinePlayer(p.getUniqueId());
-                        if(plugin.getEcon().has(op, 5))
+                        if(plugin.getEcon().has(op, 1))
                         {
-                            plugin.getEcon().withdrawPlayer(op, 5);
+                            plugin.getEcon().withdrawPlayer(op, 1);
+                            OfflinePlayer c = Bukkit.getOfflinePlayer(bn.getBrett().getCreator());
+                            plugin.getEcon().depositPlayer(c, 1);
                             p.sendMessage("§eDu hast die Notitz erfolgreich erstellt!");
                         } else p.sendMessage("§7Du hast nicht genug Geld!");
                     }

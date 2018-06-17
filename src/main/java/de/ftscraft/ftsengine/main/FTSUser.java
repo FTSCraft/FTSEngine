@@ -42,6 +42,8 @@ public class FTSUser
         if(plugin.briefkasten.containsKey(player.getUniqueId().toString()))
             this.briefkasten = plugin.briefkasten.get(player.getUniqueId().toString());
 
+        plugin.setPrefix(player);
+
     }
 
     private Ausweis ausweis;

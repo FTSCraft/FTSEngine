@@ -55,11 +55,7 @@ public class Pferd
             }
         }
 
-        for (Entity e : world.getEntities())
-        {
-            if (e.getUniqueId().toString().equalsIgnoreCase(horseUuid.toString()))
-                this.horse = (Horse) e;
-        }
+        getHorse();
 
         this.plugin = plugin;
         this.world = world;
@@ -74,7 +70,7 @@ public class Pferd
 
     public void teleport(Player p)
     {
-        if(!checkHorse()) {
+        if(checkHorse()) {
             p.sendMessage("§cDein Pferd wurde nicht Gefunden. Wir versuchen derzeit dieses Problem zu lösen!");
             return;
         }
@@ -86,7 +82,7 @@ public class Pferd
 
     public void lock(Player p)
     {
-        if(!checkHorse()) {
+        if(checkHorse()) {
             p.sendMessage("§cDein Pferd wurde nicht Gefunden. Wir versuchen derzeit dieses Problem zu lösen!");
         }
         if (p.getUniqueId().toString().equals(owner.toString()))
@@ -208,14 +204,19 @@ public class Pferd
         file.delete();
 
     }
-    public boolean checkHorse() {
+    private boolean checkHorse() {
         if(horse == null) {
-            for (Entity e : world.getEntities())
-            {
-                if (e.getUniqueId().toString().equalsIgnoreCase(uuid.toString()))
-                    this.horse = (Horse) e;
-            }
+            getHorse();
         }
         return horse != null;
+    }
+
+    private void getHorse() {
+        for (World world : Bukkit.getWorlds()) {
+            for (Entity entity : world.getEntities()) {
+                if (entity.getUniqueId().toString().equalsIgnoreCase(uuid.toString()))
+                    this.horse = (Horse) entity;
+            }
+        }
     }
 }

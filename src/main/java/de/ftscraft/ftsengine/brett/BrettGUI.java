@@ -43,7 +43,7 @@ public class BrettGUI
         List<String> createLore = new ArrayList<String>();
         createLore.add("§bErstelle eine Notitz!");
         createLore.add(" ");
-        createLore.add("§8Preis: §c5 Taler");
+        createLore.add("§8Preis: §c1 Taler");
         createMeta.setLore(createLore);
         create.setItemMeta(createMeta);
 

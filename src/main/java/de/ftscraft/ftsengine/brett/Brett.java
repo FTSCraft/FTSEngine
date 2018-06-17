@@ -9,12 +9,13 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.UUID;
 
 public class Brett
 {
 
     private String name;
-    private String creator;
+    private UUID creator;
     private BrettSign sign;
     private BrettGUI gui;
     private ArrayList<BrettNote> notes;
@@ -22,7 +23,7 @@ public class Brett
     private YamlConfiguration cfg;
     private Engine plugin;
 
-    public Brett(Sign sign, Location location, String creator, String name, Engine plugin) {
+    public Brett(Sign sign, Location location, UUID creator, String name, Engine plugin) {
         this.name = name;
         this.creator = creator;
         this.gui = new BrettGUI(this, plugin);
@@ -54,7 +55,7 @@ public class Brett
 
     }
 
-    public Brett(Sign sign, Location location, String creator, String name, Engine plugin, boolean onSetup) {
+    public Brett(Sign sign, Location location, UUID creator, String name, Engine plugin, boolean onSetup) {
         this.name = name;
         this.creator = creator;
         this.gui = new BrettGUI(this, plugin);
@@ -94,7 +95,7 @@ public class Brett
         return this.name;
     }
 
-    public String getCreator() {
+    public UUID getCreator() {
         return this.creator;
     }
 

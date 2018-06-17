@@ -73,6 +73,10 @@ public class InventoryClickListener implements Listener
 
                     if (clickeditem.getItemMeta().getDisplayName().equalsIgnoreCase("§cErstelle Notitz"))
                     {
+                        if(!plugin.getEcon().has(p, 1)) {
+                            p.sendMessage("§cDu hast nicht genug Geld!");
+                            return;
+                        }
                         Brett brett = null;
                         for (Brett bretter : plugin.bretter.values())
                         {

@@ -192,7 +192,7 @@ public class UserIO
                 BlockState bs = Bukkit.getWorld(world).getBlockAt(locaton).getState();
                 Sign sign = (Sign) bs;
 
-                Brett brett = new Brett(sign, locaton, creator, name, plugin, true);
+                Brett brett = new Brett(sign, locaton, UUID.fromString(creator), name, plugin, true);
 
                 for (String keys : cfg.getConfigurationSection("brett.note").getKeys(false))
                 {

@@ -56,6 +56,7 @@ public class Engine extends JavaPlugin implements Listener
     public HashMap<String, Briefkasten> briefkasten;
     public ArrayList<BriefLieferung> lieferungen;
     public HashMap<Player, BrettNote> playerBrettNote;
+    public Scoreboard sb;
 
     private static Economy econ = null;
     private static final Logger log = Logger.getLogger("Minecraft");
@@ -107,6 +108,7 @@ public class Engine extends JavaPlugin implements Listener
         pferde = new HashMap<>();
         var = new Var(this);
 
+
         recipie();
         new CMDausweis(this);
         new CMDwürfel(this);
@@ -138,6 +140,38 @@ public class Engine extends JavaPlugin implements Listener
         new Runner(this);
         getServer().getPluginManager().registerEvents(this, this);
 
+        setupScoreboad();
+
+    }
+
+    private void setupScoreboad()
+    {
+        sb = Bukkit.getScoreboardManager().getNewScoreboard();
+        sb.registerNewTeam("0000Admin");
+        sb.registerNewTeam("0001Moderator");
+        sb.registerNewTeam("0002Helfer");
+        sb.registerNewTeam("0003Spieler");
+        sb.getTeam("0000Admin").setPrefix("§4Kaiser §7| §7");
+        sb.getTeam("0001Moderator").setPrefix("§3Mod §7| §7");
+        sb.getTeam("0002Helfer").setPrefix("§bHelfer §7| §7");
+        sb.getTeam("0003Spieler").setPrefix("§7");
+    }
+
+    public void setPrefix(Player p) {
+        String team;
+        if(p.hasPermission("ftsengine.admin")) {
+            team = "0000Admin";
+        } else if(p.hasPermission("ftsengine.moderator")) {
+            team = "0001Moderator";
+        } else if(p.hasPermission("ftsengine.helfer")) {
+            team = "0002Helfer";
+        } else {
+            team = "0003Spieler";
+        }
+        sb.getTeam(team).addPlayer(p);
+        for(Player a : Bukkit.getOnlinePlayers()) {
+            a.setScoreboard(sb);
+        }
     }
 
     @EventHandler
