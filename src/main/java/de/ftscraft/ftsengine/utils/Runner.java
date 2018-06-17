@@ -13,7 +13,7 @@ public class Runner implements Runnable
 
     private Engine plugin;
 
-    private int seconds = 1600;
+    private int seconds = 600;
 
     public Runner(Engine plugin)
     {

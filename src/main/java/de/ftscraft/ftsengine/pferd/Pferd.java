@@ -61,9 +61,6 @@ public class Pferd
                 this.horse = (Horse) e;
         }
 
-        if(horse == null)
-            System.out.println("!!!!HORSE NULL!!!!");
-
         this.plugin = plugin;
         this.world = world;
         plugin.pferde.put(horseUuid, this);
@@ -77,6 +74,10 @@ public class Pferd
 
     public void teleport(Player p)
     {
+        if(!checkHorse()) {
+            p.sendMessage("§cDein Pferd wurde nicht Gefunden. Wir versuchen derzeit dieses Problem zu lösen!");
+            return;
+        }
         if (p.getUniqueId().toString().equals(p.getUniqueId().toString()))
         {
             horse.teleport(p.getLocation());
@@ -85,6 +86,9 @@ public class Pferd
 
     public void lock(Player p)
     {
+        if(!checkHorse()) {
+            p.sendMessage("§cDein Pferd wurde nicht Gefunden. Wir versuchen derzeit dieses Problem zu lösen!");
+        }
         if (p.getUniqueId().toString().equals(owner.toString()))
         {
             if (locked)
@@ -203,5 +207,15 @@ public class Pferd
         File file = new File(plugin.getDataFolder() + "//pferde//" + uuid.toString() + ".yml");
         file.delete();
 
-    } 
+    }
+    public boolean checkHorse() {
+        if(horse == null) {
+            for (Entity e : world.getEntities())
+            {
+                if (e.getUniqueId().toString().equalsIgnoreCase(uuid.toString()))
+                    this.horse = (Horse) e;
+            }
+        }
+        return horse != null;
+    }
 }

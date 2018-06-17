@@ -33,107 +33,111 @@ public class InventoryClickListener implements Listener
     @EventHandler
     public void onInventoryClick(InventoryClickEvent event)
     {
-
-        //FULL
-
-
-        //\FUll
-
-        //Anti Backpack
-        if (event.getCurrentItem() != null)
+        try
         {
-            if (BackpackType.getBackpackByName(event.getClickedInventory().getTitle()) != null)
+            //FULL
+
+
+            //\FUll
+
+            //Anti Backpack
+            if (event.getCurrentItem() != null)
             {
-                event.setCancelled(false);
-                return;
+                if (BackpackType.getBackpackByName(event.getClickedInventory().getTitle()) != null)
+                {
+                    event.setCancelled(false);
+                    return;
+                }
+                if (BackpackType.getBackpackByName(event.getWhoClicked().getOpenInventory().getTitle()) != null)
+                {
+                    if (BackpackType.getBackpackByName(event.getCurrentItem().getItemMeta().getDisplayName()) != null)
+                    {
+                        event.setCancelled(true);
+                        event.getWhoClicked().sendMessage("§3Du kannst kein Rucksack in ein Rucksack packen!");
+                    }
+                }
+
             }
-            if (BackpackType.getBackpackByName(event.getWhoClicked().getOpenInventory().getTitle()) != null)
+
+            //SCHWAZES BRETT
+
+            if (event.getWhoClicked() instanceof Player)
             {
-                if (BackpackType.getBackpackByName(event.getCurrentItem().getItemMeta().getDisplayName()) != null)
+                Player p = (Player) event.getWhoClicked();
+                if (event.getInventory().getTitle().startsWith("§4Schwarzes-Brett"))
                 {
                     event.setCancelled(true);
-                    event.getWhoClicked().sendMessage("§3Du kannst kein Rucksack in ein Rucksack packen!");
-                }
-            }
+                    ItemStack clickeditem = event.getCurrentItem();
+                    String name = event.getInventory().getTitle().replace("§4Schwarzes-Brett ", "");
+                    //TODO: Schwarzes Brett im Invnetar Name zueweisen, BrettNote anpassen
 
-        }
-
-        //SCHWAZES BRETT
-
-        if (event.getWhoClicked() instanceof Player)
-        {
-            Player p = (Player) event.getWhoClicked();
-            if (event.getInventory().getTitle().startsWith("§4Schwarzes-Brett"))
-            {
-                event.setCancelled(true);
-                ItemStack clickeditem = event.getCurrentItem();
-                String name = event.getInventory().getTitle().replace("§4Schwarzes-Brett ", "");
-                //TODO: Schwarzes Brett im Invnetar Name zueweisen, BrettNote anpassen
-
-                if (clickeditem.getItemMeta().getDisplayName().equalsIgnoreCase("§cErstelle Notitz"))
-                {
-                    Brett brett = null;
-                    for (Brett bretter : plugin.bretter.values())
-                    {
-                        if (bretter.getName().equalsIgnoreCase(name))
-                        {
-                            brett = bretter;
-                            break;
-                        }
-                    }
-
-                    if (brett.getGui().isFull())
-                    {
-                        p.sendMessage("§7[§bSchwarzes Brett§7] Es gibt keine freien Plätze mehr!");
-                        p.sendMessage("§7[§bSchwarzes Brett§7] Warte bis ein Platz frei ist");
-                        return;
-                    }
-
-                    p.closeInventory();
-                    p.sendMessage("§7[§bSchwarzes Brett§7] §bBitte gebe jetzt den Titel ein. §c(Max. 50 Ziechen)");
-                    ArrayList<String> al = new ArrayList<>();
-                    al.add(" ");
-                    BrettNote brettNote = new BrettNote(brett, p.getName(), true);
-                    plugin.playerBrettNote.put(p, brettNote);
-                } else
-                {
-                    String item_name = clickeditem.getItemMeta().getDisplayName();
-                    if (!(item_name.equalsIgnoreCase("&7Pinnwand") || item_name.equalsIgnoreCase("&8Leere Notitz")))
+                    if (clickeditem.getItemMeta().getDisplayName().equalsIgnoreCase("§cErstelle Notitz"))
                     {
                         Brett brett = null;
-                        int inv_slot = event.getSlot();
                         for (Brett bretter : plugin.bretter.values())
+                        {
                             if (bretter.getName().equalsIgnoreCase(name))
                             {
                                 brett = bretter;
                                 break;
                             }
-                        BrettNote note = null;
-                        for (BrettNote notes : brett.getNotes())
-                            if (notes.invslot == inv_slot)
-                            {
-                                note = notes;
-                                break;
-                            }
-                        if (note == null)
+                        }
+
+                        if (brett.getGui().isFull())
                         {
+                            p.sendMessage("§7[§bSchwarzes Brett§7] Es gibt keine freien Plätze mehr!");
+                            p.sendMessage("§7[§bSchwarzes Brett§7] Warte bis ein Platz frei ist");
                             return;
                         }
-                        String note_title = note.getTitle();
-                        String note_cont = note.getContent();
-                        String note_creator = note.getCreator();
+
+                        p.closeInventory();
+                        p.sendMessage("§7[§bSchwarzes Brett§7] §bBitte gebe jetzt den Titel ein. §c(Max. 50 Ziechen)");
+                        ArrayList<String> al = new ArrayList<>();
+                        al.add(" ");
+                        BrettNote brettNote = new BrettNote(brett, p.getName(), true);
+                        plugin.playerBrettNote.put(p, brettNote);
+                    } else
+                    {
+                        String item_name = clickeditem.getItemMeta().getDisplayName();
+                        if (!(item_name.equalsIgnoreCase("&7Pinnwand") || item_name.equalsIgnoreCase("&8Leere Notitz")))
+                        {
+                            Brett brett = null;
+                            int inv_slot = event.getSlot();
+                            for (Brett bretter : plugin.bretter.values())
+                                if (bretter.getName().equalsIgnoreCase(name))
+                                {
+                                    brett = bretter;
+                                    break;
+                                }
+                            BrettNote note = null;
+                            for (BrettNote notes : brett.getNotes())
+                                if (notes.invslot == inv_slot)
+                                {
+                                    note = notes;
+                                    break;
+                                }
+                            if (note == null)
+                            {
+                                return;
+                            }
+                            String note_title = note.getTitle();
+                            String note_cont = note.getContent();
+                            String note_creator = note.getCreator();
 
 
-                        p.sendMessage("§7**********************************");
-                        p.sendMessage("§6" + note_title);
-                        p.sendMessage(note_cont);
-                        p.sendMessage(" ");
-                        p.sendMessage("§7§nNotitz von " + note_creator);
-                        p.sendMessage("§7**********************************");
+                            p.sendMessage("§7**********************************");
+                            p.sendMessage("§6" + note_title);
+                            p.sendMessage(note_cont);
+                            p.sendMessage(" ");
+                            p.sendMessage("§7§nNotitz von " + note_creator);
+                            p.sendMessage("§7**********************************");
 
+                        }
                     }
                 }
             }
+        } catch (Exception ignored) {
+
         }
     }
 

@@ -64,32 +64,38 @@ public class CMDpferd implements CommandExecutor
                 {
                     FTSUser user = plugin.getPlayer().get(p);
                     Pferd pferd = user.getChosedPferd();
-                    if(pferd != null)
-                    pferd.teleport(p);
+                    if (pferd != null)
+                        pferd.teleport(p);
                     else p.sendMessage("§eDu hast kein Pferd ausgewählt");
                 } else p.sendMessage("§eDu bist schon auf einem Gefährt");
             } else if (sub.equalsIgnoreCase("verkaufen"))
             {
                 if (p.getVehicle() != null)
                 {
-                    if(args.length == 2) {
+                    if (args.length == 2)
+                    {
                         int price;
-                        try {
+                        try
+                        {
                             price = Integer.valueOf(args[1]);
-                        } catch (NumberFormatException e) {
+                        } catch (NumberFormatException e)
+                        {
                             p.sendMessage("§eBitte verwende eine Gültige Zahl");
                             return true;
                         }
-                        if(price <= 0) {
+                        if (price <= 0)
+                        {
                             p.sendMessage("§eDer Betrag darf nicht negativ sein!");
                             return true;
                         }
                         Pferd pferd = plugin.getPferde().get(p.getVehicle().getUniqueId());
-                        if(pferd == null) {
+                        if (pferd == null)
+                        {
                             p.sendMessage("§eDas Pferd muss regestriert sein!");
                             return true;
                         }
-                        if(!pferd.getOwner().toString().equalsIgnoreCase(p.getUniqueId().toString())) {
+                        if (!pferd.getOwner().toString().equalsIgnoreCase(p.getUniqueId().toString()))
+                        {
                             p.sendMessage("§eDir muss das Pferd gehören!");
                             return true;
                         }
@@ -101,10 +107,11 @@ public class CMDpferd implements CommandExecutor
                 } else p.sendMessage("§eDu musst auf ein Pferd sitzen");
             } else if (sub.equalsIgnoreCase("kaufen"))
             {
-                if(p.getVehicle() != null) {
+                if (p.getVehicle() != null)
+                {
                     Pferd pferd = plugin.getPferde().get(p.getVehicle().getUniqueId());
                     FTSUser user = plugin.getPlayer().get(p);
-                    if(user.getPferde().size() <= 3)
+                    if (user.getPferde().size() <= 3)
                     {
                         if (pferd.getPrice() != -1)
                         {
@@ -119,10 +126,13 @@ public class CMDpferd implements CommandExecutor
                 } else p.sendMessage("§eDu musst auf ein Pferd sitzen");
             } else if (sub.equalsIgnoreCase("abstellen"))
             {
-                if(p.getVehicle() != null) {
-                    if(p.getVehicle() instanceof Horse) {
+                if (p.getVehicle() != null)
+                {
+                    if (p.getVehicle() instanceof Horse)
+                    {
                         FTSUser user = plugin.getPlayer().get(p);
-                        if(user.ownsHorse((Horse) p.getVehicle())) {
+                        if (user.ownsHorse((Horse) p.getVehicle()))
+                        {
                             Pferd pferd = plugin.getPferde().get(p.getVehicle().getUniqueId());
                             pferd.lock(p);
                             p.getVehicle().removePassenger(p);
@@ -131,8 +141,11 @@ public class CMDpferd implements CommandExecutor
                 } else p.sendMessage("§eDu musst auf ein Pferd sitzen");
             } else if (sub.equalsIgnoreCase("auswählen"))
             {
-                FTSUser user = plugin.getPlayer().get(p);
-                user.setChosedPferd(args[1]);
+                if (args.length == 2)
+                {
+                    FTSUser user = plugin.getPlayer().get(p);
+                    user.setChosedPferd(args[1]);
+                } else plugin.getVar().sendPferdHelpMsg(p);
             } else if (sub.equalsIgnoreCase("list"))
             {
                 FTSUser user = plugin.getPlayer().get(p);
