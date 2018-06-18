@@ -49,13 +49,17 @@ public class Runner implements Runnable
 
         try
         {
+            //Lieferungen
             for (BriefLieferung lieferung : plugin.lieferungen)
             {
                 lieferung.setSeconds(lieferung.getSeconds() - 1);
             }
+            //
         } catch (Exception ignored) {
 
         }
+
+
 
     }
 

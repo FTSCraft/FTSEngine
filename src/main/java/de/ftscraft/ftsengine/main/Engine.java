@@ -10,10 +10,10 @@ import de.ftscraft.ftsengine.courier.BriefLieferung;
 import de.ftscraft.ftsengine.courier.Briefkasten;
 import de.ftscraft.ftsengine.listener.*;
 import de.ftscraft.ftsengine.pferd.Pferd;
+import de.ftscraft.ftsengine.reisepunkt.Reisepunkt;
 import de.ftscraft.ftsengine.utils.*;
 import net.milkbowl.vault.economy.Economy;
 import org.bukkit.*;
-import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.Horse;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -52,6 +52,7 @@ public class Engine extends JavaPlugin implements Listener
     public HashMap<Location, Brett> bretter;
     public HashMap<String, Briefkasten> briefkasten;
     public ArrayList<BriefLieferung> lieferungen;
+    public ArrayList<Reisepunkt> reisepunkte;
     public HashMap<Player, BrettNote> playerBrettNote;
     public Scoreboard sb;
 
@@ -100,6 +101,7 @@ public class Engine extends JavaPlugin implements Listener
         briefkasten = new HashMap<>();
         itemStacks = new ItemStacks();
         reiter = new ArrayList<>();
+        reisepunkte = new ArrayList<>();
         player = new HashMap<>();
         lieferungen = new ArrayList<>();
         pferde = new HashMap<>();
@@ -150,7 +152,7 @@ public class Engine extends JavaPlugin implements Listener
         sb.registerNewTeam("0004König").setPrefix("§2König §7");
         sb.registerNewTeam("0005Fürst").setPrefix("§2Fürst §7");
         sb.registerNewTeam("0006Stadtherr").setPrefix("§2Stadtherr §7");
-        sb.registerNewTeam("0007Bürgermeister").setPrefix("§2Bürgermeister ");
+        sb.registerNewTeam("0007Bmeister").setPrefix("§2Bürgermeister ");
         sb.registerNewTeam("0008Siedler").setPrefix("§2Siedler §7");
         sb.registerNewTeam("0009Erzmeister").setPrefix("§9Erzmeister §7");
         sb.registerNewTeam("0010Meister").setPrefix("§9Meister §7");
@@ -173,9 +175,9 @@ public class Engine extends JavaPlugin implements Listener
         } else if(p.hasPermission("ftsengine.furst")) {
             team = "0005Fürst";
         } else if(p.hasPermission("ftsengine.stadtherr")) {
-            team = "0006Bürgermeister";
+            team = "0006Stadtherr";
         } else if(p.hasPermission("ftsengine.burgermeister")) {
-            team = "0007Bürgermeister";
+            team = "0007Bmeister";
         } else if(p.hasPermission("ftsengine.siedler")) {
             team = "0008Siedler";
         } else if(p.hasPermission("ftsengine.erzmeister")) {
@@ -296,7 +298,7 @@ public class Engine extends JavaPlugin implements Listener
             a.safe();
         }
 
-        new UserIO(this, true);
+        new UserIO(this);
 
     }
 

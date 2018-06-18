@@ -7,6 +7,7 @@ import de.ftscraft.ftsengine.courier.Brief;
 import de.ftscraft.ftsengine.courier.Briefkasten;
 import de.ftscraft.ftsengine.main.Engine;
 import de.ftscraft.ftsengine.pferd.Pferd;
+import de.ftscraft.ftsengine.reisepunkt.Reisepunkt;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
@@ -42,10 +43,11 @@ public class UserIO
         getBriefkasten();
     }
 
-    public UserIO(Engine plugin, boolean safe)
+    public UserIO(Engine plugin, boolean save)
     {
         this.plugin = plugin;
         safeBriefe();
+        safeReisepunkte();
     }
 
     public void getAusweise()
@@ -259,7 +261,7 @@ public class UserIO
         }
     }
 
-    public void safeBriefe()
+    private void safeBriefe()
     {
         File file = new File(plugin.getDataFolder() + "//briefe.yml");
         YamlConfiguration cfg = YamlConfiguration.loadConfiguration(file);
@@ -279,6 +281,32 @@ public class UserIO
         {
             e.printStackTrace();
         }
+    }
+
+    private void safeReisepunkte() {
+        File file = new File(plugin.getDataFolder() + "//reisepunkte.yml");
+        YamlConfiguration cfg = YamlConfiguration.loadConfiguration(file);
+
+        for(Reisepunkt a : plugin.reisepunkte) {
+            cfg.set(a.getName()+".location.x", a.getLocation().getX());
+            cfg.set(a.getName()+".location.y", a.getLocation().getY());
+            cfg.set(a.getName()+".location.z", a.getLocation().getZ());
+            cfg.set(a.getName()+".location.world", a.getLocation().getWorld().getName());
+            cfg.set(a.getName()+".ziel.x", a.getZiel().getX());
+            cfg.set(a.getName()+".ziel.y", a.getZiel().getY());
+            cfg.set(a.getName()+".ziel.z", a.getZiel().getZ());
+            cfg.set(a.getName()+".ziel.world", a.getZiel().getWorld().getName());
+            cfg.set(a.getName()+".duration", a.getDuration());
+        }
+
+        try
+        {
+            cfg.save(file);
+        } catch (IOException e)
+        {
+            e.printStackTrace();
+        }
+
     }
 
 }

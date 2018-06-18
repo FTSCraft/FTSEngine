@@ -72,6 +72,14 @@ public class Var
         p.sendMessage("§6FTSEngine von §5halberfan §6für FTS-Craft");
     }
 
+    public void sendReisepunkHelpMsg(Player p) {
+        p.sendMessage("§c--- §e/reisepunk §c---");
+        p.sendMessage("§e/reisepunkt setzen [Name] [Dauer] §bSetzt ein Reisepunk");
+        p.sendMessage("§e/reisepunkt ziel [Name] §bSetzt das Ziel eines Reisepunkts");
+        p.sendMessage("§e/reisepunkt list §bListet alle Reisepunkte auf");
+        p.sendMessage("§e/reisepunk löschen [Name] §bEntfernt ein Reisepunkt");
+    }
+
     public void ChatInRoleplay(Player p, String msg)
     {
 

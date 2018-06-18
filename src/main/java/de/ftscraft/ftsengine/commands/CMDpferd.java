@@ -31,6 +31,13 @@ public class CMDpferd implements CommandExecutor
 
         Player p = (Player) cs;
 
+        boolean wartung = true;
+
+        if(wartung) {
+            p.sendMessage("§cDieser Command ist derzeit in Wartung. Tut uns leid :)");
+            return true;
+        }
+
         if (args.length > 0)
         {
             String sub = args[0];
