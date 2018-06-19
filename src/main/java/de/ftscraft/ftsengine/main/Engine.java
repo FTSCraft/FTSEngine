@@ -93,11 +93,6 @@ public class Engine extends JavaPlugin implements Listener
     private void init()
     {
         this.protocolManager = ProtocolLibrary.getProtocolManager();
-        Scoreboard scoreboard = Bukkit.getScoreboardManager().getMainScoreboard();
-        if (scoreboard.getTeam("roleplay_modus") == null)
-            team = scoreboard.registerNewTeam("roleplay_modus");
-        else team = scoreboard.getTeam("roleplay_modus");
-        team.setOption(Team.Option.NAME_TAG_VISIBILITY, Team.OptionStatus.NEVER);
         chats = new HashMap<>();
         highestId = 0;
         biggestBpId = 0;
@@ -158,8 +153,14 @@ public class Engine extends JavaPlugin implements Listener
     private void setupScoreboad()
     {
         sb = Bukkit.getScoreboardManager().getMainScoreboard();
-        if(sb.getTeam("0000Admin") != null)
-            return;
+        for(Team t : sb.getTeams()) {
+            t.unregister();
+        }
+        if (sb.getTeam("roleplay_modus") == null)
+            team = sb.registerNewTeam("roleplay_modus");
+        else team = sb.getTeam("roleplay_modus");
+        team.setOption(Team.Option.NAME_TAG_VISIBILITY, Team.OptionStatus.NEVER);
+
         sb.registerNewTeam("0000Admin").setPrefix("§d");
         sb.registerNewTeam("0002Helfer").setPrefix("§b");
         sb.registerNewTeam("0003Herzog").setPrefix("§2");
@@ -178,7 +179,6 @@ public class Engine extends JavaPlugin implements Listener
 
     public void setPrefix(Player p) {
         String team;
-        new PacketPlayOutScoreboardTeam();
         if(p.hasPermission("ftsengine.admin")) {
             team = "0000Admin";
         } else if(p.hasPermission("ftsengine.helfer")) {
@@ -208,7 +208,9 @@ public class Engine extends JavaPlugin implements Listener
         } else {
             team ="0014Reisender";
         }
-        sb.getTeam(team).addPlayer(p);
+
+        Team t = sb.getTeam(team);
+        t.addPlayer(p);
         for(Player a : Bukkit.getOnlinePlayers()) {
             a.setScoreboard(sb);
         }

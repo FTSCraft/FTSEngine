@@ -22,7 +22,6 @@ public class BlockBreakListener implements Listener
     @EventHandler
     public void onBreak(BlockBreakEvent event)
     {
-
         if(event.getBlock().getType() == Material.SIGN || event.getBlock().getType() == Material.WALL_SIGN || event.getBlock().getType() == Material.SIGN_POST) {
             Sign sign = (Sign) event.getBlock().getState();
             if(sign.getLine(0).equalsIgnoreCase("§b[Briefkasten]")) {
@@ -46,7 +45,7 @@ public class BlockBreakListener implements Listener
             Sign sign = (Sign) event.getBlock().getState();
             if (sign.getLine(0).equalsIgnoreCase("§4Schwarzes Brett"))
             {
-                if (!(event.getPlayer().hasPermission("blackboard.remove")))
+                if (!(event.getPlayer().hasPermission("blackboard.remove")) && !plugin.bretter.get(sign.getLocation()).getCreator().toString().equals(event.getPlayer().getUniqueId().toString()))
                 {
                     event.setCancelled(true);
                     event.getPlayer().sendMessage("§7[§bSchwarzes Brett§7] Du darfst das nicht kaputt machen!");
