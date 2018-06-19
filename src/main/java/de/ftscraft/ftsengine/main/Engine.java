@@ -1,5 +1,10 @@
 package de.ftscraft.ftsengine.main;
 
+import com.comphenix.protocol.PacketType;
+import com.comphenix.protocol.ProtocolLibrary;
+import com.comphenix.protocol.ProtocolManager;
+import com.comphenix.protocol.events.PacketContainer;
+import com.comphenix.protocol.wrappers.WrappedChatComponent;
 import de.ftscraft.ftsengine.backpacks.Backpack;
 import de.ftscraft.ftsengine.brett.Brett;
 import de.ftscraft.ftsengine.brett.BrettNote;
@@ -13,7 +18,11 @@ import de.ftscraft.ftsengine.pferd.Pferd;
 import de.ftscraft.ftsengine.reisepunkt.Reisepunkt;
 import de.ftscraft.ftsengine.utils.*;
 import net.milkbowl.vault.economy.Economy;
+import net.minecraft.server.v1_12_R1.IChatBaseComponent;
+import net.minecraft.server.v1_12_R1.PacketPlayOutPlayerListHeaderFooter;
+import net.minecraft.server.v1_12_R1.PacketPlayOutScoreboardTeam;
 import org.bukkit.*;
+import org.bukkit.craftbukkit.v1_12_R1.entity.CraftPlayer;
 import org.bukkit.entity.Horse;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -28,6 +37,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scoreboard.Scoreboard;
 import org.bukkit.scoreboard.Team;
 
+import java.lang.reflect.Field;
 import java.util.*;
 import java.util.List;
 import java.util.logging.Logger;
@@ -40,7 +50,7 @@ public class Engine extends JavaPlugin implements Listener
     private Team team;
     private UUIDFetcher uF;
     private Var var;
-    public ItemStacks itemStacks;
+    private ItemStacks itemStacks;
     public int highestId;
     public int biggestBpId;
     public int biggestBriefId;
@@ -54,12 +64,13 @@ public class Engine extends JavaPlugin implements Listener
     public ArrayList<BriefLieferung> lieferungen;
     public ArrayList<Reisepunkt> reisepunkte;
     public HashMap<Player, BrettNote> playerBrettNote;
-    public Scoreboard sb;
+    private Scoreboard sb;
 
     private static Economy econ = null;
     private static final Logger log = Logger.getLogger("Minecraft");
 
     public List<Material> mats = new ArrayList<>();
+    private ProtocolManager protocolManager;
 
     @Override
     public void onEnable()
@@ -81,6 +92,7 @@ public class Engine extends JavaPlugin implements Listener
 
     private void init()
     {
+        this.protocolManager = ProtocolLibrary.getProtocolManager();
         Scoreboard scoreboard = Bukkit.getScoreboardManager().getMainScoreboard();
         if (scoreboard.getTeam("roleplay_modus") == null)
             team = scoreboard.registerNewTeam("roleplay_modus");
@@ -145,25 +157,28 @@ public class Engine extends JavaPlugin implements Listener
 
     private void setupScoreboad()
     {
-        sb = Bukkit.getScoreboardManager().getNewScoreboard();
-        sb.registerNewTeam("0000Admin").setPrefix("§dKaiser §7");
-        sb.registerNewTeam("0002Helfer").setPrefix("§bHelfer §7");
-        sb.registerNewTeam("0003Herzog").setPrefix("§2Herzog §7");
-        sb.registerNewTeam("0004König").setPrefix("§2König §7");
-        sb.registerNewTeam("0005Fürst").setPrefix("§2Fürst §7");
-        sb.registerNewTeam("0006Stadtherr").setPrefix("§2Stadtherr §7");
-        sb.registerNewTeam("0007Bmeister").setPrefix("§2Bürgermeister ");
-        sb.registerNewTeam("0008Siedler").setPrefix("§2Siedler §7");
-        sb.registerNewTeam("0009Erzmeister").setPrefix("§9Erzmeister §7");
-        sb.registerNewTeam("0010Meister").setPrefix("§9Meister §7");
-        sb.registerNewTeam("0011Walküre").setPrefix("§4Walküre §7");
-        sb.registerNewTeam("0012Einherjer").setPrefix("§4Einherjer §7");
-        sb.registerNewTeam("0013Bürger").setPrefix("§6Bürger §7");
-        sb.registerNewTeam("0014Reisender").setPrefix("§6Reisender §7");
+        sb = Bukkit.getScoreboardManager().getMainScoreboard();
+        if(sb.getTeam("0000Admin") != null)
+            return;
+        sb.registerNewTeam("0000Admin").setPrefix("§d");
+        sb.registerNewTeam("0002Helfer").setPrefix("§b");
+        sb.registerNewTeam("0003Herzog").setPrefix("§2");
+        sb.registerNewTeam("0004König").setPrefix("§2");
+        sb.registerNewTeam("0005Fürst").setPrefix("§2");
+        sb.registerNewTeam("0006Stadtherr").setPrefix("§2");
+        sb.registerNewTeam("0007Bmeister").setPrefix("§2");
+        sb.registerNewTeam("0008Siedler").setPrefix("§2");
+        sb.registerNewTeam("0009Erzmeister").setPrefix("§9");
+        sb.registerNewTeam("0010Meister").setPrefix("§9");
+        sb.registerNewTeam("0011Walküre").setPrefix("§4");
+        sb.registerNewTeam("0012Einherjer").setPrefix("§4");
+        sb.registerNewTeam("0013Bürger").setPrefix("§6");
+        sb.registerNewTeam("0014Reisender").setPrefix("§6");
     }
 
     public void setPrefix(Player p) {
         String team;
+        new PacketPlayOutScoreboardTeam();
         if(p.hasPermission("ftsengine.admin")) {
             team = "0000Admin";
         } else if(p.hasPermission("ftsengine.helfer")) {
@@ -277,7 +292,7 @@ public class Engine extends JavaPlugin implements Listener
     }
 
 
-    public void safeAll()
+    private void safeAll()
     {
         for (Ausweis a : ausweis.values())
         {
@@ -464,5 +479,17 @@ public class Engine extends JavaPlugin implements Listener
                 return true;
         }
         return false;
+    }
+
+    public void sendTablistHeaderAndFooter(Player p, String header, String footer) {
+        PacketContainer pc = protocolManager.createPacket(PacketType.Play.Server.PLAYER_LIST_HEADER_FOOTER);
+
+        pc.getChatComponents().write(0, WrappedChatComponent.fromText(header)).write(1, WrappedChatComponent.fromText(footer));
+
+        try {
+            protocolManager.sendServerPacket(p, pc);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
     }
 }
