@@ -22,7 +22,7 @@ public class Runner implements Runnable
     {
         this.plugin = plugin;
         plugin.getServer().getScheduler().scheduleSyncRepeatingTask(plugin, this, 20, 20);
-        footer = new ArrayList<>();
+        /*footer = new ArrayList<>();
 
         footer.add("        §dKaiser §r- §bHelfer §r- §2Herzog        ");
         footer.add("         §bHelfer §r- §2Herzog §r- §2König        ");
@@ -37,25 +37,26 @@ public class Runner implements Runnable
         footer.add("      §4Walküre §r- §4Einherjer §r- §6Bürger      ");
         footer.add("     §4Einherjer §r- §6Bürger §r- §6Reisender     ");
         footer.add("       §6Bürger §r- §6Reisender §r- §dKaiser      ");
-        footer.add("       §6Reisender §r- §dKaiser §r- §bHelfer      ");
+        footer.add("       §6Reisender §r- §dKaiser §r- §bHelfer      ");*/
     }
 
     @Override
     public void run()
     {
 
-        seconds_tab ++;
+        /*seconds_tab ++;
         if(seconds_tab == 2) {
             seconds_tab = 0;
             tablist_status++;
             if(tablist_status == 14)
                 tablist_status = 0;
 
-            for(Player all : Bukkit.getOnlinePlayers()) {
+            for(Player all : Bukkit.getOnlinePlayers())
                 plugin.sendTablistHeaderAndFooter(all, "§6§lFTS-Craft", footer.get(tablist_status));
-            }
 
-        }
+        }*/
+
+
 
     }
 

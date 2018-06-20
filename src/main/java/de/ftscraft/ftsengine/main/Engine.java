@@ -161,59 +161,116 @@ public class Engine extends JavaPlugin implements Listener
         else team = sb.getTeam("roleplay_modus");
         team.setOption(Team.Option.NAME_TAG_VISIBILITY, Team.OptionStatus.NEVER);
 
-        sb.registerNewTeam("0000Admin").setPrefix("§d");
-        sb.registerNewTeam("0002Helfer").setPrefix("§b");
-        sb.registerNewTeam("0003Herzog").setPrefix("§2");
-        sb.registerNewTeam("0004König").setPrefix("§2");
-        sb.registerNewTeam("0005Fürst").setPrefix("§2");
-        sb.registerNewTeam("0006Stadtherr").setPrefix("§2");
-        sb.registerNewTeam("0007Bmeister").setPrefix("§2");
-        sb.registerNewTeam("0008Siedler").setPrefix("§2");
-        sb.registerNewTeam("0009Erzmeister").setPrefix("§9");
-        sb.registerNewTeam("0010Meister").setPrefix("§9");
-        sb.registerNewTeam("0011Walküre").setPrefix("§4");
-        sb.registerNewTeam("0012Einherjer").setPrefix("§4");
-        sb.registerNewTeam("0013Bürger").setPrefix("§6");
-        sb.registerNewTeam("0014Reisender").setPrefix("§6");
+        sb.registerNewTeam("0000Admin").setPrefix("§bAdmin");
+        sb.registerNewTeam("0002Moderator").setPrefix("§bModerator");
+        sb.registerNewTeam("0003Helfer").setPrefix("§bHelfer");
+        sb.registerNewTeam("0004Walkure").setPrefix("§cWalküre");
+        sb.registerNewTeam("0005Einherjer").setPrefix("§cEinherjer");
+        sb.registerNewTeam("0006Architekt").setPrefix("§eArchitekt");
+        sb.registerNewTeam("0007Ehrenburger").setPrefix("§eEhrenbürger");
+        sb.registerNewTeam("0008Rauber").setPrefix("§9Räuber");
+        sb.registerNewTeam("0009Richter").setPrefix("§9Richter");
+        sb.registerNewTeam("0010Mejster").setPrefix("§9Mejster");
+        sb.registerNewTeam("0011Konig").setPrefix("§2König");
+        sb.registerNewTeam("0012Herzog").setPrefix("§2Herzog");
+        sb.registerNewTeam("0013Furst").setPrefix("§2Fürst");
+        sb.registerNewTeam("0014Graf").setPrefix("§2Graf");
+        sb.registerNewTeam("0015Burgherr").setPrefix("§2Burgherr");
+        sb.registerNewTeam("0016Ritter").setPrefix("§2Ritter");
+        sb.registerNewTeam("0017Intendant").setPrefix("§2Intendant");
+        sb.registerNewTeam("0018Kurator").setPrefix("§2Kurator");
+        sb.registerNewTeam("0019Kaufmann").setPrefix("§2Kaufmann");
+        sb.registerNewTeam("0020Gildenherr").setPrefix("§2Gildenherr");
+        sb.registerNewTeam("0021Stadtherr").setPrefix("§2Stadtherr");
+        sb.registerNewTeam("0022BMeister").setPrefix("§2Bürgermeister");
+        sb.registerNewTeam("0023Siedler").setPrefix("§2Siedler");
+        sb.registerNewTeam("0024Vogt").setPrefix("§6Vogt");
+        sb.registerNewTeam("0025Herold").setPrefix("§6Herold");
+        sb.registerNewTeam("0026Knappe").setPrefix("§6Knappe");
+        sb.registerNewTeam("0027SchauSpieler").setPrefix("§6Schauspieler");
+        sb.registerNewTeam("0028Musiker").setPrefix("§6Musiker");
+        sb.registerNewTeam("0029Schreiber").setPrefix("§6Schreiber");
+        sb.registerNewTeam("0030Seefahrer").setPrefix("§6Seefahrer");
+        sb.registerNewTeam("0031Hafenmeister").setPrefix("§6Hafenmeister");
+        sb.registerNewTeam("0032Handler").setPrefix("§6Händler");
+        sb.registerNewTeam("0033Burger").setPrefix("§6Bürger");
+        sb.registerNewTeam("0034Reisender").setPrefix("§6Reisender");
     }
 
     public void setPrefix(Player p) {
         String team;
         if(p.hasPermission("ftsengine.admin")) {
             team = "0000Admin";
+        } else if(p.hasPermission("ftsengine.moderator")) {
+            team = "0002Moderator";
         } else if(p.hasPermission("ftsengine.helfer")) {
-            team = "0002Helfer";
-        } else if(p.hasPermission("ftsengine.herzog")) {
-            team = "0003Herzog";
-        } else if(p.hasPermission("ftsengine.konig")) {
-            team = "0004König";
-        } else if(p.hasPermission("ftsengine.furst")) {
-            team = "0005Fürst";
-        } else if(p.hasPermission("ftsengine.stadtherr")) {
-            team = "0006Stadtherr";
-        } else if(p.hasPermission("ftsengine.burgermeister")) {
-            team = "0007Bmeister";
-        } else if(p.hasPermission("ftsengine.siedler")) {
-            team = "0008Siedler";
-        } else if(p.hasPermission("ftsengine.erzmeister")) {
-            team = "0009Erzmeister";
-        } else if(p.hasPermission("ftsengine.meister")) {
-            team = "0010Meister";
+            team = "0003Helfer";
         } else if(p.hasPermission("ftsengine.walkure")) {
-            team = "0011Walküre";
+            team = "0004Walkure";
         } else if(p.hasPermission("ftsengine.einherjer")) {
-            team = "0012Einherjer";
+            team = "0005Einherjer";
+        } else if(p.hasPermission("ftsengine.architekt")) {
+            team = "0006Architekt";
+        } else if(p.hasPermission("ftsengine.ehrenburger")) {
+            team = "0007Ehrenburger";
+        } else if(p.hasPermission("ftsengine.rauber")) {
+            team = "0008Rauber";
+        } else if(p.hasPermission("ftsengine.richter")) {
+            team = "0009Richter";
+        } else if(p.hasPermission("ftsengine.mejster")) {
+            team = "0010Mejster";
+        } else if(p.hasPermission("ftsengine.konig")) {
+            team = "0011Konig";
+        } else if(p.hasPermission("ftsengine.herzog")) {
+            team = "0012Herzog";
+        } else if(p.hasPermission("ftsengine.furst")) {
+            team = "0013Furst";
+        } else if(p.hasPermission("ftsengine.graf")){
+            team = "0014Graf";
+        } else if(p.hasPermission("ftsengine.burgherr")) {
+            team = "0015Burgherr";
+        } else if(p.hasPermission("ftsengine.ritter")) {
+            team = "0016Ritter";
+        } else if(p.hasPermission("ftsengine.intendant")) {
+            team = "0017Intendant";
+        } else if(p.hasPermission("ftsengine.kurator")) {
+            team = "0018Kurator";
+        } else if(p.hasPermission("ftsengine.kaufmann")) {
+            team = "0019Kaufmann";
+        } else if(p.hasPermission("ftsengine.gildenherr")) {
+            team = "0020Gildenherr";
+        } else if(p.hasPermission("ftsengine.stadtherr")) {
+            team = "0021Stadtherr";
+        } else if(p.hasPermission("ftsengine.burgermeister")) {
+            team = "0022BMeister";
+        } else if(p.hasPermission("ftsengine.siedler")) {
+            team = "0023Siedler";
+        } else if(p.hasPermission("ftsengine.vogt")) {
+            team = "0024Vogt";
+        } else if(p.hasPermission("ftsengine.herold")) {
+            team = "0025Herold";
+        } else if(p.hasPermission("ftsengine.knappe")) {
+            team = "0026Knappe";
+        } else if(p.hasPermission("ftsengine.schauspieler")) {
+            team = "0027SchauSpieler";
+        } else if(p.hasPermission("ftsengine.musiker")) {
+            team = "0028Musiker";
+        } else if(p.hasPermission("ftsengine.schreiber")) {
+            team = "0029Schreiber";
+        } else if(p.hasPermission("ftsengine.seefahrer")) {
+            team = "0030Seefahrer";
+        } else if(p.hasPermission("ftsengine.hafenmeister")) {
+            team = "0031Hafenmeister";
+        } else if(p.hasPermission("ftsengine.handler")) {
+            team = "0032Handler";
         } else if(p.hasPermission("ftsengine.burger")) {
-            team = "0013Bürger";
+            team = "0033Burger";
         } else {
-            team ="0014Reisender";
+            team = "0034Reisender";
         }
-
         Team t = sb.getTeam(team);
-        t.addPlayer(p);
-        for(Player a : Bukkit.getOnlinePlayers()) {
-            a.setScoreboard(sb);
-        }
+        p.setPlayerListName(t.getPrefix() + " §7| " + ChatColor.RESET + p.getName());
+        sendTablistHeaderAndFooter(p, "§6§lplay.ftscraft.de", "");
     }
 
     @EventHandler
