@@ -32,10 +32,12 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.ShapedRecipe;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.permissions.Permission;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scoreboard.Scoreboard;
 import org.bukkit.scoreboard.Team;
+import org.bukkit.util.permissions.CommandPermissions;
 
 import java.lang.reflect.Field;
 import java.util.*;
@@ -270,6 +272,7 @@ public class Engine extends JavaPlugin implements Listener
         }
         Team t = sb.getTeam(team);
         p.setPlayerListName(t.getPrefix() + " §7| " + ChatColor.RESET + p.getName());
+        t.addPlayer(p);
         sendTablistHeaderAndFooter(p, "§6§lplay.ftscraft.de", "");
     }
 
