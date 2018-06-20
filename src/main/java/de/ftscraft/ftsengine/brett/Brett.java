@@ -33,7 +33,7 @@ public class Brett
         this.file = new File(plugin.getDataFolder() + "//bretter//" + name + ".yml");
         this.cfg = YamlConfiguration.loadConfiguration(this.file);
         if (!this.file.exists()) {
-            this.cfg.set("brett.creator", creator);
+            this.cfg.set("brett.creator", creator.toString());
             this.cfg.set("brett.location.X", location.getX());
             this.cfg.set("brett.location.Y", location.getY());
             this.cfg.set("brett.location.Z", location.getZ());

@@ -3,22 +3,12 @@ package de.ftscraft.ftsengine.commands;
 import de.ftscraft.ftsengine.courier.Brief;
 import de.ftscraft.ftsengine.courier.BriefLieferung;
 import de.ftscraft.ftsengine.main.Engine;
-import de.ftscraft.ftsengine.courier.FTSMapRenderer;
 import org.bukkit.Bukkit;
-import org.bukkit.Material;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
-import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
-import org.bukkit.inventory.ItemFlag;
-import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.ItemMeta;
-import org.bukkit.map.MapRenderer;
-import org.bukkit.map.MapView;
-
-import java.util.UUID;
 
 public class CMDbrief implements CommandExecutor
 {
@@ -63,6 +53,7 @@ public class CMDbrief implements CommandExecutor
             }
 
             String msg = "";
+            String name = p.getName();
             for (int i = 0; i < args.length; i++)
             {
                 msg += " " + args[i];
@@ -71,14 +62,30 @@ public class CMDbrief implements CommandExecutor
             msg = msg.replaceAll("ü", "ue");
             msg = msg.replaceAll("ß", "ss");
             msg = msg.replaceAll("ö", "oe");
+            if (msg.startsWith(" anonym"))
+            {
+                if (plugin.getEcon().has(p, 2))
+                {
+                    plugin.getEcon().depositPlayer(p, 2);
+                    p.sendMessage("§cDieser Brief ist nun Anonym!");
+                    msg.replaceFirst("anonym", "");
+                    name = "XXXX";
+                } else
+                {
+                    p.sendMessage("Dafür hast du kein Geld!");
+                    return true;
+                }
+            }
 
-            Brief brief = new Brief(plugin, p.getName(), msg, p.getWorld().getName());
+            Brief brief = new Brief(plugin, name, msg, p.getWorld().getName());
             p.getInventory().addItem(brief.getMap(p.getWorld()));
 
             return false;
         }
 
+
         return true;
     }
+
 }
 

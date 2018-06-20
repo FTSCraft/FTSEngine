@@ -3,6 +3,7 @@ package de.ftscraft.ftsengine.main;
 import de.ftscraft.ftsengine.courier.Briefkasten;
 import de.ftscraft.ftsengine.pferd.Pferd;
 import de.ftscraft.ftsengine.utils.Ausweis;
+import de.ftscraft.ftsengine.utils.TeamPrefixs;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -42,6 +43,7 @@ public class FTSUser
         if(plugin.briefkasten.containsKey(player.getUniqueId().toString()))
             this.briefkasten = plugin.briefkasten.get(player.getUniqueId().toString());
 
+        TeamPrefixs.setPlayerPrefix(player);
         plugin.setPrefix(player);
 
     }

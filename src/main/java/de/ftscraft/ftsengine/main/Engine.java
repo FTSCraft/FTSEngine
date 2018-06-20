@@ -40,6 +40,7 @@ import org.bukkit.scoreboard.Team;
 import org.bukkit.util.permissions.CommandPermissions;
 
 import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
 import java.util.*;
 import java.util.List;
 import java.util.logging.Logger;
@@ -163,40 +164,45 @@ public class Engine extends JavaPlugin implements Listener
         else team = sb.getTeam("roleplay_modus");
         team.setOption(Team.Option.NAME_TAG_VISIBILITY, Team.OptionStatus.NEVER);
 
-        sb.registerNewTeam("0000Admin").setPrefix("§bAdmin");
-        sb.registerNewTeam("0002Moderator").setPrefix("§bModerator");
-        sb.registerNewTeam("0003Helfer").setPrefix("§bHelfer");
-        sb.registerNewTeam("0004Walkure").setPrefix("§cWalküre");
-        sb.registerNewTeam("0005Einherjer").setPrefix("§cEinherjer");
-        sb.registerNewTeam("0006Architekt").setPrefix("§eArchitekt");
-        sb.registerNewTeam("0007Ehrenburger").setPrefix("§eEhrenbürger");
-        sb.registerNewTeam("0008Rauber").setPrefix("§9Räuber");
-        sb.registerNewTeam("0009Richter").setPrefix("§9Richter");
-        sb.registerNewTeam("0010Mejster").setPrefix("§9Mejster");
-        sb.registerNewTeam("0011Konig").setPrefix("§2König");
-        sb.registerNewTeam("0012Herzog").setPrefix("§2Herzog");
-        sb.registerNewTeam("0013Furst").setPrefix("§2Fürst");
-        sb.registerNewTeam("0014Graf").setPrefix("§2Graf");
-        sb.registerNewTeam("0015Burgherr").setPrefix("§2Burgherr");
-        sb.registerNewTeam("0016Ritter").setPrefix("§2Ritter");
-        sb.registerNewTeam("0017Intendant").setPrefix("§2Intendant");
-        sb.registerNewTeam("0018Kurator").setPrefix("§2Kurator");
-        sb.registerNewTeam("0019Kaufmann").setPrefix("§2Kaufmann");
-        sb.registerNewTeam("0020Gildenherr").setPrefix("§2Gildenherr");
-        sb.registerNewTeam("0021Stadtherr").setPrefix("§2Stadtherr");
-        sb.registerNewTeam("0022BMeister").setPrefix("§2Bürgermeister");
-        sb.registerNewTeam("0023Siedler").setPrefix("§2Siedler");
-        sb.registerNewTeam("0024Vogt").setPrefix("§6Vogt");
-        sb.registerNewTeam("0025Herold").setPrefix("§6Herold");
-        sb.registerNewTeam("0026Knappe").setPrefix("§6Knappe");
-        sb.registerNewTeam("0027SchauSpieler").setPrefix("§6Schauspieler");
-        sb.registerNewTeam("0028Musiker").setPrefix("§6Musiker");
-        sb.registerNewTeam("0029Schreiber").setPrefix("§6Schreiber");
-        sb.registerNewTeam("0030Seefahrer").setPrefix("§6Seefahrer");
-        sb.registerNewTeam("0031Hafenmeister").setPrefix("§6Hafenmeister");
-        sb.registerNewTeam("0032Handler").setPrefix("§6Händler");
-        sb.registerNewTeam("0033Burger").setPrefix("§6Bürger");
-        sb.registerNewTeam("0034Reisender").setPrefix("§6Reisender");
+        try
+        {
+            sb.registerNewTeam("0000Admin");
+            sb.registerNewTeam("0002Moderator");
+            sb.registerNewTeam("0003Helfer");
+            sb.registerNewTeam("0004Walkure");
+            sb.registerNewTeam("0005Einherjer");
+            sb.registerNewTeam("0006Architekt");
+            sb.registerNewTeam("0007Ehrenburger");
+            sb.registerNewTeam("0008Rauber");
+            sb.registerNewTeam("0009Richter");
+            sb.registerNewTeam("0010Mejster");
+            sb.registerNewTeam("0011Konig");
+            sb.registerNewTeam("0012Herzog");
+            sb.registerNewTeam("0013Furst");
+            sb.registerNewTeam("0014Graf");
+            sb.registerNewTeam("0015Burgherr");
+            sb.registerNewTeam("0016Ritter");
+            sb.registerNewTeam("0017Intendant");
+            sb.registerNewTeam("0018Kurator");
+            sb.registerNewTeam("0019Kaufmann");
+            sb.registerNewTeam("0020Gildenherr");
+            sb.registerNewTeam("0021Stadtherr");
+            sb.registerNewTeam("0022BMeister");
+            sb.registerNewTeam("0023Siedler");
+            sb.registerNewTeam("0024Vogt");
+            sb.registerNewTeam("0025Herold");
+            sb.registerNewTeam("0026Knappe");
+            sb.registerNewTeam("0027SchauSpieler");
+            sb.registerNewTeam("0028Musiker");
+            sb.registerNewTeam("0029Schreiber");
+            sb.registerNewTeam("0030Seefahrer");
+            sb.registerNewTeam("0031Hafenmeister");
+            sb.registerNewTeam("0032Handler");
+            sb.registerNewTeam("0033Burger");
+            sb.registerNewTeam("0034Reisender");
+        } catch (Exception ignore) {
+            ignore.printStackTrace();
+        }
     }
 
     public void setPrefix(Player p) {
@@ -271,7 +277,6 @@ public class Engine extends JavaPlugin implements Listener
             team = "0034Reisender";
         }
         Team t = sb.getTeam(team);
-        p.setPlayerListName(t.getPrefix() + " §7| " + ChatColor.RESET + p.getName());
         t.addPlayer(p);
         sendTablistHeaderAndFooter(p, "§6§lplay.ftscraft.de", "");
     }
@@ -410,7 +415,6 @@ public class Engine extends JavaPlugin implements Listener
     public void addAusweis(Ausweis a)
     {
         String name = uF.getName(UUID.fromString(a.getUUID()));
-        team.addPlayer(Bukkit.getOfflinePlayer(a.getUUID()));
         ausweis.put(name, a);
     }
 
@@ -552,6 +556,19 @@ public class Engine extends JavaPlugin implements Listener
             protocolManager.sendServerPacket(p, pc);
         } catch (Exception ex) {
             ex.printStackTrace();
+        }
+    }
+
+    public void test(Player p) {
+        String m = " ";
+        PacketContainer pc = protocolManager.createPacket(PacketType.Play.Server.CHAT);
+        pc.getChatComponents().write(2, WrappedChatComponent.fromText(m));
+        try
+        {
+            protocolManager.sendServerPacket(p, pc);
+        } catch (InvocationTargetException e)
+        {
+            e.printStackTrace();
         }
     }
 }
