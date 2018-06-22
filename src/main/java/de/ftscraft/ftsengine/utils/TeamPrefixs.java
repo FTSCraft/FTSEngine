@@ -9,7 +9,7 @@ public enum TeamPrefixs
 
     ADMIN("§bAdmin", "ftsengine.admin"),
     MODERATOR("§bModerator", "ftsengine.moderator"),
-    HELFER("§bHelder", "ftsengine.helfer"),
+    HELFER("§bHelfer", "ftsengine.helfer"),
     WALKURE("§cWalküre", "ftsengine.walkure"),
     EINHERJER("§cEinherjer", "ftsengine.einherjer"),
     ARCHITEKT("§eArchitekt", "ftsengine.architekt"),
@@ -28,7 +28,8 @@ public enum TeamPrefixs
     KAUFMANN("§2Kaufmann", "ftsengine.kaufmann"),
     GILDENHERR("§2Gildenherr", "ftsengine.gildenherr"),
     STADTHERR("§2Stadtherr", "ftsengine.stadtherr"),
-    MEISTER("§2Meister", "ftsengine.burgermeister"),
+    MEISTER("§2Meister", "ftsengine.meister"),
+    BURGERMEISTER("§2Bürgermeister","ftsengine.burgermeister"),
     SIEDLER("§2Siedler", "ftsengine.siedler"),
     VOGT("§6Vogt", "ftsengine.vogt"),
     HEROLD("§6Herold", "ftsengine.herold"),
@@ -45,7 +46,7 @@ public enum TeamPrefixs
     String prefix;
     String permission;
 
-    private TeamPrefixs(String prefix, String permission)
+    TeamPrefixs(String prefix, String permission)
     {
         this.prefix = prefix;
         this.permission = permission;

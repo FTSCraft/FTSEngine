@@ -1,13 +1,16 @@
 package de.ftscraft.ftsengine.utils;
 
+import de.ftscraft.ftsengine.courier.BriefLieferung;
 import de.ftscraft.ftsengine.main.Engine;
 import org.bukkit.Bukkit;
+import org.bukkit.Statistic;
 import org.bukkit.World;
 import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
+import java.util.Objects;
 import java.util.logging.Level;
 
 public class Runner implements Runnable
@@ -57,6 +60,28 @@ public class Runner implements Runnable
         }*/
 
 
+        for (Player p : Bukkit.getOnlinePlayers())
+        {
+            if (Objects.requireNonNull(plugin.getLpapi().getUser(p.getUniqueId())).getPrimaryGroup().equals("reisender"))
+            {
+                if (p.getStatistic(Statistic.PLAY_ONE_TICK) / 20 / 60 / 60 >= 30)
+                {
+                    plugin.getServer().dispatchCommand(plugin.getServer().getConsoleSender(), "lp user " + p.getName() + " parent set bürger");
+                } else p.sendMessage("" + p.getStatistic(Statistic.PLAY_ONE_TICK) / 20 / 60 / 60);
+            }
+        }
+
+        try
+        {
+            //Lieferungen
+            for (BriefLieferung lieferung : plugin.lieferungen)
+            {
+                lieferung.setSeconds(lieferung.getSeconds() - 1);
+            }
+        } catch (Exception ignored)
+        {
+
+        }
 
     }
 

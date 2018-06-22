@@ -17,6 +17,8 @@ import de.ftscraft.ftsengine.listener.*;
 import de.ftscraft.ftsengine.pferd.Pferd;
 import de.ftscraft.ftsengine.reisepunkt.Reisepunkt;
 import de.ftscraft.ftsengine.utils.*;
+import me.lucko.luckperms.LuckPerms;
+import me.lucko.luckperms.api.LuckPermsApi;
 import net.milkbowl.vault.economy.Economy;
 import net.minecraft.server.v1_12_R1.IChatBaseComponent;
 import net.minecraft.server.v1_12_R1.PacketPlayOutPlayerListHeaderFooter;
@@ -70,6 +72,7 @@ public class Engine extends JavaPlugin implements Listener
     private Scoreboard sb;
 
     private static Economy econ = null;
+    private LuckPermsApi lpapi = null;
     private static final Logger log = Logger.getLogger("Minecraft");
 
     public List<Material> mats = new ArrayList<>();
@@ -78,6 +81,10 @@ public class Engine extends JavaPlugin implements Listener
     @Override
     public void onEnable()
     {
+        RegisteredServiceProvider<LuckPermsApi> provider = Bukkit.getServicesManager().getRegistration(LuckPermsApi.class);
+        if (provider != null) {
+            lpapi = provider.getProvider();
+        }
         if (!setupEconomy())
         {
             log.severe(String.format("[%s] - Disabled due to no Vault dependency found!", getDescription().getName()));
@@ -571,4 +578,10 @@ public class Engine extends JavaPlugin implements Listener
             e.printStackTrace();
         }
     }
+
+    public LuckPermsApi getLpapi()
+    {
+        return lpapi;
+    }
+
 }

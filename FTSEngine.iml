@@ -23,6 +23,7 @@
     <orderEntry type="library" name="Maven: cglib:cglib-nodep:3.2.5" level="project" />
     <orderEntry type="library" name="Maven: com.comphenix.executors:BukkitExecutors:1.1-SNAPSHOT" level="project" />
     <orderEntry type="library" name="Maven: org.bukkit:bukkit:1.12.2-R0.1-SNAPSHOT" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: me.lucko.luckperms:luckperms-api:4.2" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Maven: net.milkbowl.vault:VaultAPI:1.6" level="project" />
     <orderEntry type="library" name="Maven: org.bukkit:craftbukkit:1.12.2-R0.1-SNAPSHOT" level="project" />
   </component>

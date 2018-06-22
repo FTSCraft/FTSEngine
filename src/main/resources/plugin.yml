@@ -2,7 +2,7 @@ name: FTSEngine
 author: halberfan aka. DoubleTropple
 main: de.ftscraft.ftsengine.main.Engine
 version: 0.6
-depend: [Vault, ProtocolLib]
+depend: [Vault, ProtocolLib, LuckPerms]
 
 commands:
     ausweis:
