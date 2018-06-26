@@ -1,6 +1,5 @@
 package de.ftscraft.ftsengine.commands;
 
-import de.ftscraft.ftsengine.chat.ChatChannels;
 import de.ftscraft.ftsengine.main.Engine;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -34,21 +33,6 @@ public class CMDchannel implements CommandExecutor, TabCompleter
         }
 
         if(args.length == 1) {
-            String channel = args[0];
-            Player p = (Player)cs;
-            if(channel.equalsIgnoreCase("roleplay")) {
-                plugin.getChats().put(p, ChatChannels.ROLEPLAY);
-                p.sendMessage(plugin.msgs.NOW_IN_CHANNEL.replace("%s", "Roleplay"));
-            } else if(channel.equalsIgnoreCase("handel")) {
-                plugin.getChats().put(p, ChatChannels.HANDEL);
-                p.sendMessage(plugin.msgs.NOW_IN_CHANNEL.replace("%s", "Handel"));
-            } else if(channel.equalsIgnoreCase("flüstern")) {
-                plugin.getChats().put(p, ChatChannels.FLÜSTERN);
-                p.sendMessage(plugin.msgs.NOW_IN_CHANNEL.replace("%s", "Flüster"));
-            } else if(channel.equalsIgnoreCase("rufen")) {
-                plugin.getChats().put(p, ChatChannels.RUFEN);
-                p.sendMessage(plugin.msgs.NOW_IN_CHANNEL.replace("%s", "Ruf"));
-            }
 
         }
 

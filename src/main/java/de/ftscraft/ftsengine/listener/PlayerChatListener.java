@@ -1,8 +1,8 @@
 package de.ftscraft.ftsengine.listener;
 
 import de.ftscraft.ftsengine.brett.BrettNote;
-import de.ftscraft.ftsengine.chat.ChatChannels;
 import de.ftscraft.ftsengine.main.Engine;
+import de.ftscraft.ftsengine.main.FTSUser;
 import de.ftscraft.ftsengine.utils.Ausweis;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
@@ -114,20 +114,14 @@ public class PlayerChatListener implements Listener
             e.getPlayer().sendMessage(msg);
             return;
         }
-
+        /*
         Player p = e.getPlayer();
-        ChatChannels ch = plugin.getChats().get(p);
-        if(ch == ChatChannels.FLÜSTERN) {
-            plugin.getVar().ChatInRoleplay(p, e.getMessage());
-        } else if(ch == ChatChannels.HANDEL) {
-            plugin.getVar().ChatInHandel(p, e.getMessage());
-        } else if(ch == ChatChannels.RUFEN) {
-            plugin.getVar().ChatInRufen(p, e.getMessage());
-        } else if(ch == ChatChannels.ROLEPLAY) {
-            plugin.getVar().ChatInRoleplay(p, e.getMessage());
-        }
 
+        FTSUser user = plugin.getPlayer().get(p);
+        user.getChatChannel().sendMessage(p, e.getMessage());
 
+        e.setCancelled(true);
+        */
 
     }
 

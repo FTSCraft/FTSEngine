@@ -3,6 +3,7 @@ package de.ftscraft.ftsengine.commands;
 import de.ftscraft.ftsengine.main.Engine;
 import de.ftscraft.ftsengine.main.FTSUser;
 import de.ftscraft.ftsengine.pferd.Pferd;
+import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -31,7 +32,7 @@ public class CMDpferd implements CommandExecutor
 
         Player p = (Player) cs;
 
-        boolean wartung = true;
+        boolean wartung = false;
 
         if(wartung) {
             p.sendMessage("§cDieser Command ist derzeit in Wartung. Tut uns leid :)");
@@ -50,14 +51,16 @@ public class CMDpferd implements CommandExecutor
                     {
                         if (p.getVehicle() instanceof Horse)
                         {
-                            if (!plugin.isRegistered((Horse) p.getVehicle()))
+                            if (!plugin.horseIsDa((Horse) p.getVehicle()))
                             {
                                 FTSUser user = plugin.getPlayer().get(p);
                                 if (user.getPferde().size() < 4)
                                 {
                                     Horse horse = (Horse) p.getVehicle();
                                     horse.setCustomName(args[1]);
-                                    Pferd pf = new Pferd(plugin, horse.getUniqueId(), p.getWorld(), p.getUniqueId(), false, -1, 0, args[1], false);
+                                    plugin.biggestPferdId++;
+                                    Pferd pf = new Pferd(plugin, plugin.biggestPferdId,  p.getWorld(), p.getUniqueId(), false, -1, 0, args[1], false);
+                                    pf.setHorse(horse);
                                     p.sendMessage(plugin.msgs.NOW_YOUR_HORSE);
                                     user.addPferd(pf);
                                 } else p.sendMessage("§eDu hast schon zu viele Pferde!");
@@ -95,7 +98,13 @@ public class CMDpferd implements CommandExecutor
                             p.sendMessage("§eDer Betrag darf nicht negativ sein!");
                             return true;
                         }
-                        Pferd pferd = plugin.getPferde().get(p.getVehicle().getUniqueId());
+                        Pferd pferd;
+                        if(p.getVehicle().hasMetadata("FTSEngine.Horse"))
+                            pferd = plugin.getPferde().get(p.getVehicle().getMetadata("FTSEngine.Horse").get(0).asInt());
+                        else {
+                            p.sendMessage("§eDas Pferd muss regestriert sein!");
+                            return true;
+                        }
                         if (pferd == null)
                         {
                             p.sendMessage("§eDas Pferd muss regestriert sein!");
@@ -116,7 +125,13 @@ public class CMDpferd implements CommandExecutor
             {
                 if (p.getVehicle() != null)
                 {
-                    Pferd pferd = plugin.getPferde().get(p.getVehicle().getUniqueId());
+                    Pferd pferd;
+                    if(p.getVehicle().hasMetadata("FTSEngine.Horse"))
+                    pferd = plugin.getPferde().get(p.getVehicle().getMetadata("FTSEngine.Horse").get(0).asInt());
+                    else {
+                        p.sendMessage("§eDas Pferd muss regestriert sein!");
+                        return true;
+                    }
                     FTSUser user = plugin.getPlayer().get(p);
                     if (user.getPferde().size() <= 3)
                     {
@@ -125,7 +140,8 @@ public class CMDpferd implements CommandExecutor
                             int price = pferd.getPrice();
                             if (plugin.getEcon().has(p, price))
                             {
-                                plugin.getEcon().withdrawPlayer(p, price);
+                                plugin.getEcon().withdrawPlayer(Bukkit.getOfflinePlayer(p.getUniqueId()), price);
+                                //Deposit in setOwner Method
                                 pferd.setOwner(p.getUniqueId(), p);
                             } else p.sendMessage("§eDu hast nicht genug Geld!");
                         } else p.sendMessage("§eDas Pferd steht nicht zum verkauf");
@@ -140,7 +156,13 @@ public class CMDpferd implements CommandExecutor
                         FTSUser user = plugin.getPlayer().get(p);
                         if (user.ownsHorse((Horse) p.getVehicle()))
                         {
-                            Pferd pferd = plugin.getPferde().get(p.getVehicle().getUniqueId());
+                            Pferd pferd;
+                            if(p.getVehicle().hasMetadata("FTSEngine.Horse"))
+                            pferd = plugin.getPferde().get(p.getVehicle().getMetadata("FTSEngine.Horse").get(0).asInt());
+                            else {
+                                p.sendMessage("§eDas Pferd muss regestriert sein!");
+                                return true;
+                            }
                             pferd.lock(p);
                             p.getVehicle().removePassenger(p);
                         } else p.sendMessage("§eDieses Pferd gehört dir nicht");

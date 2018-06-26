@@ -48,7 +48,7 @@ public class CMDtaube implements CommandExecutor
                         return true;
                     }
                     int disctance = (int) pl.distance(tl);
-                    int seconds = disctance / 2;
+                    int seconds = disctance / 5;
 
                     String msg = "";
 

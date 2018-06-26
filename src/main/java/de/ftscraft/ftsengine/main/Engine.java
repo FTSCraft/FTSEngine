@@ -8,7 +8,7 @@ import com.comphenix.protocol.wrappers.WrappedChatComponent;
 import de.ftscraft.ftsengine.backpacks.Backpack;
 import de.ftscraft.ftsengine.brett.Brett;
 import de.ftscraft.ftsengine.brett.BrettNote;
-import de.ftscraft.ftsengine.chat.ChatChannels;
+import de.ftscraft.ftsengine.chat.ChatChannel;
 import de.ftscraft.ftsengine.commands.*;
 import de.ftscraft.ftsengine.courier.Brief;
 import de.ftscraft.ftsengine.courier.BriefLieferung;
@@ -17,14 +17,11 @@ import de.ftscraft.ftsengine.listener.*;
 import de.ftscraft.ftsengine.pferd.Pferd;
 import de.ftscraft.ftsengine.reisepunkt.Reisepunkt;
 import de.ftscraft.ftsengine.utils.*;
-import me.lucko.luckperms.LuckPerms;
 import me.lucko.luckperms.api.LuckPermsApi;
+import net.milkbowl.vault.chat.Chat;
 import net.milkbowl.vault.economy.Economy;
-import net.minecraft.server.v1_12_R1.IChatBaseComponent;
-import net.minecraft.server.v1_12_R1.PacketPlayOutPlayerListHeaderFooter;
-import net.minecraft.server.v1_12_R1.PacketPlayOutScoreboardTeam;
+import net.milkbowl.vault.permission.Permission;
 import org.bukkit.*;
-import org.bukkit.craftbukkit.v1_12_R1.entity.CraftPlayer;
 import org.bukkit.entity.Horse;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -34,14 +31,11 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.ShapedRecipe;
 import org.bukkit.inventory.meta.ItemMeta;
-import org.bukkit.permissions.Permission;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scoreboard.Scoreboard;
 import org.bukkit.scoreboard.Team;
-import org.bukkit.util.permissions.CommandPermissions;
 
-import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.util.*;
 import java.util.List;
@@ -59,9 +53,10 @@ public class Engine extends JavaPlugin implements Listener
     public int highestId;
     public int biggestBpId;
     public int biggestBriefId;
-    private HashMap<Player, ChatChannels> chats;
+    public int biggestPferdId;
+    private ArrayList<ChatChannel> chatChannels;
     private ArrayList<Player> reiter;
-    public HashMap<UUID, Pferd> pferde;
+    public HashMap<Integer, Pferd> pferde;
     public HashMap<Integer, Backpack> backpacks;
     public HashMap<Integer, Brief> briefe;
     public HashMap<Location, Brett> bretter;
@@ -73,6 +68,9 @@ public class Engine extends JavaPlugin implements Listener
 
     private static Economy econ = null;
     private LuckPermsApi lpapi = null;
+    private Permission perms = null;
+    private Chat chat = null;
+
     private static final Logger log = Logger.getLogger("Minecraft");
 
     public List<Material> mats = new ArrayList<>();
@@ -91,7 +89,16 @@ public class Engine extends JavaPlugin implements Listener
             getServer().getPluginManager().disablePlugin(this);
             return;
         }
+        setupPermissions();
+        setupChat();
         init();
+    }
+
+    private boolean setupChat()
+    {
+        RegisteredServiceProvider<Chat> rsp = getServer().getServicesManager().getRegistration(Chat.class);
+        chat = rsp.getProvider();
+        return chat != null;
     }
 
     @Override
@@ -100,12 +107,19 @@ public class Engine extends JavaPlugin implements Listener
         safeAll();
     }
 
+    private boolean setupPermissions() {
+        RegisteredServiceProvider<Permission> rsp = getServer().getServicesManager().getRegistration(Permission.class);
+        perms = rsp.getProvider();
+        return perms != null;
+    }
+
     private void init()
     {
         this.protocolManager = ProtocolLibrary.getProtocolManager();
-        chats = new HashMap<>();
+        chatChannels = new ArrayList<>();
         highestId = 0;
         biggestBpId = 0;
+        biggestPferdId = 0;
         biggestBriefId = 0;
         playerBrettNote = new HashMap<>();
         bretter = new HashMap<>();
@@ -152,12 +166,24 @@ public class Engine extends JavaPlugin implements Listener
         new InventoryClickListener(this);
         new PlayerQuitListener(this);
         new PlayerChatListener(this);
+        new ChunkLoadListener(this);
+        new ChunkUnloadListener(this);
 
         new Runner(this);
         getServer().getPluginManager().registerEvents(this, this);
 
         setupScoreboad();
 
+    }
+
+    public Permission getPerms()
+    {
+        return perms;
+    }
+
+    public Chat getChat()
+    {
+        return chat;
     }
 
     private void setupScoreboad()
@@ -387,7 +413,7 @@ public class Engine extends JavaPlugin implements Listener
             a.safe();
         }
 
-        new UserIO(this);
+        new UserIO(this, true);
 
     }
 
@@ -446,9 +472,9 @@ public class Engine extends JavaPlugin implements Listener
         return reiter;
     }
 
-    public HashMap<Player, ChatChannels> getChats()
+    public ArrayList<ChatChannel> getChatChannels()
     {
-        return chats;
+        return chatChannels;
     }
 
     @SuppressWarnings("ArraysAsListWithZeroOrOneArgument")
@@ -524,26 +550,14 @@ public class Engine extends JavaPlugin implements Listener
         return backpacks;
     }
 
-    public boolean horseIsDa(UUID horse)
+    public boolean horseIsDa(Horse horse)
     {
-        return pferde.containsKey(horse);
+        return horse.hasMetadata("FTSEngine.Horse");
     }
 
-    public HashMap<UUID, Pferd> getPferde()
+    public HashMap<Integer, Pferd> getPferde()
     {
         return pferde;
-    }
-
-    public boolean isRegistered(Horse horse)
-    {
-        for (Pferd a : pferde.values())
-        {
-            if (a.getUUID() == horse.getUniqueId())
-            {
-                return true;
-            }
-        }
-        return false;
     }
 
     public boolean BriefkastenExists(Location loc) {

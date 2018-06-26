@@ -26,9 +26,9 @@ public class HorseListener implements Listener
         {
             if (e.getVehicle() instanceof Horse)
             {
-                if (plugin.horseIsDa(e.getVehicle().getUniqueId()))
+                if (plugin.horseIsDa((Horse) e.getVehicle()))
                 {
-                    Pferd pferd = plugin.getPferde().get(e.getVehicle().getUniqueId());
+                    Pferd pferd = plugin.getPferde().get(e.getVehicle().getMetadata("FTSEngine.Horse").get(0).asInt());
                     if(pferd.getPrice() >= 0) {
                         Player p = (Player) e.getEntered();
                         p.sendMessage("§cDieses Pferd steht für §e"+pferd.getPrice()+" §czum Verkauf. Tippe §e/pferd kaufen §cum das Pferd zu kaufen!");
@@ -52,8 +52,9 @@ public class HorseListener implements Listener
     @EventHandler
     public void onHorseDeath(EntityDeathEvent e) {
         if(e.getEntity() instanceof Horse) {
-            if(plugin.horseIsDa(e.getEntity().getUniqueId())) {
-                Pferd pferd = plugin.getPferde().get(e.getEntity().getUniqueId());
+            if(plugin.horseIsDa((Horse) e.getEntity())) {
+                Pferd pferd;
+                pferd = plugin.getPferde().get(e.getEntity().getMetadata("FTSEngine.Horse").get(0).asInt());
                 pferd.dead();
             }
         }

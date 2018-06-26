@@ -66,9 +66,9 @@ public class CMDbrief implements CommandExecutor
             {
                 if (plugin.getEcon().has(p, 2))
                 {
-                    plugin.getEcon().depositPlayer(p, 2);
+                    plugin.getEcon().withdrawPlayer(p, 2);
                     p.sendMessage("§cDieser Brief ist nun Anonym!");
-                    msg.replaceFirst("anonym", "");
+                    msg.replaceFirst(" anonym", "");
                     name = "XXXX";
                 } else
                 {

@@ -24,15 +24,13 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.util.*;
 
-public class UserIO
-{
+public class UserIO {
 
     private Engine plugin;
 
     private File folder;
 
-    public UserIO(Engine plugin)
-    {
+    public UserIO(Engine plugin) {
         this.plugin = plugin;
         folder = plugin.getDataFolder();
         getAusweise();
@@ -43,25 +41,20 @@ public class UserIO
         getBriefkasten();
     }
 
-    public UserIO(Engine plugin, boolean save)
-    {
+    public UserIO(Engine plugin, boolean save) {
         this.plugin = plugin;
         safeBriefe();
         safeReisepunkte();
     }
 
-    public void getAusweise()
-    {
+    public void getAusweise() {
         File aFolder = new File(folder + "//ausweise//");
-        if (!aFolder.exists())
-        {
+        if (!aFolder.exists()) {
             aFolder.mkdirs();
         }
 
-        try
-        {
-            for (File aFile : Objects.requireNonNull(aFolder.listFiles()))
-            {
+        try {
+            for (File aFile : Objects.requireNonNull(aFolder.listFiles())) {
                 FileConfiguration cfg = YamlConfiguration.loadConfiguration(aFile);
 
                 String UUID = aFile.getName().replace(".yml", "");
@@ -88,29 +81,24 @@ public class UserIO
 
                 new Ausweis(plugin, UUID, firstName, lastName, gender, race, nation, desc, religion, cal, id);
             }
-        } catch (Exception e)
-        {
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
     }
 
-    private void getPferde()
-    {
+    private void getPferde() {
         File aFolder = new File(folder + "//pferde//");
 
-        if (!aFolder.exists())
-        {
+        if (!aFolder.exists()) {
             aFolder.mkdirs();
         }
 
-        try
-        {
+        try {
 
-            for (File aFile : Objects.requireNonNull(aFolder.listFiles()))
-            {
+            for (File aFile : Objects.requireNonNull(aFolder.listFiles())) {
                 FileConfiguration cfg = YamlConfiguration.loadConfiguration(aFile);
-                String uuid;
+                Integer id;
                 String owner;
                 boolean locked;
                 World w;
@@ -119,7 +107,17 @@ public class UserIO
                 String name;
                 boolean chosed;
 
-                uuid = cfg.getString("uuid");
+                String color;
+                String world;
+                String style;
+                double speed;
+                ItemStack[] inventory;
+                List i;
+                double health,
+                        jump,
+                        x, y, z;
+
+                id = cfg.getInt("horseID");
                 owner = cfg.getString("owner");
                 locked = cfg.getBoolean("locked");
                 w = Bukkit.getWorld(cfg.getString("world"));
@@ -128,24 +126,36 @@ public class UserIO
                 name = cfg.getString("name");
                 chosed = cfg.getBoolean("chosed");
 
-                new Pferd(plugin, UUID.fromString(uuid), w, UUID.fromString(owner), locked, price, persID, name, chosed);
+                color = cfg.getString("horse.color");
+                style = cfg.getString("horse.style");
+                i = cfg.getList("horse.inventory");
+                inventory = (ItemStack[]) i.toArray(new ItemStack[i.size()]);
+                health = cfg.getDouble("horse.health");
+                jump = cfg.getDouble("horse.jump");
+                speed = cfg.getDouble("horse.speed");
+                x = cfg.getDouble("horse.location.x");
+                y = cfg.getDouble("horse.location.y");
+                z = cfg.getDouble("horse.location.z");
+                world = cfg.getString("horse.location.world");
+
+                if(id > plugin.biggestPferdId)
+                    plugin.biggestPferdId = id;
+
+                Pferd p = new Pferd(plugin, id, w, UUID.fromString(owner), locked, price, persID, name, chosed);
+                p.setHorseData(color, style, speed, inventory, health, jump, x, y, z, world);
             }
 
-        } catch (NullPointerException ignored)
-        {
-
+        }catch (Exception e) {
+            e.printStackTrace();
         }
 
     }
 
-    private void getBackpacks()
-    {
+    private void getBackpacks() {
         File aFolder = new File(folder + "//backpacks//");
 
-        try
-        {
-            for (File aFile : Objects.requireNonNull(aFolder.listFiles()))
-            {
+        try {
+            for (File aFile : Objects.requireNonNull(aFolder.listFiles())) {
                 FileConfiguration c = YamlConfiguration.loadConfiguration(aFile);
                 int id;
                 Inventory inv;
@@ -163,24 +173,20 @@ public class UserIO
                 new Backpack(plugin, type, id, inv);
 
             }
-        } catch (NullPointerException e)
-        {
+        } catch (NullPointerException e) {
             e.printStackTrace();
         }
     }
 
-    private void getBretter()
-    {
+    private void getBretter() {
         File aFolder = new File(folder + "//bretter");
 
         if (!aFolder.exists())
             aFolder.mkdirs();
 
-        try
-        {
+        try {
 
-            for (File files : Objects.requireNonNull(aFolder.listFiles()))
-            {
+            for (File files : Objects.requireNonNull(aFolder.listFiles())) {
                 YamlConfiguration cfg = YamlConfiguration.loadConfiguration(files);
 
                 String creator = cfg.getString("brett.creator");
@@ -196,8 +202,7 @@ public class UserIO
 
                 Brett brett = new Brett(sign, locaton, UUID.fromString(creator), name, plugin, true);
 
-                for (String keys : cfg.getConfigurationSection("brett.note").getKeys(false))
-                {
+                for (String keys : cfg.getConfigurationSection("brett.note").getKeys(false)) {
                     String title = cfg.getString("brett.note." + keys + ".title");
                     String content = cfg.getString("brett.note." + keys + ".content");
                     String note_creator = cfg.getString("brett.note." + keys + ".creator");
@@ -207,23 +212,19 @@ public class UserIO
                 }
 
             }
-        } catch (Exception ignored)
-        {
+        } catch (Exception ignored) {
 
         }
     }
 
-    private void getBriefkasten()
-    {
+    private void getBriefkasten() {
         File aFolder = new File(folder + "//briefkasten//");
         if (!aFolder.exists())
             aFolder.mkdirs();
 
-        try
-        {
+        try {
 
-            for (File files : Objects.requireNonNull(aFolder.listFiles()))
-            {
+            for (File files : Objects.requireNonNull(aFolder.listFiles())) {
                 YamlConfiguration cfg = YamlConfiguration.loadConfiguration(files);
 
                 String owner = cfg.getString("owner");
@@ -238,19 +239,16 @@ public class UserIO
 
             }
 
-        } catch (Exception ignored)
-        {
+        } catch (Exception ignored) {
 
         }
     }
 
-    private void loadBriefe()
-    {
+    private void loadBriefe() {
         File file = new File(plugin.getDataFolder() + "//briefe.yml");
         YamlConfiguration cfg = YamlConfiguration.loadConfiguration(file);
 
-        for (String keys : cfg.getKeys(false))
-        {
+        for (String keys : cfg.getKeys(false)) {
             String message = cfg.getString(keys + ".message");
             String creator = cfg.getString(keys + ".creator");
             long creation = cfg.getLong(keys + ".creation");
@@ -261,24 +259,20 @@ public class UserIO
         }
     }
 
-    private void safeBriefe()
-    {
+    private void safeBriefe() {
         File file = new File(plugin.getDataFolder() + "//briefe.yml");
         YamlConfiguration cfg = YamlConfiguration.loadConfiguration(file);
 
-        for (Brief brief : plugin.briefe.values())
-        {
+        for (Brief brief : plugin.briefe.values()) {
             String id = String.valueOf(brief.id);
             cfg.set(id + ".message", brief.msg);
             cfg.set(id + ".creator", brief.creator);
             cfg.set(id + ".creation", brief.creation);
         }
 
-        try
-        {
+        try {
             cfg.save(file);
-        } catch (IOException e)
-        {
+        } catch (IOException e) {
             e.printStackTrace();
         }
     }
@@ -287,23 +281,21 @@ public class UserIO
         File file = new File(plugin.getDataFolder() + "//reisepunkte.yml");
         YamlConfiguration cfg = YamlConfiguration.loadConfiguration(file);
 
-        for(Reisepunkt a : plugin.reisepunkte) {
-            cfg.set(a.getName()+".location.x", a.getLocation().getX());
-            cfg.set(a.getName()+".location.y", a.getLocation().getY());
-            cfg.set(a.getName()+".location.z", a.getLocation().getZ());
-            cfg.set(a.getName()+".location.world", a.getLocation().getWorld().getName());
-            cfg.set(a.getName()+".ziel.x", a.getZiel().getX());
-            cfg.set(a.getName()+".ziel.y", a.getZiel().getY());
-            cfg.set(a.getName()+".ziel.z", a.getZiel().getZ());
-            cfg.set(a.getName()+".ziel.world", a.getZiel().getWorld().getName());
-            cfg.set(a.getName()+".duration", a.getDuration());
+        for (Reisepunkt a : plugin.reisepunkte) {
+            cfg.set(a.getName() + ".location.x", a.getLocation().getX());
+            cfg.set(a.getName() + ".location.y", a.getLocation().getY());
+            cfg.set(a.getName() + ".location.z", a.getLocation().getZ());
+            cfg.set(a.getName() + ".location.world", a.getLocation().getWorld().getName());
+            cfg.set(a.getName() + ".ziel.x", a.getZiel().getX());
+            cfg.set(a.getName() + ".ziel.y", a.getZiel().getY());
+            cfg.set(a.getName() + ".ziel.z", a.getZiel().getZ());
+            cfg.set(a.getName() + ".ziel.world", a.getZiel().getWorld().getName());
+            cfg.set(a.getName() + ".duration", a.getDuration());
         }
 
-        try
-        {
+        try {
             cfg.save(file);
-        } catch (IOException e)
-        {
+        } catch (IOException e) {
             e.printStackTrace();
         }
 

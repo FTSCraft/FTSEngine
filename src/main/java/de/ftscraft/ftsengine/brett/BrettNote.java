@@ -1,7 +1,7 @@
 package de.ftscraft.ftsengine.brett;
 
 import de.ftscraft.ftsengine.main.Engine;
-import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang.StringUtils;
 import org.bukkit.Material;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.inventory.ItemStack;
