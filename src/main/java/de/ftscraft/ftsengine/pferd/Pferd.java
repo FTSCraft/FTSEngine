@@ -248,4 +248,9 @@ public class Pferd {
         this.horse = h;
         loc.getChunk().unload();
     }
+
+    public void updateLocation() {
+        if (horse != null)
+            this.location = horse.getLocation().clone();
+    }
 }

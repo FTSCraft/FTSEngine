@@ -22,7 +22,6 @@ public class ChunkUnloadListener implements Listener {
         for(Pferd a : plugin.pferde.values()) {
             if(a.location.getChunk().equals(e.getChunk())) {
                 a.removeHorse();
-                break;
             }
         }
 

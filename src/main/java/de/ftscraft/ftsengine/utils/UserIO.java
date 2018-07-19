@@ -111,8 +111,6 @@ public class UserIO {
                 String world;
                 String style;
                 double speed;
-                ItemStack[] inventory;
-                List i;
                 double health,
                         jump,
                         x, y, z;
@@ -128,8 +126,9 @@ public class UserIO {
 
                 color = cfg.getString("horse.color");
                 style = cfg.getString("horse.style");
-                i = cfg.getList("horse.inventory");
-                inventory = (ItemStack[]) i.toArray(new ItemStack[i.size()]);
+                List itemsList = cfg.getList("horse.inventory");
+                ItemStack[] items = (ItemStack[]) itemsList.toArray(new ItemStack[itemsList.size()]);
+
                 health = cfg.getDouble("horse.health");
                 jump = cfg.getDouble("horse.jump");
                 speed = cfg.getDouble("horse.speed");
@@ -142,7 +141,7 @@ public class UserIO {
                     plugin.biggestPferdId = id;
 
                 Pferd p = new Pferd(plugin, id, w, UUID.fromString(owner), locked, price, persID, name, chosed);
-                p.setHorseData(color, style, speed, inventory, health, jump, x, y, z, world);
+                p.setHorseData(color, style, speed, items, health, jump, x, y, z, world);
             }
 
         }catch (Exception e) {
@@ -173,8 +172,8 @@ public class UserIO {
                 new Backpack(plugin, type, id, inv);
 
             }
-        } catch (NullPointerException e) {
-            e.printStackTrace();
+        } catch (NullPointerException ignored) {
+
         }
     }
 
@@ -189,7 +188,7 @@ public class UserIO {
             for (File files : Objects.requireNonNull(aFolder.listFiles())) {
                 YamlConfiguration cfg = YamlConfiguration.loadConfiguration(files);
 
-                String creator = cfg.getString("brett.creator");
+                UUID creator = (UUID) cfg.get("brett.creator");
                 String name = files.getName().replace(".yml", "");
                 int loc_X = cfg.getInt("brett.location.X");
                 int loc_Y = cfg.getInt("brett.location.Y");
@@ -200,7 +199,7 @@ public class UserIO {
                 BlockState bs = Bukkit.getWorld(world).getBlockAt(locaton).getState();
                 Sign sign = (Sign) bs;
 
-                Brett brett = new Brett(sign, locaton, UUID.fromString(creator), name, plugin, true);
+                Brett brett = new Brett(sign, locaton, creator, name, plugin, true);
 
                 for (String keys : cfg.getConfigurationSection("brett.note").getKeys(false)) {
                     String title = cfg.getString("brett.note." + keys + ".title");

@@ -83,12 +83,7 @@ public class Engine extends JavaPlugin implements Listener
         if (provider != null) {
             lpapi = provider.getProvider();
         }
-        if (!setupEconomy())
-        {
-            log.severe(String.format("[%s] - Disabled due to no Vault dependency found!", getDescription().getName()));
-            getServer().getPluginManager().disablePlugin(this);
-            return;
-        }
+        setupEconomy();
         setupPermissions();
         setupChat();
         init();
