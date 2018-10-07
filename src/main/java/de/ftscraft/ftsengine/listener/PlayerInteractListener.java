@@ -41,7 +41,7 @@ public class PlayerInteractListener implements Listener
 
         if (e.getAction().equals(Action.RIGHT_CLICK_BLOCK))
         {
-            if (e.getClickedBlock().getType().equals(Material.SIGN) || e.getClickedBlock().getType().equals(Material.SIGN_POST) || e.getClickedBlock().getType().equals(Material.WALL_SIGN))
+            if (e.getClickedBlock().getType().equals(Material.SIGN) || e.getClickedBlock().getType().equals(Material.WALL_SIGN))
             {
                 if (plugin.bretter.containsKey(e.getClickedBlock().getLocation()))
                 {

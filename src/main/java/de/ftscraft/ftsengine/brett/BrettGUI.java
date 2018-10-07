@@ -27,12 +27,12 @@ public class BrettGUI
     }
 
     private void setupGui() {
-        ItemStack pinnwand = new ItemStack(Material.STAINED_GLASS_PANE, 1, (byte) 15);
+        ItemStack pinnwand = new ItemStack(Material.WHITE_STAINED_GLASS_PANE, 1, (byte) 15);
         ItemMeta pinnwandMeta = pinnwand.getItemMeta();
         pinnwandMeta.setDisplayName("§7Pinnwand");
         pinnwand.setItemMeta(pinnwandMeta);
 
-        ItemStack emptyNote = new ItemStack(Material.STAINED_GLASS_PANE, 1, (byte) 7);
+        ItemStack emptyNote = new ItemStack(Material.WHITE_STAINED_GLASS_PANE, 1, (byte) 7);
         ItemMeta emptyNoteMeta = emptyNote.getItemMeta();
         emptyNoteMeta.setDisplayName("§8Leere Notitz");
         emptyNote.setItemMeta(emptyNoteMeta);
@@ -66,7 +66,7 @@ public class BrettGUI
     }
 
     public void removeNote(int itemSlot) {
-        ItemStack emptyNote = new ItemStack(Material.STAINED_GLASS_PANE, 1, (byte) 7);
+        ItemStack emptyNote = new ItemStack(Material.WHITE_STAINED_GLASS_PANE, 1, (byte) 7);
         ItemMeta emptyNoteMeta = emptyNote.getItemMeta();
         emptyNoteMeta.setDisplayName("§8Leere Notitz");
         emptyNote.setItemMeta(emptyNoteMeta);

@@ -1,6 +1,8 @@
 package de.ftscraft.ftsengine.commands;
 
 import de.ftscraft.ftsengine.main.Engine;
+import de.ftscraft.ftsengine.utils.Var;
+import org.bukkit.Statistic;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -78,6 +80,8 @@ public class CMDwürfel implements CommandExecutor
                         e.sendMessage("§7Du bemerkst wie "+p.getName() +" versucht hat zu zinken. Der Spieler §c"+p.getName()+" §7hat eine §c"+n+" §7gewürfelt");
             }
 
+        } else {
+            cs.sendMessage(Var.millisToWeek(p.getStatistic(Statistic.PLAY_ONE_MINUTE)));
         }
 
         return false;

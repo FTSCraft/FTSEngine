@@ -18,11 +18,14 @@ public class ChunkUnloadListener implements Listener {
 
     @EventHandler
     public void onChunkUnload(ChunkUnloadEvent e) {
-
-        for(Pferd a : plugin.pferde.values()) {
-            if(a.location.getChunk().equals(e.getChunk())) {
-                a.removeHorse();
+        try {
+            for (Pferd a : plugin.pferde.values()) {
+                if (a.location.getChunk().equals(e.getChunk())) {
+                    a.removeHorse();
+                }
             }
+        }catch (Exception ignored) {
+
         }
 
     }

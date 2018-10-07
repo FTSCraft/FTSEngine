@@ -1,7 +1,8 @@
 name: FTSEngine
 author: halberfan aka. DoubleTropple
 main: de.ftscraft.ftsengine.main.Engine
-version: 0.6
+version: 0.6.1
+api-version: 1.13
 depend: [Vault, ProtocolLib, LuckPerms]
 
 commands:
@@ -14,6 +15,8 @@ commands:
     schlagen:
     removearmorstand:
         premission: ftsengine.armorstand
-    pferd:
+    #pferd:
     reisepunkt:
     brief:
+    gehen:
+    klopfen:

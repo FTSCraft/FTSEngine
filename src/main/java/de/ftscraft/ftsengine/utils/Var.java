@@ -128,4 +128,31 @@ public class Var
 
         return id;
     }
+
+    public static String millisToWeek(int millis) {
+        int seconds = 0;
+
+        int minutes = millis;
+        int hours = 0;
+        int days = 0;
+        int weeks = 0;
+
+
+        while (minutes > 60) {
+            minutes = minutes - 60;
+            hours++;
+        }
+        while (hours > 24) {
+            hours = hours - 24;
+            days++;
+        }
+        while (days > 7) {
+            days = days - 7;
+            weeks++;
+        }
+
+        String a = "§c"+weeks+" Wochen, "+days+" Tage, "+hours+" Stunden, "+minutes+" Minuten und "+seconds+" Sekunden";
+        return a;
+    }
+
 }

@@ -128,6 +128,7 @@ public class FTSUser {
     public boolean ownsHorse(Horse h) {
         for (Pferd pferd : pferde) {
             if (h.hasMetadata("FTSEngine.Horse"))
+
                 if (h.getMetadata("FTSEngine.Horse").get(0).asInt() == pferd.getID())
                     return true;
         }

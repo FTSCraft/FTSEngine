@@ -22,7 +22,7 @@ public class BlockBreakListener implements Listener
     @EventHandler
     public void onBreak(BlockBreakEvent event)
     {
-        if(event.getBlock().getType() == Material.SIGN || event.getBlock().getType() == Material.WALL_SIGN || event.getBlock().getType() == Material.SIGN_POST) {
+        if(event.getBlock().getType() == Material.SIGN || event.getBlock().getType() == Material.WALL_SIGN ) {
             Sign sign = (Sign) event.getBlock().getState();
             if(sign.getLine(0).equalsIgnoreCase("§b[Briefkasten]")) {
                 if(sign.getLine(1).contains(event.getPlayer().getName())) {
@@ -40,7 +40,7 @@ public class BlockBreakListener implements Listener
         }
 
         //Schwarzes Brett
-        if (event.getBlock().getType() == Material.SIGN || event.getBlock().getType() == Material.WALL_SIGN || event.getBlock().getType() == Material.SIGN_POST)
+        if (event.getBlock().getType() == Material.SIGN || event.getBlock().getType() == Material.WALL_SIGN )
         {
             Sign sign = (Sign) event.getBlock().getState();
             if (sign.getLine(0).equalsIgnoreCase("§4Schwarzes Brett"))

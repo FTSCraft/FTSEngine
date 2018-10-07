@@ -2,6 +2,7 @@ package de.ftscraft.ftsengine.utils;
 
 import de.ftscraft.ftsengine.courier.BriefLieferung;
 import de.ftscraft.ftsengine.main.Engine;
+import de.ftscraft.ftsengine.reisepunkt.Reisepunkt;
 import org.bukkit.Bukkit;
 import org.bukkit.Statistic;
 import org.bukkit.World;
@@ -30,13 +31,9 @@ public class Runner implements Runnable
     @Override
     public void run()
     {
-
-        for (Player p : Bukkit.getOnlinePlayers())
-        {
-            if (plugin.getChat().getPrimaryGroup(p).equalsIgnoreCase("reisender"))
-            {
-                if (p.getStatistic(Statistic.PLAY_ONE_TICK) / 20 / 60 / 60 >= 30)
-                {
+        for (Player p : Bukkit.getOnlinePlayers()) {
+            if (plugin.getChat().getPrimaryGroup(p).equalsIgnoreCase("default")) {
+                if (p.getStatistic(Statistic.PLAY_ONE_MINUTE) >= 108000) {
                     plugin.getServer().dispatchCommand(plugin.getServer().getConsoleSender(), "lp user " + p.getName() + " parent set bürger");
                 }
             }
@@ -52,6 +49,9 @@ public class Runner implements Runnable
         } catch (Exception ignored)
         {
 
+        }
+        for(Reisepunkt a : plugin.reisepunkte) {
+            a.secondDown();
         }
 
     }

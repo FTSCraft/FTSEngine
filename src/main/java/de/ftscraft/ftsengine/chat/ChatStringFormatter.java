@@ -1,6 +1,5 @@
 package de.ftscraft.ftsengine.chat;
 
-import com.massivecraft.factions.entity.MPlayer;
 import de.ftscraft.ftsengine.main.Engine;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
@@ -17,6 +16,7 @@ public class ChatStringFormatter
 
     public String format(String msg, Player p, ChatChannel chatChannel)
     {
+        /*
         String format = chatChannel.getFormat();
         MPlayer mPlayer = MPlayer.get(p);
         format = ChatColor.translateAlternateColorCodes('&', format);
@@ -31,6 +31,8 @@ public class ChatStringFormatter
         format = format.replace("{msg}", msg);
 
         return format;
+        */
+        return "";
     }
 
 }

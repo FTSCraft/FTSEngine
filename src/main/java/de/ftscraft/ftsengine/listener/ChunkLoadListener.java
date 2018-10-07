@@ -20,11 +20,18 @@ public class ChunkLoadListener implements Listener {
     @EventHandler
     public void onChunkLoad(ChunkLoadEvent e) {
 
-        for (Pferd a : plugin.getPferde().values()) {
-            a.updateLocation();
-            if(a.location.getChunk().equals(e.getChunk())) {
-                a.spawnHorse(null);
+        try {
+            for (Pferd a : plugin.getPferde().values()) {
+                a.updateLocation();
+                if(a.location == null) {
+                    return;
+                }
+                if (a.location.getChunk().equals(e.getChunk())) {
+                    a.spawnHorse(null);
+                }
             }
+        } catch (Exception ignored) {
+
         }
 
     }

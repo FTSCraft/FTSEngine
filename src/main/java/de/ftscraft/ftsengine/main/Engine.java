@@ -87,6 +87,10 @@ public class Engine extends JavaPlugin implements Listener
         setupPermissions();
         setupChat();
         init();
+        for(Player a : Bukkit.getOnlinePlayers()) {
+            FTSUser user = new FTSUser(this, a);
+            this.getPlayer().put(a, user);
+        }
     }
 
     private boolean setupChat()
@@ -142,16 +146,19 @@ public class Engine extends JavaPlugin implements Listener
         new CMDtaube(this);
         new CMDschlagen(this);
         new CMDremovearmorstand(this);
-        new CMDpferd(this);
+        //new CMDpferd(this);
         new CMDbrief(this);
         new CMDcountdown(this);
         new CMDroleplay(this);
+        new CMDreisepunkt(this);
+        new CMDgehen(this);
+        new CMDklopfen(this);
         new UserIO(this);
 
         new EntityClickListener(this);
         new DamageListener(this);
         new SneakListener(this);
-        new HorseListener(this);
+        //new HorseListener(this);
         new PlayerJoinListener(this);
         new SignWriteListener(this);
         new ItemMoveListener(this);
@@ -161,8 +168,8 @@ public class Engine extends JavaPlugin implements Listener
         new InventoryClickListener(this);
         new PlayerQuitListener(this);
         new PlayerChatListener(this);
-        new ChunkLoadListener(this);
-        new ChunkUnloadListener(this);
+        //new ChunkLoadListener(this);
+        //new ChunkUnloadListener(this);
 
         new Runner(this);
         getServer().getPluginManager().registerEvents(this, this);
@@ -397,6 +404,7 @@ public class Engine extends JavaPlugin implements Listener
         for (Pferd a : pferde.values())
         {
             a.safe();
+            a.removeHorse();
         }
 
         for (Backpack a : backpacks.values())
@@ -489,10 +497,10 @@ public class Engine extends JavaPlugin implements Listener
         lanze.setIngredient('*', Material.AIR);
         getServer().addRecipe(lanze);
 
-        mats.addAll(Arrays.asList(Material.ACACIA_STAIRS, Material.BRICK_STAIRS, Material.BIRCH_WOOD_STAIRS, Material.COBBLESTONE_STAIRS,
-                Material.DARK_OAK_STAIRS, Material.JUNGLE_WOOD_STAIRS, Material.NETHER_BRICK_STAIRS, Material.PURPUR_STAIRS, Material.QUARTZ_STAIRS,
-                Material.QUARTZ_STAIRS, Material.RED_SANDSTONE_STAIRS, Material.SANDSTONE_STAIRS, Material.SMOOTH_STAIRS, Material.SPRUCE_WOOD_STAIRS,
-                Material.WOOD_STAIRS, Material.GRASS_PATH));
+        mats.addAll(Arrays.asList(Material.ACACIA_STAIRS, Material.BRICK_STAIRS, Material.BIRCH_STAIRS, Material.COBBLESTONE_STAIRS,
+                Material.DARK_OAK_STAIRS, Material.JUNGLE_STAIRS, Material.NETHER_BRICK_STAIRS, Material.PURPUR_STAIRS, Material.QUARTZ_STAIRS,
+                Material.QUARTZ_STAIRS, Material.RED_SANDSTONE_STAIRS, Material.SANDSTONE_STAIRS, Material.STONE_BRICK_STAIRS, Material.SPRUCE_STAIRS,
+                Material.OAK_STAIRS, Material.GRASS_PATH));
 
         //TINY BACKPACK
 

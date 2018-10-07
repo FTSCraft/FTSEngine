@@ -52,7 +52,7 @@ public class BriefLieferung
 
         for(ItemStack is : this.sender.getChest().getBlockInventory().getContents()) {
             if(is != null)
-            if(is.getType() == Material.MAP || is.getType() == Material.WRITTEN_BOOK || is.getType() == Material.BOOK_AND_QUILL) {
+            if(is.getType() == Material.MAP || is.getType() == Material.WRITTEN_BOOK || is.getType() == Material.WRITABLE_BOOK) {
                 lieferung.add(is);
                 this.sender.getChest().getBlockInventory().remove(is);
             } else p.sendMessage("§7Die anderen Sachen da drin sind viel zu schwer für den alten Postmann! Er hat sie drin gelassen.");

@@ -3,6 +3,7 @@ package de.ftscraft.ftsengine.courier;
 import de.ftscraft.ftsengine.main.Engine;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.block.Chest;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.yaml.snakeyaml.Yaml;
@@ -25,7 +26,9 @@ public class Briefkasten
         this.plugin = plugin;
         this.owner = owner;
         this.briefe = new ArrayList<>();
-        this.chest = (Chest) loc.getBlock().getState();
+        if(loc.getBlock().getType() == Material.CHEST || loc.getBlock().getType() == Material.TRAPPED_CHEST)
+            this.chest = (Chest) loc.getBlock().getState();
+        else destory();
 
         this.chest.setCustomName("§2Briefkasten §c"+ Bukkit.getOfflinePlayer(UUID.fromString(owner)).getName());
         plugin.briefkasten.put(owner, this);
@@ -47,10 +50,10 @@ public class Briefkasten
     }
 
     public void safe() {
-        File file = new File(plugin.getDataFolder() + "//briefkasten//"+owner.toString()+".yml");
+        File file = new File(plugin.getDataFolder() + "//briefkasten//"+owner+".yml");
         YamlConfiguration cfg = YamlConfiguration.loadConfiguration(file);
 
-        cfg.set("owner", owner.toString());
+        cfg.set("owner", owner);
         cfg.set("location.x", chest.getLocation().getX());
         cfg.set("location.y", chest.getLocation().getY());
         cfg.set("location.z", chest.getLocation().getZ());

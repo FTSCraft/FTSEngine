@@ -1,9 +1,0 @@
-
-Pferd:
-
-Chunk Load -> Gucken ob Pferd mit Position drin ist
-Cunk unLoad -> Pferd entfernen
-
-Teleport -> Position des Pferdes ändern damit es im Chunk Load nicht geladen wird
-Restart -> Alle Pferde löschen
-Start -> Kein Pferd spawnen (Chunk Load)

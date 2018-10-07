@@ -36,7 +36,7 @@ public class UserIO {
         getAusweise();
         getBackpacks();
         getBretter();
-        getPferde();
+        //getPferde();
         loadBriefe();
         getBriefkasten();
     }
@@ -44,7 +44,7 @@ public class UserIO {
     public UserIO(Engine plugin, boolean save) {
         this.plugin = plugin;
         safeBriefe();
-        safeReisepunkte();
+        //safeReisepunkte();
     }
 
     public void getAusweise() {
@@ -142,6 +142,7 @@ public class UserIO {
 
                 Pferd p = new Pferd(plugin, id, w, UUID.fromString(owner), locked, price, persID, name, chosed);
                 p.setHorseData(color, style, speed, items, health, jump, x, y, z, world);
+                //p.spawnHorse(null);
             }
 
         }catch (Exception e) {
@@ -173,7 +174,7 @@ public class UserIO {
 
             }
         } catch (NullPointerException ignored) {
-
+            ignored.printStackTrace();
         }
     }
 
@@ -188,7 +189,7 @@ public class UserIO {
             for (File files : Objects.requireNonNull(aFolder.listFiles())) {
                 YamlConfiguration cfg = YamlConfiguration.loadConfiguration(files);
 
-                UUID creator = (UUID) cfg.get("brett.creator");
+                UUID creator = UUID.fromString(cfg.getString("brett.creator"));
                 String name = files.getName().replace(".yml", "");
                 int loc_X = cfg.getInt("brett.location.X");
                 int loc_Y = cfg.getInt("brett.location.Y");
@@ -197,6 +198,9 @@ public class UserIO {
                 Location locaton = new Location(Bukkit.getWorld(world), loc_X, loc_Y, loc_Z);
 
                 BlockState bs = Bukkit.getWorld(world).getBlockAt(locaton).getState();
+                if(!(bs instanceof Sign)) {
+                    continue;
+                }
                 Sign sign = (Sign) bs;
 
                 Brett brett = new Brett(sign, locaton, creator, name, plugin, true);
@@ -212,11 +216,11 @@ public class UserIO {
 
             }
         } catch (Exception ignored) {
-
+            ignored.printStackTrace();
         }
     }
 
-    private void getBriefkasten() {
+        private void getBriefkasten() {
         File aFolder = new File(folder + "//briefkasten//");
         if (!aFolder.exists())
             aFolder.mkdirs();
@@ -239,7 +243,7 @@ public class UserIO {
             }
 
         } catch (Exception ignored) {
-
+            ignored.printStackTrace();
         }
     }
 
@@ -275,7 +279,7 @@ public class UserIO {
             e.printStackTrace();
         }
     }
-
+    /*
     private void safeReisepunkte() {
         File file = new File(plugin.getDataFolder() + "//reisepunkte.yml");
         YamlConfiguration cfg = YamlConfiguration.loadConfiguration(file);
@@ -299,5 +303,6 @@ public class UserIO {
         }
 
     }
+    */
 
 }

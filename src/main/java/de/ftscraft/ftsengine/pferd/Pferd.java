@@ -4,6 +4,7 @@ import de.ftscraft.ftsengine.main.Engine;
 import de.ftscraft.ftsengine.main.FTSUser;
 import org.bukkit.*;
 import org.bukkit.attribute.Attribute;
+import org.bukkit.block.Biome;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Horse;
@@ -63,7 +64,6 @@ public class Pferd {
         this.plugin = plugin;
         this.world = world;
         plugin.pferde.put(id, this);
-
     }
 
     public boolean isOwner(Player p) {
@@ -73,7 +73,7 @@ public class Pferd {
     public void teleport(Player p) {
         this.location = p.getLocation().clone();
         spawnHorse(p);
-        this.location = horse.getLocation();
+        updateLocation();
     }
 
     public void lock(Player p) {
@@ -109,6 +109,7 @@ public class Pferd {
     }
 
     public void safe() {
+
         File file = new File(plugin.getDataFolder() + "//pferde//" + id + ".yml");
         FileConfiguration cfg = YamlConfiguration.loadConfiguration(file);
 
@@ -131,8 +132,6 @@ public class Pferd {
             cfg.set("horse.location.y", location.getY());
             cfg.set("horse.location.z", location.getZ());
             cfg.set("horse.location.world", location.getWorld().getName());
-            horse.getLocation().getChunk().load();
-            horse.remove();
         }
 
         try {
@@ -140,6 +139,8 @@ public class Pferd {
         } catch (IOException e) {
             e.printStackTrace();
         }
+
+        removeHorse();
 
     }
 
@@ -221,6 +222,12 @@ public class Pferd {
         if (this.horse != null) {
             this.location = horse.getLocation().clone();
             this.horse.remove();
+        } else {
+            try {
+                if(!location.getChunk().isLoaded())
+                    location.getChunk().load();
+                this.horse.remove();
+            } catch (Exception ignored) {}
         }
     }
 
@@ -246,7 +253,6 @@ public class Pferd {
         h.setMetadata("FTSEngine.Horse", new FixedMetadataValue(plugin, id));
         this.location = h.getLocation();
         this.horse = h;
-        loc.getChunk().unload();
     }
 
     public void updateLocation() {
