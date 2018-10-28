@@ -7,8 +7,7 @@ import org.bukkit.map.*;
 
 import java.util.Calendar;
 
-public class FTSMapRenderer extends org.bukkit.map.MapRenderer
-{
+public class FTSMapRenderer extends org.bukkit.map.MapRenderer {
 
     private String msg;
     private String date;
@@ -31,8 +30,8 @@ public class FTSMapRenderer extends org.bukkit.map.MapRenderer
         for (int x = 0; x < 150; x++) {
             for (int y = 0; y < 150; y++) {
                 mapCanvas.setPixel(x, y, (byte) 145);
-                if(y == 10)
-                    mapCanvas.setPixel(x,y, (byte) 120);
+                if (y == 10)
+                    mapCanvas.setPixel(x, y, (byte) 120);
             }
         }
 
@@ -44,15 +43,14 @@ public class FTSMapRenderer extends org.bukkit.map.MapRenderer
         String text = "";
         int zeilen = 0;
 
-        for (int i = 0; i < wörter.length; i++)
-        {
+        for (int i = 0; i < wörter.length; i++) {
             if (wörter[i].length() + text.length() < 20) {
                 text = text + " " + wörter[i];
-                if(i + 1 == wörter.length)
-                    mapCanvas.drawText(1,zeilen * 10 + SPACE, MinecraftFont.Font, text);
+                if (i + 1 == wörter.length)
+                    mapCanvas.drawText(1, zeilen * 10 + SPACE, MinecraftFont.Font, text);
             } else {
                 text = text + " " + wörter[i];
-                mapCanvas.drawText(1,zeilen * 10 + SPACE, MinecraftFont.Font, text);
+                mapCanvas.drawText(1, zeilen * 10 + SPACE, MinecraftFont.Font, text);
                 zeilen++;
                 text = " ";
             }

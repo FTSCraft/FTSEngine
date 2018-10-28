@@ -61,9 +61,7 @@ public class Ausweis
 
     private boolean todayBirthday() {
         Calendar now = Calendar.getInstance();
-        if(now.get(Calendar.MONTH) == birthday.get(Calendar.MONTH) && now.get(Calendar.DAY_OF_MONTH) == birthday.get(Calendar.DAY_OF_MONTH))
-            return true;
-        return false;
+        return now.get(Calendar.MONTH) == birthday.get(Calendar.MONTH) && now.get(Calendar.DAY_OF_MONTH) == birthday.get(Calendar.DAY_OF_MONTH);
     }
 
     private void checkBirthday()

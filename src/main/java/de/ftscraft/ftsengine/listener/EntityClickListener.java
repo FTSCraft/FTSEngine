@@ -1,6 +1,7 @@
 package de.ftscraft.ftsengine.listener;
 
 import de.ftscraft.ftsengine.main.Engine;
+import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -22,6 +23,10 @@ public class EntityClickListener implements Listener
     {
         if (plugin.getReiter().contains(e.getPlayer()))
         {
+            if(e.getRightClicked().getType() == EntityType.PHANTOM) {
+                e.getPlayer().sendMessage("§cne ne ne.");
+                return;
+            }
             e.getRightClicked().addPassenger(e.getPlayer());
             plugin.getReiter().remove(e.getPlayer());
         }

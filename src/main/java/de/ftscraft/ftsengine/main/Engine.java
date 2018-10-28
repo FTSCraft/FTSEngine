@@ -146,6 +146,7 @@ public class Engine extends JavaPlugin implements Listener
         new CMDtaube(this);
         new CMDschlagen(this);
         new CMDremovearmorstand(this);
+        new CMDkurier(this);
         //new CMDpferd(this);
         new CMDbrief(this);
         new CMDcountdown(this);

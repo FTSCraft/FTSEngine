@@ -8,11 +8,11 @@ import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.inventory.meta.MapMeta;
 import org.bukkit.map.MapRenderer;
 import org.bukkit.map.MapView;
 
-public class Brief
-{
+public class Brief {
 
     public String msg;
     public String creator;
@@ -52,15 +52,13 @@ public class Brief
     public ItemStack getMap(World w)
     {
 
-        ItemStack map = new ItemStack(Material.MAP, 1);
-        ItemMeta mapMeta = map.getItemMeta();
-        mapMeta.addItemFlags(ItemFlag.HIDE_ENCHANTS, ItemFlag.HIDE_ATTRIBUTES, ItemFlag.HIDE_DESTROYS);
+        ItemStack map = new ItemStack(Material.FILLED_MAP, 1);
+        MapMeta mapMeta = (MapMeta) map.getItemMeta();
         mapMeta.setDisplayName("§7Brief von §e" + creator);
+        mapMeta.setMapId(id);
         map.setItemMeta(mapMeta);
-        map.setDurability((short) id);
 
-        for (MapRenderer mr : mv.getRenderers())
-        {
+        for (MapRenderer mr : mv.getRenderers()) {
             mv.removeRenderer(mr);
         }
 
@@ -81,8 +79,7 @@ public class Brief
         MapView mv = plugin.getServer().getMap((short) id);
         if (mv.getRenderers().contains(renderer))
             return;
-        for (MapRenderer mr : mv.getRenderers())
-        {
+        for (MapRenderer mr : mv.getRenderers()) {
             mv.removeRenderer(mr);
         }
 

@@ -8,9 +8,9 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerItemHeldEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.MapMeta;
 
-public class ItemSwitchListener implements Listener
-{
+public class ItemSwitchListener implements Listener {
 
     private Engine plugin;
 
@@ -24,12 +24,12 @@ public class ItemSwitchListener implements Listener
     public void onItemSwitch(PlayerItemHeldEvent e)
     {
         Inventory inv = e.getPlayer().getInventory();
-        if(inv.getItem(e.getNewSlot()) == null)
+        if (inv.getItem(e.getNewSlot()) == null)
             return;
-        if(inv.getItem(e.getNewSlot()).getType() == Material.MAP) {
+        if (inv.getItem(e.getNewSlot()).getType() == Material.MAP) {
             ItemStack itemMap = inv.getItem(e.getNewSlot());
-            Brief brief = plugin.briefe.get((int) itemMap.getDurability());
-            if(brief != null) {
+            Brief brief = plugin.briefe.get(((MapMeta) itemMap.getItemMeta()).getMapId());
+            if (brief != null) {
                 brief.loadMap(itemMap);
             }
         }
