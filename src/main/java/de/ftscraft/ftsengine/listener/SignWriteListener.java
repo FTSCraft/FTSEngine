@@ -61,6 +61,12 @@ public class SignWriteListener implements Listener
 
                         org.bukkit.block.Sign sign = (org.bukkit.block.Sign) event.getBlock().getState();
                         event.setLine(0, "§4Schwarzes Brett");
+                        for(Brett all : plugin.bretter.values()) {
+                            if(all.getName().equals(name)) {
+                                event.getPlayer().sendMessage("§cDieser Name ist schon vorhanden. Probier ein anderen");
+                                return;
+                            }
+                        }
                         plugin.bretter.put(event.getBlock().getLocation(), new Brett(sign, event.getBlock().getLocation(), event.getPlayer().getUniqueId(), name, plugin));
                         event.getPlayer().sendMessage("§7[§bSchwarzes Brett§7] Du hast das Schwarze Brett erfolgreich erstellt");
 

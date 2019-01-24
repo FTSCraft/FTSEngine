@@ -30,7 +30,8 @@ public class UserIO {
 
     private File folder;
 
-    public UserIO(Engine plugin) {
+    public UserIO(Engine plugin)
+    {
         this.plugin = plugin;
         folder = plugin.getDataFolder();
         getAusweise();
@@ -41,13 +42,15 @@ public class UserIO {
         getBriefkasten();
     }
 
-    public UserIO(Engine plugin, boolean save) {
+    public UserIO(Engine plugin, boolean save)
+    {
         this.plugin = plugin;
         safeBriefe();
         //safeReisepunkte();
     }
 
-    public void getAusweise() {
+    public void getAusweise()
+    {
         File aFolder = new File(folder + "//ausweise//");
         if (!aFolder.exists()) {
             aFolder.mkdirs();
@@ -87,71 +90,8 @@ public class UserIO {
 
     }
 
-    private void getPferde() {
-        File aFolder = new File(folder + "//pferde//");
-
-        if (!aFolder.exists()) {
-            aFolder.mkdirs();
-        }
-
-        try {
-
-            for (File aFile : Objects.requireNonNull(aFolder.listFiles())) {
-                FileConfiguration cfg = YamlConfiguration.loadConfiguration(aFile);
-                Integer id;
-                String owner;
-                boolean locked;
-                World w;
-                int price;
-                int persID;
-                String name;
-                boolean chosed;
-
-                String color;
-                String world;
-                String style;
-                double speed;
-                double health,
-                        jump,
-                        x, y, z;
-
-                id = cfg.getInt("horseID");
-                owner = cfg.getString("owner");
-                locked = cfg.getBoolean("locked");
-                w = Bukkit.getWorld(cfg.getString("world"));
-                price = cfg.getInt("price");
-                persID = cfg.getInt("id");
-                name = cfg.getString("name");
-                chosed = cfg.getBoolean("chosed");
-
-                color = cfg.getString("horse.color");
-                style = cfg.getString("horse.style");
-                List itemsList = cfg.getList("horse.inventory");
-                ItemStack[] items = (ItemStack[]) itemsList.toArray(new ItemStack[itemsList.size()]);
-
-                health = cfg.getDouble("horse.health");
-                jump = cfg.getDouble("horse.jump");
-                speed = cfg.getDouble("horse.speed");
-                x = cfg.getDouble("horse.location.x");
-                y = cfg.getDouble("horse.location.y");
-                z = cfg.getDouble("horse.location.z");
-                world = cfg.getString("horse.location.world");
-
-                if(id > plugin.biggestPferdId)
-                    plugin.biggestPferdId = id;
-
-                Pferd p = new Pferd(plugin, id, w, UUID.fromString(owner), locked, price, persID, name, chosed);
-                p.setHorseData(color, style, speed, items, health, jump, x, y, z, world);
-                //p.spawnHorse(null);
-            }
-
-        }catch (Exception e) {
-            e.printStackTrace();
-        }
-
-    }
-
-    private void getBackpacks() {
+    private void getBackpacks()
+    {
         File aFolder = new File(folder + "//backpacks//");
 
         try {
@@ -178,7 +118,8 @@ public class UserIO {
         }
     }
 
-    private void getBretter() {
+    private void getBretter()
+    {
         File aFolder = new File(folder + "//bretter");
 
         if (!aFolder.exists())
@@ -187,40 +128,48 @@ public class UserIO {
         try {
 
             for (File files : Objects.requireNonNull(aFolder.listFiles())) {
-                YamlConfiguration cfg = YamlConfiguration.loadConfiguration(files);
+                try {
+                    YamlConfiguration cfg = YamlConfiguration.loadConfiguration(files);
+                    UUID creator;
+                    if (!(cfg.get("brett.creator") instanceof String)) {
+                        files.delete();
+                        continue;
+                    }
+                    creator = UUID.fromString(cfg.getString("brett.creator"));
+                    String name = files.getName().replace(".yml", "");
+                    int loc_X = cfg.getInt("brett.location.X");
+                    int loc_Y = cfg.getInt("brett.location.Y");
+                    int loc_Z = cfg.getInt("brett.location.Z");
+                    String world = cfg.getString("brett.location.world");
+                    Location locaton = new Location(Bukkit.getWorld(world), loc_X, loc_Y, loc_Z);
 
-                UUID creator = UUID.fromString(cfg.getString("brett.creator"));
-                String name = files.getName().replace(".yml", "");
-                int loc_X = cfg.getInt("brett.location.X");
-                int loc_Y = cfg.getInt("brett.location.Y");
-                int loc_Z = cfg.getInt("brett.location.Z");
-                String world = cfg.getString("brett.location.world");
-                Location locaton = new Location(Bukkit.getWorld(world), loc_X, loc_Y, loc_Z);
+                    BlockState bs = Bukkit.getWorld(world).getBlockAt(locaton).getState();
+                    if (!(bs instanceof Sign)) {
+                        continue;
+                    }
+                    Sign sign = (Sign) bs;
 
-                BlockState bs = Bukkit.getWorld(world).getBlockAt(locaton).getState();
-                if(!(bs instanceof Sign)) {
-                    continue;
+                    Brett brett = new Brett(sign, locaton, creator, name, plugin, true);
+
+                    for (String keys : cfg.getConfigurationSection("brett.note").getKeys(false)) {
+                        String title = cfg.getString("brett.note." + keys + ".title");
+                        String content = cfg.getString("brett.note." + keys + ".content");
+                        String note_creator = cfg.getString("brett.note." + keys + ".creator");
+                        long time = cfg.getLong("brett.note." + keys + ".creation");
+                        if (!title.equalsIgnoreCase("null"))
+                            brett.addNote(title, content, note_creator, time, Integer.valueOf(keys));
+                    }
+                } catch (Exception ex) {
+
                 }
-                Sign sign = (Sign) bs;
-
-                Brett brett = new Brett(sign, locaton, creator, name, plugin, true);
-
-                for (String keys : cfg.getConfigurationSection("brett.note").getKeys(false)) {
-                    String title = cfg.getString("brett.note." + keys + ".title");
-                    String content = cfg.getString("brett.note." + keys + ".content");
-                    String note_creator = cfg.getString("brett.note." + keys + ".creator");
-                    long time = cfg.getLong("brett.note." + keys + ".creation");
-                    if (!title.equalsIgnoreCase("null"))
-                        brett.addNote(title, content, note_creator, time, Integer.valueOf(keys));
-                }
-
             }
         } catch (Exception ignored) {
-            ignored.printStackTrace();
+
         }
     }
 
-        private void getBriefkasten() {
+    private void getBriefkasten()
+    {
         File aFolder = new File(folder + "//briefkasten//");
         if (!aFolder.exists())
             aFolder.mkdirs();
@@ -247,7 +196,8 @@ public class UserIO {
         }
     }
 
-    private void loadBriefe() {
+    private void loadBriefe()
+    {
         File file = new File(plugin.getDataFolder() + "//briefe.yml");
         YamlConfiguration cfg = YamlConfiguration.loadConfiguration(file);
 
@@ -262,7 +212,8 @@ public class UserIO {
         }
     }
 
-    private void safeBriefe() {
+    private void safeBriefe()
+    {
         File file = new File(plugin.getDataFolder() + "//briefe.yml");
         YamlConfiguration cfg = YamlConfiguration.loadConfiguration(file);
 
