@@ -501,7 +501,7 @@ public class Engine extends JavaPlugin implements Listener
         mats.addAll(Arrays.asList(Material.ACACIA_STAIRS, Material.BRICK_STAIRS, Material.BIRCH_STAIRS, Material.COBBLESTONE_STAIRS,
                 Material.DARK_OAK_STAIRS, Material.JUNGLE_STAIRS, Material.NETHER_BRICK_STAIRS, Material.PURPUR_STAIRS, Material.QUARTZ_STAIRS,
                 Material.QUARTZ_STAIRS, Material.RED_SANDSTONE_STAIRS, Material.SANDSTONE_STAIRS, Material.STONE_BRICK_STAIRS, Material.SPRUCE_STAIRS,
-                Material.OAK_STAIRS, Material.GRASS_PATH));
+                Material.OAK_STAIRS, Material.GRASS_PATH, Material.PRISMARINE_STAIRS, Material.PRISMARINE_BRICK_STAIRS, Material.DARK_PRISMARINE_STAIRS));
 
         //TINY BACKPACK
 
