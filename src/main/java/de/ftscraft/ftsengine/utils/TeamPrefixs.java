@@ -7,50 +7,58 @@ import org.bukkit.scoreboard.Team;
 public enum TeamPrefixs
 {
 
-    ADMIN("§bAdmin", "ftsengine.admin"),
-    MODERATOR("§bModerator", "ftsengine.moderator"),
-    HELFER("§bHelfer", "ftsengine.helfer"),
-    WALKURE("§cWalküre", "ftsengine.walkure"),
-    EINHERJER("§cEinherjer", "ftsengine.einherjer"),
-    ARCHITEKT("§eArchitekt", "ftsengine.architekt"),
-    EHRENBURGER("§eEhrenbürger", "ftsengine.ehrenburger"),
-    PAPST("§9Papst","ftsengine.papst"),
-    RAUBER("§9Söldner", "ftsengine.rauber"),
-    RICHTER("§9Richter", "ftsengine.richter"),
-    MEJSTER("§9Mejster", "ftsengine.mejster"),
-    KONIG("§2König", "ftsengine.konig"),
-    HERZOG("§2Herzog", "ftsengine.herzog"),
-    FURST("§2Fürst", "ftsengine.furst"),
-    GRAF("§2Graf", "ftsengine.graf"),
-    BURGHERR("§2Burgherr", "ftsengine.burgherr"),
-    RITTER("§2Ritter", "ftsengine.ritter"),
-    INTENDANT("§2Intendant", "ftsengine.intendant"),
-    KURATOR("§2Kurator", "ftsengine.kurator"),
-    KAUFMANN("§2Kaufmann", "ftsengine.kaufmann"),
-    GILDENHERR("§2Gildenherr", "ftsengine.gildenherr"),
-    STADTHERR("§2Stadtherr", "ftsengine.stadtherr"),
-    MEISTER("§2Meister", "ftsengine.meister"),
-    BURGERMEISTER("§2Bürgermeister","ftsengine.burgermeister"),
-    SIEDLER("§2Siedler", "ftsengine.siedler"),
-    VOGT("§6Vogt", "ftsengine.vogt"),
-    HEROLD("§6Herold", "ftsengine.herold"),
-    KNAPPE("§6Knappe", "ftsengine.knappe"),
-    SCHAUSPIELER("§6Schauspieler", "ftsengine.schauspieler"),
-    MUSIKER("§6Musiker", "ftsengine.musiker"),
-    SCHREIBER("§6Schreiber", "ftsengine.schreiber"),
-    SEEFAHRER("§6Seefahrer", "ftsengine.seefahrer"),
-    HAFENMEISTER("§6Hafenmeister", "ftsengine.hafenmeister"),
-    HANDLER("§6Händler", "ftsengine.handler"),
-    BURGER("§6Bürger", "ftsengine.burger"),
-    REISENDER("§6Reisender", "");
+    ADMIN("§bAdmin", "ftsengine.admin", "Admin"),
+    MODERATOR("§bModerator", "ftsengine.moderator", "Moderator"),
+    HELFER("§bHelfer", "ftsengine.helfer", "Helfer"),
+    WALKURE("§cWalküre", "ftsengine.walkure", "Walkuere"),
+    EINHERJER("§cEinherjer", "ftsengine.einherjer", "Einherjer"),
+    HUSCARL("§cHuscarl", "ftsengine.huscarl", "Huscarl"),
+    Schildmaid("§cSchildmaid", "ftsengine.schildmaid", "Schildmaid"),
+    ARCHITEKT("§eArchitekt", "ftsengine.architekt", "Architekt"),
+    EHRENBURGER("§eEhrenbürger", "ftsengine.ehrenburger", "EBuerger"),
+    PAPST("§9Papst","ftsengine.papst", "Papst"),
+    RAUBER("§9Söldner", "ftsengine.rauber", "Rauber"),
+    RICHTER("§9Richter", "ftsengine.richter", "Richter"),
+    MEJSTER("§9Medikus", "ftsengine.mejster", "Mejster"),
+    KAUFMANN("§9Kaufmann", "ftsengine.kaufmann", "Kaufmann"),
+    BRAUMEISTER("§9Braumeister", "ftsengine.braumeister", "BMeister"),
+    KURATOR("§2Kurator", "ftsengine.kurator", "Kurator"),
+    KONIG("§2König", "ftsengine.konig", "Konig"),
+    HERZOG("§2Herzog", "ftsengine.herzog", "Herzog"),
+    FURST("§2Fürst", "ftsengine.furst", "Furst"),
+    GRAF("§2Graf", "ftsengine.graf", "Graf"),
+    BURGHERR("§2Burgherr", "ftsengine.burgherr", "Burgherr"),
+    RITTER("§2Ritter", "ftsengine.ritter", "Ritter"),
+    INTENDANT("§2Intendant", "ftsengine.intendant", "Intendant"),
+    GILDENHERR("§2Gildenherr", "ftsengine.gildenherr", "Gildenherr"),
+    STADTHERR("§2Stadtherr", "ftsengine.stadtherr", "Stadtherr"),
+    MEISTER("§2Meister", "ftsengine.meister", "Meister"),
+    BURGERMEISTER("§2Bürgermeister","ftsengine.burgermeister", "BMeister"),
+    SIEDLER("§2Siedler", "ftsengine.siedler", "Siedler"),
+    VOGT("§6Vogt", "ftsengine.vogt", "Vogt"),
+    HEROLD("§6Herold", "ftsengine.herold", "Herold"),
+    KNAPPE("§6Knappe", "ftsengine.knappe", "Knappe"),
+    SCHAUSPIELER("§6Schauspieler", "ftsengine.schauspieler", "SSpieler"),
+    MUSIKER("§6Musiker", "ftsengine.musiker", "Musiker"),
+    SCHREIBER("§6Schreiber", "ftsengine.schreiber", "Schreiber"),
+    SEEFAHRER("§6Seefahrer", "ftsengine.seefahrer", "Seefahrer"),
+    HAFENMEISTER("§6Hafenmeister", "ftsengine.hafenmeister", "HMeister"),
+    HANDLER("§6Händler", "ftsengine.handler", "Handler"),
+    BURGER("§6Bürger", "ftsengine.burger", "Burger"),
+    REISENDER("§6Reisender", "", "Reisender");
 
     String prefix;
     String permission;
-
-    TeamPrefixs(String prefix, String permission)
+    String teamName;
+    TeamPrefixs(String prefix, String permission, String teamName)
     {
+        this.teamName = teamName;
         this.prefix = prefix;
         this.permission = permission;
+    }
+
+    public String getTeamName() {
+        return teamName;
     }
 
     public String getPermission()

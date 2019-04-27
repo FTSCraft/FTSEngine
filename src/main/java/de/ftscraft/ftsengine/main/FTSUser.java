@@ -70,18 +70,24 @@ public class FTSUser {
         }
 
         if (block.getType() != Material.GRASS_PATH) {
-            BlockState state = block.getState();
-            Stairs stair = (Stairs) state.getData();
-            BlockFace face = stair.getFacing();
-            Block up = block.getLocation().clone().add(0, 1, 0).getBlock();
-            if (up.getState().getType() != Material.AIR)
-                return;
-            if (face == BlockFace.DOWN)
-                return;
-            Location loc2 = block.getLocation().clone().subtract(-0.5D, 1.2D, -0.4D);
-            loc2.setYaw(plugin.getVar().getYawByBlockFace(face));
-            sit_stand = block.getLocation().getWorld().spawn(loc2, ArmorStand.class);
-            player.teleport(sit_stand);
+            if(block.getType() == Material.DARK_PRISMARINE_STAIRS || block.getType() == Material.PRISMARINE_BRICK_STAIRS
+                    || block.getType() == Material.PRISMARINE_STAIRS) {
+                Location loc2 = block.getLocation().clone().subtract(-0.5D, 1.2D, -0.4D);
+                sit_stand = block.getLocation().getWorld().spawn(loc2, ArmorStand.class);
+            } else {
+                BlockState state = block.getState();
+                Stairs stair = (Stairs) state.getData();
+                BlockFace face = stair.getFacing();
+                Block up = block.getLocation().clone().add(0, 1, 0).getBlock();
+                if (up.getState().getType() != Material.AIR)
+                    return;
+                if (face == BlockFace.DOWN)
+                    return;
+                Location loc2 = block.getLocation().clone().subtract(-0.5D, 1.2D, -0.4D);
+                loc2.setYaw(plugin.getVar().getYawByBlockFace(face));
+                sit_stand = block.getLocation().getWorld().spawn(loc2, ArmorStand.class);
+                player.teleport(sit_stand);
+            }
         } else {
             sit_stand = block.getLocation().getWorld().spawn(block.getLocation().clone().add(0.25D, 0.0D, 0.5D).subtract(0, 0.75D, 0), ArmorStand.class);
         }

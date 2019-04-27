@@ -31,7 +31,6 @@ public class PlayerInteractListener implements Listener
 
         if (e.getAction() == Action.RIGHT_CLICK_BLOCK)
         {
-
             if (plugin.mats.contains(e.getClickedBlock().getType()))
             {
                 if (e.getPlayer().getInventory().getItemInMainHand().getType() == Material.AIR)

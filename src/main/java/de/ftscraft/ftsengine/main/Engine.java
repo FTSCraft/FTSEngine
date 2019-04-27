@@ -22,6 +22,7 @@ import net.milkbowl.vault.chat.Chat;
 import net.milkbowl.vault.economy.Economy;
 import net.milkbowl.vault.permission.Permission;
 import org.bukkit.*;
+import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Horse;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -145,12 +146,12 @@ public class Engine extends JavaPlugin implements Listener
         //new CMDchannel(this);
         new CMDtaube(this);
         new CMDschlagen(this);
+        new CMDfasten(this);
         new CMDremovearmorstand(this);
         new CMDkurier(this);
         //new CMDpferd(this);
         new CMDbrief(this);
         new CMDcountdown(this);
-        new CMDroleplay(this);
         new CMDreisepunkt(this);
         new CMDgehen(this);
         new CMDklopfen(this);
@@ -202,115 +203,26 @@ public class Engine extends JavaPlugin implements Listener
 
         try
         {
-            sb.registerNewTeam("0000Admin");
-            sb.registerNewTeam("0002Moderator");
-            sb.registerNewTeam("0003Helfer");
-            sb.registerNewTeam("0004Walkure");
-            sb.registerNewTeam("0005Einherjer");
-            sb.registerNewTeam("0006Architekt");
-            sb.registerNewTeam("0007Ehrenburger");
-            sb.registerNewTeam("0008Rauber");
-            sb.registerNewTeam("0009Richter");
-            sb.registerNewTeam("0010Mejster");
-            sb.registerNewTeam("0011Konig");
-            sb.registerNewTeam("0012Herzog");
-            sb.registerNewTeam("0013Furst");
-            sb.registerNewTeam("0014Graf");
-            sb.registerNewTeam("0015Burgherr");
-            sb.registerNewTeam("0016Ritter");
-            sb.registerNewTeam("0017Intendant");
-            sb.registerNewTeam("0018Kurator");
-            sb.registerNewTeam("0019Kaufmann");
-            sb.registerNewTeam("0020Gildenherr");
-            sb.registerNewTeam("0021Stadtherr");
-            sb.registerNewTeam("0022BMeister");
-            sb.registerNewTeam("0023Siedler");
-            sb.registerNewTeam("0024Vogt");
-            sb.registerNewTeam("0025Herold");
-            sb.registerNewTeam("0026Knappe");
-            sb.registerNewTeam("0027SchauSpieler");
-            sb.registerNewTeam("0028Musiker");
-            sb.registerNewTeam("0029Schreiber");
-            sb.registerNewTeam("0030Seefahrer");
-            sb.registerNewTeam("0031Hafenmeister");
-            sb.registerNewTeam("0032Handler");
-            sb.registerNewTeam("0033Burger");
-            sb.registerNewTeam("0034Reisender");
+            for (int i = 0; i < TeamPrefixs.values().length; i++) {
+                String name = i + TeamPrefixs.values()[i].getTeamName();
+                sb.registerNewTeam(name);
+            }
         } catch (Exception ignore) {
             ignore.printStackTrace();
         }
     }
 
     public void setPrefix(Player p) {
-        String team;
-        if(p.hasPermission("ftsengine.admin")) {
-            team = "0000Admin";
-        } else if(p.hasPermission("ftsengine.moderator")) {
-            team = "0002Moderator";
-        } else if(p.hasPermission("ftsengine.helfer")) {
-            team = "0003Helfer";
-        } else if(p.hasPermission("ftsengine.walkure")) {
-            team = "0004Walkure";
-        } else if(p.hasPermission("ftsengine.einherjer")) {
-            team = "0005Einherjer";
-        } else if(p.hasPermission("ftsengine.architekt")) {
-            team = "0006Architekt";
-        } else if(p.hasPermission("ftsengine.ehrenburger")) {
-            team = "0007Ehrenburger";
-        } else if(p.hasPermission("ftsengine.rauber")) {
-            team = "0008Rauber";
-        } else if(p.hasPermission("ftsengine.richter")) {
-            team = "0009Richter";
-        } else if(p.hasPermission("ftsengine.mejster")) {
-            team = "0010Mejster";
-        } else if(p.hasPermission("ftsengine.konig")) {
-            team = "0011Konig";
-        } else if(p.hasPermission("ftsengine.herzog")) {
-            team = "0012Herzog";
-        } else if(p.hasPermission("ftsengine.furst")) {
-            team = "0013Furst";
-        } else if(p.hasPermission("ftsengine.graf")){
-            team = "0014Graf";
-        } else if(p.hasPermission("ftsengine.burgherr")) {
-            team = "0015Burgherr";
-        } else if(p.hasPermission("ftsengine.ritter")) {
-            team = "0016Ritter";
-        } else if(p.hasPermission("ftsengine.intendant")) {
-            team = "0017Intendant";
-        } else if(p.hasPermission("ftsengine.kurator")) {
-            team = "0018Kurator";
-        } else if(p.hasPermission("ftsengine.kaufmann")) {
-            team = "0019Kaufmann";
-        } else if(p.hasPermission("ftsengine.gildenherr")) {
-            team = "0020Gildenherr";
-        } else if(p.hasPermission("ftsengine.stadtherr")) {
-            team = "0021Stadtherr";
-        } else if(p.hasPermission("ftsengine.burgermeister")) {
-            team = "0022BMeister";
-        } else if(p.hasPermission("ftsengine.siedler")) {
-            team = "0023Siedler";
-        } else if(p.hasPermission("ftsengine.vogt")) {
-            team = "0024Vogt";
-        } else if(p.hasPermission("ftsengine.herold")) {
-            team = "0025Herold";
-        } else if(p.hasPermission("ftsengine.knappe")) {
-            team = "0026Knappe";
-        } else if(p.hasPermission("ftsengine.schauspieler")) {
-            team = "0027SchauSpieler";
-        } else if(p.hasPermission("ftsengine.musiker")) {
-            team = "0028Musiker";
-        } else if(p.hasPermission("ftsengine.schreiber")) {
-            team = "0029Schreiber";
-        } else if(p.hasPermission("ftsengine.seefahrer")) {
-            team = "0030Seefahrer";
-        } else if(p.hasPermission("ftsengine.hafenmeister")) {
-            team = "0031Hafenmeister";
-        } else if(p.hasPermission("ftsengine.handler")) {
-            team = "0032Handler";
-        } else if(p.hasPermission("ftsengine.burger")) {
-            team = "0033Burger";
-        } else {
-            team = "0034Reisender";
+        String team = null;
+        for (int i = 0; i < TeamPrefixs.values().length; i++) {
+            TeamPrefixs t = TeamPrefixs.values()[i];
+            if(p.hasPermission(t.getPermission())) {
+                team = i + t.getTeamName();
+            }
+            if(t == TeamPrefixs.REISENDER)
+                team = i + t.getTeamName();
+            if(team != null)
+                break;
         }
         Team t = sb.getTeam(team);
         t.addPlayer(p);
