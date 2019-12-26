@@ -47,10 +47,10 @@ public class FTSMapRenderer extends org.bukkit.map.MapRenderer {
             if (wörter[i].length() + text.length() < 20) {
                 text = text + " " + wörter[i];
                 if (i + 1 == wörter.length)
-                    mapCanvas.drawText(1, zeilen * 10 + SPACE, MinecraftFont.Font, text);
+                    mapCanvas.drawText(0, zeilen * 10 + SPACE, MinecraftFont.Font, text);
             } else {
                 text = text + " " + wörter[i];
-                mapCanvas.drawText(1, zeilen * 10 + SPACE, MinecraftFont.Font, text);
+                mapCanvas.drawText(0, zeilen * 10 + SPACE, MinecraftFont.Font, text);
                 zeilen++;
                 text = " ";
             }

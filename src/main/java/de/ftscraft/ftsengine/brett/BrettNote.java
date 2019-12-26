@@ -55,7 +55,7 @@ public class BrettNote
             this.brett = brett;
             this.creator = creator;
             this.time = System.currentTimeMillis();
-            this.create = create;
+            this.create = true;
 
             YamlConfiguration cfg = brett.getCfg();
 

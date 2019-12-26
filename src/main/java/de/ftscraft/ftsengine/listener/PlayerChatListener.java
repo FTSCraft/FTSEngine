@@ -12,6 +12,8 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
 
+import java.util.Objects;
+
 public class PlayerChatListener implements Listener
 {
 
@@ -105,10 +107,14 @@ public class PlayerChatListener implements Listener
 
             e.setCancelled(true);
 
-            for(Entity en : e.getPlayer().getNearbyEntities(15,15,15)) {
-                if(en instanceof Player) {
-                    en.sendMessage(msg);
+            try {
+                for (Entity en : Objects.requireNonNull(e.getPlayer().getNearbyEntities(15, 15, 15))) {
+                    if (en instanceof Player) {
+                        en.sendMessage(msg);
+                    }
                 }
+            } catch (IllegalStateException e1) {
+                e1.printStackTrace();
             }
 
             e.getPlayer().sendMessage(msg);

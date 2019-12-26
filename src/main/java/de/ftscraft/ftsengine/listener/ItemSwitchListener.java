@@ -23,7 +23,7 @@ public class ItemSwitchListener implements Listener {
     @EventHandler
     public void onItemSwitch(PlayerItemHeldEvent e)
     {
-        Inventory inv = e.getPlayer().getInventory();
+        /*Inventory inv = e.getPlayer().getInventory();
         if (inv.getItem(e.getNewSlot()) == null)
             return;
         if (inv.getItem(e.getNewSlot()).getType() == Material.MAP) {
@@ -33,6 +33,7 @@ public class ItemSwitchListener implements Listener {
                 brief.loadMap(itemMap);
             }
         }
+        */
     }
 
 }

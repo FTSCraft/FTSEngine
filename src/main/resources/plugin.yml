@@ -1,15 +1,15 @@
 name: FTSEngine
 author: halberfan
 main: de.ftscraft.ftsengine.main.Engine
-version: 0.6.1
-api-version: 1.13
+version: 1.0.3.1
+api-version: 1.14
 depend: [Vault, ProtocolLib, LuckPerms]
 
 commands:
     ausweis:
     würfel:
     countdown:
-    roleplay:
+    #roleplay:
     reiten:
     taube:
     schlagen:
@@ -22,3 +22,4 @@ commands:
     klopfen:
     kurier:
     fasten:
+    item:

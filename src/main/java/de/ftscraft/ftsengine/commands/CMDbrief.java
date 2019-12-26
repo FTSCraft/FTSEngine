@@ -1,7 +1,6 @@
 package de.ftscraft.ftsengine.commands;
 
 import de.ftscraft.ftsengine.courier.Brief;
-import de.ftscraft.ftsengine.courier.BriefLieferung;
 import de.ftscraft.ftsengine.main.Engine;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
@@ -40,18 +39,6 @@ public class CMDbrief implements CommandExecutor
         if (args.length >= 1)
         {
 
-            if (args[0].equalsIgnoreCase("senden"))
-            {
-                if (args.length == 2)
-                {
-
-                    OfflinePlayer t = Bukkit.getOfflinePlayer(args[1]);
-
-                    new BriefLieferung(plugin, p.getUniqueId().toString(), t.getUniqueId().toString());
-                    return true;
-                }
-            }
-
             String msg = "";
             String name = p.getName();
             for (int i = 0; i < args.length; i++)
@@ -68,7 +55,7 @@ public class CMDbrief implements CommandExecutor
                 {
                     plugin.getEcon().withdrawPlayer(p, 2);
                     p.sendMessage("§cDieser Brief ist nun Anonym!");
-                    msg.replaceFirst(" anonym", "");
+                    msg = msg.replaceFirst(" anonym", " ");
                     name = "XXXX";
                 } else
                 {
@@ -76,6 +63,7 @@ public class CMDbrief implements CommandExecutor
                     return true;
                 }
             }
+
 
             Brief brief = new Brief(plugin, name, msg, p.getWorld().getName());
             p.getInventory().addItem(brief.getMap(p.getWorld()));

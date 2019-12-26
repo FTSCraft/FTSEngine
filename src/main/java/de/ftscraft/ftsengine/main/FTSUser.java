@@ -1,28 +1,29 @@
 package de.ftscraft.ftsengine.main;
 
-import de.ftscraft.ftsengine.chat.ChatChannel;
-import de.ftscraft.ftsengine.courier.Briefkasten;
-import de.ftscraft.ftsengine.pferd.Pferd;
+import com.comphenix.protocol.wrappers.WrappedGameProfile;
 import de.ftscraft.ftsengine.utils.Ausweis;
 import de.ftscraft.ftsengine.utils.TeamPrefixs;
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.block.BlockState;
 import org.bukkit.entity.ArmorStand;
-import org.bukkit.entity.Horse;
 import org.bukkit.entity.Player;
 import org.bukkit.material.Stairs;
-
-import java.util.ArrayList;
 
 public class FTSUser {
 
     private Engine plugin;
     private Player player;
-    private ChatChannel chatChannel;
-    private ArrayList<Pferd> pferde;
+
+    private Location beforeSitting;
+
+    private WrappedGameProfile oldProfile;
+    private WrappedGameProfile newProfile;
+
+    private String disguiseName;
 
     public FTSUser(Engine plugin, Player player) {
         this.plugin = plugin;
@@ -31,16 +32,6 @@ public class FTSUser {
             this.ausweis = plugin.getAusweis(player);
         else this.ausweis = null;
         sits = false;
-        pferde = new ArrayList<>();
-
-        for (Pferd p : plugin.pferde.values()) {
-            if (p.getOwner().toString().equals(player.getUniqueId().toString())) {
-                this.pferde.add(p);
-            }
-        }
-
-        if (plugin.briefkasten.containsKey(player.getUniqueId().toString()))
-            this.briefkasten = plugin.briefkasten.get(player.getUniqueId().toString());
 
         TeamPrefixs.setPlayerPrefix(player);
         plugin.setPrefix(player);
@@ -49,12 +40,13 @@ public class FTSUser {
     }
 
     private Ausweis ausweis;
-    private Briefkasten briefkasten;
-    private boolean sits;
+    private boolean sits = false;
     ArmorStand sit_stand;
     private int lanzenschlaege;
 
     public void setSitting(Block block) {
+
+        this.beforeSitting = player.getLocation().clone();
 
         Location loc = block.getLocation();
         if (player.getLocation().distance(loc) >= 2) {
@@ -69,9 +61,8 @@ public class FTSUser {
             sit_stand = null;
         }
 
-        if (block.getType() != Material.GRASS_PATH) {
-            if(block.getType() == Material.DARK_PRISMARINE_STAIRS || block.getType() == Material.PRISMARINE_BRICK_STAIRS
-                    || block.getType() == Material.PRISMARINE_STAIRS) {
+        if (!plugin.mats.contains(block.getType())) {
+            if(plugin.getVar().getNoStairs().contains(block.getType())) {
                 Location loc2 = block.getLocation().clone().subtract(-0.5D, 1.2D, -0.4D);
                 sit_stand = block.getLocation().getWorld().spawn(loc2, ArmorStand.class);
             } else {
@@ -89,13 +80,15 @@ public class FTSUser {
                 player.teleport(sit_stand);
             }
         } else {
-            sit_stand = block.getLocation().getWorld().spawn(block.getLocation().clone().add(0.25D, 0.0D, 0.5D).subtract(0, 0.75D, 0), ArmorStand.class);
+            if(plugin.getVar().getCarpets().contains(block.getType())) {
+                sit_stand = block.getLocation().getWorld().spawn(block.getLocation().clone().add(0.5D, 0.0D, 0.5D).subtract(0, 1.65D, 0), ArmorStand.class);
+            } else {
+                sit_stand = block.getLocation().getWorld().spawn(block.getLocation().clone().add(0.5D, 0.0D, 0.5D).subtract(0, 0.75D, 0), ArmorStand.class);
+            }
         }
         sit_stand.setGravity(false);
         sit_stand.setVisible(false);
         sit_stand.addPassenger(player);
-
-        briefkasten = plugin.briefkasten.get(player.getUniqueId().toString());
 
         this.sits = true;
     }
@@ -105,8 +98,14 @@ public class FTSUser {
     }
 
     public void abortSitting() {
-        sit_stand.remove();
-        sits = false;
+
+        Bukkit.getScheduler().runTaskLater(plugin, () -> {
+            sit_stand.remove();
+            if (player.teleport(beforeSitting)) {
+            }
+            sits = false;
+        }, 3);
+
     }
 
     public int getLanzenschlaege() {
@@ -123,74 +122,23 @@ public class FTSUser {
             abortSitting();
     }
 
-    public void addPferd(Pferd pf) {
-        pferde.add(pf);
-    }
-
-    public ArrayList<Pferd> getPferde() {
-        return pferde;
-    }
-
-    public boolean ownsHorse(Horse h) {
-        for (Pferd pferd : pferde) {
-            if (h.hasMetadata("FTSEngine.Horse"))
-
-                if (h.getMetadata("FTSEngine.Horse").get(0).asInt() == pferd.getID())
-                    return true;
-        }
-        return false;
-    }
-
-    public boolean pferdIDIsDa(int id) {
-        for (Pferd a : pferde) {
-            if (a.getPersID() == id)
-                return true;
-        }
-        return false;
-    }
-
-    public Pferd getChosedPferd() {
-        for (Pferd pferd : pferde) {
-            if (pferd.isChosed()) {
-                return pferd;
-            }
-        }
-        return null;
-    }
-
     public void sendMsg(String msg) {
         if (player != null)
             player.sendMessage(msg);
     }
 
-    public void setChosedPferd(String chosedPferd) {
-        for (Pferd p : pferde) {
-            if (p.isChosed()) {
-                p.setChosed(false);
-            }
-            if (p.getName().equalsIgnoreCase(chosedPferd)) {
-                p.setChosed(true);
-                player.sendMessage("§eDu hast nun " + p.getName() + " ausgewählt!");
-                return;
-            }
-        }
-        sendMsg("§eDu hast kein Pferd was so heißt!");
+
+    public String getDisguiseName() {
+        return disguiseName;
     }
 
-    public void removePferd(Pferd pferd) {
-        if (pferde.contains(pferd))
-            pferde.remove(pferd);
+    public WrappedGameProfile getOldProfile() {
+        return oldProfile;
     }
 
-    public Briefkasten getBriefkasten() {
-        return briefkasten;
+    public WrappedGameProfile getNewProfile() {
+        return newProfile;
     }
 
-    public boolean hasBriefkasten() {
-        return briefkasten != null;
-    }
 
-    public ChatChannel getChatChannel() {
-        return chatChannel;
-    }
 }

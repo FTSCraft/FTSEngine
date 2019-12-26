@@ -4,24 +4,18 @@ import de.ftscraft.ftsengine.backpacks.Backpack;
 import de.ftscraft.ftsengine.backpacks.BackpackType;
 import de.ftscraft.ftsengine.brett.Brett;
 import de.ftscraft.ftsengine.courier.Brief;
-import de.ftscraft.ftsengine.courier.Briefkasten;
 import de.ftscraft.ftsengine.main.Engine;
-import de.ftscraft.ftsengine.pferd.Pferd;
-import de.ftscraft.ftsengine.reisepunkt.Reisepunkt;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
-import org.bukkit.World;
 import org.bukkit.block.BlockState;
 import org.bukkit.block.Sign;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
-import org.yaml.snakeyaml.Yaml;
 
 import java.io.File;
 import java.io.IOException;
-import java.nio.file.Files;
 import java.util.*;
 
 public class UserIO {
@@ -39,7 +33,6 @@ public class UserIO {
         getBretter();
         //getPferde();
         loadBriefe();
-        getBriefkasten();
     }
 
     public UserIO(Engine plugin, boolean save)
@@ -70,6 +63,7 @@ public class UserIO {
                 String religion = cfg.getString("religion");
                 String nation = cfg.getString("nation");
                 String desc = cfg.getString("desc");
+                String spitzname = cfg.getString("spitzname");
                 long millis = cfg.getLong("birthday");
                 Integer id = cfg.getInt("id");
                 Calendar cal;
@@ -82,7 +76,7 @@ public class UserIO {
                 if (id > plugin.highestId)
                     plugin.highestId = id;
 
-                new Ausweis(plugin, UUID, firstName, lastName, gender, race, nation, desc, religion, cal, id);
+                new Ausweis(plugin, UUID, firstName, lastName, spitzname, gender, race, nation, desc, religion, cal, id);
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -168,33 +162,6 @@ public class UserIO {
         }
     }
 
-    private void getBriefkasten()
-    {
-        File aFolder = new File(folder + "//briefkasten//");
-        if (!aFolder.exists())
-            aFolder.mkdirs();
-
-        try {
-
-            for (File files : Objects.requireNonNull(aFolder.listFiles())) {
-                YamlConfiguration cfg = YamlConfiguration.loadConfiguration(files);
-
-                String owner = cfg.getString("owner");
-                int x = cfg.getInt("location.x");
-                int y = cfg.getInt("location.y");
-                int z = cfg.getInt("location.z");
-                String world = cfg.getString("location.world");
-
-                Location loc = new Location(Bukkit.getWorld(world), x, y, z);
-
-                new Briefkasten(plugin, owner, loc);
-
-            }
-
-        } catch (Exception ignored) {
-            ignored.printStackTrace();
-        }
-    }
 
     private void loadBriefe()
     {

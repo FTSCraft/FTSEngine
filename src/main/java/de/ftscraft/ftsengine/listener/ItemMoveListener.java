@@ -15,12 +15,6 @@ public class ItemMoveListener implements Listener
     public ItemMoveListener(Engine plugin)
     {
         this.plugin = plugin;
-        plugin.getServer().getPluginManager().registerEvents(this, plugin);
-    }
-
-    @EventHandler(priority = EventPriority.HIGH)
-    public void onItemMove(InventoryMoveItemEvent e) {
-
     }
 
 }

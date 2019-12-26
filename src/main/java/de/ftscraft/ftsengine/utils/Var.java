@@ -1,9 +1,14 @@
 package de.ftscraft.ftsengine.utils;
 
 import de.ftscraft.ftsengine.main.Engine;
+import org.bukkit.Material;
 import org.bukkit.block.BlockFace;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.UUID;
 
 public class Var
@@ -24,7 +29,8 @@ public class Var
         p.sendMessage("§c------ Ausweis von §e" + uF.getName(UUID.fromString(a.getUUID())) + " §c------");
         p.sendMessage("§cNachname: §e" + a.getLastName());
         p.sendMessage("§cVorname: §e" + a.getFirstName());
-        p.sendMessage("§cGeschlecht: §e" + (a.getGender() == Gender.MALE ? "Mann" : a.getGender() == Gender.FEMALE ? "Frau" : "N/A"));
+        p.sendMessage("§cSpitzname: §e" + (a.getSpitzname() != null ? a.getSpitzname() : "N/A"));
+        p.sendMessage("§cGeschlecht: §e" + (a.getGender() == Gender.MALE ? "Mann" : a.getGender() == Gender.FEMALE ? "Frau" : a.getGender() == Gender.DIVERS ? "Divers" : "N/A"));
         p.sendMessage("§cGeburtstag: §e" + a.getBirthdayString());
         p.sendMessage("§cRasse: §e" + (a.getRace() != null ? a.getRace() : "N/A"));
         p.sendMessage("§cNation: §e" + (a.getNation() != null ? a.getNation() : "N/A"));
@@ -38,7 +44,8 @@ public class Var
         p.sendMessage("§c----- §e/ausweis §c-----");
         p.sendMessage("§e/ausweis name [Vorname] [Nachname] §bÄndert deinen Namen und erstellt beim 1. Mal einen Ausweis");
         p.sendMessage("§e/ausweis alter [DD-MM] §bSetzt das Geburtsdatum");
-        p.sendMessage("§e/ausweis geschlecht [m/f] §bSetzt das Geschlecht (m - Mann | f - Frau)");
+        p.sendMessage("§e/ausweis geschlecht [m/f] §bSetzt das Geschlecht (m - Mann | f - Frau | d - Divers)");
+        p.sendMessage("§e/ausweis spitzname [Spitzname] §bGebe dir einen Spitznamen");
         p.sendMessage("§e/ausweis rasse [Rasse] §bSetzt deine Rasse");
         p.sendMessage("§e/ausweis nation [Nation] §bSetzt deine Nation");
         p.sendMessage("§e/ausweis beschreibung [Beschr.] §bSetzt deine kurze Beschreibung von dir (Mind. 4 Wörter)");
@@ -155,4 +162,44 @@ public class Var
         return a;
     }
 
+    private List<Material> carpets = new ArrayList<>();
+
+    public List<Material> getCarpets() {
+
+        if(carpets.isEmpty()) {
+
+            for (Material value : Material.values()) {
+                if(value.toString().contains("CARPET"))
+                    carpets.add(value);
+            }
+
+            carpets.remove(Material.LEGACY_CARPET);
+
+        }
+
+        return carpets;
+
+    }
+
+    private List<Material> noStairs = new ArrayList<>();
+
+    public List<Material> getNoStairs() {
+
+        if(noStairs.isEmpty()) {
+
+            noStairs.addAll(Arrays.asList(
+
+                    Material.DARK_PRISMARINE_STAIRS, Material.PRISMARINE_STAIRS, Material.PRISMARINE_BRICK_STAIRS,
+                    Material.POLISHED_ANDESITE_STAIRS, Material.POLISHED_DIORITE_STAIRS, Material.POLISHED_GRANITE_STAIRS,
+                    Material.SMOOTH_RED_SANDSTONE_STAIRS, Material.MOSSY_COBBLESTONE_STAIRS, Material.MOSSY_STONE_BRICK_STAIRS,
+                    Material.END_STONE_BRICK_STAIRS, Material.STONE_STAIRS, Material.SMOOTH_SANDSTONE_STAIRS,
+                    Material.SMOOTH_QUARTZ_STAIRS, Material.GRANITE_STAIRS, Material.ANDESITE_STAIRS, Material.RED_NETHER_BRICK_STAIRS,
+                    Material.DIORITE
+
+            ));
+
+        }
+
+        return noStairs;
+    }
 }

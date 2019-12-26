@@ -1,18 +1,8 @@
 package de.ftscraft.ftsengine.utils;
 
-import de.ftscraft.ftsengine.courier.BriefLieferung;
 import de.ftscraft.ftsengine.main.Engine;
-import de.ftscraft.ftsengine.reisepunkt.Reisepunkt;
-import org.bukkit.Bukkit;
-import org.bukkit.Statistic;
-import org.bukkit.World;
-import org.bukkit.entity.ArmorStand;
-import org.bukkit.entity.Entity;
-import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
-import java.util.Objects;
-import java.util.logging.Level;
 
 public class Runner implements Runnable
 {
@@ -25,34 +15,19 @@ public class Runner implements Runnable
     public Runner(Engine plugin)
     {
         this.plugin = plugin;
-        plugin.getServer().getScheduler().scheduleSyncRepeatingTask(plugin, this, 20, 20);
+        //plugin.getServer().getScheduler().scheduleSyncRepeatingTask(plugin, this, 20, 20);
     }
 
     @Override
     public void run()
     {
-        for (Player p : Bukkit.getOnlinePlayers()) {
+        /*for (Player p : Bukkit.getOnlinePlayers()) {
             if (plugin.getChat().getPrimaryGroup(p).equalsIgnoreCase("default")) {
-                if (p.getStatistic(Statistic.PLAY_ONE_MINUTE) >= 108000) {
+                if (p.getStatistic(Statistic.PLAY_ONE_MINUTE) >= 30 * 60 * 60 * 20) {
                     plugin.getServer().dispatchCommand(plugin.getServer().getConsoleSender(), "lp user " + p.getName() + " parent set bürger");
                 }
             }
-        }
-
-        try
-        {
-            //Lieferungen
-            for (BriefLieferung lieferung : plugin.lieferungen)
-            {
-                lieferung.setSeconds(lieferung.getSeconds() - 1);
-            }
-        } catch (Exception ignored)
-        {
-
-        }
-        for(Reisepunkt a : plugin.reisepunkte) {
-            a.secondDown();
-        }
+        }*/
 
     }
 

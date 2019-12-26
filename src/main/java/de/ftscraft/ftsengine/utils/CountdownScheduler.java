@@ -3,6 +3,7 @@ package de.ftscraft.ftsengine.utils;
 import de.ftscraft.ftsengine.main.Engine;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.Sound;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 
@@ -76,9 +77,10 @@ public class CountdownScheduler implements Runnable
             seconds--;
 
             if(seconds == 0) {
+                t.playSound(t.getLocation(), Sound.ENTITY_BAT_LOOP, 3, -20);
                 p.sendMessage(plugin.msgs.PREFIX+"Deine Taube ist angekommen!");
                 t.sendMessage("§c---------");
-                t.sendMessage("§eEine Brieftaube von §c"+p.getName()+"§7 hat dich erreicht!");
+                t.sendMessage("§eEine Brieftaube von §c"+p.getName()+"§e hat dich erreicht!");
                 t.sendMessage(" ");
                 t.sendMessage(ChatColor.YELLOW+msg);
                 Bukkit.getScheduler().cancelTask(taskid);

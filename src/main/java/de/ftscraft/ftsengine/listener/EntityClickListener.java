@@ -27,7 +27,7 @@ public class EntityClickListener implements Listener
                 e.getPlayer().sendMessage("§cne ne ne.");
                 return;
             }
-            e.getRightClicked().addPassenger(e.getPlayer());
+            e.getRightClicked().setPassenger(e.getPlayer());
             plugin.getReiter().remove(e.getPlayer());
         }
 
