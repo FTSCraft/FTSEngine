@@ -4,11 +4,15 @@ import de.ftscraft.ftsengine.backpacks.Backpack;
 import de.ftscraft.ftsengine.backpacks.BackpackType;
 import de.ftscraft.ftsengine.brett.Brett;
 import de.ftscraft.ftsengine.main.Engine;
+import net.sf.cglib.asm.$ByteVector;
+import org.bukkit.Bukkit;
 import org.bukkit.Material;
+import org.bukkit.Sound;
 import org.bukkit.block.data.type.Sign;
 import org.bukkit.block.data.type.Stairs;
 import org.bukkit.block.data.type.WallSign;
 import org.bukkit.entity.ArmorStand;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -17,9 +21,14 @@ import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 
+import java.util.ArrayList;
+import java.util.Random;
+
 public class PlayerInteractListener implements Listener {
 
     private Engine plugin;
+
+    private ArrayList<Player> hornCooldown = new ArrayList<>();
 
     public PlayerInteractListener(Engine plugin) {
         this.plugin = plugin;
@@ -75,6 +84,48 @@ public class PlayerInteractListener implements Listener {
                             }
                         }
                     }
+            }
+
+            if (e.getPlayer().getInventory().getItemInMainHand().getType() == Material.NAUTILUS_SHELL) {
+
+                ItemStack item = e.getPlayer().getInventory().getItemInMainHand();
+
+                if (item.hasItemMeta()) {
+
+                    if (item.getItemMeta().getDisplayName().equalsIgnoreCase("§6Horn")) {
+
+                        Player p = e.getPlayer();
+
+                        if(hornCooldown.contains(p)) {
+                            return;
+                        }
+
+
+                        hornCooldown.add(p);
+
+                        Random random = new Random();
+                        int r = random.nextInt(50) + 10;
+
+                        p.playSound(p.getLocation(), Sound.EVENT_RAID_HORN, 100, r);
+
+                        for (Entity n : p.getNearbyEntities(70, 70, 70)) {
+                            if (n instanceof Player) {
+                                Player playerInRadius = (Player) n;
+
+                                playerInRadius.playSound(p.getLocation(), Sound.EVENT_RAID_HORN, 300, r);
+                            }
+                        }
+
+                        Bukkit.getScheduler().runTaskLater(plugin, () -> {
+
+                            hornCooldown.remove(p);
+
+                        }, 20 * 2);
+
+                    }
+
+                }
+
             }
 
 

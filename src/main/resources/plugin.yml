@@ -1,8 +1,8 @@
 name: FTSEngine
 author: halberfan
 main: de.ftscraft.ftsengine.main.Engine
-version: 1.0.3.1
-api-version: 1.14
+version: 1.0.8.1
+api-version: 1.13
 depend: [Vault, ProtocolLib, LuckPerms]
 
 commands:
@@ -23,3 +23,4 @@ commands:
     kurier:
     fasten:
     item:
+    spucken:

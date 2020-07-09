@@ -23,6 +23,8 @@ public class ItemStacks
     private ItemStack diamondHelmetReplacement, diamondChestplateReplacement, diamondLeggingsReplacement, diamondBootsReplacement;
     private ItemStack leather_horse, iron_horse, diamond_horse;
 
+    private ItemStack horn;
+
     private List<Material> disabledDefaultRecipes;
 
     public ItemStacks() {
@@ -76,6 +78,12 @@ public class ItemStacks
         bp_keyM.setDisplayName("§5Rucksack Schlüssel");
         bp_key.setItemMeta(bp_keyM);
 
+        //Horn
+        horn = new ItemStack(Material.NAUTILUS_SHELL, 1);
+        ItemMeta hornM = horn.getItemMeta();
+        hornM.setDisplayName("§6Horn");
+        horn.setItemMeta(hornM);
+
         iron_helmet = new ItemStack(Material.IRON_HELMET, 1);
         iron_chestplate = new ItemStack(Material.IRON_CHESTPLATE, 1);
         iron_leggings = new ItemStack(Material.IRON_LEGGINGS, 1);
@@ -87,7 +95,7 @@ public class ItemStacks
         chainmail_boots = new ItemStack(Material.CHAINMAIL_BOOTS, 1);
 
         diamond_helmet = new ItemStack(Material.DIAMOND_HELMET, 1);
-        diamond_chestplate = new ItemStack(Material.DIAMOND_CHESTPLATE, 2);
+        diamond_chestplate = new ItemStack(Material.DIAMOND_CHESTPLATE, 1);
         diamond_leggings = new ItemStack(Material.DIAMOND_LEGGINGS, 1);
         diamond_boots = new ItemStack(Material.DIAMOND_BOOTS, 1);
 
@@ -200,6 +208,10 @@ public class ItemStacks
 
     public List<Material> getDisabledDefaultRecipes() {
         return disabledDefaultRecipes;
+    }
+
+    public ItemStack getHorn() {
+        return horn;
     }
 
     public ItemStack getAir() {

@@ -50,7 +50,7 @@ public class Var
         p.sendMessage("§e/ausweis nation [Nation] §bSetzt deine Nation");
         p.sendMessage("§e/ausweis beschreibung [Beschr.] §bSetzt deine kurze Beschreibung von dir (Mind. 4 Wörter)");
         p.sendMessage("§e/ausweis religion [Religion] §bSetzt deine Religion");
-        p.sendMessage("§e/ausweis kopieren [Spielername] §bKopiert den Ausweis eines anderen Spielers - Kosten: 5 Taler");
+        p.sendMessage("§e/ausweis kopieren [Spielername] §bKopiert den Ausweis eines anderen Spielers");
         p.sendMessage("§6FTSEngine von §5halberfan §6für FTS-Craft");
     }
 

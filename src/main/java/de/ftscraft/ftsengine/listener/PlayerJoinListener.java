@@ -30,7 +30,7 @@ public class PlayerJoinListener implements Listener
 
         //Map
         if(p.getInventory().getItemInMainHand() != null) {
-            if(p.getInventory().getItemInMainHand().getType() == Material.MAP) {
+            if(p.getInventory().getItemInMainHand().getType() == Material.FILLED_MAP) {
                 ItemStack itemMap = p.getInventory().getItemInMainHand();
                 Brief brief = plugin.briefe.get((int) itemMap.getDurability());
                 if(brief != null) {

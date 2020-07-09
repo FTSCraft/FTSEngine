@@ -23,17 +23,17 @@ public class ItemSwitchListener implements Listener {
     @EventHandler
     public void onItemSwitch(PlayerItemHeldEvent e)
     {
-        /*Inventory inv = e.getPlayer().getInventory();
+        Inventory inv = e.getPlayer().getInventory();
         if (inv.getItem(e.getNewSlot()) == null)
             return;
-        if (inv.getItem(e.getNewSlot()).getType() == Material.MAP) {
+        if (inv.getItem(e.getNewSlot()).getType() == Material.FILLED_MAP) {
             ItemStack itemMap = inv.getItem(e.getNewSlot());
             Brief brief = plugin.briefe.get(((MapMeta) itemMap.getItemMeta()).getMapId());
             if (brief != null) {
                 brief.loadMap(itemMap);
             }
         }
-        */
+
     }
 
 }

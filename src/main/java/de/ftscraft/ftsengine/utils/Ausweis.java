@@ -162,8 +162,8 @@ public class Ausweis {
         ItemStack is = new ItemStack(Material.FLOWER_BANNER_PATTERN, 1);
         ItemMeta im = is.getItemMeta();
         im.setDisplayName("§6Personalausweis " + lastName + " #" + id);
-        im.addEnchant(Enchantment.LUCK, 0, true);
-        im.addItemFlags(ItemFlag.HIDE_ENCHANTS);
+        //im.addEnchant(Enchantment.LUCK, 0, true);
+        //im.addItemFlags(ItemFlag.HIDE_ENCHANTS);
         is.setItemMeta(im);
         return is;
     }
@@ -182,6 +182,9 @@ public class Ausweis {
     }
 
     public boolean birthdaySetuped() {
+
+        if(birthday == null)
+            return false;
 
         if(birthday.get(Calendar.MILLISECOND) == 0) {
             return false;

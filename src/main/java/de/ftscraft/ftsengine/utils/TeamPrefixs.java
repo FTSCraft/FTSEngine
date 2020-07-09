@@ -15,7 +15,7 @@ public enum TeamPrefixs
     ARCHITEKT("§eArchitekt", "ftsengine.architekt", "Architekt"),
     EHRENBURGER("§eEhrenbürger", "ftsengine.ehrenburger", "EBuerger"),
     PAPST("§9Papst","ftsengine.papst", "Papst"),
-    RAUBER("§9Söldner", "ftsengine.rauber", "Rauber"),
+    RAUBER("§9Räuber", "ftsengine.rauber", "Rauber"),
     RICHTER("§9Richter", "ftsengine.richter", "Richter"),
     MEJSTER("§9Medikus", "ftsengine.mejster", "Mejster"),
     KAUFMANN("§9Kaufmann", "ftsengine.kaufmann", "Kaufmann"),

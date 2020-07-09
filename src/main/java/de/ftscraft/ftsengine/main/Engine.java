@@ -5,6 +5,7 @@ import com.comphenix.protocol.ProtocolLibrary;
 import com.comphenix.protocol.ProtocolManager;
 import com.comphenix.protocol.events.PacketContainer;
 import com.comphenix.protocol.wrappers.WrappedChatComponent;
+import com.nisovin.shopkeepers.api.ShopkeepersPlugin;
 import de.ftscraft.ftsengine.backpacks.Backpack;
 import de.ftscraft.ftsengine.brett.Brett;
 import de.ftscraft.ftsengine.brett.BrettNote;
@@ -12,12 +13,12 @@ import de.ftscraft.ftsengine.commands.*;
 import de.ftscraft.ftsengine.courier.Brief;
 import de.ftscraft.ftsengine.listener.*;
 import de.ftscraft.ftsengine.utils.*;
-import me.lucko.luckperms.api.LuckPermsApi;
 import net.milkbowl.vault.chat.Chat;
 import net.milkbowl.vault.economy.Economy;
 import net.milkbowl.vault.permission.Permission;
 import org.bukkit.*;
 import org.bukkit.entity.Player;
+import org.bukkit.entity.Villager;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
@@ -25,6 +26,7 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.Recipe;
 import org.bukkit.inventory.ShapedRecipe;
+import org.bukkit.inventory.ShapelessRecipe;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -55,7 +57,6 @@ public class Engine extends JavaPlugin implements Listener {
     private Scoreboard sb;
 
     private static Economy econ = null;
-    private LuckPermsApi lpapi = null;
     private Permission perms = null;
     private Chat chat = null;
 
@@ -63,13 +64,10 @@ public class Engine extends JavaPlugin implements Listener {
 
     public List<Material> mats = new ArrayList<>();
     private ProtocolManager protocolManager;
+    private ShopkeepersPlugin shopkeepersPlugin;
 
     @Override
     public void onEnable() {
-        RegisteredServiceProvider<LuckPermsApi> provider = Bukkit.getServicesManager().getRegistration(LuckPermsApi.class);
-        if (provider != null) {
-            lpapi = provider.getProvider();
-        }
         setupEconomy();
         setupPermissions();
         setupChat();
@@ -99,6 +97,7 @@ public class Engine extends JavaPlugin implements Listener {
 
     private void init() {
         this.protocolManager = ProtocolLibrary.getProtocolManager();
+        this.shopkeepersPlugin = ShopkeepersPlugin.getInstance();
         highestId = 0;
         biggestBpId = 0;
         biggestPferdId = 0;
@@ -126,6 +125,7 @@ public class Engine extends JavaPlugin implements Listener {
         new CMDschlagen(this);
         new CMDfasten(this);
         new CMDremovearmorstand(this);
+        new CMDspucken(this);
         new CMDcountdown(this);
         new CMDgehen(this);
         new CMDitem(this);
@@ -146,6 +146,7 @@ public class Engine extends JavaPlugin implements Listener {
         new InventoryClickListener(this);
         new PlayerQuitListener(this);
         new PlayerChatListener(this);
+        new VillagerTradeListener(this);
 
         new Runner(this);
         getServer().getPluginManager().registerEvents(this, this);
@@ -196,7 +197,7 @@ public class Engine extends JavaPlugin implements Listener {
         }
         Team t = sb.getTeam(team);
         t.addPlayer(p);
-        //sendTablistHeaderAndFooter(p, "§6§lplay.ftscraft.de", "");
+        sendTablistHeaderAndFooter(p, "§6§lplay.ftscraft.de", "");
     }
 
     @EventHandler
@@ -380,6 +381,15 @@ public class Engine extends JavaPlugin implements Listener {
         backpack_key.setIngredient('*', Material.AIR);
         backpack_key.setIngredient('F', Material.FEATHER);
         getServer().addRecipe(backpack_key);
+
+        //Horn
+
+        NamespacedKey hornkey = new NamespacedKey(this, "FTSHorn");
+
+        ShapelessRecipe horn = new ShapelessRecipe(hornkey, itemStacks.getHorn());
+        horn.addIngredient(Material.NAUTILUS_SHELL);
+        horn.addIngredient(Material.WHEAT);
+        getServer().addRecipe(horn);
 
         List<Recipe> backup = new ArrayList<>();
         Iterator<Recipe> a = getServer().recipeIterator();
@@ -616,9 +626,7 @@ public class Engine extends JavaPlugin implements Listener {
         }
     }
 
-    public LuckPermsApi getLpapi() {
-        return lpapi;
+    public ShopkeepersPlugin getShopkeepersPlugin() {
+        return shopkeepersPlugin;
     }
-
-
 }

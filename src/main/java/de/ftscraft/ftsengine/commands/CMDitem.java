@@ -53,7 +53,7 @@ public class CMDitem implements CommandExecutor {
                         ItemStack is = p.getInventory().getItemInMainHand();
                         if (is != null && is.getType() != Material.AIR) {
 
-                            if(name.equalsIgnoreCase("§cÜberreste")) {
+                            if(name.equalsIgnoreCase("§cÜberreste") || name.contains("schloss")) {
 
                                 p.sendMessage("§cDas Item so zu nennen ist nicht erlaubt!");
                                 return true;
@@ -69,7 +69,7 @@ public class CMDitem implements CommandExecutor {
                         } else
                             p.sendMessage("§cDu musst ein Item in deiner Hand haben!");
 
-                    } else if (args[0].equalsIgnoreCase("glow")) {
+                    } /*else if (args[0].equalsIgnoreCase("glow")) {
 
                         ItemStack item = p.getInventory().getItemInMainHand();
 
@@ -85,7 +85,7 @@ public class CMDitem implements CommandExecutor {
                             } else p.sendMessage("§cDas Item ist schon am krass glänzen!");
                         } else p.sendMessage("§cBite nehme das Item in die Hand!");
 
-                    } else if (args[0].equalsIgnoreCase("lore")) {
+                    } */ else if (args[0].equalsIgnoreCase("lore")) {
 
                         StringBuilder stringBuilderAll = new StringBuilder();
 

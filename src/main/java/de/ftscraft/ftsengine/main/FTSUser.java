@@ -66,18 +66,22 @@ public class FTSUser {
                 Location loc2 = block.getLocation().clone().subtract(-0.5D, 1.2D, -0.4D);
                 sit_stand = block.getLocation().getWorld().spawn(loc2, ArmorStand.class);
             } else {
-                BlockState state = block.getState();
-                Stairs stair = (Stairs) state.getData();
-                BlockFace face = stair.getFacing();
-                Block up = block.getLocation().clone().add(0, 1, 0).getBlock();
-                if (up.getState().getType() != Material.AIR)
-                    return;
-                if (face == BlockFace.DOWN)
-                    return;
-                Location loc2 = block.getLocation().clone().subtract(-0.5D, 1.2D, -0.4D);
-                loc2.setYaw(plugin.getVar().getYawByBlockFace(face));
-                sit_stand = block.getLocation().getWorld().spawn(loc2, ArmorStand.class);
-                player.teleport(sit_stand);
+                try {
+                    BlockState state = block.getState();
+                    Stairs stair = (Stairs) state.getData();
+                    BlockFace face = stair.getFacing();
+                    Block up = block.getLocation().clone().add(0, 1, 0).getBlock();
+                    if (up.getState().getType() != Material.AIR)
+                        return;
+                    if (face == BlockFace.DOWN)
+                        return;
+                    Location loc2 = block.getLocation().clone().subtract(-0.5D, 1.2D, -0.4D);
+                    loc2.setYaw(plugin.getVar().getYawByBlockFace(face));
+                    sit_stand = block.getLocation().getWorld().spawn(loc2, ArmorStand.class);
+                    player.teleport(sit_stand);
+                } catch (Exception ignored) {
+
+                }
             }
         } else {
             if(plugin.getVar().getCarpets().contains(block.getType())) {
