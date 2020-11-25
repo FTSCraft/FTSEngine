@@ -3,7 +3,7 @@ package de.ftscraft.ftsengine.backpacks;
 public enum BackpackType
 {
 
-    TINY("§2Kleiner Rucksack", 3 * 9, "§7In diesen Rucksack passen viele, weitere Dinge rein"),
+    TINY("§2Kleiner Rucksack", 4 * 9, "§7In diesen Rucksack passen viele, weitere Dinge rein"),
     LARGE("§4Großer Rucksack", 6 * 9, "§7Dieser nützliche Rucksack hat Platz für viele Sachen"),
     ENDER("§6Ender Rucksack", -1, "§7Öffne mit diesem Rucksack deine Ender-Kiste");
 

@@ -23,6 +23,8 @@ public class Brief {
 
     private Engine plugin;
 
+    private boolean error = false;
+
     public Brief(Engine plugin, String creator, String msg, String world)
     {
         this.msg = msg;
@@ -84,5 +86,20 @@ public class Brief {
         }
 
         mv.addRenderer(renderer);
+    }
+
+    public void error() {
+        this.error = true;
+    }
+
+    public boolean isError() {
+        return error;
+    }
+
+    public void unloadMap(ItemStack itemMap) {
+        MapView mv = plugin.getServer().getMap((short) id);
+        for (MapRenderer mr : mv.getRenderers()) {
+            mv.removeRenderer(mr);
+        }
     }
 }

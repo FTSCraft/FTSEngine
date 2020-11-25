@@ -11,12 +11,14 @@ import de.ftscraft.ftsengine.brett.Brett;
 import de.ftscraft.ftsengine.brett.BrettNote;
 import de.ftscraft.ftsengine.commands.*;
 import de.ftscraft.ftsengine.courier.Brief;
+import de.ftscraft.ftsengine.courier.Briefkasten;
 import de.ftscraft.ftsengine.listener.*;
 import de.ftscraft.ftsengine.utils.*;
 import net.milkbowl.vault.chat.Chat;
 import net.milkbowl.vault.economy.Economy;
 import net.milkbowl.vault.permission.Permission;
 import org.bukkit.*;
+import org.bukkit.block.data.type.Slab;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Villager;
 import org.bukkit.event.EventHandler;
@@ -54,6 +56,7 @@ public class Engine extends JavaPlugin implements Listener {
     public HashMap<Integer, Brief> briefe;
     public HashMap<Location, Brett> bretter;
     public HashMap<Player, BrettNote> playerBrettNote;
+    public HashMap<UUID, Briefkasten> briefkasten;
     private Scoreboard sb;
 
     private static Economy econ = null;
@@ -107,6 +110,7 @@ public class Engine extends JavaPlugin implements Listener {
         //sitting = new HashMap<>();
         msgs = new Messages();
         backpacks = new HashMap<>();
+        briefkasten = new HashMap<>();
         ausweis = new HashMap<>();
         uF = new UUIDFetcher();
         briefe = new HashMap<>();
@@ -131,6 +135,7 @@ public class Engine extends JavaPlugin implements Listener {
         new CMDitem(this);
         new CMDklopfen(this);
         new CMDbrief(this);
+        new CMDkussen(this);
         new UserIO(this);
 
         new EntityClickListener(this);
@@ -147,6 +152,7 @@ public class Engine extends JavaPlugin implements Listener {
         new PlayerQuitListener(this);
         new PlayerChatListener(this);
         new VillagerTradeListener(this);
+        new PacketReciveListener(this);
 
         new Runner(this);
         getServer().getPluginManager().registerEvents(this, this);
@@ -260,7 +266,6 @@ public class Engine extends JavaPlugin implements Listener {
         return econ != null;
     }
 
-
     private void safeAll() {
         for (Ausweis a : ausweis.values()) {
             a.safe();
@@ -341,6 +346,7 @@ public class Engine extends JavaPlugin implements Listener {
                 Material.END_STONE_BRICK_STAIRS,
                 Material.STONE_BRICK_STAIRS));*/
         mats.add(Material.GRASS_PATH);
+
         mats.addAll(var.getCarpets());
 
         //TINY BACKPACK
@@ -348,18 +354,18 @@ public class Engine extends JavaPlugin implements Listener {
         NamespacedKey tbpkey = new NamespacedKey(this, "FTStinybackpack");
 
         ShapedRecipe tiny_backpack = new ShapedRecipe(tbpkey, itemStacks.getTiny_bp());
-        tiny_backpack.shape("LLL", "L*L", "LLL");
-        tiny_backpack.setIngredient('L', Material.LEATHER);
-        tiny_backpack.setIngredient('*', Material.AIR);
+        tiny_backpack.shape("HHH", "HCH", "HHH");
+        tiny_backpack.setIngredient('H', Material.RABBIT_HIDE);
+        tiny_backpack.setIngredient('C', Material.CHEST);
         getServer().addRecipe(tiny_backpack);
 
         //LARGE BACKPACK
 
         NamespacedKey lbpkey = new NamespacedKey(this, "FTSlargebackpack");
         ShapedRecipe large_backpack = new ShapedRecipe(lbpkey, itemStacks.getBig_bp());
-        large_backpack.shape("LLL", "LCL", "LLL");
+        large_backpack.shape("LLL", "LRL", "LLL");
         large_backpack.setIngredient('L', Material.LEATHER);
-        large_backpack.setIngredient('C', Material.CHEST);
+        large_backpack.setIngredient('R', itemStacks.getTiny_bp());
         getServer().addRecipe(large_backpack);
 
         //ENDER BACKPACK
@@ -388,7 +394,7 @@ public class Engine extends JavaPlugin implements Listener {
 
         ShapelessRecipe horn = new ShapelessRecipe(hornkey, itemStacks.getHorn());
         horn.addIngredient(Material.NAUTILUS_SHELL);
-        horn.addIngredient(Material.WHEAT);
+        horn.addIngredient(Material.NOTE_BLOCK);
         getServer().addRecipe(horn);
 
         List<Recipe> backup = new ArrayList<>();
@@ -624,6 +630,10 @@ public class Engine extends JavaPlugin implements Listener {
         } catch (Exception ex) {
             ex.printStackTrace();
         }
+    }
+
+    public ProtocolManager getProtocolManager() {
+        return protocolManager;
     }
 
     public ShopkeepersPlugin getShopkeepersPlugin() {

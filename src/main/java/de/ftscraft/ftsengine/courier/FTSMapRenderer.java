@@ -1,6 +1,7 @@
 package de.ftscraft.ftsengine.courier;
 
 import de.ftscraft.ftsengine.main.Engine;
+import de.ftscraft.ftsengine.utils.Messages;
 import org.bukkit.Color;
 import org.bukkit.entity.Player;
 import org.bukkit.map.*;
@@ -12,10 +13,12 @@ public class FTSMapRenderer extends org.bukkit.map.MapRenderer {
     private String msg;
     private String date;
     private Engine plugin;
+    private boolean debug = true;
 
-    public FTSMapRenderer(int id, Engine plugin)
-    {
-        Brief brief = plugin.briefe.get(id);
+    Brief brief;
+
+    public FTSMapRenderer(int id, Engine plugin) {
+        brief = plugin.briefe.get(id);
         this.msg = brief.msg;
         Calendar cal = Calendar.getInstance();
         cal.setTimeInMillis(brief.creation);
@@ -24,8 +27,7 @@ public class FTSMapRenderer extends org.bukkit.map.MapRenderer {
     }
 
     @Override
-    public void render(MapView mapView, MapCanvas mapCanvas, Player player)
-    {
+    public void render(MapView mapView, MapCanvas mapCanvas, Player player) {
 
         for (int x = 0; x < 150; x++) {
             for (int y = 0; y < 150; y++) {
@@ -47,7 +49,13 @@ public class FTSMapRenderer extends org.bukkit.map.MapRenderer {
             if (wörter[i].length() + text.length() < 20) {
                 text = text + " " + wörter[i];
                 if (i + 1 == wörter.length)
-                    mapCanvas.drawText(0, zeilen * 10 + SPACE, MinecraftFont.Font, text);
+                    try {
+                        mapCanvas.drawText(0, zeilen * 10 + SPACE, MinecraftFont.Font, text);
+                    } catch (IllegalArgumentException ignored) {
+                        player.sendMessage("Da sind Zeichen im Brief die nicht gehen!");
+                        brief.error();
+                        return;
+                    }
             } else {
                 text = text + " " + wörter[i];
                 mapCanvas.drawText(0, zeilen * 10 + SPACE, MinecraftFont.Font, text);

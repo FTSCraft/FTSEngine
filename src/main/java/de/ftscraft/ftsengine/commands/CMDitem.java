@@ -1,5 +1,7 @@
 package de.ftscraft.ftsengine.commands;
 
+import de.ftscraft.ftsengine.backpacks.Backpack;
+import de.ftscraft.ftsengine.backpacks.BackpackType;
 import de.ftscraft.ftsengine.main.Engine;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -13,15 +15,22 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class CMDitem implements CommandExecutor {
 
     private Engine plugin;
 
+    private List<String> forbiddenItems;
+
     public CMDitem(Engine plugin) {
         this.plugin = plugin;
         this.plugin.getCommand("item").setExecutor(this);
+
+        forbiddenItems = new ArrayList<>();
+
+        forbiddenItems.addAll(Arrays.asList(BackpackType.LARGE.getName(), BackpackType.TINY.getName(), BackpackType.ENDER.getName()));
     }
 
     @Override
@@ -36,6 +45,18 @@ public class CMDitem implements CommandExecutor {
 
                 if (args.length >= 1) {
 
+                    ItemStack is = p.getInventory().getItemInMainHand();
+
+                    if(is.hasItemMeta()) {
+
+                        if(forbiddenItems.contains(is.getItemMeta().getDisplayName())) {
+
+                            p.sendMessage("§cDu darfst dieses Item nicht bearbeiten!");
+
+                            return true;
+                        }
+
+                    }
 
                     if (args[0].equalsIgnoreCase("name")) {
 
@@ -50,7 +71,6 @@ public class CMDitem implements CommandExecutor {
 
                         String name = ChatColor.translateAlternateColorCodes('&', stringBuilder.toString());
 
-                        ItemStack is = p.getInventory().getItemInMainHand();
                         if (is != null && is.getType() != Material.AIR) {
 
                             if(name.equalsIgnoreCase("§cÜberreste") || name.contains("schloss")) {

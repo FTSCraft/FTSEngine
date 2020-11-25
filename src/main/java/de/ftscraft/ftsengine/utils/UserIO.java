@@ -1,9 +1,11 @@
 package de.ftscraft.ftsengine.utils;
 
+import com.google.gson.internal.$Gson$Preconditions;
 import de.ftscraft.ftsengine.backpacks.Backpack;
 import de.ftscraft.ftsengine.backpacks.BackpackType;
 import de.ftscraft.ftsengine.brett.Brett;
 import de.ftscraft.ftsengine.courier.Brief;
+import de.ftscraft.ftsengine.courier.Briefkasten;
 import de.ftscraft.ftsengine.main.Engine;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -14,6 +16,7 @@ import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
+import javax.swing.*;
 import java.io.File;
 import java.io.IOException;
 import java.util.*;
@@ -24,8 +27,7 @@ public class UserIO {
 
     private File folder;
 
-    public UserIO(Engine plugin)
-    {
+    public UserIO(Engine plugin) {
         this.plugin = plugin;
         folder = plugin.getDataFolder();
         getAusweise();
@@ -33,17 +35,17 @@ public class UserIO {
         getBretter();
         //getPferde();
         loadBriefe();
+        loadBriefkasten();
     }
 
-    public UserIO(Engine plugin, boolean save)
-    {
+    public UserIO(Engine plugin, boolean save) {
         this.plugin = plugin;
         safeBriefe();
+        saveBriefkasten();
         //safeReisepunkte();
     }
 
-    public void getAusweise()
-    {
+    public void getAusweise() {
         File aFolder = new File(folder + "//ausweise//");
         if (!aFolder.exists()) {
             aFolder.mkdirs();
@@ -84,8 +86,7 @@ public class UserIO {
 
     }
 
-    private void getBackpacks()
-    {
+    private void getBackpacks() {
         File aFolder = new File(folder + "//backpacks//");
 
         try {
@@ -112,8 +113,7 @@ public class UserIO {
         }
     }
 
-    private void getBretter()
-    {
+    private void getBretter() {
         File aFolder = new File(folder + "//bretter");
 
         if (!aFolder.exists())
@@ -163,8 +163,7 @@ public class UserIO {
     }
 
 
-    private void loadBriefe()
-    {
+    private void loadBriefe() {
         File file = new File(plugin.getDataFolder() + "//briefe.yml");
         YamlConfiguration cfg = YamlConfiguration.loadConfiguration(file);
 
@@ -179,8 +178,7 @@ public class UserIO {
         }
     }
 
-    private void safeBriefe()
-    {
+    private void safeBriefe() {
         File file = new File(plugin.getDataFolder() + "//briefe.yml");
         YamlConfiguration cfg = YamlConfiguration.loadConfiguration(file);
 
@@ -222,5 +220,52 @@ public class UserIO {
 
     }
     */
+
+    private void loadBriefkasten() {
+
+        File aFolder = new File(folder + "//briefkasten//");
+        if (!aFolder.exists()) {
+            aFolder.mkdirs();
+        }
+
+        for (File file : aFolder.listFiles()) {
+
+            FileConfiguration cfg = YamlConfiguration.loadConfiguration(file);
+
+            double x = cfg.getDouble("loc.x");
+            double y = cfg.getDouble("loc.y");
+            double z = cfg.getDouble("loc.z");
+            String world = cfg.getString("loc.world");
+            UUID player = UUID.fromString(cfg.getString("player"));
+
+            Briefkasten briefkasten = new Briefkasten(plugin, new Location(Bukkit.getWorld(world), x, y, z), player);
+
+        }
+
+    }
+
+    public void saveBriefkasten() {
+
+        for (Briefkasten briefkasten : plugin.briefkasten.values()) {
+            File file = new File(plugin.getDataFolder() + "//briefkasten//" + briefkasten.getPlayer().toString()+ ".yml");
+
+            FileConfiguration cfg = YamlConfiguration.loadConfiguration(file);
+
+            cfg.set("loc.x", briefkasten.getLocation().getX());
+            cfg.set("loc.y", briefkasten.getLocation().getY());
+            cfg.set("loc.z", briefkasten.getLocation().getZ());
+
+            cfg.set("loc.world", briefkasten.getLocation().getWorld().getName());
+
+            cfg.set("player", briefkasten.getPlayer().toString());
+
+            try {
+                cfg.save(file);
+              } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+
+    }
 
 }
