@@ -1,6 +1,8 @@
 package de.ftscraft.ftsengine.commands;
 
 import de.ftscraft.ftsengine.main.Engine;
+import de.ftscraft.ftsengine.utils.Ausweis;
+import de.ftscraft.ftsengine.utils.Gender;
 import de.ftscraft.ftsengine.utils.Var;
 import org.bukkit.Statistic;
 import org.bukkit.command.Command;
@@ -10,80 +12,130 @@ import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 
 import java.util.Random;
+import java.util.concurrent.ThreadLocalRandom;
 
 
-public class CMDwürfel implements CommandExecutor
-{
+public class CMDwürfel implements CommandExecutor {
 
     private Engine plugin;
 
-    public CMDwürfel(Engine plugin)
-    {
+    private final int DICES = 3;
+
+    public CMDwürfel(Engine plugin) {
         this.plugin = plugin;
         plugin.getCommand("würfel").setExecutor(this);
     }
 
     @Override
-    public boolean onCommand(CommandSender cs, Command cmd, String label, String[] args)
-    {
-        if(!(cs instanceof Player)) {
+    public boolean onCommand(CommandSender cs, Command cmd, String label, String[] args) {
+        if (!(cs instanceof Player)) {
             cs.sendMessage(plugin.msgs.ONLY_PLAYER);
             return true;
         }
 
-        Player p = (Player)cs;
+        Player p = (Player) cs;
 
-        if(args.length == 0)
-        {
-            Random random = new Random();
-            int n = random.nextInt(6) + 1;
-            p.sendMessage("§7Du hat ne' §c"+n+" gewürfelt");
-            for(Entity e : p.getNearbyEntities(15,15,15))
-                if(e instanceof Player)
-                    e.sendMessage("§7Der Spieler §c"+p.getName()+" §7hat eine §c"+n+" §7gewürfelt");
+        Ausweis ausweis = plugin.getAusweis(p);
 
+        if (ausweis == null || ausweis.getGender() == null || ausweis.getRace() == null) {
+            p.sendMessage("§6Bitte lege dir zuerst einen Ausweis an (/ausweis). Für das Würfeln ist folgendes wichtig: §cName, Rasse, Geschlecht");
+            return true;
+        }
 
-        } else if(args.length == 1) {
-            int z;
-            try {
-                z = Integer.valueOf(args[0]);
-            } catch (NumberFormatException e) {
-                p.sendMessage(plugin.msgs.USAGE_NUMBER);
-                return true;
+        int[] numbers = new int[DICES];
+
+        Gender gender = ausweis.getGender();
+        String name = ausweis.getFirstName() + " " + ausweis.getLastName();
+
+        DiceType dice = DiceType.getDiceTypeByName(ausweis.getRace());
+
+        if(args.length == 1 && dice == null) {
+            dice = DiceType.getDiceTypeByName(args[0]);
+        }
+
+        if (dice != null) {
+
+            int total = 0;
+
+            StringBuilder sb;
+
+            if (gender == Gender.FEMALE) {
+                if (dice.getMName().equalsIgnoreCase(dice.getFName())) {
+                    sb = new StringBuilder("§6Der §o" + dice.getMName() + " §r§e" + name + " §6würfelt: §e");
+                } else
+                    sb = new StringBuilder("§6Die §o" + dice.getFName() + " §r§e" + name + " §6würfelt: §e");
+            } else
+                sb = new StringBuilder("§6Der §o" + dice.getMName() + " §r§e" + name + " §6würfelt: §e");
+
+            for (int i = 0; i < numbers.length; i++) {
+                numbers[i] = ThreadLocalRandom.current().nextInt(1, dice.pips + 1);
+                total += numbers[i];
+                if (i == numbers.length - 1) {
+                    sb.append(numbers[i] + " = ");
+                } else {
+                    sb.append(numbers[i] + " + ");
+                }
             }
 
-            Random random = new Random();
-            int r = random.nextInt(4) + 1;
+            sb.append(((total >= dice.needs) ? "§2" : "§c") + total);
 
-            if(r == 1 || r == 2) {
-                p.sendMessage("§7Du hast ne' §c"+z+" §7gewürfelt!");
-                for(Entity e : p.getNearbyEntities(15,15,15))
-                    if(e instanceof Player)
-                        e.sendMessage("§7Der Spieler §c"+p.getName()+" §7hat eine §c"+z+" §7gewürfelt");
-            } else if(r == 3) {
-                int n = random.nextInt(6) + 1;
-                while(n == z) {
-                    n = random.nextInt(6) + 1;
+            for (Entity nearbyEntity : p.getLocation().getNearbyEntities(20, 20, 20)) {
+                if (nearbyEntity instanceof Player) {
+                    nearbyEntity.sendMessage(sb.toString());
                 }
-                p.sendMessage("§7Das zinken ist dir nicht gelungen. Du hat ne' §c"+n+" gewürfelt");
-                for(Entity e : p.getNearbyEntities(15,15,15))
-                    if(e instanceof Player)
-                        e.sendMessage("§7Der Spieler §c"+p.getName()+" §7hat eine §c"+n+" §7gewürfelt");
-            } else if(r == 4) {
-                int n = random.nextInt(6) + 1;
-                while(n == z) {
-                    n = random.nextInt(6) + 1;
-                }
-                p.sendMessage("§7Das zinken ist dir nicht gelungen und die anderen haben es mitbekommen! Du hast ne' §c"+n+"§7 gewürfelt");
-                for(Entity e : p.getNearbyEntities(15,15,15))
-                    if(e instanceof Player)
-                        e.sendMessage("§7Du bemerkst wie "+p.getName() +" versucht hat zu zinken. Der Spieler §c"+p.getName()+" §7hat eine §c"+n+" §7gewürfelt");
             }
+
 
         } else {
-            cs.sendMessage(Var.millisToWeek(p.getStatistic(Statistic.PLAY_ONE_MINUTE)));
+            cs.sendMessage("§cBitte würfel so: §e/würfel [Mensch/Zwerg/Elf/Ork]");
         }
 
         return false;
     }
+
+    public enum DiceType {
+
+        ORK("Ork", "Orkin", 24, 50),
+        ELF("Elf", "Elfin", 20, 30),
+        ZWERG("Zwerg", "Zwergin", 18, 30),
+        MENSCH("Mensch", "Mensch", 16, 30);
+
+        private String mName;
+        private String fName;
+        private int pips;
+        private int needs;
+
+        DiceType(String mName, String fName, int pips, int needs) {
+            this.mName = mName;
+            this.fName = fName;
+            this.pips = pips;
+            this.needs = needs;
+        }
+
+        public String getMName() {
+            return mName;
+        }
+
+        public String getFName() {
+            return fName;
+        }
+
+        public int getPips() {
+            return pips;
+        }
+
+        public int getNeeds() {
+            return needs;
+        }
+
+        public static DiceType getDiceTypeByName(String race) {
+            for (DiceType value : DiceType.values()) {
+                if (value.getMName().equalsIgnoreCase(race) || race.toLowerCase().contains(value.getMName().toLowerCase()))
+                    return value;
+            }
+            return null;
+        }
+
+    }
+
 }
