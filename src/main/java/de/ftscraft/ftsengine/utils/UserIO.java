@@ -57,15 +57,23 @@ public class UserIO {
 
                 String UUID = aFile.getName().replace(".yml", "");
                 String lastName = cfg.getString("lastName");
+                if(lastName != null)
+                    lastName.replace('_', ' ');
                 String firstName = cfg.getString("firstName");
+                if(firstName != null)
+                    firstName.replace('_', ' ');
                 Gender gender = null;
                 if (cfg.isSet("gender"))
                     gender = Gender.valueOf(cfg.getString("gender"));
                 String race = cfg.getString("race");
                 String religion = cfg.getString("religion");
                 String nation = cfg.getString("nation");
+                if(nation != null)
+                    nation = nation.replace('_', ' ');
                 String desc = cfg.getString("desc");
                 String spitzname = cfg.getString("spitzname");
+                if(spitzname != null)
+                    spitzname.replace('_', ' ');
                 long millis = cfg.getLong("birthday");
                 Integer id = cfg.getInt("id");
                 Calendar cal;
