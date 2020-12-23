@@ -70,7 +70,7 @@ public class Ausweis {
         }
     }
 
-    public boolean safe() {
+    public boolean save() {
 
         File file = new File(plugin.getDataFolder() + "//ausweise//" + getUUID() + ".yml");
         FileConfiguration cfg = YamlConfiguration.loadConfiguration(file);
@@ -103,31 +103,45 @@ public class Ausweis {
     }
 
     public String getFirstName() {
-        return firstName;
+        if(firstName == null)
+            return null;
+        return firstName.replace('_', ' ');
     }
 
     public String getLastName() {
-        return lastName;
+        if(lastName == null)
+            return null;
+        return lastName.replace('_', ' ');
     }
 
     public Gender getGender() {
+        if(gender == null)
+            return null;
         return gender;
     }
 
     public String getRace() {
-        return race;
+        if(race == null)
+            return null;
+        return race.replace('_', ' ');
     }
 
     public String getNation() {
-        return nation;
+        if(nation == null)
+            return null;
+        return nation.replace('_', ' ');
     }
 
     public String getDesc() {
+        if(desc == null)
+            return null;
         return desc;
     }
 
     public String getReligion() {
-        return religion;
+        if(religion == null)
+            return null;
+        return religion.replace('_', ' ');
     }
 
     public void setFirstName(String firstName) {
@@ -198,6 +212,8 @@ public class Ausweis {
     }
 
     public String getSpitzname() {
+        if(spitzname == null)
+            return null;
         return spitzname;
     }
 }

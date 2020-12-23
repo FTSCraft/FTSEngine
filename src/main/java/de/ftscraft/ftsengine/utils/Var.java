@@ -29,7 +29,7 @@ public class Var
         p.sendMessage("§c------ Ausweis von §e" + uF.getName(UUID.fromString(a.getUUID())) + " §c------");
         p.sendMessage("§cNachname: §e" + a.getLastName());
         p.sendMessage("§cVorname: §e" + a.getFirstName());
-        p.sendMessage("§cSpitzname: §e" + (a.getSpitzname() != null ? a.getSpitzname() : "N/A"));
+        p.sendMessage("§cSpitzname: §e" + (a.getSpitzname() != null ? a.getSpitzname().replace('_', ' ') : "N/A"));
         p.sendMessage("§cGeschlecht: §e" + (a.getGender() == Gender.MALE ? "Mann" : a.getGender() == Gender.FEMALE ? "Frau" : a.getGender() == Gender.DIVERS ? "Divers" : "N/A"));
         p.sendMessage("§cGeburtstag: §e" + a.getBirthdayString());
         p.sendMessage("§cRasse: §e" + (a.getRace() != null ? a.getRace() : "N/A"));

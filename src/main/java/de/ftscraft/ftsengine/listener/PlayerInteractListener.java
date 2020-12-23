@@ -47,26 +47,72 @@ public class PlayerInteractListener implements Listener {
     @EventHandler
     public void onClick(PlayerInteractEvent e) {
 
-        if(e.getItem().getType() == Material.BOW) {
-            ItemStack is = e.getItem();
-            if(is.hasItemMeta()) {
-                if(is.getItemMeta().getDisplayName().equalsIgnoreCase("§6Harfe")) {
+        if(e.getItem() != null) {
 
-                    PacketContainer packet = protocolManager.createPacket(PacketType.Play.Client.BLOCK_DIG);
-                    packet.getModifier().writeDefaults();
-                    //Index 4 = The action the player is taking against the block
-                    packet.getIntegers().write(0, 5);
-                    //Index 0-3 = Standard values which have to be set on 0
-                    packet.getIntegers().write(0, 0);
-                    packet.getIntegers().write(0, 0);
-                    try {
-                        protocolManager.sendServerPacket(e.getPlayer(), packet);
-                    } catch (InvocationTargetException ex) {
-                        ex.printStackTrace();
+            if (e.getItem().getType() == Material.BOW) {
+                ItemStack is = e.getItem();
+                if (is.hasItemMeta()) {
+                    if (is.getItemMeta().getDisplayName().equalsIgnoreCase("§6Harfe")) {
+
+                        PacketContainer packet = protocolManager.createPacket(PacketType.Play.Client.BLOCK_DIG);
+                        packet.getModifier().writeDefaults();
+                        //Index 4 = The action the player is taking against the block
+                        packet.getIntegers().write(0, 5);
+                        //Index 0-3 = Standard values which have to be set on 0
+                        packet.getIntegers().write(0, 0);
+                        packet.getIntegers().write(0, 0);
+                        try {
+                            protocolManager.sendServerPacket(e.getPlayer(), packet);
+                        } catch (InvocationTargetException ex) {
+                            ex.printStackTrace();
+                        }
+
+                    }
+                }
+            }
+
+            if (e.getPlayer().getInventory().getItemInMainHand().getType() == Material.NAUTILUS_SHELL) {
+
+                ItemStack item = e.getPlayer().getInventory().getItemInMainHand();
+
+                if (item.hasItemMeta()) {
+
+                    if (item.getItemMeta().getDisplayName().equalsIgnoreCase("§6Horn")) {
+
+                        Player p = e.getPlayer();
+
+                        if(hornCooldown.contains(p)) {
+                            return;
+                        }
+
+
+                        hornCooldown.add(p);
+
+                        Random random = new Random();
+                        int r = random.nextInt(50) + 10;
+
+                        p.playSound(p.getLocation(), Sound.EVENT_RAID_HORN, 100, r);
+
+                        for (Entity n : p.getNearbyEntities(70, 70, 70)) {
+                            if (n instanceof Player) {
+                                Player playerInRadius = (Player) n;
+
+                                playerInRadius.playSound(p.getLocation(), Sound.EVENT_RAID_HORN, 300, r);
+                            }
+                        }
+
+                        Bukkit.getScheduler().runTaskLater(plugin, () -> {
+
+                            hornCooldown.remove(p);
+
+                        }, 20 * 2);
+
                     }
 
                 }
+
             }
+
         }
 
         if (e.getAction() == Action.RIGHT_CLICK_BLOCK) {
@@ -115,48 +161,6 @@ public class PlayerInteractListener implements Listener {
                             }
                         }
                     }
-            }
-
-            if (e.getPlayer().getInventory().getItemInMainHand().getType() == Material.NAUTILUS_SHELL) {
-
-                ItemStack item = e.getPlayer().getInventory().getItemInMainHand();
-
-                if (item.hasItemMeta()) {
-
-                    if (item.getItemMeta().getDisplayName().equalsIgnoreCase("§6Horn")) {
-
-                        Player p = e.getPlayer();
-
-                        if(hornCooldown.contains(p)) {
-                            return;
-                        }
-
-
-                        hornCooldown.add(p);
-
-                        Random random = new Random();
-                        int r = random.nextInt(50) + 10;
-
-                        p.playSound(p.getLocation(), Sound.EVENT_RAID_HORN, 100, r);
-
-                        for (Entity n : p.getNearbyEntities(70, 70, 70)) {
-                            if (n instanceof Player) {
-                                Player playerInRadius = (Player) n;
-
-                                playerInRadius.playSound(p.getLocation(), Sound.EVENT_RAID_HORN, 300, r);
-                            }
-                        }
-
-                        Bukkit.getScheduler().runTaskLater(plugin, () -> {
-
-                            hornCooldown.remove(p);
-
-                        }, 20 * 2);
-
-                    }
-
-                }
-
             }
 
 

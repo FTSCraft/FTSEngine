@@ -18,9 +18,7 @@ import net.milkbowl.vault.chat.Chat;
 import net.milkbowl.vault.economy.Economy;
 import net.milkbowl.vault.permission.Permission;
 import org.bukkit.*;
-import org.bukkit.block.data.type.Slab;
 import org.bukkit.entity.Player;
-import org.bukkit.entity.Villager;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
@@ -268,7 +266,7 @@ public class Engine extends JavaPlugin implements Listener {
 
     private void safeAll() {
         for (Ausweis a : ausweis.values()) {
-            a.safe();
+            a.save();
         }
 
         for (Backpack a : backpacks.values()) {
