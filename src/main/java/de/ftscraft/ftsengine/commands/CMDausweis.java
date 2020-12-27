@@ -10,6 +10,7 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -53,37 +54,24 @@ public class CMDausweis implements CommandExecutor {
                             plugin.addAusweis(a);
                         }
                         p.sendMessage(msgs.SUCC_CMD_AUSWEIS.replace("%s", "Name").replace("%v", fName + " " + lName));
-                        p.sendMessage(msgs.PREFIX + "ACHTUNG! Wenn du deinen Gerburtstag mit /ausweis alter [Geburtstag] eingibst geb das so ein: §5DD-MM §7!");
-                        p.sendMessage("§7Also wenn du am §517.2 §7Geburtstag hast, geb §5'17-02' §7ein");
-                        p.sendMessage("§7Achso, falls du zum Geburtstag einen Rang möchtest, geb noch unbedingt dein Geschlecht ein.");
                     } else
                         p.sendMessage(msgs.PREFIX + "Bitte benutze den Befehl so:" + " §c/ausweis name [Vorname] [Nachname]");
                     break;
-                case "alter":
-                    if (args.length == 2) {
-                        if (!plugin.hasAusweis(p)) {
-                            p.sendMessage(msgs.NEED_AUSWEIS);
-                            return true;
-                        }
-                        if (plugin.getAusweis(p).birthdaySetuped()) {
-                            p.sendMessage(msgs.ALREADY_SETUP_BIRTH);
-                            return true;
-                        }
-                        String dob = args[1];
-                        SimpleDateFormat sdf1 = new SimpleDateFormat("dd-MM");
-                        Date date;
-                        try {
-                            date = sdf1.parse(dob);
-                            date.setTime(date.getTime() + 1);
-                            Calendar cal = Calendar.getInstance();
-                            cal.setTime(date);
-                            plugin.getAusweis(p).setBirthday(cal);
-                            p.sendMessage(msgs.PREFIX + "Okay, du hast am " + cal.get(Calendar.DAY_OF_MONTH) + "." + (cal.get(Calendar.MONTH) + 1) + " Geburtstag!");
-                        } catch (ParseException e) {
-                            e.printStackTrace();
-                        }
-
+                case "link":
+                    if (!plugin.hasAusweis(p)) {
+                        p.sendMessage(msgs.NEED_AUSWEIS);
+                        return true;
                     }
+                    if (args.length == 2) {
+                        String link = args[1];
+                        if(!link.startsWith("https://forum.ftscraft.de/")) {
+                            p.sendMessage("§cDer Link muss mit unserer URL des Forums anfangen! (https://forum.ftscraft.de/)");
+                            return true;
+                        }
+                        plugin.getAusweis(p).setForumLink(link);
+                        p.sendMessage(msgs.SUCC_CMD_AUSWEIS.replace("%s", "Charaktervorstellung").replace("%v", link));
+                    } else
+                        p.sendMessage(msgs.PREFIX + "Bitte benutze den Befehl so: §c/ausweis link [Forumlink deiner Charvorstellung]");
                     break;
                 case "geschlecht":
                     if (!plugin.hasAusweis(p)) {
@@ -188,17 +176,30 @@ public class CMDausweis implements CommandExecutor {
                         p.sendMessage(msgs.PREFIX + "Bitte benutze den Befehl so:" + " §c/ausweis spitzname [Spitzname]");
                     break;
                 case "kopieren":
-                    if (args.length == 2) {
-                        final int PRICE = 0;
-                        String name = args[1];
-                        if (plugin.getEcon().has(p, PRICE)) {
-                            if (plugin.hasAusweis(name)) {
-                                p.getInventory().addItem(plugin.getAusweis(name).getAsItem());
-                                p.sendMessage(msgs.SUCC_COPY_AUSWEIS.replace("%s", name));
-                                plugin.getEcon().withdrawPlayer(p, PRICE);
-                            } else p.sendMessage(plugin.msgs.PREFIX + "Dieser Spieler hat kein Ausweis");
-                        } else p.sendMessage(plugin.msgs.PREFIX + "Du hast nicht genug Geld!");
+                    ItemStack item;
+                    String name;
+                    if (args.length == 1) {
+                        if (plugin.hasAusweis(p)) {
+                            name = "Dir";
+                            item = plugin.getAusweis(p).getAsItem();
+                        } else {
+                            p.setDisplayName(plugin.msgs.PREFIX + "Mach dir erstmal einen Ausweis!");
+                            return true;
+                        }
+                    } else if (args.length == 2 && p.hasPermission("ftsengine.helfer")) {
+                        name = args[1];
+                        if (plugin.hasAusweis(name)) {
+                            item = plugin.getAusweis(name).getAsItem();
+                        } else {
+                            p.sendMessage(plugin.msgs.PREFIX + "Dieser Spieler hat keinen Ausweis");
+                            return true;
+                        }
+                    } else {
+                        p.sendMessage(plugin.msgs.PREFIX + "Dafür hast du keine Rechte");
+                        return true;
                     }
+                    p.getInventory().addItem(item);
+                    p.sendMessage(msgs.SUCC_COPY_AUSWEIS.replace("%s", name));
                     break;
                 case "list":
                     for (Ausweis a : plugin.ausweis.values()) {
@@ -213,42 +214,11 @@ public class CMDausweis implements CommandExecutor {
 
             if (sub.equalsIgnoreCase("admin")) {
 
-                if(args.length >= 3) {
+                if (args.length >= 3) {
 
                     if (p.hasPermission("ftsengine.admin")) {
 
-                        if (args[2].equalsIgnoreCase("geburtstag")) {
 
-                            if(args.length == 4) {
-
-                                String targetString = args[1];
-                                Player target = Bukkit.getPlayer(targetString);
-
-                                if (target != null) {
-
-                                    if (!plugin.hasAusweis(target)) {
-                                        p.sendMessage("§cDer Spieler hat keinen Ausweis!");
-                                        return true;
-                                    }
-
-                                    String dob = args[3];
-                                    SimpleDateFormat sdf1 = new SimpleDateFormat("dd-MM");
-                                    Date date;
-                                    try {
-                                        date = sdf1.parse(dob);
-                                        date.setTime(date.getTime() + 1);
-                                        Calendar cal = Calendar.getInstance();
-                                        cal.setTime(date);
-                                        plugin.getAusweis(target).setBirthday(cal);
-                                        p.sendMessage(msgs.PREFIX + "Okay, der Spieler " + target.getName() + " hat am " + cal.get(Calendar.DAY_OF_MONTH) + "." + (cal.get(Calendar.MONTH) + 1) + " Geburtstag!");
-                                        target.sendMessage(msgs.PREFIX + "Der Spieler " + p.getName() + " hat deinen Geburtstag geändert. (" + cal.get(Calendar.DAY_OF_MONTH) + "." + (cal.get(Calendar.MONTH) + 1) + ")");
-                                    } catch (ParseException e) {
-                                        e.printStackTrace();
-                                    }
-
-                                } else p.sendMessage("§cDieser Spieler ist nicht online!");
-                            } else p.sendMessage("§cBitte benutze den Befehl so: /ausweis admin SPIELER geburtstag TAG");
-                        } else p.sendMessage("§cBitte benutze den Befehl so: /ausweis admin SPIELER geburtstag TAG");
                     } else p.sendMessage("§cDafür hast du keine Rechte LOL");
                 }
 

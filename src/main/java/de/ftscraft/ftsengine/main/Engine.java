@@ -204,6 +204,8 @@ public class Engine extends JavaPlugin implements Listener {
         sendTablistHeaderAndFooter(p, "§6§lplay.ftscraft.de", "");
     }
 
+    private HashMap<OfflinePlayer, Long> ausweisCooldown = new HashMap<>();
+
     @EventHandler
     public void onItemInteract(PlayerInteractEvent e) {
 
@@ -219,6 +221,11 @@ public class Engine extends JavaPlugin implements Listener {
                 String iName = e.getPlayer().getInventory().getItemInMainHand().getItemMeta().getDisplayName();
                 if (iName != null) {
                     if (iName.startsWith("§6Personalausweis")) {
+                        if(ausweisCooldown.containsKey(e.getPlayer())) {
+                            if(ausweisCooldown.get(e.getPlayer()) > System.currentTimeMillis())
+                                return;
+                        }
+                        ausweisCooldown.put(e.getPlayer(), System.currentTimeMillis() + 1000);
                         String idS = iName.replaceAll(".*#", "");
                         int id;
                         //Bei Fehlern bei Item gucken : Id da?
@@ -629,6 +636,7 @@ public class Engine extends JavaPlugin implements Listener {
             ex.printStackTrace();
         }
     }
+
 
     public ProtocolManager getProtocolManager() {
         return protocolManager;

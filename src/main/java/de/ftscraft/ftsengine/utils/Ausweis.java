@@ -28,12 +28,12 @@ public class Ausweis {
     private String nation;
     private String desc;
     private String religion;
-    private Calendar birthday;
+    private String forumLink;
     public final Integer id;
 
     private Engine plugin;
 
-    public Ausweis(Engine plugin, String UUID, String firstName, String lastName, String spitzname, Gender gender, String race, String nation, String desc, String religion, Calendar cal, Integer id) {
+    public Ausweis(Engine plugin, String UUID, String firstName, String lastName, String spitzname, Gender gender, String race, String nation, String desc, String religion, String link, Integer id) {
         this.plugin = plugin;
         this.UUID = UUID;
         this.firstName = firstName;
@@ -42,12 +42,11 @@ public class Ausweis {
         this.gender = gender;
         this.race = race;
         this.nation = nation;
-        this.birthday = cal;
+        this.forumLink = link;
         this.desc = desc;
         this.religion = religion;
         this.id = id;
         plugin.addAusweis(this);
-        checkBirthday();
     }
 
     public Ausweis(Engine plugin, Player player) {
@@ -57,17 +56,6 @@ public class Ausweis {
         this.plugin = plugin;
         plugin.addAusweis(this);
 
-    }
-
-    private boolean todayBirthday() {
-        Calendar now = Calendar.getInstance();
-        return now.get(Calendar.MONTH) == birthday.get(Calendar.MONTH) && now.get(Calendar.DAY_OF_MONTH) == birthday.get(Calendar.DAY_OF_MONTH);
-    }
-
-    private void checkBirthday() {
-        if (todayBirthday()) {
-            plugin.getServer().dispatchCommand(plugin.getServer().getConsoleSender(), "lp user " + Bukkit.getOfflinePlayer(getUUID()).getName() + " parent addtemp premium 2d");
-        }
     }
 
     public boolean save() {
@@ -85,8 +73,7 @@ public class Ausweis {
         cfg.set("desc", desc);
         cfg.set("id", id);
         cfg.set("religion", religion);
-        if (birthday != null)
-            cfg.set("birthday", birthday.getTime().getTime());
+        cfg.set("link", forumLink);
 
         try {
             cfg.save(file);
@@ -182,31 +169,6 @@ public class Ausweis {
         return is;
     }
 
-    public void setBirthday(Calendar birthday) {
-        this.birthday = birthday;
-        checkBirthday();
-    }
-
-    public String getBirthdayString() {
-        String s;
-        if (birthday == null)
-            return "N/A";
-        s = birthday.get(Calendar.DAY_OF_MONTH) + "." + (birthday.get(Calendar.MONTH) + 1);
-        return s;
-    }
-
-    public boolean birthdaySetuped() {
-
-        if(birthday == null)
-            return false;
-
-        if(birthday.get(Calendar.MILLISECOND) == 0) {
-            return false;
-        }
-
-        return birthday != null;
-    }
-
     public void setSpitzname(String spitzname) {
         this.spitzname = spitzname;
     }
@@ -215,5 +177,13 @@ public class Ausweis {
         if(spitzname == null)
             return null;
         return spitzname;
+    }
+
+    public void setForumLink(String forumLink) {
+        this.forumLink = forumLink;
+    }
+
+    public String getForumLink() {
+        return forumLink;
     }
 }

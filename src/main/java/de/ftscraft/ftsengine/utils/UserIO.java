@@ -74,19 +74,14 @@ public class UserIO {
                 String spitzname = cfg.getString("spitzname");
                 if(spitzname != null)
                     spitzname.replace('_', ' ');
-                long millis = cfg.getLong("birthday");
+                String link = cfg.getString("link");
                 Integer id = cfg.getInt("id");
-                Calendar cal;
-                Date date = new Date();
-                date.setTime(millis);
-                cal = Calendar.getInstance();
-                cal.setTime(date);
 
 
                 if (id > plugin.highestId)
                     plugin.highestId = id;
 
-                new Ausweis(plugin, UUID, firstName, lastName, spitzname, gender, race, nation, desc, religion, cal, id);
+                new Ausweis(plugin, UUID, firstName, lastName, spitzname, gender, race, nation, desc, religion, link, id);
             }
         } catch (Exception e) {
             e.printStackTrace();

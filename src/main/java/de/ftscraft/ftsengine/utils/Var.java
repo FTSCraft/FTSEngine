@@ -1,6 +1,9 @@
 package de.ftscraft.ftsengine.utils;
 
 import de.ftscraft.ftsengine.main.Engine;
+import net.md_5.bungee.api.chat.ClickEvent;
+import net.md_5.bungee.api.chat.ComponentBuilder;
+import net.md_5.bungee.api.chat.HoverEvent;
 import org.bukkit.Material;
 import org.bukkit.block.BlockFace;
 import org.bukkit.entity.Player;
@@ -31,11 +34,21 @@ public class Var
         p.sendMessage("§cVorname: §e" + a.getFirstName());
         p.sendMessage("§cSpitzname: §e" + (a.getSpitzname() != null ? a.getSpitzname().replace('_', ' ') : "N/A"));
         p.sendMessage("§cGeschlecht: §e" + (a.getGender() == Gender.MALE ? "Mann" : a.getGender() == Gender.FEMALE ? "Frau" : a.getGender() == Gender.DIVERS ? "Divers" : "N/A"));
-        p.sendMessage("§cGeburtstag: §e" + a.getBirthdayString());
         p.sendMessage("§cRasse: §e" + (a.getRace() != null ? a.getRace() : "N/A"));
         p.sendMessage("§cNation: §e" + (a.getNation() != null ? a.getNation() : "N/A"));
         p.sendMessage("§cBeschreibung: §e" + (a.getDesc() != null ? a.getDesc() : "N/A"));
         p.sendMessage("§cReligion: §e" + (a.getReligion() != null ? a.getReligion() : "N/A"));
+        if(a.getForumLink() != null ){
+            ComponentBuilder componentBuilder = new ComponentBuilder("§e[KLICK]");
+            componentBuilder.event(new ClickEvent(ClickEvent.Action.OPEN_URL, a.getForumLink()));
+            p.sendMessage(new ComponentBuilder("§cVorstellung: ").append(componentBuilder.create()).create());
+        } else {
+            ComponentBuilder componentBuilder = new ComponentBuilder("§e[NICHT VORHANDEN]");
+            componentBuilder.event(new ClickEvent(ClickEvent.Action.OPEN_URL, "https://www.youtube.com/watch?v=dQw4w9WgXcQ"));
+            componentBuilder.event(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ComponentBuilder("§6Klick trotzdem Mal ;)").create()));
+            p.sendMessage(new ComponentBuilder("§cVorstellung: ").append(componentBuilder.create()).create());
+        }
+
         p.sendMessage("§7ID: #" + a.id);
     }
 
@@ -43,14 +56,14 @@ public class Var
     {
         p.sendMessage("§c----- §e/ausweis §c-----");
         p.sendMessage("§e/ausweis name [Vorname] [Nachname] §bÄndert deinen Namen und erstellt beim 1. Mal einen Ausweis");
-        p.sendMessage("§e/ausweis alter [DD-MM] §bSetzt das Geburtsdatum");
         p.sendMessage("§e/ausweis geschlecht [m/f] §bSetzt das Geschlecht (m - Mann | f - Frau | d - Divers)");
         p.sendMessage("§e/ausweis spitzname [Spitzname] §bGebe dir einen Spitznamen");
         p.sendMessage("§e/ausweis rasse [Rasse] §bSetzt deine Rasse");
         p.sendMessage("§e/ausweis nation [Nation] §bSetzt deine Nation");
         p.sendMessage("§e/ausweis beschreibung [Beschr.] §bSetzt deine kurze Beschreibung von dir (Mind. 4 Wörter)");
         p.sendMessage("§e/ausweis religion [Religion] §bSetzt deine Religion");
-        p.sendMessage("§e/ausweis kopieren [Spielername] §bKopiert den Ausweis eines anderen Spielers");
+        p.sendMessage("§e/ausweis link [Link] §bSetzt den Link zu deiner Charvorstellung im Forum");
+        p.sendMessage("§e/ausweis kopieren §bKopiert deinen Ausweis");
         p.sendMessage("§6FTSEngine von §5halberfan §6für FTS-Craft");
     }
 
