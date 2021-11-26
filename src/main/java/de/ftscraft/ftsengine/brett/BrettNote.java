@@ -13,6 +13,7 @@ import java.util.List;
 public class BrettNote
 {
 
+    public int page;
     private String creator;
     private String title;
     private String content;
@@ -146,7 +147,7 @@ public class BrettNote
     public void remove()
     {
         brett.getNotes().remove(this);
-        brett.getGui().removeNote(invslot);
+        brett.getGui().removeNote(invslot, page);
         brett.getCfg().set("brett.note."+id+".title", "null");
         brett.getCfg().set("brett.note."+id+".content", "null");
         brett.getCfg().set("brett.note."+id+".creator", "null");

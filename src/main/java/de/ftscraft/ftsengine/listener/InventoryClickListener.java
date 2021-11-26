@@ -4,6 +4,10 @@ import de.ftscraft.ftsengine.backpacks.BackpackType;
 import de.ftscraft.ftsengine.brett.Brett;
 import de.ftscraft.ftsengine.brett.BrettNote;
 import de.ftscraft.ftsengine.main.Engine;
+import de.ftscraft.ftsengine.main.FTSUser;
+import de.ftscraft.ftsengine.utils.Messages;
+import net.md_5.bungee.api.chat.ClickEvent;
+import net.md_5.bungee.api.chat.ComponentBuilder;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -14,10 +18,7 @@ import org.bukkit.event.Event;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
-import org.bukkit.event.inventory.CraftItemEvent;
-import org.bukkit.event.inventory.InventoryAction;
-import org.bukkit.event.inventory.InventoryClickEvent;
-import org.bukkit.event.inventory.PrepareItemCraftEvent;
+import org.bukkit.event.inventory.*;
 import org.bukkit.inventory.InventoryHolder;
 import org.bukkit.inventory.ItemStack;
 
@@ -50,11 +51,6 @@ public class InventoryClickListener implements Listener {
 
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onInventoryClick(InventoryClickEvent event) {
-        //FULL
-
-
-        //\FUll
-
 
         //SCHWAZES BRETT
 
@@ -68,11 +64,11 @@ public class InventoryClickListener implements Listener {
                 String name = event.getView().getTitle().replace("§4Schwarzes-Brett ", "");
                 //TODO: Schwarzes Brett im Invnetar Name zueweisen, BrettNote anpassen
 
-                if (Objects.requireNonNull(clickeditem.getItemMeta()).getDisplayName().equalsIgnoreCase("§cErstelle Notitz")) {
-                    if (!plugin.getEcon().has(p, 1)) {
-                        p.sendMessage("§cDu hast nicht genug Geld!");
-                        return;
-                    }
+                if (clickeditem == null)
+                    return;
+
+                if (Objects.requireNonNull(clickeditem.getItemMeta()).getDisplayName().equalsIgnoreCase("§cErstelle Notiz")) {
+
                     Brett brett = null;
                     for (Brett bretter : plugin.bretter.values()) {
                         if (bretter.getName().equalsIgnoreCase(name)) {
@@ -81,11 +77,37 @@ public class InventoryClickListener implements Listener {
                         }
                     }
 
+                    int price;
+                    if (brett.isAdmin())
+                        price = 50;
+                    else price = 1;
+                    if (!plugin.getEcon().has(p, price)) {
+                        p.sendMessage("§cDu hast nicht genug Geld!");
+                        return;
+                    }
+
+                    //Check if Brett is full
                     if (brett.getGui().isFull()) {
                         p.sendMessage("§7[§bSchwarzes Brett§7] Es gibt keine freien Plätze mehr!");
                         p.sendMessage("§7[§bSchwarzes Brett§7] Warte bis ein Platz frei ist");
                         return;
                     }
+
+                    //Check if player has more than 4 Notes
+                    int i = 0;
+                    for (BrettNote note : brett.getNotes()) {
+                        if (note.getCreator().equals(p.getName())) {
+                            i++;
+                        }
+                    }
+                    if (i > 4) {
+                        p.sendMessage("§7[§bSchwarzes Brett§7] Du hast bereits (mehr als) 5 Notizen geschriben. Es reicht!");
+                        if (p.hasPermission("brett.admin")) {
+                            p.sendMessage("§7[§bSchwarzes Brett§7] Aber du hast die Rechte also darfst du das");
+                        } else
+                            return;
+                    }
+                    //
 
                     p.closeInventory();
                     p.sendMessage("§7[§bSchwarzes Brett§7] §bBitte gebe jetzt den Titel ein. §c(Max. 50 Ziechen)");
@@ -95,9 +117,40 @@ public class InventoryClickListener implements Listener {
                     plugin.playerBrettNote.put(p, brettNote);
                 } else {
                     String item_name = clickeditem.getItemMeta().getDisplayName();
-                    if (!(item_name.equalsIgnoreCase("&7Pinnwand") || item_name.equalsIgnoreCase("&8Leere Notitz"))) {
+
+                    if (item_name.startsWith("§cSeite")) {
+                        String pageS = item_name.substring(8);
+                        if (!clickeditem.getType().equals(Material.FLOWER_BANNER_PATTERN))
+                            return;
+                        int page;
+                        try {
+                            page = Integer.valueOf(pageS);
+                        } catch (NumberFormatException e) {
+                            return;
+                        }
+
+                        FTSUser user = plugin.getPlayer().get(p);
+
+                        user.getBrett().getGui().open(p, page);
+
+                    }
+
+                    if (!(item_name.equalsIgnoreCase("&7Pinnwand") || item_name.equalsIgnoreCase("&8Leere Notiz"))) {
                         Brett brett = null;
                         int inv_slot = event.getSlot();
+                        int page = 0;
+
+                        if (event.getInventory().getItem(36).getType() == Material.WHITE_STAINED_GLASS_PANE)
+                            page = 1;
+                        if (event.getInventory().getItem(37).getType() == Material.WHITE_STAINED_GLASS_PANE)
+                            page = 2;
+                        if (event.getInventory().getItem(38).getType() == Material.WHITE_STAINED_GLASS_PANE)
+                            page = 3;
+                        if (event.getInventory().getItem(39).getType() == Material.WHITE_STAINED_GLASS_PANE)
+                            page = 4;
+                        if (event.getInventory().getItem(40).getType() == Material.WHITE_STAINED_GLASS_PANE)
+                            page = 5;
+
                         for (Brett bretter : plugin.bretter.values())
                             if (bretter.getName().equalsIgnoreCase(name)) {
                                 brett = bretter;
@@ -105,7 +158,7 @@ public class InventoryClickListener implements Listener {
                             }
                         BrettNote note = null;
                         for (BrettNote notes : brett.getNotes())
-                            if (notes.invslot == inv_slot) {
+                            if (notes.invslot == inv_slot && notes.page == page) {
                                 note = notes;
                                 break;
                             }
@@ -121,7 +174,12 @@ public class InventoryClickListener implements Listener {
                         p.sendMessage("§6" + note_title);
                         p.sendMessage(note_cont);
                         p.sendMessage(" ");
-                        p.sendMessage("§7§nNotitz von " + note_creator);
+                        p.sendMessage("§7§nNotiz von " + note_creator);
+                        if (p.hasPermission("brett.admin") || note_creator.equals(p.getName())) {
+                            ComponentBuilder componentBuilder = new ComponentBuilder("§4Löschen");
+                            componentBuilder.event(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/ftsengine brett delete " + inv_slot + " " + page + " " + brett.getName().replace(" ", "_")));
+                            p.sendMessage(componentBuilder.create());
+                        }
                         p.sendMessage("§7**********************************");
 
                     }
@@ -131,17 +189,49 @@ public class InventoryClickListener implements Listener {
 
         //Anti Backpack
         if (event.getCurrentItem() != null) {
-            if (BackpackType.getBackpackByName(event.getView().getTitle()) == null) {
-                return;
+
+            //Check if inv is enderchest or shulkerbox
+            if (event.getInventory().getType() == InventoryType.ENDER_CHEST || event.getInventory().getType() == InventoryType.SHULKER_BOX) {
+                //if player uses number keys, cancel
+                if(event.getClick() == ClickType.NUMBER_KEY) {
+                    event.setCancelled(true);
+                    event.getWhoClicked().sendMessage(new Messages().PREFIX + "Leider kannst du hier nicht deine Nummern benutzen.");
+                    return;
+                }
+                //check by raw slot if player is navigating in his inv or in chests
+                if (event.getRawSlot() >= 27) {
+
+                    //check if he clicked on backpack
+                    if (event.getCurrentItem().getItemMeta() != null) {
+
+                        if (BackpackType.getBackpackByName(event.getCurrentItem().getItemMeta().getDisplayName()) != null) {
+
+                            //cancel
+                            event.getWhoClicked().sendMessage(new Messages().PREFIX + "Leider kannst du keine Rucksäcke in Enderchests oder Shulkerchests packen.");
+                            event.setCancelled(true);
+                            return;
+
+                        }
+
+                    }
+
+                }
             }
-            if (BackpackType.getBackpackByName(event.getWhoClicked().getOpenInventory().getTitle()) != null) {
-                if (BackpackType.getBackpackByName(Objects.requireNonNull(event.getCurrentItem().getItemMeta()).getDisplayName()) != null) {
+
+            if(BackpackType.getBackpackByName(event.getWhoClicked().getOpenInventory().getTitle()) != null) {
+                if(event.getClick() == ClickType.NUMBER_KEY) {
+                    event.setCancelled(true);
+                    event.getWhoClicked().sendMessage(new Messages().PREFIX + "Leider kannst du hier nicht deine Nummern benutzen.");
+                    return;
+                }
+                if (BackpackType.getBackpackByName(event.getCurrentItem().getItemMeta().getDisplayName()) != null) {
                     if (!event.getWhoClicked().hasPermission("ftsengine.backpack.move")) {
                         event.setCancelled(true);
                         event.getWhoClicked().sendMessage("§3Du kannst kein Rucksack in ein Rucksack packen!");
                     }
                 }
             }
+
 
         }
     }

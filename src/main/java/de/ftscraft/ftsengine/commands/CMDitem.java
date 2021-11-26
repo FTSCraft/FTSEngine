@@ -23,14 +23,18 @@ public class CMDitem implements CommandExecutor {
     private Engine plugin;
 
     private List<String> forbiddenItems;
+    private List<String> forbiddenNames;
 
     public CMDitem(Engine plugin) {
         this.plugin = plugin;
         this.plugin.getCommand("item").setExecutor(this);
 
         forbiddenItems = new ArrayList<>();
+        forbiddenNames = new ArrayList<>();
 
         forbiddenItems.addAll(Arrays.asList(BackpackType.LARGE.getName(), BackpackType.TINY.getName(), BackpackType.ENDER.getName()));
+
+        forbiddenNames.addAll(Arrays.asList("§5Dietrich"));
     }
 
     @Override
@@ -73,7 +77,7 @@ public class CMDitem implements CommandExecutor {
 
                         if (is != null && is.getType() != Material.AIR) {
 
-                            if(name.equalsIgnoreCase("§cÜberreste") || name.contains("schloss")) {
+                            if(name.equalsIgnoreCase("§cÜberreste") || name.contains("schloss") || forbiddenNames.contains(name)) {
 
                                 p.sendMessage("§cDas Item so zu nennen ist nicht erlaubt!");
                                 return true;

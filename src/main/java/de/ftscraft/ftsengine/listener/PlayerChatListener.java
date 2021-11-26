@@ -44,15 +44,24 @@ public class PlayerChatListener implements Listener {
                     if (e.getMessage().length() < 151 && e.getMessage().length() > 9) {
                         BrettNote bn = plugin.playerBrettNote.get(p);
                         bn.setContent(e.getMessage());
-                        p.sendMessage("§7[§bSchwarzes Brett§7] Ok! Die Notitz wurde erstellt");
                         bn.addToBrett();
                         //Geld
                         OfflinePlayer op = Bukkit.getOfflinePlayer(p.getUniqueId());
-                        if (plugin.getEcon().has(op, 1)) {
-                            plugin.getEcon().withdrawPlayer(op, 1);
+                        int price;
+                        if(bn.getBrett().isAdmin())
+                            price = 0;
+                        else price = 0;
+                        if (plugin.getEcon().has(op, price)) {
+                            plugin.getEcon().withdrawPlayer(op, price);
                             OfflinePlayer c = Bukkit.getOfflinePlayer(bn.getBrett().getCreator());
-                            plugin.getEcon().depositPlayer(c, 1);
-                            p.sendMessage("§eDu hast die Notitz erfolgreich erstellt!");
+                            plugin.getEcon().depositPlayer(c, price);
+                            p.sendMessage("§7[§bSchwarzes Brett§7] Ok! Die Notiz wurde erstellt");
+
+                            if(bn.getBrett().isAdmin()) {
+                                Ausweis ausweis = plugin.getAusweis(p);
+                                plugin.getServer().broadcastMessage("§7[§bMarktschreier§7] Es wurde etwas neues am Schwarzen Brett in Lohengrin von §c" + ausweis.getFirstName() + " " + ausweis.getLastName() + " §7mit dem Titel §c" + bn.getTitle() + " §7angeheftet");
+                            }
+
                         } else p.sendMessage("§7Du hast nicht genug Geld!");
                     }
                 }

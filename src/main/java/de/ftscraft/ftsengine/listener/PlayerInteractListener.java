@@ -12,6 +12,7 @@ import de.ftscraft.ftsengine.main.Engine;
 import net.sf.cglib.asm.$ByteVector;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
+import org.bukkit.Particle;
 import org.bukkit.Sound;
 import org.bukkit.block.data.type.Sign;
 import org.bukkit.block.data.type.Slab;
@@ -126,8 +127,9 @@ public class PlayerInteractListener implements Listener {
         if (e.getAction().equals(Action.RIGHT_CLICK_BLOCK)) {
             if (e.getClickedBlock().getBlockData() instanceof WallSign || e.getClickedBlock().getBlockData() instanceof Sign) {
                 if (plugin.bretter.containsKey(e.getClickedBlock().getLocation())) {
-                    plugin.bretter.get(e.getClickedBlock().getLocation()).getGui().open(e.getPlayer());
+                    plugin.bretter.get(e.getClickedBlock().getLocation()).getGui().open(e.getPlayer(), 1);
                     Brett brett = plugin.bretter.get(e.getClickedBlock().getLocation());
+                    plugin.getPlayer().get(e.getPlayer()).setBrett(brett);
                     brett.checkForRunOut();
                 }
             }
@@ -162,6 +164,18 @@ public class PlayerInteractListener implements Listener {
                             }
                         }
                     }
+            } else if(e.getPlayer().getInventory().getItemInMainHand().getType() == Material.LANTERN) {
+
+                ItemStack itemInHand = e.getPlayer().getInventory().getItemInMainHand();
+                if(itemInHand.getItemMeta().hasDisplayName()) {
+                    if(itemInHand.getItemMeta().getDisplayName().equalsIgnoreCase("§cWeihrauchlaterne")) {
+
+                        Player p = e.getPlayer();
+                        p.spawnParticle(Particle.CAMPFIRE_COSY_SMOKE, p.getLocation().add(0, 1.5, 0), 8, 0.0D, 0, 0.01D, 0.01D);
+
+                    }
+                }
+
             }
 
 

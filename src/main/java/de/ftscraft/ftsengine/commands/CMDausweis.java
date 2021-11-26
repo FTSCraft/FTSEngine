@@ -183,7 +183,7 @@ public class CMDausweis implements CommandExecutor {
                             name = "Dir";
                             item = plugin.getAusweis(p).getAsItem();
                         } else {
-                            p.setDisplayName(plugin.msgs.PREFIX + "Mach dir erstmal einen Ausweis!");
+                            p.sendMessage(plugin.msgs.PREFIX + "Mach dir erstmal einen Ausweis!");
                             return true;
                         }
                     } else if (args.length == 2 && p.hasPermission("ftsengine.helfer")) {

@@ -22,24 +22,27 @@ public class Brett
     private File file;
     private YamlConfiguration cfg;
     private Engine plugin;
+    private boolean admin;
 
-    public Brett(Sign sign, Location location, UUID creator, String name, Engine plugin) {
+    public Brett(Sign sign, Location location, UUID creator, String name, boolean admin, Engine plugin) {
         this.name = name;
         this.creator = creator;
-        this.gui = new BrettGUI(this, plugin);
+        this.admin = admin;
         this.notes = new ArrayList();
         this.plugin = plugin;
+        this.gui = new BrettGUI(this, plugin);
         this.sign = new BrettSign(sign, location, creator);
         this.file = new File(plugin.getDataFolder() + "//bretter//" + name + ".yml");
         this.cfg = YamlConfiguration.loadConfiguration(this.file);
         if (!this.file.exists()) {
             this.cfg.set("brett.creator", creator.toString());
+            this.cfg.set("brett.admin", admin);
             this.cfg.set("brett.location.X", location.getX());
             this.cfg.set("brett.location.Y", location.getY());
             this.cfg.set("brett.location.Z", location.getZ());
             this.cfg.set("brett.location.world", location.getWorld().getName());
 
-            for(int i = 0; i < 28; ++i) {
+            for(int i = 0; i < 27*5; ++i) {
                 this.cfg.set("brett.note." + i + ".title", "null");
                 this.cfg.set("brett.note." + i + ".content", "null");
                 this.cfg.set("brett.note." + i + ".creator", "null");
@@ -55,9 +58,10 @@ public class Brett
 
     }
 
-    public Brett(Sign sign, Location location, UUID creator, String name, Engine plugin, boolean onSetup) {
+    public Brett(Sign sign, Location location, UUID creator, String name, Engine plugin, boolean admin, boolean onSetup) {
         this.name = name;
         this.creator = creator;
+        this.admin = admin;
         this.gui = new BrettGUI(this, plugin);
         this.notes = new ArrayList();
         this.plugin = plugin;
@@ -71,7 +75,7 @@ public class Brett
             this.cfg.set("brett.location.Z", location.getZ());
             this.cfg.set("brett.location.world", location.getWorld().getName());
 
-            for(int i = 0; i < 27; ++i) {
+            for(int i = 0; i < 27*5; ++i) {
                 this.cfg.set("brett.note." + i + ".title", "null");
                 this.cfg.set("brett.note." + i + ".content", "null");
                 this.cfg.set("brett.note." + i + ".creator", "null");
@@ -134,7 +138,7 @@ public class Brett
 
         while(var1.hasNext()) {
             BrettNote note = (BrettNote)var1.next();
-            if (note.getTime() + 864000000L <= System.currentTimeMillis()) {
+            if (note.getTime() + 604800000L <= System.currentTimeMillis()) {
                 note.remove();
             }
         }
@@ -146,4 +150,7 @@ public class Brett
         this.file.delete();
     }
 
+    public boolean isAdmin() {
+        return admin;
+    }
 }

@@ -68,6 +68,11 @@ public class BlockBreakListener implements Listener
 
                 if(op.getName().equals(event.getPlayer().getName())) {
 
+                    if(!plugin.briefkasten.containsKey(op.getUniqueId())) {
+                        event.setCancelled(false);
+                        return;
+                    }
+
                     plugin.briefkasten.remove(op.getUniqueId());
 
                     File file = new File(plugin.getDataFolder() + "//briefkasten//" + event.getPlayer().getUniqueId().toString()+ ".yml");

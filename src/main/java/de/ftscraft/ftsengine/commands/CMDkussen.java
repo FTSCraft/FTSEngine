@@ -3,6 +3,7 @@ package de.ftscraft.ftsengine.commands;
 import de.ftscraft.ftsengine.main.Engine;
 import de.ftscraft.ftsengine.utils.Messages;
 import org.bukkit.Bukkit;
+import org.bukkit.Particle;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -50,6 +51,12 @@ public class CMDkussen implements CommandExecutor {
                                 ((Player) n).playSound(n.getLocation(), "minecraft:custom.effect_kiss", 1, 1);
                             }
                         }
+
+                        //for (int i = 0; i < 4; i++) {
+                            p.getWorld().spawnParticle(Particle.HEART, p.getLocation().add(0,2.2,0), 4, 0.2, 0.3, 0.2);
+                            target.getWorld().spawnParticle(Particle.HEART, p.getLocation().add(0,2.2,0), 4, 0.2, 0.3, 0.2);
+                        //}
+
                     } else
                         p.sendMessage(messages.PREFIX + "Der Spieler ist zu weit entfernt");
                 } else

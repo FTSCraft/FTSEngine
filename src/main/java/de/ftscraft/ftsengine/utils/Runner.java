@@ -16,7 +16,7 @@ public class Runner implements Runnable
     private int tablist_status = 0;
     private ArrayList<String> footer;
 
-    private ArrayList<Player> sentUserMessage;
+    private ArrayList<Player> sentUserMessage = new ArrayList<>();
 
     public Runner(Engine plugin)
     {

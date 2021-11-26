@@ -12,7 +12,7 @@ public class CMDfasten implements CommandExecutor {
 
     public CMDfasten(Engine plugin) {
         this.plugin = plugin;
-        plugin.getCommand("fasten").setExecutor(this::onCommand);
+        plugin.getCommand("fasten").setExecutor(this);
     }
 
     @Override

@@ -98,7 +98,8 @@ public class Engine extends JavaPlugin implements Listener {
 
     private void init() {
         this.protocolManager = ProtocolLibrary.getProtocolManager();
-        this.shopkeepersPlugin = ShopkeepersPlugin.getInstance();
+        if (getServer().getPluginManager().isPluginEnabled("Shopkeepers"))
+            this.shopkeepersPlugin = ShopkeepersPlugin.getInstance();
         highestId = 0;
         biggestBpId = 0;
         biggestPferdId = 0;
@@ -131,6 +132,7 @@ public class Engine extends JavaPlugin implements Listener {
         new CMDcountdown(this);
         new CMDgehen(this);
         new CMDitem(this);
+        new CMDftsengine(this);
         new CMDklopfen(this);
         new CMDbrief(this);
         new CMDkussen(this);
@@ -150,12 +152,13 @@ public class Engine extends JavaPlugin implements Listener {
         new PlayerQuitListener(this);
         new PlayerChatListener(this);
         new VillagerTradeListener(this);
+        new ProjectileHitListener(this);
         new PacketReciveListener(this);
 
         new Runner(this);
         getServer().getPluginManager().registerEvents(this, this);
 
-        setupScoreboad();
+        //setupScoreboad();
 
     }
 
@@ -167,7 +170,7 @@ public class Engine extends JavaPlugin implements Listener {
         return chat;
     }
 
-    private void setupScoreboad() {
+    /*private void setupScoreboad() {
         sb = Bukkit.getScoreboardManager().getMainScoreboard();
         for (Team t : sb.getTeams()) {
             t.unregister();
@@ -203,7 +206,7 @@ public class Engine extends JavaPlugin implements Listener {
         t.addPlayer(p);
         sendTablistHeaderAndFooter(p, "§6§lplay.ftscraft.de", "");
     }
-
+*/
     private HashMap<OfflinePlayer, Long> ausweisCooldown = new HashMap<>();
 
     @EventHandler
@@ -221,8 +224,8 @@ public class Engine extends JavaPlugin implements Listener {
                 String iName = e.getPlayer().getInventory().getItemInMainHand().getItemMeta().getDisplayName();
                 if (iName != null) {
                     if (iName.startsWith("§6Personalausweis")) {
-                        if(ausweisCooldown.containsKey(e.getPlayer())) {
-                            if(ausweisCooldown.get(e.getPlayer()) > System.currentTimeMillis())
+                        if (ausweisCooldown.containsKey(e.getPlayer())) {
+                            if (ausweisCooldown.get(e.getPlayer()) > System.currentTimeMillis())
                                 return;
                         }
                         ausweisCooldown.put(e.getPlayer(), System.currentTimeMillis() + 1000);
@@ -350,7 +353,7 @@ public class Engine extends JavaPlugin implements Listener {
                 Material.OAK_STAIRS, Material.DARK_PRISMARINE_STAIRS, Material.PRISMARINE_STAIRS, Material.PRISMARINE_BRICK_STAIRS,
                 Material.END_STONE_BRICK_STAIRS,
                 Material.STONE_BRICK_STAIRS));*/
-        mats.add(Material.GRASS_PATH);
+        mats.add(Material.DIRT_PATH);
 
         mats.addAll(var.getCarpets());
 
@@ -372,6 +375,14 @@ public class Engine extends JavaPlugin implements Listener {
         large_backpack.setIngredient('L', Material.LEATHER);
         large_backpack.setIngredient('R', itemStacks.getTiny_bp());
         getServer().addRecipe(large_backpack);
+
+        //GOLD INGOT
+        NamespacedKey goldKey = new NamespacedKey(this, "FTSGOLD");
+        ShapelessRecipe goldRec = new ShapelessRecipe(goldKey, itemStacks.getGold());
+        goldRec.addIngredient(2, Material.RAW_GOLD);
+        goldRec.addIngredient(Material.COPPER_INGOT);
+        getServer().addRecipe(goldRec);
+
 
         //ENDER BACKPACK
 
@@ -612,7 +623,14 @@ public class Engine extends JavaPlugin implements Listener {
         diamond_boots_air2.setIngredient('*', Material.AIR);
         getServer().addRecipe(diamond_boots_air2);
 
+        //Quarz
 
+        NamespacedKey quartzkey = new NamespacedKey(this, "FTSquartz");
+        ShapedRecipe quartzRecipie = new ShapedRecipe(quartzkey, new ItemStack(Material.QUARTZ, 2));
+        quartzRecipie.shape("GGG", "GLG", "GGG");
+        quartzRecipie.setIngredient('G', Material.POLISHED_DIORITE);
+        quartzRecipie.setIngredient('L', Material.LAPIS_LAZULI);
+        getServer().addRecipe(quartzRecipie);
 
 
     }

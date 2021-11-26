@@ -57,10 +57,10 @@ public class UserIO {
 
                 String UUID = aFile.getName().replace(".yml", "");
                 String lastName = cfg.getString("lastName");
-                if(lastName != null)
+                if (lastName != null)
                     lastName.replace('_', ' ');
                 String firstName = cfg.getString("firstName");
-                if(firstName != null)
+                if (firstName != null)
                     firstName.replace('_', ' ');
                 Gender gender = null;
                 if (cfg.isSet("gender"))
@@ -68,11 +68,11 @@ public class UserIO {
                 String race = cfg.getString("race");
                 String religion = cfg.getString("religion");
                 String nation = cfg.getString("nation");
-                if(nation != null)
+                if (nation != null)
                     nation = nation.replace('_', ' ');
                 String desc = cfg.getString("desc");
                 String spitzname = cfg.getString("spitzname");
-                if(spitzname != null)
+                if (spitzname != null)
                     spitzname.replace('_', ' ');
                 String link = cfg.getString("link");
                 Integer id = cfg.getInt("id");
@@ -99,13 +99,23 @@ public class UserIO {
                 Inventory inv;
                 BackpackType type;
 
-                type = BackpackType.valueOf(c.getString("type"));
+                if (c.getString("type") != null)
+                    type = BackpackType.valueOf(c.getString("type"));
+                else type = BackpackType.LARGE;
 
+                if(c.getList("inventory") == null) {
+                    System.out.println("Korrumpierter Rucksack: " + aFile.getName());
+                    continue;
+                }
                 List itemsList = c.getList("inventory");
                 ItemStack[] items = (ItemStack[]) itemsList.toArray(new ItemStack[itemsList.size()]);
                 inv = Bukkit.createInventory(null, type.getSize(), type.getName());
                 inv.setContents(items);
 
+                if(!c.contains("id")) {
+                    System.out.println("Korrumpierter Rucksack: " + aFile.getName());
+                    continue;
+                }
                 id = c.getInt("id");
 
                 new Backpack(plugin, type, id, inv);
@@ -138,6 +148,9 @@ public class UserIO {
                     int loc_Y = cfg.getInt("brett.location.Y");
                     int loc_Z = cfg.getInt("brett.location.Z");
                     String world = cfg.getString("brett.location.world");
+                    boolean admin = false;
+                    if (cfg.contains("brett.admin"))
+                        admin = cfg.getBoolean("brett.admin");
                     Location locaton = new Location(Bukkit.getWorld(world), loc_X, loc_Y, loc_Z);
 
                     BlockState bs = Bukkit.getWorld(world).getBlockAt(locaton).getState();
@@ -146,7 +159,7 @@ public class UserIO {
                     }
                     Sign sign = (Sign) bs;
 
-                    Brett brett = new Brett(sign, locaton, creator, name, plugin, true);
+                    Brett brett = new Brett(sign, locaton, creator, name, plugin, admin, true);
 
                     for (String keys : cfg.getConfigurationSection("brett.note").getKeys(false)) {
                         String title = cfg.getString("brett.note." + keys + ".title");
@@ -250,7 +263,7 @@ public class UserIO {
     public void saveBriefkasten() {
 
         for (Briefkasten briefkasten : plugin.briefkasten.values()) {
-            File file = new File(plugin.getDataFolder() + "//briefkasten//" + briefkasten.getPlayer().toString()+ ".yml");
+            File file = new File(plugin.getDataFolder() + "//briefkasten//" + briefkasten.getPlayer().toString() + ".yml");
 
             FileConfiguration cfg = YamlConfiguration.loadConfiguration(file);
 
@@ -264,7 +277,7 @@ public class UserIO {
 
             try {
                 cfg.save(file);
-              } catch (IOException e) {
+            } catch (IOException e) {
                 e.printStackTrace();
             }
         }

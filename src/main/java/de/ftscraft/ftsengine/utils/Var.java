@@ -44,7 +44,7 @@ public class Var
             p.sendMessage(new ComponentBuilder("§cVorstellung: ").append(componentBuilder.create()).create());
         } else {
             ComponentBuilder componentBuilder = new ComponentBuilder("§e[NICHT VORHANDEN]");
-            componentBuilder.event(new ClickEvent(ClickEvent.Action.OPEN_URL, "https://www.youtube.com/watch?v=dQw4w9WgXcQ"));
+            componentBuilder.event(new ClickEvent(ClickEvent.Action.OPEN_URL, "https://www.youtube.com/watch?v=mFWsQ2cZrVE"));
             componentBuilder.event(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ComponentBuilder("§6Klick trotzdem Mal ;)").create()));
             p.sendMessage(new ComponentBuilder("§cVorstellung: ").append(componentBuilder.create()).create());
         }
@@ -210,6 +210,11 @@ public class Var
                     Material.DIORITE
 
             ));
+
+            for (Material value : Material.values()) {
+                if(value.toString().contains("STAIRS"))
+                    noStairs.add(value);
+            }
 
         }
 

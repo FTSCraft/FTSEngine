@@ -8,20 +8,19 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.LeatherArmorMeta;
 
-import java.awt.*;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class ItemStacks
-{
+public class ItemStacks {
 
     private ItemStack big_bp, tiny_bp, bp_key, ender_bp;
     private ItemStack iron_helmet, iron_chestplate, iron_leggings, iron_boots,
             chainmail_helmet, chainmail_chestplate, chainmail_leggings, chainmail_boots,
-            diamond_helmet, diamond_chestplate, diamond_leggings, diamond_boots;
+            diamond_helmet, diamond_chestplate, diamond_leggings, diamond_boots, gold_ingot;
     private ItemStack diamondHelmetReplacement, diamondChestplateReplacement, diamondLeggingsReplacement, diamondBootsReplacement;
     private ItemStack leather_horse, iron_horse, diamond_horse;
+    private ItemStack gold;
 
     private ItemStack horn;
 
@@ -108,25 +107,27 @@ public class ItemStacks
         diamondLeggingsReplacement = new ItemStack(Material.DIAMOND, 7);
         diamondBootsReplacement = new ItemStack(Material.DIAMOND, 4);
 
+        gold = new ItemStack(Material.GOLD_INGOT, 1);
+
     }
 
-    public ItemStack getBig_bp()
-    {
+    public ItemStack getBig_bp() {
         return big_bp;
     }
 
-    public ItemStack getTiny_bp()
-    {
+    public ItemStack getGold() {
+        return gold;
+    }
+
+    public ItemStack getTiny_bp() {
         return tiny_bp;
     }
 
-    public ItemStack getBp_key()
-    {
+    public ItemStack getBp_key() {
         return bp_key;
     }
 
-    public ItemStack getEnder_bp()
-    {
+    public ItemStack getEnder_bp() {
         return ender_bp;
     }
 

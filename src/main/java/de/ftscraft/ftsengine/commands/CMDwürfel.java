@@ -42,15 +42,22 @@ public class CMDwürfel implements CommandExecutor {
             return true;
         }
 
-        int[] numbers = new int[DICES];
-
         Gender gender = ausweis.getGender();
         String name = ausweis.getFirstName() + " " + ausweis.getLastName();
 
         DiceType dice = DiceType.getDiceTypeByName(ausweis.getRace());
 
-        if(args.length == 1 && dice == null) {
-            dice = DiceType.getDiceTypeByName(args[0]);
+        boolean magic = false;
+
+        if (args.length <= 2 && args.length > 0) {
+            if (dice == null) {
+                dice = DiceType.getDiceTypeByName(args[0]);
+                if (args.length == 2)
+                    if (args[1].equalsIgnoreCase("magie"))
+                        magic = true;
+            } else {
+                magic = args[0].equalsIgnoreCase("magie");
+            }
         }
 
         if (dice != null) {
@@ -67,17 +74,23 @@ public class CMDwürfel implements CommandExecutor {
             } else
                 sb = new StringBuilder("§6Der §o" + dice.getMName() + " §r§e" + name + " §6würfelt: §e");
 
-            for (int i = 0; i < numbers.length; i++) {
-                numbers[i] = ThreadLocalRandom.current().nextInt(1, dice.pips + 1);
-                total += numbers[i];
-                if (i == numbers.length - 1) {
-                    sb.append(numbers[i] + " = ");
-                } else {
-                    sb.append(numbers[i] + " + ");
-                }
-            }
+            if (magic) {
 
-            sb.append(((total >= dice.needs) ? "§2" : "§c") + total);
+                total = ThreadLocalRandom.current().nextInt(1, 12 + 1);
+
+                sb.append(((total >= dice.getMagicMin() && total <= dice.getMagicMax()) ? "§2" : "§c") + total + " §5[Magie]");
+
+            } else {
+
+                int value = ThreadLocalRandom.current().nextInt(1, 100 + 1);
+
+                if(value <= dice.getNeeds()) {
+                    sb.append("§2" + value + " §6und hat damit den Wurf §2geschafft!");
+                } else {
+                    sb.append("§c" + value + " §6hätte aber §c" + dice.getNeeds() + " §6oder niedriger würfeln müssen!");
+                }
+
+            }
 
             for (Entity nearbyEntity : p.getLocation().getNearbyEntities(20, 20, 20)) {
                 if (nearbyEntity instanceof Player) {
@@ -87,7 +100,7 @@ public class CMDwürfel implements CommandExecutor {
 
 
         } else {
-            cs.sendMessage("§cBitte würfel so: §e/würfel [Mensch/Zwerg/Elf/Ork]");
+            cs.sendMessage("§cBitte würfel so: §e/würfel [Mensch/Zwerg/Elf/Ork/Goblin] <Magie>");
         }
 
         return false;
@@ -95,21 +108,25 @@ public class CMDwürfel implements CommandExecutor {
 
     public enum DiceType {
 
-        ORK("Ork", "Orkin", 24, 50),
-        ELF("Elf", "Elfin", 20, 30),
-        ZWERG("Zwerg", "Zwergin", 18, 30),
-        MENSCH("Mensch", "Mensch", 16, 30);
+        ORK("Ork", "Orkin", 60, 4, 8),
+        ZWERG("Zwerg", "Zwergin", 50, 4, 8),
+        MENSCH("Mensch", "Mensch", 40, 6, 8),
+        ELF("Elf", "Elfin", 25, 2, 10),
+        GOBLIN("Goblin", "Goblin", 15, 3, 9);
 
         private String mName;
         private String fName;
         private int pips;
-        private int needs;
+        private int chance;
+        private int magicMin, magicMax;
 
-        DiceType(String mName, String fName, int pips, int needs) {
+        DiceType(String mName, String fName, int chance, int magicMin, int magicMax) {
             this.mName = mName;
             this.fName = fName;
             this.pips = pips;
-            this.needs = needs;
+            this.chance = chance;
+            this.magicMin = magicMin;
+            this.magicMax = magicMax;
         }
 
         public String getMName() {
@@ -125,7 +142,15 @@ public class CMDwürfel implements CommandExecutor {
         }
 
         public int getNeeds() {
-            return needs;
+            return chance;
+        }
+
+        public int getMagicMax() {
+            return magicMax;
+        }
+
+        public int getMagicMin() {
+            return magicMin;
         }
 
         public static DiceType getDiceTypeByName(String race) {

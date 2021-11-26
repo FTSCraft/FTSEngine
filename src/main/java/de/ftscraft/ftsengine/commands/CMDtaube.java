@@ -82,7 +82,16 @@ public class CMDtaube implements CommandExecutor {
                         p.sendMessage(plugin.msgs.NOT_IN_WORLD.replace("%s", args[i]));
                         return true;
                     }
-                    int seconds = 6;
+                    double distance = t.getLocation().distance(p.getLocation());
+                    int seconds;
+
+                    if(distance > 10000) {
+                        seconds = 60 * 3;
+                    } else if(distance < 350) {
+                        seconds = 5;
+                    } else {
+                        seconds = (int) distance / 70;
+                    }
 
                     String msg = "";
 

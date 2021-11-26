@@ -1,10 +1,10 @@
 name: FTSEngine
 author: halberfan
 main: de.ftscraft.ftsengine.main.Engine
-version: "1.4"
-api-version: 1.14
+version: "1.5.3"
+api-version: 1.17
 depend: [Vault, ProtocolLib, LuckPerms]
-softdepend: [Shopkeepers]
+softdepend: [Shopkeepers, Dynmap]
 
 commands:
     ausweis:
@@ -25,4 +25,5 @@ commands:
     fasten:
     item:
     spucken:
+    ftsengine:
     küssen:

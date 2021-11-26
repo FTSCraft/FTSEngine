@@ -13,6 +13,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
+import java.io.File;
 import java.util.UUID;
 
 public class CMDbrief implements CommandExecutor {
@@ -77,6 +78,27 @@ public class CMDbrief implements CommandExecutor {
 
             }
 
+        } else if(args.length == 1) {
+            if(args[0].equalsIgnoreCase("removekasten")) {
+
+                if(!plugin.briefkasten.containsKey(p.getUniqueId())) {
+                    p.sendMessage("§cDu hast keinen Briefkasten!");
+                    return true;
+                }
+
+                plugin.briefkasten.remove(p.getUniqueId());
+
+                File file = new File(plugin.getDataFolder() + "//briefkasten//" + p.getUniqueId().toString()+ ".yml");
+
+                file.getName();
+
+                file.delete();
+
+                p.sendMessage("§cDu hast deinen Briefkasten erfolgreich entfernt!");
+
+                return true;
+
+            }
         }
 
         if (args.length >= 1) {

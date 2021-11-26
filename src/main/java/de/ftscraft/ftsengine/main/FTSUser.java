@@ -1,6 +1,7 @@
 package de.ftscraft.ftsengine.main;
 
 import com.comphenix.protocol.wrappers.WrappedGameProfile;
+import de.ftscraft.ftsengine.brett.Brett;
 import de.ftscraft.ftsengine.courier.Briefkasten;
 import de.ftscraft.ftsengine.utils.Ausweis;
 import de.ftscraft.ftsengine.utils.TeamPrefixs;
@@ -29,6 +30,8 @@ public class FTSUser {
 
     private Briefkasten briefkasten;
 
+    private Brett currentBrett = null;
+
     public FTSUser(Engine plugin, Player player) {
         this.plugin = plugin;
         this.player = player;
@@ -37,9 +40,10 @@ public class FTSUser {
         else this.ausweis = null;
         sits = false;
 
-        TeamPrefixs.setPlayerPrefix(player);
-        plugin.setPrefix(player);
-
+        /*if(ausweis == null)
+            TeamPrefixs.setPlayerPrefix(null, player);
+        else
+            TeamPrefixs.setPlayerPrefix(ausweis.getGender(), player);*/
 
     }
 
@@ -158,4 +162,15 @@ public class FTSUser {
     }
 
 
+    public Brett getBrett() {
+
+        return currentBrett;
+
+    }
+
+    public void setBrett(Brett brett) {
+
+        this.currentBrett = brett;
+
+    }
 }

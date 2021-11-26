@@ -33,7 +33,7 @@ public class SignWriteListener implements Listener {
     public void onWirte(SignChangeEvent event) {
 
         //If player wants to create a briefkasten
-        if(event.getLine(0).equalsIgnoreCase("[Briefkasten]")) {
+        if (event.getLine(0).equalsIgnoreCase("[Briefkasten]")) {
 
             Player p = event.getPlayer();
             FTSUser user = plugin.getPlayer().get(p);
@@ -42,23 +42,21 @@ public class SignWriteListener implements Listener {
 
             Block block = event.getBlock();
 
-            if (block != null && block.getState() instanceof Sign)
-            {
+            if (block != null && block.getState() instanceof Sign) {
                 BlockData data = block.getBlockData();
-                if (data instanceof Directional)
-                {
-                    Directional directional = (Directional)data;
+                if (data instanceof Directional) {
+                    Directional directional = (Directional) data;
                     Block blockBehind = block.getRelative(directional.getFacing().getOppositeFace());
 
-                    if(blockBehind.getType() == Material.CHEST) {
+                    if (blockBehind.getType() == Material.CHEST) {
 
-                        if(plugin.briefkasten.containsKey(p.getUniqueId())) {
+                        if (plugin.briefkasten.containsKey(p.getUniqueId())) {
 
                             Briefkasten briefkasten = plugin.briefkasten.get(p.getUniqueId());
 
                             p.sendMessage("§cDu hast bereits einen Briefkasten, zerstöre diesen, bevor du einen neuen erstellst");
                             p.sendMessage("§cFalls du vergessen hast wo er ist, hier die Koordinaten:");
-                            p.sendMessage("§cX: "+briefkasten.getLocation().getX() + " Y: " +briefkasten.getLocation().getY() + " Z: " + briefkasten.getLocation().getZ());
+                            p.sendMessage("§cX: " + briefkasten.getLocation().getX() + " Y: " + briefkasten.getLocation().getY() + " Z: " + briefkasten.getLocation().getZ());
 
                             event.setCancelled(true);
 
@@ -86,21 +84,36 @@ public class SignWriteListener implements Listener {
         if (event.getLine(0).equalsIgnoreCase("Schwarzes Brett"))
             if (event.getLine(1).length() > 3) {
                 String name = event.getLine(1);
-                if (event.getLine(2).equalsIgnoreCase(""))
-                    if (event.getLine(3).equalsIgnoreCase("")) {
-
-                        org.bukkit.block.Sign sign = (org.bukkit.block.Sign) event.getBlock().getState();
-                        event.setLine(0, "§4Schwarzes Brett");
-                        for (Brett all : plugin.bretter.values()) {
-                            if (all.getName().equals(name)) {
-                                event.getPlayer().sendMessage("§cDieser Name ist schon vorhanden. Probier ein anderen");
-                                return;
-                            }
-                        }
-                        plugin.bretter.put(event.getBlock().getLocation(), new Brett(sign, event.getBlock().getLocation(), event.getPlayer().getUniqueId(), name, plugin));
-                        event.getPlayer().sendMessage("§7[§bSchwarzes Brett§7] Du hast das Schwarze Brett erfolgreich erstellt");
-
+                boolean admin = false;
+                if (event.getLine(3).equalsIgnoreCase("Admin")) {
+                    if (event.getPlayer().hasPermission("ftsengine.brett.admin")) {
+                        admin = true;
+                    } else {
+                        event.setCancelled(true);
+                        event.getPlayer().sendMessage("§cDu darfst keine Admin-Schilder erstellen!");
                     }
+                }
+                if (event.getLine(2).equalsIgnoreCase("")) {
+
+
+                    org.bukkit.block.Sign sign = (org.bukkit.block.Sign) event.getBlock().getState();
+                    event.setLine(0, "§4Schwarzes Brett");
+                    event.setLine(2, "");
+
+                    if (admin)
+                        event.setLine(3, "§7[Admin]");
+                    else event.setLine(3, "");
+
+                    for (Brett all : plugin.bretter.values()) {
+                        if (all.getName().equals(name)) {
+                            event.getPlayer().sendMessage("§cDieser Name ist schon vorhanden. Probier ein anderen");
+                            return;
+                        }
+                    }
+                    plugin.bretter.put(event.getBlock().getLocation(), new Brett(sign, event.getBlock().getLocation(), event.getPlayer().getUniqueId(), name, admin, plugin));
+                    event.getPlayer().sendMessage("§7[§bSchwarzes Brett§7] Du hast das Schwarze Brett erfolgreich erstellt");
+
+                }
             } else
                 event.getPlayer().sendMessage("§7[§bSchwarzes Brett§7] Der Name (2. Zeile) muss mind. 4 Zeichen haben!");
         if (!(event.getPlayer().hasPermission("blackboard.create"))) {
