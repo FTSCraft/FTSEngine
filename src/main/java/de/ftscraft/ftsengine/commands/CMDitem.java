@@ -34,7 +34,20 @@ public class CMDitem implements CommandExecutor {
 
         forbiddenItems.addAll(Arrays.asList(BackpackType.LARGE.getName(), BackpackType.TINY.getName(), BackpackType.ENDER.getName()));
 
-        forbiddenNames.addAll(Arrays.asList("§5Dietrich"));
+        forbiddenNames.addAll(Arrays.asList("§5Dietrich",
+                "Pfeife",
+                "Goldene Pfeife",
+                "Misteltabak",
+                "Tropischer Tabak",
+                "Netherwarzen Tabak",
+                "Pilztabak",
+                "DocWeed",
+                "Rucksack",
+                "Handschellen",
+                "Horn",
+                "Marmelade",
+                "schloss",
+                "Süßer Fisch"));
     }
 
     @Override
