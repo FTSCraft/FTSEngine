@@ -126,6 +126,18 @@ public class PlayerInteractListener implements Listener {
 
         if (e.getAction().equals(Action.RIGHT_CLICK_BLOCK)) {
             if (e.getClickedBlock().getBlockData() instanceof WallSign || e.getClickedBlock().getBlockData() instanceof Sign) {
+                org.bukkit.block.Sign sign = (org.bukkit.block.Sign) e.getClickedBlock().getState();
+                if (sign.getLine(0).equalsIgnoreCase("§4Schwarzes Brett")) {
+                    if(sign.getLine(1).equalsIgnoreCase("§bGlobal")) {
+                        for (Brett value : plugin.bretter.values()) {
+                            if(value.getName().equalsIgnoreCase("Global")) {
+                                plugin.getPlayer().get(e.getPlayer()).setBrett(value);
+                                value.getGui().open(e.getPlayer(), 1);
+                                value.checkForRunOut();
+                            }
+                        }
+                    }
+                }
                 if (plugin.bretter.containsKey(e.getClickedBlock().getLocation())) {
                     plugin.bretter.get(e.getClickedBlock().getLocation()).getGui().open(e.getPlayer(), 1);
                     Brett brett = plugin.bretter.get(e.getClickedBlock().getLocation());

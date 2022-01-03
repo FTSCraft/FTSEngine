@@ -41,6 +41,7 @@ public class CMDitem implements CommandExecutor {
                 "Tropischer Tabak",
                 "Netherwarzen Tabak",
                 "Pilztabak",
+                "tabak",
                 "DocWeed",
                 "Rucksack",
                 "Handschellen",

@@ -79,8 +79,8 @@ public class InventoryClickListener implements Listener {
 
                     int price;
                     if (brett.isAdmin())
-                        price = 50;
-                    else price = 1;
+                        price = 0;
+                    else price = 0;
                     if (!plugin.getEcon().has(p, price)) {
                         p.sendMessage("§cDu hast nicht genug Geld!");
                         return;

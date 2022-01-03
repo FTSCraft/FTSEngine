@@ -85,12 +85,23 @@ public class SignWriteListener implements Listener {
             if (event.getLine(1).length() > 3) {
                 String name = event.getLine(1);
                 boolean admin = false;
+                boolean global = false;
                 if (event.getLine(3).equalsIgnoreCase("Admin")) {
                     if (event.getPlayer().hasPermission("ftsengine.brett.admin")) {
                         admin = true;
                     } else {
                         event.setCancelled(true);
                         event.getPlayer().sendMessage("§cDu darfst keine Admin-Schilder erstellen!");
+                        return;
+                    }
+                }
+                if (name.equalsIgnoreCase("Global")) {
+                    if (event.getPlayer().hasPermission("ftsengine.brett.admin")) {
+                        global = true;
+                    } else {
+                        event.setCancelled(true);
+                        event.getPlayer().sendMessage("§cDu darfst keine Admin-Schilder erstellen!");
+                        return;
                     }
                 }
                 if (event.getLine(2).equalsIgnoreCase("")) {
@@ -104,12 +115,24 @@ public class SignWriteListener implements Listener {
                         event.setLine(3, "§7[Admin]");
                     else event.setLine(3, "");
 
+                    if (global)
+                        event.setLine(1, "§bGlobal");
+
+                    boolean firstGlobal = true;
+
                     for (Brett all : plugin.bretter.values()) {
                         if (all.getName().equals(name)) {
+                            if(global) {
+                                firstGlobal = false;
+                                break;
+                            }
                             event.getPlayer().sendMessage("§cDieser Name ist schon vorhanden. Probier ein anderen");
+                            event.setCancelled(true);
                             return;
                         }
                     }
+
+                    if(firstGlobal)
                     plugin.bretter.put(event.getBlock().getLocation(), new Brett(sign, event.getBlock().getLocation(), event.getPlayer().getUniqueId(), name, admin, plugin));
                     event.getPlayer().sendMessage("§7[§bSchwarzes Brett§7] Du hast das Schwarze Brett erfolgreich erstellt");
 

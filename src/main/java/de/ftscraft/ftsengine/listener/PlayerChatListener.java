@@ -33,22 +33,22 @@ public class PlayerChatListener implements Listener {
             if (plugin.playerBrettNote.get(p) != null) {
                 if (!(plugin.playerBrettNote.get(p).isTitle())) {
                     e.setCancelled(true);
-                    if (e.getMessage().length() < 51 && e.getMessage().length() > 4) {
+                    if (e.getMessage().length() > 4) {
                         BrettNote bn = plugin.playerBrettNote.get(p);
                         bn.setTitle(e.getMessage());
-                        p.sendMessage("§7[§bSchwarzes Brett§7] Perfekt! Jetzt bitte die Beschreibung (max. 150, mind. 10 Zeichen)");
+                        p.sendMessage("§7[§bSchwarzes Brett§7] Perfekt! Jetzt bitte die Beschreibung (mind. 10 Zeichen)");
                     } else
-                        p.sendMessage("§7[§bSchwarzes Brett§7] Der Titel muss mind. 5 Zeichen haben und darf max. 50 Zeichen haben");
+                        p.sendMessage("§7[§bSchwarzes Brett§7] Der Titel muss mind. 5 Zeichen haben.");
                 } else if (!(plugin.playerBrettNote.get(p).isContent())) {
                     e.setCancelled(true);
-                    if (e.getMessage().length() < 151 && e.getMessage().length() > 9) {
+                    if (e.getMessage().length() > 9) {
                         BrettNote bn = plugin.playerBrettNote.get(p);
                         bn.setContent(e.getMessage());
                         bn.addToBrett();
                         //Geld
                         OfflinePlayer op = Bukkit.getOfflinePlayer(p.getUniqueId());
                         int price;
-                        if(bn.getBrett().isAdmin())
+                        if (bn.getBrett().isAdmin())
                             price = 0;
                         else price = 0;
                         if (plugin.getEcon().has(op, price)) {
@@ -57,19 +57,20 @@ public class PlayerChatListener implements Listener {
                             plugin.getEcon().depositPlayer(c, price);
                             p.sendMessage("§7[§bSchwarzes Brett§7] Ok! Die Notiz wurde erstellt");
 
-                            if(bn.getBrett().isAdmin()) {
+                            if (bn.getBrett().isAdmin()) {
                                 Ausweis ausweis = plugin.getAusweis(p);
                                 plugin.getServer().broadcastMessage("§7[§bMarktschreier§7] Es wurde etwas neues am Schwarzen Brett in Lohengrin von §c" + ausweis.getFirstName() + " " + ausweis.getLastName() + " §7mit dem Titel §c" + bn.getTitle() + " §7angeheftet");
                             }
 
                         } else p.sendMessage("§7Du hast nicht genug Geld!");
-                    }
+                    } else
+                        p.sendMessage("§7Bitte mind. 10 Zeichen in der Beschreibung!");
                 }
             }
         }
 
-            return;
-        }
+        return;
+    }
         /*
         Player p = e.getPlayer();
 
@@ -78,7 +79,6 @@ public class PlayerChatListener implements Listener {
 
         e.setCancelled(true);
         */
-
 
 
 }
