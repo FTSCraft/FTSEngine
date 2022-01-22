@@ -15,7 +15,7 @@ import org.spigotmc.event.entity.EntityMountEvent;
 public class EntityClickListener implements Listener
 {
 
-    private Engine plugin;
+    private final Engine plugin;
 
     public EntityClickListener(Engine plugin)
     {

@@ -10,7 +10,7 @@ import org.bukkit.entity.Player;
 
 public class CMDklopfen implements CommandExecutor {
 
-    private Engine plugin;
+    private final Engine plugin;
 
     public CMDklopfen(Engine plugin) {
         this.plugin = plugin;

@@ -18,8 +18,8 @@ import org.bukkit.material.Stairs;
 
 public class FTSUser {
 
-    private Engine plugin;
-    private Player player;
+    private final Engine plugin;
+    private final Player player;
 
     private Location beforeSitting;
 
@@ -47,7 +47,7 @@ public class FTSUser {
 
     }
 
-    private Ausweis ausweis;
+    private final Ausweis ausweis;
     private boolean sits = false;
     ArmorStand sit_stand;
     private int lanzenschlaege;

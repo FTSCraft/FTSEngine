@@ -9,7 +9,7 @@ import org.bukkit.entity.Player;
 public class CMDreiten implements CommandExecutor
 {
 
-    private Engine plugin;
+    private final Engine plugin;
 
     public CMDreiten(Engine plugin)
     {

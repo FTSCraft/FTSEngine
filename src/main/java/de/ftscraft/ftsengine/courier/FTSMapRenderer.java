@@ -10,10 +10,10 @@ import java.util.Calendar;
 
 public class FTSMapRenderer extends org.bukkit.map.MapRenderer {
 
-    private String msg;
-    private String date;
-    private Engine plugin;
-    private boolean debug = true;
+    private final String msg;
+    private final String date;
+    private final Engine plugin;
+    private final boolean debug = true;
 
     Brief brief;
 

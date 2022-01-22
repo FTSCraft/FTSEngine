@@ -14,15 +14,15 @@ import java.util.UUID;
 public class Brett
 {
 
-    private String name;
-    private UUID creator;
-    private BrettSign sign;
-    private BrettGUI gui;
-    private ArrayList<BrettNote> notes;
-    private File file;
-    private YamlConfiguration cfg;
-    private Engine plugin;
-    private boolean admin;
+    private final String name;
+    private final UUID creator;
+    private final BrettSign sign;
+    private final BrettGUI gui;
+    private final ArrayList<BrettNote> notes;
+    private final File file;
+    private final YamlConfiguration cfg;
+    private final Engine plugin;
+    private final boolean admin;
 
     public Brett(Sign sign, Location location, UUID creator, String name, boolean admin, Engine plugin) {
         this.name = name;

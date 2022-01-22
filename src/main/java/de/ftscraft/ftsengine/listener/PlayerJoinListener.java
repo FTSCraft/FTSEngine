@@ -14,7 +14,7 @@ import org.bukkit.inventory.ItemStack;
 public class PlayerJoinListener implements Listener
 {
 
-    private Engine plugin;
+    private final Engine plugin;
 
     public PlayerJoinListener(Engine plugin)
     {

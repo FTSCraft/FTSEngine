@@ -12,8 +12,8 @@ import org.bukkit.entity.Player;
 
 public class CMDkussen implements CommandExecutor {
 
-    private Engine plugin;
-    private Messages messages = new Messages();
+    private final Engine plugin;
+    private final Messages messages = new Messages();
 
     public CMDkussen(Engine plugin) {
         this.plugin = plugin;

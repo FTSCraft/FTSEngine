@@ -8,9 +8,9 @@ import java.util.UUID;
 public class BrettSign
 {
 
-    private Sign sign;
-    private Location location;
-    private UUID creator;
+    private final Sign sign;
+    private final Location location;
+    private final UUID creator;
 
     BrettSign(Sign sign, Location location, UUID creator) {
         this.creator = creator;

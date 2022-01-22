@@ -27,7 +27,7 @@ import java.util.Objects;
 
 public class InventoryClickListener implements Listener {
 
-    private Engine plugin;
+    private final Engine plugin;
 
     public InventoryClickListener(Engine plugin) {
         this.plugin = plugin;

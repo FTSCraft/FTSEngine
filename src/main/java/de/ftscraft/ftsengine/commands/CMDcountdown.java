@@ -10,7 +10,7 @@ import org.bukkit.entity.Player;
 public class CMDcountdown implements CommandExecutor
 {
 
-    private Engine plugin;
+    private final Engine plugin;
 
 
     public CMDcountdown(Engine plugin)

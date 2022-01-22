@@ -12,7 +12,7 @@ import org.bukkit.inventory.meta.MapMeta;
 
 public class ItemSwitchListener implements Listener {
 
-    private Engine plugin;
+    private final Engine plugin;
 
     public ItemSwitchListener(Engine plugin)
     {

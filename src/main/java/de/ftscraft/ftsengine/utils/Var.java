@@ -17,8 +17,8 @@ import java.util.UUID;
 public class Var
 {
 
-    private UUIDFetcher uF;
-    private Engine plugin;
+    private final UUIDFetcher uF;
+    private final Engine plugin;
 
     public Var(Engine plugin)
     {
@@ -175,7 +175,7 @@ public class Var
         return a;
     }
 
-    private List<Material> carpets = new ArrayList<>();
+    private final List<Material> carpets = new ArrayList<>();
 
     public List<Material> getCarpets() {
 
@@ -194,7 +194,7 @@ public class Var
 
     }
 
-    private List<Material> noStairs = new ArrayList<>();
+    private final List<Material> noStairs = new ArrayList<>();
 
     public List<Material> getNoStairs() {
 

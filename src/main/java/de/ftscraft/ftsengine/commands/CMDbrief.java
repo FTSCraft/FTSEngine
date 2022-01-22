@@ -18,7 +18,7 @@ import java.util.UUID;
 
 public class CMDbrief implements CommandExecutor {
 
-    private Engine plugin;
+    private final Engine plugin;
 
     public CMDbrief(Engine plugin) {
         this.plugin = plugin;
@@ -88,7 +88,7 @@ public class CMDbrief implements CommandExecutor {
 
                 plugin.briefkasten.remove(p.getUniqueId());
 
-                File file = new File(plugin.getDataFolder() + "//briefkasten//" + p.getUniqueId().toString()+ ".yml");
+                File file = new File(plugin.getDataFolder() + "//briefkasten//" + p.getUniqueId() + ".yml");
 
                 file.getName();
 

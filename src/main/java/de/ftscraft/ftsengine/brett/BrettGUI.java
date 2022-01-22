@@ -13,10 +13,14 @@ import java.util.List;
 
 public class BrettGUI {
 
-    private Inventory inv_page1, inv_page2, inv_page3, inv_page4, inv_page5;
+    private final Inventory inv_page1;
+    private final Inventory inv_page2;
+    private final Inventory inv_page3;
+    private final Inventory inv_page4;
+    private final Inventory inv_page5;
 
-    private Brett brett;
-    private Engine plugin;
+    private final Brett brett;
+    private final Engine plugin;
 
     public BrettGUI(Brett brett, Engine plugin) {
         this.brett = brett;

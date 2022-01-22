@@ -12,7 +12,7 @@ import org.spigotmc.event.entity.EntityDismountEvent;
 
 public class SneakListener implements Listener {
 
-    private Engine plugin;
+    private final Engine plugin;
 
     public SneakListener(Engine plugin) {
         this.plugin = plugin;

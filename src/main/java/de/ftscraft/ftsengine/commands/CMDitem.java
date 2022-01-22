@@ -20,10 +20,10 @@ import java.util.List;
 
 public class CMDitem implements CommandExecutor {
 
-    private Engine plugin;
+    private final Engine plugin;
 
-    private List<String> forbiddenItems;
-    private List<String> forbiddenNames;
+    private final List<String> forbiddenItems;
+    private final List<String> forbiddenNames;
 
     public CMDitem(Engine plugin) {
         this.plugin = plugin;

@@ -131,6 +131,7 @@ public class Engine extends JavaPlugin implements Listener {
         new CMDspucken(this);
         new CMDcountdown(this);
         new CMDgehen(this);
+        new CMDzauber(this);
         new CMDitem(this);
         new CMDftsengine(this);
         new CMDklopfen(this);
@@ -207,7 +208,7 @@ public class Engine extends JavaPlugin implements Listener {
         sendTablistHeaderAndFooter(p, "§6§lplay.ftscraft.de", "");
     }
 */
-    private HashMap<OfflinePlayer, Long> ausweisCooldown = new HashMap<>();
+    private final HashMap<OfflinePlayer, Long> ausweisCooldown = new HashMap<>();
 
     @EventHandler
     public void onItemInteract(PlayerInteractEvent e) {

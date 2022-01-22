@@ -11,7 +11,7 @@ import org.bukkit.event.Listener;
 
 public class PacketReciveListener implements Listener {
 
-    private Engine plugin;
+    private final Engine plugin;
 
     public PacketReciveListener(Engine plugin) {
         this.plugin = plugin;

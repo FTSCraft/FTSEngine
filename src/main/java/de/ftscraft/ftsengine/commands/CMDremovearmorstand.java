@@ -11,7 +11,7 @@ import org.bukkit.entity.Player;
 public class CMDremovearmorstand implements CommandExecutor
 {
 
-    private Engine plugin;
+    private final Engine plugin;
 
     public CMDremovearmorstand(Engine plugin)
     {

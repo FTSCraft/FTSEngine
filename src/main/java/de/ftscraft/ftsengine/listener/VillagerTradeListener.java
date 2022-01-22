@@ -11,7 +11,7 @@ import org.bukkit.event.inventory.InventoryType;
 
 public class VillagerTradeListener implements Listener {
 
-    private Engine plugin;
+    private final Engine plugin;
 
     public VillagerTradeListener(Engine plugin) {
         this.plugin = plugin;

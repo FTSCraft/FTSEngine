@@ -7,9 +7,9 @@ public enum BackpackType
     LARGE("§4Großer Rucksack", 6 * 9, "§7Dieser nützliche Rucksack hat Platz für viele Sachen"),
     ENDER("§6Ender Rucksack", -1, "§7Öffne mit diesem Rucksack deine Ender-Kiste");
 
-    private String name;
-    private int size;
-    private String lore;
+    private final String name;
+    private final int size;
+    private final String lore;
 
     BackpackType(String name, int size, String lore)
     {

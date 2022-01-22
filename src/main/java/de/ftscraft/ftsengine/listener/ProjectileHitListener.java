@@ -11,7 +11,7 @@ import org.bukkit.util.Vector;
 
 public class ProjectileHitListener implements Listener {
 
-    private Engine plugin;
+    private final Engine plugin;
 
     public ProjectileHitListener(Engine plugin) {
         this.plugin = plugin;

@@ -9,7 +9,7 @@ import org.bukkit.inventory.ItemStack;
 
 public class CMDgehen implements CommandExecutor {
 
-    private Engine plugin;
+    private final Engine plugin;
 
     public CMDgehen(Engine plugin) {
         this.plugin = plugin;

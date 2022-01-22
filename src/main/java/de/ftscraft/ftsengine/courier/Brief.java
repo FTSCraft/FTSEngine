@@ -16,12 +16,12 @@ public class Brief {
 
     public String msg;
     public String creator;
-    private MapView mv;
+    private final MapView mv;
     public long creation;
-    private FTSMapRenderer renderer;
+    private final FTSMapRenderer renderer;
     public int id;
 
-    private Engine plugin;
+    private final Engine plugin;
 
     private boolean error = false;
 

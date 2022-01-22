@@ -10,7 +10,7 @@ import org.bukkit.event.inventory.InventoryMoveItemEvent;
 public class ItemMoveListener implements Listener
 {
 
-    private Engine plugin;
+    private final Engine plugin;
 
     public ItemMoveListener(Engine plugin)
     {

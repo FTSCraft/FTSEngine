@@ -15,7 +15,7 @@ import java.util.List;
 public class CMDchannel implements CommandExecutor, TabCompleter
 {
 
-    private Engine plugin;
+    private final Engine plugin;
 
     public CMDchannel(Engine plugin)
     {

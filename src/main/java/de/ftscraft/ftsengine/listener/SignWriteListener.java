@@ -22,7 +22,7 @@ import java.util.logging.Level;
 
 public class SignWriteListener implements Listener {
 
-    private Engine plugin;
+    private final Engine plugin;
 
     public SignWriteListener(Engine plugin) {
         this.plugin = plugin;

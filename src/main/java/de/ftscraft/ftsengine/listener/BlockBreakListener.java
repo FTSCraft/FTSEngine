@@ -75,7 +75,7 @@ public class BlockBreakListener implements Listener
 
                     plugin.briefkasten.remove(op.getUniqueId());
 
-                    File file = new File(plugin.getDataFolder() + "//briefkasten//" + event.getPlayer().getUniqueId().toString()+ ".yml");
+                    File file = new File(plugin.getDataFolder() + "//briefkasten//" + event.getPlayer().getUniqueId() + ".yml");
 
                     file.getName();
 

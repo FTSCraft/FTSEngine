@@ -10,12 +10,12 @@ import org.bukkit.entity.Player;
 public class CountdownScheduler implements Runnable
 {
 
-    private Engine plugin;
-    private Player p;
+    private final Engine plugin;
+    private final Player p;
     private Player t;
     private String msg;
     private int seconds;
-    private int taskid;
+    private final int taskid;
     private SCHEDULERTYPE type;
 
     public CountdownScheduler(Engine plugin, int seconds, Player p)

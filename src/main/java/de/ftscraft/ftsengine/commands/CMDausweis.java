@@ -20,8 +20,8 @@ import java.util.UUID;
 
 public class CMDausweis implements CommandExecutor {
 
-    private Engine plugin;
-    private Messages msgs;
+    private final Engine plugin;
+    private final Messages msgs;
 
     public CMDausweis(Engine plugin) {
         this.plugin = plugin;

@@ -8,7 +8,7 @@ import org.bukkit.event.player.PlayerQuitEvent;
 
 public class PlayerQuitListener implements Listener
 {
-    private Engine plugin;
+    private final Engine plugin;
 
     public PlayerQuitListener(Engine plugin)
     {

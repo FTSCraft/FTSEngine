@@ -17,7 +17,7 @@ import java.util.concurrent.ThreadLocalRandom;
 
 public class CMDwürfel implements CommandExecutor {
 
-    private Engine plugin;
+    private final Engine plugin;
 
     private final int DICES = 3;
 
@@ -114,11 +114,12 @@ public class CMDwürfel implements CommandExecutor {
         ELF("Elf", "Elfin", 25, 2, 10),
         GOBLIN("Goblin", "Goblin", 15, 3, 9);
 
-        private String mName;
-        private String fName;
+        private final String mName;
+        private final String fName;
         private int pips;
-        private int chance;
-        private int magicMin, magicMax;
+        private final int chance;
+        private final int magicMin;
+        private final int magicMax;
 
         DiceType(String mName, String fName, int chance, int magicMin, int magicMax) {
             this.mName = mName;

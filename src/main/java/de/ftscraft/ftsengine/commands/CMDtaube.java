@@ -14,7 +14,7 @@ import java.util.ArrayList;
 
 public class CMDtaube implements CommandExecutor {
 
-    private Engine plugin;
+    private final Engine plugin;
 
     public CMDtaube(Engine plugin) {
         this.plugin = plugin;

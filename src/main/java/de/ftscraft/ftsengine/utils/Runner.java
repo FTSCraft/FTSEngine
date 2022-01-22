@@ -11,12 +11,12 @@ import java.util.ArrayList;
 public class Runner implements Runnable
 {
 
-    private Engine plugin;
-    private int seconds_tab = 0;
-    private int tablist_status = 0;
+    private final Engine plugin;
+    private final int seconds_tab = 0;
+    private final int tablist_status = 0;
     private ArrayList<String> footer;
 
-    private ArrayList<Player> sentUserMessage = new ArrayList<>();
+    private final ArrayList<Player> sentUserMessage = new ArrayList<>();
 
     public Runner(Engine plugin)
     {

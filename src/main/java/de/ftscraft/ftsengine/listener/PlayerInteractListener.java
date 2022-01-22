@@ -35,10 +35,10 @@ import java.util.Random;
 
 public class PlayerInteractListener implements Listener {
 
-    private Engine plugin;
-    private ProtocolManager protocolManager;
+    private final Engine plugin;
+    private final ProtocolManager protocolManager;
 
-    private ArrayList<Player> hornCooldown = new ArrayList<>();
+    private final ArrayList<Player> hornCooldown = new ArrayList<>();
 
     public PlayerInteractListener(Engine plugin) {
         this.plugin = plugin;

@@ -14,12 +14,12 @@ import java.util.logging.Logger;
 
 public class Briefkasten {
 
-    private Engine plugin;
+    private final Engine plugin;
 
-    private Location location;
+    private final Location location;
     private Chest chest;
 
-    private UUID player;
+    private final UUID player;
 
     public Briefkasten(Engine plugin, Location location, UUID player) {
         this.plugin = plugin;

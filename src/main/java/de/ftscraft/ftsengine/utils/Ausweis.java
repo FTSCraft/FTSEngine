@@ -17,7 +17,7 @@ import java.util.Calendar;
 
 public class Ausweis {
 
-    private String UUID;
+    private final String UUID;
     private String firstName,
             lastName,
             spitzname;
@@ -31,7 +31,7 @@ public class Ausweis {
     private String forumLink;
     public final Integer id;
 
-    private Engine plugin;
+    private final Engine plugin;
 
     public Ausweis(Engine plugin, String UUID, String firstName, String lastName, String spitzname, Gender gender, String race, String nation, String desc, String religion, String link, Integer id) {
         this.plugin = plugin;

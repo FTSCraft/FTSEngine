@@ -23,7 +23,7 @@ import java.util.*;
 
 public class UserIO {
 
-    private Engine plugin;
+    private final Engine plugin;
 
     private File folder;
 

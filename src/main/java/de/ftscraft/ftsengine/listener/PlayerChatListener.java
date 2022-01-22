@@ -16,7 +16,7 @@ import java.util.Objects;
 
 public class PlayerChatListener implements Listener {
 
-    private Engine plugin;
+    private final Engine plugin;
 
     public PlayerChatListener(Engine plugin) {
         this.plugin = plugin;

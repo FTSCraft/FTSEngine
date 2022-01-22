@@ -16,7 +16,7 @@ import java.util.Random;
 
 public class DamageListener implements Listener {
 
-    private Engine plugin;
+    private final Engine plugin;
 
     public DamageListener(Engine plugin) {
         this.plugin = plugin;

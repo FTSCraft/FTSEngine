@@ -15,11 +15,11 @@ import java.util.Arrays;
 public class Backpack
 {
 
-    private int id;
-    private BackpackType type;
-    private Inventory inventory;
+    private final int id;
+    private final BackpackType type;
+    private final Inventory inventory;
 
-    private Engine plugin;
+    private final Engine plugin;
 
     public Backpack(Engine plugin, BackpackType type, int id, Inventory inv) {
         this.plugin = plugin;

@@ -14,7 +14,7 @@ import org.bukkit.util.Vector;
 
 public class CMDspucken implements CommandExecutor {
 
-    private Engine plugin;
+    private final Engine plugin;
 
     public CMDspucken(Engine plugin) {
         this.plugin = plugin;

@@ -12,7 +12,7 @@ import org.bukkit.entity.Player;
 public class CMDschlagen implements CommandExecutor
 {
 
-    private Engine plugin;
+    private final Engine plugin;
 
     public CMDschlagen(Engine plugin)
     {
