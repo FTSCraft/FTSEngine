@@ -3,7 +3,7 @@ package de.ftscraft.ftsengine.utils;
 public class Messages
 {
 
-    public final String PREFIX = "§7[§5FTS-Engine§7] ",
+    public static final String PREFIX = "§7[§5FTS-Engine§7] ",
                         NEED_AUSWEIS = PREFIX + "Du solltest dir erstmal ein Namen geben! (/ausweis name [Vorname] [Nachname]",
                         SUCC_CMD_AUSWEIS = PREFIX+"Dein*e §e%s §7ist nun §e%v§c.",
                         SUCC_COPY_AUSWEIS = PREFIX+"Du hast erfolgreich den Ausweis von %s kopiert!",
@@ -16,7 +16,9 @@ public class Messages
                         NOW_IN_CHANNEL = PREFIX+"Du bist nun im %s-Channel",
                         NOT_IN_ROLEPLAY = PREFIX + "Du bist nicht mehr im Roleplay Modus!",
                         ONLY_PLAYER = PREFIX + "Dieser Befehl ist nur für Spieler!",
-                        NOW_YOUR_HORSE = PREFIX + "Du besitzt nun dieses Pferd!";
+                        NOW_YOUR_HORSE = PREFIX + "Du besitzt nun dieses Pferd!",
+                        PLAYER_TOO_FAR_AWAY = PREFIX + "Der Spieler ist zu weit entfernt!",
+                        TARGET_NO_AUSWEIS = PREFIX + "Der Spieler hat keinen Ausweis!";
 
 
 }

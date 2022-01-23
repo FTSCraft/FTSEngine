@@ -61,7 +61,8 @@ public class CMDkussen implements CommandExecutor {
                         p.sendMessage(messages.PREFIX + "Der Spieler ist zu weit entfernt");
                 } else
                     p.sendMessage(messages.PREFIX + "Der Spieler hat keinen Ausweis");
-            }
+            }else
+                p.sendMessage("Der Spieler ist derzeit nicht online!");
 
         }
 
