@@ -128,6 +128,8 @@ public class Engine extends JavaPlugin implements Listener {
         new CMDwinken(this);
         new CMDschlagen(this);
         new CMDfasten(this);
+        new CMDohrfeige(this);
+        new CMDumarmen(this);
         new CMDremovearmorstand(this);
         new CMDspucken(this);
         new CMDcountdown(this);
