@@ -7,6 +7,7 @@ import org.bukkit.Particle;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
@@ -43,7 +44,11 @@ public class CMDohrfeige implements CommandExecutor {
                     if(target.getLocation().distance(p.getLocation()) < 4){
                         String message = "§c" + plugin.getAusweis(p).getFirstName() + " " + plugin.getAusweis(p).getLastName() + "§e gibt §c" + plugin.getAusweis(target).getFirstName() + " " + plugin.getAusweis(target).getLastName() + "§e eine Ohrfeige.";
                         p.sendMessage(message);
-
+                        for(Entity n : p.getNearbyEntities(15, 15, 15)) {
+                            if (n instanceof Player) {
+                                n.sendMessage(message);
+                            }
+                        }
                         //for (int = 0; i < 4; i++){
                         p.getWorld().spawnParticle(Particle.DAMAGE_INDICATOR, p.getLocation().add(0,2.2,0), 4, 0.2, 0.3, 0.2);
                         target.getWorld().spawnParticle(Particle.DAMAGE_INDICATOR, p.getLocation().add(0,2.2,0), 4, 0.2, 0.3, 0.2);
