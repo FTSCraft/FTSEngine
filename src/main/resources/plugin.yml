@@ -2,7 +2,7 @@ name: FTSEngine
 author: halberfan
 main: de.ftscraft.ftsengine.main.Engine
 version: "1.7.1"
-api-version: 1.17
+api-version: 1.18.1
 depend: [Vault, ProtocolLib, LuckPerms]
 softdepend: [Shopkeepers, Dynmap]
 
