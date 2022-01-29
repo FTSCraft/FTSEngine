@@ -2,6 +2,7 @@ package de.ftscraft.ftsengine.commands;
 
 import de.ftscraft.ftsengine.main.Engine;
 import de.ftscraft.ftsengine.utils.CountdownScheduler;
+import de.ftscraft.ftsengine.utils.Messages;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -23,7 +24,7 @@ public class CMDcountdown implements CommandExecutor
     public boolean onCommand(CommandSender cs, Command cmd, String label, String[] args)
     {
         if(!(cs instanceof Player)) {
-            cs.sendMessage(plugin.msgs.ONLY_PLAYER);
+            cs.sendMessage(Messages.ONLY_PLAYER);
             return true;
         }
 
@@ -33,18 +34,18 @@ public class CMDcountdown implements CommandExecutor
             try {
                 secs = Integer.valueOf(args[0]);
             } catch(NumberFormatException e) {
-                cs.sendMessage(plugin.msgs.USAGE_NUMBER);
+                cs.sendMessage(Messages.USAGE_NUMBER);
                 return true;
             }
 
             if(secs > 30) {
-                cs.sendMessage(plugin.msgs.PREFIX + "Maximal 30 Sekunden!");
+                cs.sendMessage(Messages.PREFIX + "Maximal 30 Sekunden!");
                 return true;
             }
 
             new CountdownScheduler(plugin, secs, (Player)cs);
 
-            cs.sendMessage(plugin.msgs.PREFIX + "Der Countdown wurde gestartet!");
+            cs.sendMessage(Messages.PREFIX + "Der Countdown wurde gestartet!");
 
         }
 

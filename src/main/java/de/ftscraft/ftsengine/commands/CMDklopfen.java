@@ -1,7 +1,6 @@
 package de.ftscraft.ftsengine.commands;
 
 import de.ftscraft.ftsengine.main.Engine;
-import de.ftscraft.ftsengine.main.FTSUser;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;

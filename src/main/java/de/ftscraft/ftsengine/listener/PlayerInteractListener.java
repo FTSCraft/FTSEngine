@@ -3,13 +3,10 @@ package de.ftscraft.ftsengine.listener;
 import com.comphenix.protocol.PacketType;
 import com.comphenix.protocol.ProtocolManager;
 import com.comphenix.protocol.events.PacketContainer;
-import com.comphenix.protocol.wrappers.EnumWrappers;
-import com.comphenix.protocol.wrappers.WrappedChatComponent;
 import de.ftscraft.ftsengine.backpacks.Backpack;
 import de.ftscraft.ftsengine.backpacks.BackpackType;
 import de.ftscraft.ftsengine.brett.Brett;
 import de.ftscraft.ftsengine.main.Engine;
-import net.sf.cglib.asm.$ByteVector;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.Particle;
@@ -18,11 +15,9 @@ import org.bukkit.block.data.type.Sign;
 import org.bukkit.block.data.type.Slab;
 import org.bukkit.block.data.type.Stairs;
 import org.bukkit.block.data.type.WallSign;
-import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
-import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
@@ -30,7 +25,6 @@ import org.bukkit.inventory.ItemStack;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Random;
 
 public class PlayerInteractListener implements Listener {

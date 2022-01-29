@@ -8,7 +8,6 @@ import org.bukkit.configuration.file.YamlConfiguration;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.UUID;
 
 public class Brett
@@ -28,7 +27,7 @@ public class Brett
         this.name = name;
         this.creator = creator;
         this.admin = admin;
-        this.notes = new ArrayList();
+        this.notes = new ArrayList<>();
         this.plugin = plugin;
         this.gui = new BrettGUI(this, plugin);
         this.sign = new BrettSign(sign, location, creator);
@@ -63,7 +62,7 @@ public class Brett
         this.creator = creator;
         this.admin = admin;
         this.gui = new BrettGUI(this, plugin);
-        this.notes = new ArrayList();
+        this.notes = new ArrayList<>();
         this.plugin = plugin;
         this.sign = new BrettSign(sign, location, creator);
         this.file = new File(plugin.getDataFolder() + "//bretter//" + name + ".yml");
@@ -119,9 +118,8 @@ public class Brett
         return this.cfg;
     }
 
-    public boolean addNote(String title, String content, String creator, long time, int id) {
+    public void addNote(String title, String content, String creator, long time, int id) {
         new BrettNote(this, title, content, creator, id, time, this.plugin);
-        return false;
     }
 
     public void saveCfg() {
@@ -134,10 +132,8 @@ public class Brett
     }
 
     public void checkForRunOut() {
-        Iterator var1 = this.getNotes().iterator();
 
-        while(var1.hasNext()) {
-            BrettNote note = (BrettNote)var1.next();
+        for (BrettNote note : this.getNotes()) {
             if (note.getTime() + 604800000L <= System.currentTimeMillis()) {
                 note.remove();
             }

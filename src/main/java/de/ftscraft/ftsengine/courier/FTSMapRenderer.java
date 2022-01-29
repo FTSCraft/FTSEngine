@@ -1,8 +1,6 @@
 package de.ftscraft.ftsengine.courier;
 
 import de.ftscraft.ftsengine.main.Engine;
-import de.ftscraft.ftsengine.utils.Messages;
-import org.bukkit.Color;
 import org.bukkit.entity.Player;
 import org.bukkit.map.*;
 
@@ -12,7 +10,6 @@ public class FTSMapRenderer extends org.bukkit.map.MapRenderer {
 
     private final String msg;
     private final String date;
-    private final Engine plugin;
     private final boolean debug = true;
 
     Brief brief;
@@ -23,7 +20,6 @@ public class FTSMapRenderer extends org.bukkit.map.MapRenderer {
         Calendar cal = Calendar.getInstance();
         cal.setTimeInMillis(brief.creation);
         date = cal.get(Calendar.DAY_OF_MONTH) + "." + (cal.get(Calendar.MONTH) + 1);
-        this.plugin = plugin;
     }
 
     @Override

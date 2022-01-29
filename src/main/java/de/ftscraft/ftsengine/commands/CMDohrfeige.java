@@ -18,7 +18,7 @@ public class CMDohrfeige implements CommandExecutor {
 
     public CMDohrfeige(Engine plugin) {
         this.plugin = plugin;
-        plugin.getCommand("ohrfeige").setExecutor(this::onCommand);
+        plugin.getCommand("ohrfeige").setExecutor(this);
     }
 
     @Override
@@ -55,9 +55,9 @@ public class CMDohrfeige implements CommandExecutor {
                         //}
 
                     }else
-                        p.sendMessage(messages.PLAYER_TOO_FAR_AWAY);
+                        p.sendMessage(Messages.PLAYER_TOO_FAR_AWAY);
                 }else
-                    p.sendMessage(messages.TARGET_NO_AUSWEIS);
+                    p.sendMessage(Messages.TARGET_NO_AUSWEIS);
             }else
                 p.sendMessage("Der Spieler ist derzeit nicht online");
         }

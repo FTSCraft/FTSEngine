@@ -2,17 +2,13 @@ package de.ftscraft.ftsengine.listener;
 
 import de.ftscraft.ftsengine.brett.BrettNote;
 import de.ftscraft.ftsengine.main.Engine;
-import de.ftscraft.ftsengine.main.FTSUser;
 import de.ftscraft.ftsengine.utils.Ausweis;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
-import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
-
-import java.util.Objects;
 
 public class PlayerChatListener implements Listener {
 
@@ -48,9 +44,7 @@ public class PlayerChatListener implements Listener {
                         //Geld
                         OfflinePlayer op = Bukkit.getOfflinePlayer(p.getUniqueId());
                         int price;
-                        if (bn.getBrett().isAdmin())
-                            price = 0;
-                        else price = 0;
+                        price = 0;
                         if (plugin.getEcon().has(op, price)) {
                             plugin.getEcon().withdrawPlayer(op, price);
                             OfflinePlayer c = Bukkit.getOfflinePlayer(bn.getBrett().getCreator());

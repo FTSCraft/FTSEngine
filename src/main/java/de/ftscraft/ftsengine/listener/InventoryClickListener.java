@@ -8,18 +8,12 @@ import de.ftscraft.ftsengine.main.FTSUser;
 import de.ftscraft.ftsengine.utils.Messages;
 import net.md_5.bungee.api.chat.ClickEvent;
 import net.md_5.bungee.api.chat.ComponentBuilder;
-import org.bukkit.Bukkit;
-import org.bukkit.Location;
 import org.bukkit.Material;
-import org.bukkit.NetherWartsState;
-import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
-import org.bukkit.event.Event;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.*;
-import org.bukkit.inventory.InventoryHolder;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.ArrayList;
@@ -78,9 +72,7 @@ public class InventoryClickListener implements Listener {
                     }
 
                     int price;
-                    if (brett.isAdmin())
-                        price = 0;
-                    else price = 0;
+                    price = 0;
                     if (!plugin.getEcon().has(p, price)) {
                         p.sendMessage("§cDu hast nicht genug Geld!");
                         return;
@@ -195,7 +187,7 @@ public class InventoryClickListener implements Listener {
                 //if player uses number keys, cancel
                 if(event.getClick() == ClickType.NUMBER_KEY) {
                     event.setCancelled(true);
-                    event.getWhoClicked().sendMessage(new Messages().PREFIX + "Leider kannst du hier nicht deine Nummern benutzen.");
+                    event.getWhoClicked().sendMessage(Messages.PREFIX + "Leider kannst du hier nicht deine Nummern benutzen.");
                     return;
                 }
                 //check by raw slot if player is navigating in his inv or in chests
@@ -207,7 +199,7 @@ public class InventoryClickListener implements Listener {
                         if (BackpackType.getBackpackByName(event.getCurrentItem().getItemMeta().getDisplayName()) != null) {
 
                             //cancel
-                            event.getWhoClicked().sendMessage(new Messages().PREFIX + "Leider kannst du keine Rucksäcke in Enderchests oder Shulkerchests packen.");
+                            event.getWhoClicked().sendMessage(Messages.PREFIX + "Leider kannst du keine Rucksäcke in Enderchests oder Shulkerchests packen.");
                             event.setCancelled(true);
                             return;
 

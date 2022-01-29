@@ -3,11 +3,9 @@ package de.ftscraft.ftsengine.commands;
 import de.ftscraft.ftsengine.brett.Brett;
 import de.ftscraft.ftsengine.brett.BrettNote;
 import de.ftscraft.ftsengine.main.Engine;
-import org.bukkit.World;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Player;
 
 public class CMDftsengine implements CommandExecutor {
 
@@ -15,7 +13,7 @@ public class CMDftsengine implements CommandExecutor {
 
     public CMDftsengine(Engine plugin) {
         this.plugin = plugin;
-        this.plugin.getCommand("ftsengine").setExecutor(this::onCommand);
+        this.plugin.getCommand("ftsengine").setExecutor(this);
     }
 
     @Override

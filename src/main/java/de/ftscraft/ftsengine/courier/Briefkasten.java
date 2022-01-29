@@ -1,10 +1,7 @@
 package de.ftscraft.ftsengine.courier;
 
 import de.ftscraft.ftsengine.main.Engine;
-import de.ftscraft.ftsengine.utils.exceptions.BriefkastenNotFoundException;
-import org.bukkit.Chunk;
 import org.bukkit.Location;
-import org.bukkit.Material;
 import org.bukkit.block.Chest;
 import org.bukkit.inventory.ItemStack;
 
@@ -14,15 +11,12 @@ import java.util.logging.Logger;
 
 public class Briefkasten {
 
-    private final Engine plugin;
-
     private final Location location;
     private Chest chest;
 
     private final UUID player;
 
     public Briefkasten(Engine plugin, Location location, UUID player) {
-        this.plugin = plugin;
         this.location = location;
         this.player = player;
 

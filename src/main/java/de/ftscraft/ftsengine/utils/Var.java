@@ -18,11 +18,9 @@ public class Var
 {
 
     private final UUIDFetcher uF;
-    private final Engine plugin;
 
     public Var(Engine plugin)
     {
-        this.plugin = plugin;
         this.uF = new UUIDFetcher();
     }
 

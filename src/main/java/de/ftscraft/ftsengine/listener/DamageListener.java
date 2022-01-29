@@ -1,12 +1,7 @@
 package de.ftscraft.ftsengine.listener;
 
 import de.ftscraft.ftsengine.main.Engine;
-import org.bukkit.Location;
 import org.bukkit.Material;
-import org.bukkit.Particle;
-import org.bukkit.World;
-import org.bukkit.entity.Entity;
-import org.bukkit.entity.Horse;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;

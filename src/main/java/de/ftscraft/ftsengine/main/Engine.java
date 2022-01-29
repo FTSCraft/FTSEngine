@@ -34,7 +34,6 @@ import org.bukkit.scoreboard.Scoreboard;
 import org.bukkit.scoreboard.Team;
 
 import java.util.*;
-import java.util.List;
 import java.util.logging.Logger;
 
 public class Engine extends JavaPlugin implements Listener {
@@ -174,43 +173,6 @@ public class Engine extends JavaPlugin implements Listener {
         return chat;
     }
 
-    /*private void setupScoreboad() {
-        sb = Bukkit.getScoreboardManager().getMainScoreboard();
-        for (Team t : sb.getTeams()) {
-            t.unregister();
-        }
-        if (sb.getTeam("roleplay_modus") == null)
-            team = sb.registerNewTeam("roleplay_modus");
-        else team = sb.getTeam("roleplay_modus");
-        team.setOption(Team.Option.NAME_TAG_VISIBILITY, Team.OptionStatus.NEVER);
-
-        try {
-            for (int i = 0; i < TeamPrefixs.values().length; i++) {
-                String name = i + TeamPrefixs.values()[i].getTeamName();
-                sb.registerNewTeam(name);
-            }
-        } catch (Exception ignore) {
-            ignore.printStackTrace();
-        }
-    }
-
-    public void setPrefix(Player p) {
-        String team = null;
-        for (int i = 0; i < TeamPrefixs.values().length; i++) {
-            TeamPrefixs t = TeamPrefixs.values()[i];
-            if (p.hasPermission(t.getPermission())) {
-                team = i + t.getTeamName();
-            }
-            if (t == TeamPrefixs.REISENDER)
-                team = i + t.getTeamName();
-            if (team != null)
-                break;
-        }
-        Team t = sb.getTeam(team);
-        t.addPlayer(p);
-        sendTablistHeaderAndFooter(p, "§6§lplay.ftscraft.de", "");
-    }
-*/
     private final HashMap<OfflinePlayer, Long> ausweisCooldown = new HashMap<>();
 
     @EventHandler
@@ -351,12 +313,6 @@ public class Engine extends JavaPlugin implements Listener {
         lanze.setIngredient('*', Material.AIR);
         getServer().addRecipe(lanze);
 
-        /*mats.addAll(Arrays.asList(Material.ACACIA_STAIRS, Material.BRICK_STAIRS, Material.BIRCH_STAIRS, Material.COBBLESTONE_STAIRS,
-                Material.DARK_OAK_STAIRS, Material.JUNGLE_STAIRS, Material.NETHER_BRICK_STAIRS, Material.PURPUR_STAIRS, Material.QUARTZ_STAIRS,
-                Material.QUARTZ_STAIRS, Material.RED_SANDSTONE_STAIRS, Material.SANDSTONE_STAIRS, Material.SPRUCE_STAIRS, Material.MOSSY_STONE_BRICKS,
-                Material.OAK_STAIRS, Material.DARK_PRISMARINE_STAIRS, Material.PRISMARINE_STAIRS, Material.PRISMARINE_BRICK_STAIRS,
-                Material.END_STONE_BRICK_STAIRS,
-                Material.STONE_BRICK_STAIRS));*/
         mats.add(Material.DIRT_PATH);
 
         mats.addAll(var.getCarpets());
@@ -431,13 +387,6 @@ public class Engine extends JavaPlugin implements Listener {
 
         }
 
-
-        /*getServer().clearRecipes();
-        System.out.println("----");
-        for (Recipe recipe : backup) {
-            getServer().addRecipe(recipe);
-            System.out.println(recipe.getResult());
-        }*/
 
         //Iron Helmet
 

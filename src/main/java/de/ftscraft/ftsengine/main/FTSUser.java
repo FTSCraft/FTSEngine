@@ -4,7 +4,6 @@ import com.comphenix.protocol.wrappers.WrappedGameProfile;
 import de.ftscraft.ftsengine.brett.Brett;
 import de.ftscraft.ftsengine.courier.Briefkasten;
 import de.ftscraft.ftsengine.utils.Ausweis;
-import de.ftscraft.ftsengine.utils.TeamPrefixs;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -35,19 +34,14 @@ public class FTSUser {
     public FTSUser(Engine plugin, Player player) {
         this.plugin = plugin;
         this.player = player;
+        Ausweis ausweis;
         if (plugin.getAusweis(player) != null)
-            this.ausweis = plugin.getAusweis(player);
-        else this.ausweis = null;
+            ausweis = plugin.getAusweis(player);
+        else ausweis = null;
         sits = false;
-
-        /*if(ausweis == null)
-            TeamPrefixs.setPlayerPrefix(null, player);
-        else
-            TeamPrefixs.setPlayerPrefix(ausweis.getGender(), player);*/
 
     }
 
-    private final Ausweis ausweis;
     private boolean sits = false;
     ArmorStand sit_stand;
     private int lanzenschlaege;

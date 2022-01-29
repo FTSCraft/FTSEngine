@@ -3,15 +3,13 @@ package de.ftscraft.ftsengine.commands;
 import de.ftscraft.ftsengine.main.Engine;
 import de.ftscraft.ftsengine.utils.Ausweis;
 import de.ftscraft.ftsengine.utils.Gender;
-import de.ftscraft.ftsengine.utils.Var;
-import org.bukkit.Statistic;
+import de.ftscraft.ftsengine.utils.Messages;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 
-import java.util.Random;
 import java.util.concurrent.ThreadLocalRandom;
 
 
@@ -29,7 +27,7 @@ public class CMDwürfel implements CommandExecutor {
     @Override
     public boolean onCommand(CommandSender cs, Command cmd, String label, String[] args) {
         if (!(cs instanceof Player)) {
-            cs.sendMessage(plugin.msgs.ONLY_PLAYER);
+            cs.sendMessage(Messages.ONLY_PLAYER);
             return true;
         }
 

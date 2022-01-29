@@ -2,6 +2,7 @@ package de.ftscraft.ftsengine.commands;
 
 import de.ftscraft.ftsengine.main.Engine;
 import de.ftscraft.ftsengine.utils.CountdownScheduler;
+import de.ftscraft.ftsengine.utils.Messages;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Sound;
@@ -9,8 +10,6 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-
-import java.util.ArrayList;
 
 public class CMDtaube implements CommandExecutor {
 
@@ -24,7 +23,7 @@ public class CMDtaube implements CommandExecutor {
     @Override
     public boolean onCommand(CommandSender cs, Command cmd, String label, String[] args) {
         if (!(cs instanceof Player)) {
-            cs.sendMessage(plugin.msgs.ONLY_PLAYER);
+            cs.sendMessage(Messages.ONLY_PLAYER);
             return true;
         }
 
@@ -42,11 +41,11 @@ public class CMDtaube implements CommandExecutor {
 
                 for (Player t : Bukkit.getOnlinePlayers()) {
                     if (t == null) {
-                        p.sendMessage(plugin.msgs.PREFIX + "§7Der Spieler §c" + t.getName() + " §7wurde nicht gefunden");
+                        p.sendMessage(Messages.PREFIX + "§7Der Spieler §c" + t.getName() + " §7wurde nicht gefunden");
                     } else {
                         Location tl = t.getLocation();
                         if (!pl.getWorld().getName().equals(tl.getWorld().getName())) {
-                            p.sendMessage(plugin.msgs.NOT_IN_WORLD.replace("%s", t.getName()));
+                            p.sendMessage(Messages.NOT_IN_WORLD.replace("%s", t.getName()));
                             return true;
                         }
                         int seconds = 6;
@@ -75,11 +74,11 @@ public class CMDtaube implements CommandExecutor {
 
                 Player t = Bukkit.getPlayer(player[i]);
                 if (t == null) {
-                    p.sendMessage(plugin.msgs.PREFIX + "§7Der Spieler §c" + player[i] + " §7wurde nicht gefunden");
+                    p.sendMessage(Messages.PREFIX + "§7Der Spieler §c" + player[i] + " §7wurde nicht gefunden");
                 } else {
                     Location tl = t.getLocation();
                     if (pl.getWorld().getName() != tl.getWorld().getName()) {
-                        p.sendMessage(plugin.msgs.NOT_IN_WORLD.replace("%s", args[i]));
+                        p.sendMessage(Messages.NOT_IN_WORLD.replace("%s", args[i]));
                         return true;
                     }
                     double distance = t.getLocation().distance(p.getLocation());

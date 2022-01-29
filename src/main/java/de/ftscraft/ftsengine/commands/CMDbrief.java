@@ -3,10 +3,9 @@ package de.ftscraft.ftsengine.commands;
 import de.ftscraft.ftsengine.courier.Brief;
 import de.ftscraft.ftsengine.courier.Briefkasten;
 import de.ftscraft.ftsengine.main.Engine;
-import de.ftscraft.ftsengine.utils.ItemStacks;
+import de.ftscraft.ftsengine.utils.Messages;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
-import org.bukkit.OfflinePlayer;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -28,14 +27,9 @@ public class CMDbrief implements CommandExecutor {
     @Override
     public boolean onCommand(CommandSender cs, Command cmd, String label, String[] args) {
         if (!(cs instanceof Player)) {
-            cs.sendMessage(plugin.msgs.ONLY_PLAYER);
+            cs.sendMessage(Messages.ONLY_PLAYER);
             return true;
         }
-
-        /*if(cs instanceof Player) {
-            cs.sendMessage("§eDieser Command ist noch in Arbeit!");
-            return true;
-        }*/
 
         Player p = (Player) cs;
 
@@ -105,8 +99,8 @@ public class CMDbrief implements CommandExecutor {
 
             String msg = "";
             String name = p.getName();
-            for (int i = 0; i < args.length; i++) {
-                msg += " " + args[i];
+            for (String arg : args) {
+                msg += " " + arg;
             }
             msg = msg.replace("ä", "ae");
             msg = msg.replaceAll("ü", "ue");

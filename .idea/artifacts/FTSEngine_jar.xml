@@ -1,6 +1,6 @@
 <component name="ArtifactManager">
   <artifact type="jar" name="FTSEngine:jar">
-    <output-path>$USER_HOME$/OneDrive/Desktop/Development/Server 1.18 - Zauber/plugins</output-path>
+    <output-path>$USER_HOME$/Documents/FTS/Testserver/plugins</output-path>
     <root id="archive" name="FTSEngine.jar">
       <element id="module-output" name="FTSEngine" />
     </root>

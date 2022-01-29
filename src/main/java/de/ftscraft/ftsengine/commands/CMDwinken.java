@@ -16,7 +16,7 @@ public class CMDwinken implements CommandExecutor {
 
     public CMDwinken(Engine plugin) {
         this.plugin = plugin;
-        plugin.getCommand("winken").setExecutor(this::onCommand);
+        plugin.getCommand("winken").setExecutor(this);
     }
 
     @Override
@@ -49,9 +49,9 @@ public class CMDwinken implements CommandExecutor {
                             }
                         }
                     }else
-                        p.sendMessage(messages.PLAYER_TOO_FAR_AWAY);
+                        p.sendMessage(Messages.PLAYER_TOO_FAR_AWAY);
                 }else
-                    p.sendMessage(messages.TARGET_NO_AUSWEIS);
+                    p.sendMessage(Messages.TARGET_NO_AUSWEIS);
             }else
                 p.sendMessage("Der Spieler ist derzeit nicht online!");
         }
