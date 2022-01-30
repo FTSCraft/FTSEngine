@@ -40,7 +40,7 @@ public class CMDumarmen implements CommandExecutor {
             if(target != null){
                 if (plugin.getAusweis(target) != null){
                     if(target.getLocation().distance(p.getLocation()) < 4){
-                        String message = "§c" + plugin.getAusweis(p).getFirstName() + " " + plugin.getAusweis(p).getLastName() + "§e gibt §c" + plugin.getAusweis(target).getFirstName() + " " + plugin.getAusweis(target).getLastName() + "§e eine Ohrfeige.";
+                        String message = "§c" + plugin.getAusweis(p).getFirstName() + " " + plugin.getAusweis(p).getLastName() + "§e umarmt §c" + plugin.getAusweis(target).getFirstName() + " " + plugin.getAusweis(target).getLastName() + "§e .";
                         p.sendMessage(message);
                         for (Entity n : p.getNearbyEntities(10, 10, 10)){
                             if(n instanceof Player){
