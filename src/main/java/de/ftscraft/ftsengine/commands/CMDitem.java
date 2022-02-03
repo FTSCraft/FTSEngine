@@ -1,6 +1,5 @@
 package de.ftscraft.ftsengine.commands;
 
-import de.ftscraft.ftsengine.backpacks.Backpack;
 import de.ftscraft.ftsengine.backpacks.BackpackType;
 import de.ftscraft.ftsengine.main.Engine;
 import org.bukkit.ChatColor;
@@ -8,9 +7,7 @@ import org.bukkit.Material;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
-import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
-import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
@@ -20,14 +17,11 @@ import java.util.List;
 
 public class CMDitem implements CommandExecutor {
 
-    private final Engine plugin;
-
     private final List<String> forbiddenItems;
     private final List<String> forbiddenNames;
 
     public CMDitem(Engine plugin) {
-        this.plugin = plugin;
-        this.plugin.getCommand("item").setExecutor(this);
+        plugin.getCommand("item").setExecutor(this);
 
         forbiddenItems = new ArrayList<>();
         forbiddenNames = new ArrayList<>();
@@ -139,9 +133,9 @@ public class CMDitem implements CommandExecutor {
 
                         List<String> lore = new ArrayList<>();
 
-                        for (int i = 0; i < lines.length; i++) {
-                            lines[i].replace("|", "");
-                            lore.add(ChatColor.translateAlternateColorCodes('&', lines[i]));
+                        for (String line : lines) {
+                            line.replace("|", "");
+                            lore.add(ChatColor.translateAlternateColorCodes('&', line));
                         }
 
                         ItemStack item = p.getInventory().getItemInMainHand();

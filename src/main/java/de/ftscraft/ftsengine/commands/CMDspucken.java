@@ -2,23 +2,17 @@ package de.ftscraft.ftsengine.commands;
 
 import de.ftscraft.ftsengine.main.Engine;
 import de.ftscraft.ftsengine.utils.Messages;
-import net.milkbowl.vault.chat.Chat;
 import org.bukkit.*;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Arrow;
 import org.bukkit.entity.LlamaSpit;
 import org.bukkit.entity.Player;
-import org.bukkit.util.Vector;
 
 public class CMDspucken implements CommandExecutor {
 
-    private final Engine plugin;
-
     public CMDspucken(Engine plugin) {
-        this.plugin = plugin;
-        this.plugin.getCommand("spucken").setExecutor(this);
+        plugin.getCommand("spucken").setExecutor(this);
     }
 
     @Override

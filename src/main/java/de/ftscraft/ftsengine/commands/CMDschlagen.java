@@ -1,6 +1,7 @@
 package de.ftscraft.ftsengine.commands;
 
 import de.ftscraft.ftsengine.main.Engine;
+import de.ftscraft.ftsengine.utils.Messages;
 import org.bukkit.Location;
 import org.bukkit.Particle;
 import org.bukkit.command.Command;
@@ -24,7 +25,7 @@ public class CMDschlagen implements CommandExecutor
     public boolean onCommand(CommandSender cs, Command cmd, String label, String[] args)
     {
         if(!(cs instanceof Player)) {
-            cs.sendMessage(plugin.msgs.ONLY_PLAYER);
+            cs.sendMessage(Messages.ONLY_PLAYER);
             return true;
         }
 

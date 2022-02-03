@@ -1,6 +1,7 @@
 package de.ftscraft.ftsengine.commands;
 
 import de.ftscraft.ftsengine.main.Engine;
+import de.ftscraft.ftsengine.utils.Messages;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -24,7 +25,7 @@ public class CMDremovearmorstand implements CommandExecutor
     {
         if(cs.hasPermission("ftsengine.armorstand")) {
             if(!(cs instanceof Player)) {
-                cs.sendMessage(plugin.msgs.PREFIX);
+                cs.sendMessage(Messages.PREFIX);
                 return true;
             }
 

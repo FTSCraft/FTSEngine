@@ -1,6 +1,5 @@
 package de.ftscraft.ftsengine.utils;
 
-import com.google.gson.internal.$Gson$Preconditions;
 import de.ftscraft.ftsengine.backpacks.Backpack;
 import de.ftscraft.ftsengine.backpacks.BackpackType;
 import de.ftscraft.ftsengine.brett.Brett;
@@ -16,7 +15,6 @@ import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
-import javax.swing.*;
 import java.io.File;
 import java.io.IOException;
 import java.util.*;
@@ -122,7 +120,7 @@ public class UserIO {
 
             }
         } catch (NullPointerException ignored) {
-            ignored.printStackTrace();
+
         }
     }
 
@@ -169,7 +167,7 @@ public class UserIO {
                         if (!title.equalsIgnoreCase("null"))
                             brett.addNote(title, content, note_creator, time, Integer.valueOf(keys));
                     }
-                } catch (Exception ex) {
+                } catch (Exception ignored) {
 
                 }
             }
@@ -211,31 +209,6 @@ public class UserIO {
             e.printStackTrace();
         }
     }
-    /*
-    private void safeReisepunkte() {
-        File file = new File(plugin.getDataFolder() + "//reisepunkte.yml");
-        YamlConfiguration cfg = YamlConfiguration.loadConfiguration(file);
-
-        for (Reisepunkt a : plugin.reisepunkte) {
-            cfg.set(a.getName() + ".location.x", a.getLocation().getX());
-            cfg.set(a.getName() + ".location.y", a.getLocation().getY());
-            cfg.set(a.getName() + ".location.z", a.getLocation().getZ());
-            cfg.set(a.getName() + ".location.world", a.getLocation().getWorld().getName());
-            cfg.set(a.getName() + ".ziel.x", a.getZiel().getX());
-            cfg.set(a.getName() + ".ziel.y", a.getZiel().getY());
-            cfg.set(a.getName() + ".ziel.z", a.getZiel().getZ());
-            cfg.set(a.getName() + ".ziel.world", a.getZiel().getWorld().getName());
-            cfg.set(a.getName() + ".duration", a.getDuration());
-        }
-
-        try {
-            cfg.save(file);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-    }
-    */
 
     private void loadBriefkasten() {
 

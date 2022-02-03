@@ -8,10 +8,7 @@ import org.bukkit.entity.Player;
 
 public class CMDfasten implements CommandExecutor {
 
-    private final Engine plugin;
-
     public CMDfasten(Engine plugin) {
-        this.plugin = plugin;
         plugin.getCommand("fasten").setExecutor(this);
     }
 

@@ -17,7 +17,7 @@ public class CMDkussen implements CommandExecutor {
 
     public CMDkussen(Engine plugin) {
         this.plugin = plugin;
-        plugin.getCommand("küssen").setExecutor(this::onCommand);
+        plugin.getCommand("küssen").setExecutor(this);
     }
 
     @Override
@@ -58,9 +58,9 @@ public class CMDkussen implements CommandExecutor {
                         //}
 
                     } else
-                        p.sendMessage(messages.PREFIX + "Der Spieler ist zu weit entfernt");
+                        p.sendMessage(Messages.PREFIX + "Der Spieler ist zu weit entfernt");
                 } else
-                    p.sendMessage(messages.PREFIX + "Der Spieler hat keinen Ausweis");
+                    p.sendMessage(Messages.PREFIX + "Der Spieler hat keinen Ausweis");
             }else
                 p.sendMessage("Der Spieler ist derzeit nicht online!");
 

@@ -17,7 +17,7 @@ public class CMDumarmen implements CommandExecutor {
 
     public CMDumarmen(Engine plugin) {
         this.plugin = plugin;
-        plugin.getCommand("umarmen").setExecutor(this::onCommand);
+        plugin.getCommand("umarmen").setExecutor(this);
     }
 
     @Override
@@ -54,9 +54,9 @@ public class CMDumarmen implements CommandExecutor {
                         //}
 
                     }else
-                        p.sendMessage(messages.PLAYER_TOO_FAR_AWAY);
+                        p.sendMessage(Messages.PLAYER_TOO_FAR_AWAY);
                 }else
-                    p.sendMessage(messages.TARGET_NO_AUSWEIS);
+                    p.sendMessage(Messages.TARGET_NO_AUSWEIS);
             }else
                 p.sendMessage("Der Spieler ist derzeit nicht online");
         }

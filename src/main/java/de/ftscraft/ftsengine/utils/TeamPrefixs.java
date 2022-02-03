@@ -1,10 +1,5 @@
 package de.ftscraft.ftsengine.utils;
 
-import de.ftscraft.ftsengine.main.Engine;
-import de.ftscraft.ftsengine.main.FTSUser;
-import org.bukkit.entity.Player;
-import org.bukkit.scoreboard.Team;
-
 public enum TeamPrefixs {
 
     /*ADMIN("§bAdmin", "§bAdmin", "ftsengine.admin", "Admin"),

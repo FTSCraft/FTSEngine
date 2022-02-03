@@ -1,19 +1,15 @@
 package de.ftscraft.ftsengine.utils;
 
 import de.ftscraft.ftsengine.main.Engine;
-import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
-import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
-import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.Calendar;
 
 public class Ausweis {
 
@@ -163,8 +159,6 @@ public class Ausweis {
         ItemStack is = new ItemStack(Material.FLOWER_BANNER_PATTERN, 1);
         ItemMeta im = is.getItemMeta();
         im.setDisplayName("§6Personalausweis " + lastName + " #" + id);
-        //im.addEnchant(Enchantment.LUCK, 0, true);
-        //im.addItemFlags(ItemFlag.HIDE_ENCHANTS);
         is.setItemMeta(im);
         return is;
     }

@@ -24,8 +24,6 @@ public class BrettNote
     private long time;
     private Brett brett;
 
-    private Engine plugin;
-
     public BrettNote(Brett brett, String title, String content, String creator, int id, long time, Engine plugin) {
         this.title = title;
         this.brett = brett;
@@ -33,14 +31,13 @@ public class BrettNote
         this.time = time;
         this.creator = creator;
         create = false;
-        this.plugin  = plugin;
         this.id = id;
 
 
         item = new ItemStack(Material.PAPER, 1);
         ItemMeta im = item.getItemMeta();
         im.setDisplayName("§6"+ StringUtils.abbreviate(title, 30));
-        List<String> lore = new ArrayList<String>();
+        List<String> lore = new ArrayList<>();
         lore.add("§7"+StringUtils.abbreviate(content, 30));
         lore.add("§8Von: §2"+creator);
         im.setLore(lore);

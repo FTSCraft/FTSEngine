@@ -20,11 +20,9 @@ public class BrettGUI {
     private final Inventory inv_page5;
 
     private final Brett brett;
-    private final Engine plugin;
 
     public BrettGUI(Brett brett, Engine plugin) {
         this.brett = brett;
-        this.plugin = plugin;
         inv_page1 = Bukkit.createInventory(null, 9 * 5, "§4Schwarzes-Brett " + brett.getName());
         inv_page2 = Bukkit.createInventory(null, 9 * 5, "§4Schwarzes-Brett " + brett.getName());
         inv_page3 = Bukkit.createInventory(null, 9 * 5, "§4Schwarzes-Brett " + brett.getName());
@@ -47,7 +45,7 @@ public class BrettGUI {
         ItemStack create = new ItemStack(Material.PAPER, 1);
         ItemMeta createMeta = create.getItemMeta();
         createMeta.setDisplayName("§cErstelle Notiz");
-        List<String> createLore = new ArrayList<String>();
+        List<String> createLore = new ArrayList<>();
         createLore.add("§bErstelle eine Notiz!");
         createLore.add(" ");
 

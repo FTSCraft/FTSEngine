@@ -78,7 +78,7 @@ public class CountdownScheduler implements Runnable
 
             if(seconds == 0) {
                 t.playSound(t.getLocation(), Sound.ENTITY_BAT_LOOP, 3, -20);
-                p.sendMessage(plugin.msgs.PREFIX+"Deine Taube ist angekommen!");
+                p.sendMessage(Messages.PREFIX +"Deine Taube ist angekommen!");
                 t.sendMessage("§c---------");
                 t.sendMessage("§eEine Brieftaube von §c"+p.getName()+"§e hat dich erreicht!");
                 t.sendMessage(" ");
