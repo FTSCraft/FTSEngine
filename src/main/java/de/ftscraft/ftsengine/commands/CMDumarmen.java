@@ -42,7 +42,7 @@ public class CMDumarmen implements CommandExecutor {
                     if(target.getLocation().distance(p.getLocation()) < 4){
                         String message = "§c" + plugin.getAusweis(p).getFirstName() + " " + plugin.getAusweis(p).getLastName() + "§e umarmt §c" + plugin.getAusweis(target).getFirstName() + " " + plugin.getAusweis(target).getLastName() + "§e .";
                         p.sendMessage(message);
-                        for (Entity n : p.getNearbyEntities(10, 10, 10)){
+                        for (Entity n : p.getNearbyEntities(11, 11, 11)){
                             if(n instanceof Player){
                                 n.sendMessage(message);
                             }
