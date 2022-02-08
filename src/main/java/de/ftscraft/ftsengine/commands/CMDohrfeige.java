@@ -36,6 +36,7 @@ public class CMDohrfeige implements CommandExecutor {
         }
 
         if(args.length == 1){
+
             String tName = args[0];
             Player target = Bukkit.getPlayer(tName);
 
