@@ -26,7 +26,7 @@ public class CMDklopfen implements CommandExecutor {
             }
             String message = "§c"+plugin.getAusweis(p).getFirstName() + " " + plugin.getAusweis(p).getLastName()+"§e klopft an der Tür";
             p.sendMessage(message);
-            for(Entity n : p.getNearbyEntities(10, 10, 10)) {
+            for(Entity n : p.getNearbyEntities(20, 20, 20)) {
                 if(n instanceof Player)
                     n.sendMessage(message);
             }
