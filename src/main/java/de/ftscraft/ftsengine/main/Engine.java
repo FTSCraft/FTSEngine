@@ -6,7 +6,9 @@ import com.comphenix.protocol.ProtocolManager;
 import com.comphenix.protocol.events.PacketContainer;
 import com.comphenix.protocol.wrappers.WrappedChatComponent;
 import com.nisovin.shopkeepers.api.ShopkeepersPlugin;
+import com.sun.tools.javac.util.Names;
 import de.ftscraft.ftsengine.backpacks.Backpack;
+import de.ftscraft.ftsengine.backpacks.BackpackType;
 import de.ftscraft.ftsengine.brett.Brett;
 import de.ftscraft.ftsengine.brett.BrettNote;
 import de.ftscraft.ftsengine.commands.*;
@@ -18,16 +20,15 @@ import net.milkbowl.vault.chat.Chat;
 import net.milkbowl.vault.economy.Economy;
 import net.milkbowl.vault.permission.Permission;
 import org.bukkit.*;
+import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
-import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.Recipe;
-import org.bukkit.inventory.ShapedRecipe;
-import org.bukkit.inventory.ShapelessRecipe;
+import org.bukkit.inventory.*;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.inventory.meta.LeatherArmorMeta;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scoreboard.Scoreboard;
@@ -398,6 +399,14 @@ public class Engine extends JavaPlugin implements Listener {
         iron_helmet.setIngredient('B', Material.IRON_BLOCK);
         getServer().addRecipe(iron_helmet);
 
+        NamespacedKey ihkey2 = new NamespacedKey(this, "FTSironhelmet");
+        ShapedRecipe iron_helmet2 = new ShapedRecipe(ihkey2, itemStacks.getIron_helmet());
+        iron_helmet2.shape("***", "III", "IBI");
+        iron_helmet2.setIngredient('I', Material.IRON_INGOT);
+        iron_helmet2.setIngredient('*', Material.AIR);
+        iron_helmet2.setIngredient('B', Material.IRON_BLOCK);
+        getServer().addRecipe(iron_helmet2);
+
         //IronChestplate
 
         NamespacedKey icpkey = new NamespacedKey(this, "FTSironchestplate");
@@ -428,6 +437,15 @@ public class Engine extends JavaPlugin implements Listener {
         iron_boots.setIngredient('B', Material.IRON_BLOCK);
         getServer().addRecipe(iron_boots);
 
+        NamespacedKey ibkey2 = new NamespacedKey(this, "FTSironboots");
+        ShapedRecipe iron_boots2 = new ShapedRecipe(ibkey2, itemStacks.getIron_boots());
+        iron_boots2.shape("IBI", "I*I", "***");
+        iron_boots2.setIngredient('I', Material.IRON_INGOT);
+        iron_boots2.setIngredient('*', Material.AIR);
+        iron_boots2.setIngredient('B', Material.IRON_BLOCK);
+        getServer().addRecipe(iron_boots2);
+
+
         //ChainmailHelmet
 
         NamespacedKey chkey = new NamespacedKey(this, "FTSchainhelmet");
@@ -436,6 +454,13 @@ public class Engine extends JavaPlugin implements Listener {
         chain_helmet.setIngredient('I', Material.IRON_INGOT);
         chain_helmet.setIngredient('*', Material.AIR);
         getServer().addRecipe(chain_helmet);
+
+        NamespacedKey chkey2 = new NamespacedKey(this, "FTSchainhelmet");
+        ShapedRecipe chain_helmet2 = new ShapedRecipe(chkey2, itemStacks.getChainmail_helmet());
+        chain_helmet2.shape("***", "III", "I*I");
+        chain_helmet2.setIngredient('I', Material.IRON_INGOT);
+        chain_helmet2.setIngredient('*', Material.AIR);
+        getServer().addRecipe(chain_helmet2);
 
         //ChainmailChestplate
 
@@ -464,6 +489,13 @@ public class Engine extends JavaPlugin implements Listener {
         chain_boots.setIngredient('*', Material.AIR);
         getServer().addRecipe(chain_boots);
 
+        NamespacedKey cbkey2 = new NamespacedKey(this, "FTSchainboots");
+        ShapedRecipe chain_boots2 = new ShapedRecipe(cbkey2, itemStacks.getChainmail_boots());
+        chain_boots2.shape("I*I", "I*I", "***");
+        chain_boots2.setIngredient('I', Material.IRON_INGOT);
+        chain_boots2.setIngredient('*', Material.AIR);
+        getServer().addRecipe(chain_boots2);
+
         //Diamond Helmet
 
         NamespacedKey dhkey = new NamespacedKey(this, "FTSdiamondhelmet");
@@ -473,6 +505,14 @@ public class Engine extends JavaPlugin implements Listener {
         diamond_helmet.setIngredient('B', Material.DIAMOND_BLOCK);
         diamond_helmet.setIngredient('*', Material.AIR);
         getServer().addRecipe(diamond_helmet);
+
+        NamespacedKey dhkey2 = new NamespacedKey(this, "FTSdiamondhelmet");
+        ShapedRecipe diamond_helmet2 = new ShapedRecipe(dhkey2, itemStacks.getDiamond_helmet());
+        diamond_helmet2.shape("***", "DDD", "D*D");
+        diamond_helmet2.setIngredient('D', Material.DIAMOND);
+        diamond_helmet2.setIngredient('B', Material.DIAMOND_BLOCK);
+        diamond_helmet2.setIngredient('*', Material.AIR);
+        getServer().addRecipe(diamond_helmet2);
 
         //Diamond Chestplate
 
@@ -503,6 +543,14 @@ public class Engine extends JavaPlugin implements Listener {
         diamond_boots.setIngredient('B', Material.DIAMOND_BLOCK);
         diamond_boots.setIngredient('*', Material.AIR);
         getServer().addRecipe(diamond_boots);
+
+        NamespacedKey dbkey2 = new NamespacedKey(this, "FTSdiamondboots");
+        ShapedRecipe diamond_boots2 = new ShapedRecipe(dbkey2, itemStacks.getDiamond_boots());
+        diamond_boots2.shape("***", "DBD", "D*D");
+        diamond_boots2.setIngredient('D', Material.DIAMOND);
+        diamond_boots2.setIngredient('B', Material.DIAMOND_BLOCK);
+        diamond_boots2.setIngredient('*', Material.AIR);
+        getServer().addRecipe(diamond_boots2);
 
         //Horse Leather Armor
 
@@ -585,7 +633,155 @@ public class Engine extends JavaPlugin implements Listener {
         quartzRecipie.setIngredient('L', Material.LAPIS_LAZULI);
         getServer().addRecipe(quartzRecipie);
 
+        //Copperpickaxe
+        NamespacedKey cpickkey = new NamespacedKey(this, "FTSkupferpicke");
+        ItemStack cpick = new ItemStack(Material.STONE_PICKAXE, 1);
+        ItemMeta cpickM = cpick.getItemMeta();
+        cpickM.setDisplayName("Kupferspitzhacke");
+        cpick.setItemMeta(cpickM);
+        cpick.addEnchantment(Enchantment.DURABILITY, 2);
+        cpick.addEnchantment(Enchantment.DIG_SPEED, 2);
 
+        ShapedRecipe cpickr = new ShapedRecipe(cpickkey, cpick);
+        cpickr.shape("CCC", "*S*", "*S*");
+        cpickr.setIngredient('C', Material.COPPER_INGOT);
+        cpickr.setIngredient('S', Material.STICK);
+        cpickr.setIngredient('*', Material.AIR);
+        getServer().addRecipe(cpickr);
+
+        //Copperaxe
+        NamespacedKey caxekey = new NamespacedKey(this, "FTSkupferaxt");
+        ItemStack caxe = new ItemStack(Material.STONE_AXE, 1);
+        ItemMeta caxeM = cpick.getItemMeta();
+        caxeM.setDisplayName("Kupferaxt");
+        caxe.setItemMeta(caxeM);
+        caxe.addEnchantment(Enchantment.DURABILITY, 2);
+        caxe.addEnchantment(Enchantment.DIG_SPEED, 2);
+
+        ShapedRecipe caxer = new ShapedRecipe(caxekey, caxe);
+        caxer.shape("*CC", "*SC", "*S*");
+        caxer.setIngredient('C', Material.COPPER_INGOT);
+        caxer.setIngredient('S', Material.STICK);
+        caxer.setIngredient('*', Material.AIR);
+        getServer().addRecipe(caxer);
+
+        ShapedRecipe caxel = new ShapedRecipe(caxekey, caxe);
+        caxel.shape("CC*", "CS*", "*S*");
+        caxel.setIngredient('C', Material.COPPER_INGOT);
+        caxel.setIngredient('S', Material.STICK);
+        caxel.setIngredient('*', Material.AIR);
+        getServer().addRecipe(caxel);
+
+        ShapedRecipe caxell = new ShapedRecipe(caxekey, caxe);
+        caxell.shape("CC*", "SC*", "S**");
+        caxell.setIngredient('C', Material.COPPER_INGOT);
+        caxell.setIngredient('S', Material.STICK);
+        caxell.setIngredient('*', Material.AIR);
+        getServer().addRecipe(caxell);
+
+        ShapedRecipe caxerr = new ShapedRecipe(caxekey, caxe);
+        caxerr.shape("*CC", "*CS", "**S");
+        caxerr.setIngredient('C', Material.COPPER_INGOT);
+        caxerr.setIngredient('S', Material.STICK);
+        caxerr.setIngredient('*', Material.AIR);
+        getServer().addRecipe(caxerr);
+
+        //Coppersword
+        NamespacedKey cswordkey = new NamespacedKey(this, "FTSkupferschwert");
+        ItemStack csword = new ItemStack(Material.STONE_SWORD, 1);
+        ItemMeta cswordM = csword.getItemMeta();
+        cswordM.setDisplayName("Kupferschwert");
+        csword.setItemMeta(cswordM);
+        csword.addEnchantment(Enchantment.DURABILITY, 2);
+        csword.addEnchantment(Enchantment.DAMAGE_ALL, 2);
+
+        ShapedRecipe cswordl = new ShapedRecipe(cswordkey, csword);
+        cswordl.shape("C**", "C**", "S**");
+        cswordl.setIngredient('C', Material.COPPER_INGOT);
+        cswordl.setIngredient('S', Material.STICK);
+        cswordl.setIngredient('*', Material.AIR);
+        getServer().addRecipe(cswordl);
+
+        ShapedRecipe cswordr = new ShapedRecipe(cswordkey, csword);
+        cswordr.shape("**C", "**C", "**S");
+        cswordr.setIngredient('C', Material.COPPER_INGOT);
+        cswordr.setIngredient('S', Material.STICK);
+        cswordr.setIngredient('*', Material.AIR);
+        getServer().addRecipe(cswordr);
+
+        ShapedRecipe cswordm = new ShapedRecipe(cswordkey, csword);
+        cswordm.shape("*C*", "*C*", "*S*");
+        cswordm.setIngredient('C', Material.COPPER_INGOT);
+        cswordm.setIngredient('S', Material.STICK);
+        cswordm.setIngredient('*', Material.AIR);
+        getServer().addRecipe(cswordm);
+
+        //Copperhoe
+        NamespacedKey choekey = new NamespacedKey(this, "FTSkupferhacke");
+        ItemStack choe = new ItemStack(Material.STONE_HOE, 1);
+        ItemMeta choeM = choe.getItemMeta();
+        choeM.setDisplayName("Kupferhacke");
+        choe.setItemMeta(choeM);
+        choe.addEnchantment(Enchantment.DURABILITY, 2);
+        choe.addEnchantment(Enchantment.DIG_SPEED, 2);
+
+        ShapedRecipe choel = new ShapedRecipe(choekey, choe);
+        choel.shape("CC*", "*S*", "*S*");
+        choel.setIngredient('C', Material.COPPER_INGOT);
+        choel.setIngredient('S', Material.STICK);
+        choel.setIngredient('*', Material.AIR);
+        getServer().addRecipe(choel);
+
+        ShapedRecipe choer = new ShapedRecipe(choekey, choe);
+        choer.shape("*CC", "*S*", "*s*");
+        choer.setIngredient('C', Material.COPPER_INGOT);
+        choer.setIngredient('S', Material.STICK);
+        choer.setIngredient('*', Material.AIR);
+        getServer().addRecipe(choer);
+
+        ShapedRecipe choerr = new ShapedRecipe(choekey, choe);
+        choerr.shape("*CC", "**S", "**S");
+        choerr.setIngredient('C', Material.COPPER_INGOT);
+        choerr.setIngredient('S', Material.STICK);
+        choerr.setIngredient('*', Material.AIR);
+        getServer().addRecipe(choerr);
+
+        ShapedRecipe choell = new ShapedRecipe(choekey, choe);
+        choell.shape("CC*", "S**", "S**");
+        choell.setIngredient('C', Material.COPPER_INGOT);
+        choell.setIngredient('S', Material.STICK);
+        choell.setIngredient('*', Material.AIR);
+        getServer().addRecipe(choell);
+
+        //Coppershovel
+        NamespacedKey cshovelkey = new NamespacedKey(this, "FTSkupferschaufel");
+        ItemStack cshovel = new ItemStack(Material.STONE_SHOVEL, 1);
+        ItemMeta cshovelM = cshovel.getItemMeta();
+        cshovelM.setDisplayName("Kupferschaufel");
+        cshovel.setItemMeta(cshovelM);
+        cshovel.addEnchantment(Enchantment.DURABILITY, 2);
+        cshovel.addEnchantment(Enchantment.DIG_SPEED, 2);
+
+        ShapedRecipe cshovell = new ShapedRecipe(cshovelkey, cshovel);
+        cshovell.shape("C**", "S**", "S**");
+        cshovell.setIngredient('C', Material.COPPER_INGOT);
+        cshovell.setIngredient('S', Material.STICK);
+        cshovell.setIngredient('*', Material.AIR);
+        getServer().addRecipe(cshovell);
+
+        ShapedRecipe cshovelr = new ShapedRecipe(cshovelkey, cshovel);
+        cshovelr.shape("**C", "**S", "**S");
+        cshovelr.setIngredient('C', Material.COPPER_INGOT);
+        cshovell.setIngredient('S', Material.STICK);
+        cshovell.setIngredient('*', Material.AIR);
+        getServer().addRecipe(cshovelr);
+
+        ShapedRecipe cshovelm = new ShapedRecipe(cshovelkey, cshovel);
+        cshovelm.shape("*C*", "*S*", "*S*");
+        cshovelm.setIngredient('C', Material.COPPER_INGOT);
+        cshovelm.setIngredient('S', Material.STICK);
+        cshovelm.setIngredient('*', Material.AIR);
+        getServer().addRecipe(cshovelm);
     }
 
     public HashMap<Player, FTSUser> getPlayer() {
