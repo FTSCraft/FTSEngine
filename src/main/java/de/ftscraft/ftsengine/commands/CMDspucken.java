@@ -19,7 +19,7 @@ public class CMDspucken implements CommandExecutor {
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
 
         if(!(sender instanceof Player)) {
-            sender.sendMessage(new Messages().ONLY_PLAYER);
+            sender.sendMessage(Messages.ONLY_PLAYER);
             return true;
         }
 

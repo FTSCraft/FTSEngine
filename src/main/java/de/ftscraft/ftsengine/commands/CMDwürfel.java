@@ -76,16 +76,16 @@ public class CMDwürfel implements CommandExecutor {
 
                 total = ThreadLocalRandom.current().nextInt(1, 12 + 1);
 
-                sb.append(((total >= dice.getMagicMin() && total <= dice.getMagicMax()) ? "§2" : "§c") + total + " §5[Magie]");
+                sb.append((total >= dice.getMagicMin() && total <= dice.getMagicMax()) ? "§2" : "§c").append(total).append(" §5[Magie]");
 
             } else {
 
                 int value = ThreadLocalRandom.current().nextInt(1, 100 + 1);
 
                 if(value <= dice.getNeeds()) {
-                    sb.append("§2" + value + " §6und hat damit den Wurf §2geschafft!");
+                    sb.append("§2").append(value).append(" §6und hat damit den Wurf §2geschafft!");
                 } else {
-                    sb.append("§c" + value + " §6hätte aber §c" + dice.getNeeds() + " §6oder niedriger würfeln müssen!");
+                    sb.append("§c").append(value).append(" §6hätte aber §c").append(dice.getNeeds()).append(" §6oder niedriger würfeln müssen!");
                 }
 
             }

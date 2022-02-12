@@ -73,7 +73,7 @@ public class UserIO {
                 if (spitzname != null)
                     spitzname.replace('_', ' ');
                 String link = cfg.getString("link");
-                Integer id = cfg.getInt("id");
+                int id = cfg.getInt("id");
 
 
                 if (id > plugin.highestId)

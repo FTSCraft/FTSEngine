@@ -103,7 +103,7 @@ public class InventoryClickListener implements Listener {
 
                     p.closeInventory();
                     p.sendMessage("§7[§bSchwarzes Brett§7] §bBitte gebe jetzt den Titel ein. §c(Max. 50 Ziechen)");
-                    ArrayList<String> al = new ArrayList<>();
+                    ArrayList<String> al = new ArrayList<String>();
                     al.add(" ");
                     BrettNote brettNote = new BrettNote(brett, p.getName(), true);
                     plugin.playerBrettNote.put(p, brettNote);
@@ -213,7 +213,7 @@ public class InventoryClickListener implements Listener {
             if(BackpackType.getBackpackByName(event.getWhoClicked().getOpenInventory().getTitle()) != null) {
                 if(event.getClick() == ClickType.NUMBER_KEY) {
                     event.setCancelled(true);
-                    event.getWhoClicked().sendMessage(new Messages().PREFIX + "Leider kannst du hier nicht deine Nummern benutzen.");
+                    event.getWhoClicked().sendMessage(Messages.PREFIX + "Leider kannst du hier nicht deine Nummern benutzen.");
                     return;
                 }
                 if (BackpackType.getBackpackByName(event.getCurrentItem().getItemMeta().getDisplayName()) != null) {

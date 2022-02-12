@@ -25,7 +25,6 @@ public class CMDchannel implements CommandExecutor, TabCompleter
         plugin.getCommand("channel").setTabCompleter(this);
     }
 
-    @Override
     public boolean onCommand(CommandSender cs, Command cmd, String label, String[] args)
     {
         if(!(cs instanceof Player)) {
@@ -40,10 +39,9 @@ public class CMDchannel implements CommandExecutor, TabCompleter
         return false;
     }
 
-    @Override
     public List<String> onTabComplete(CommandSender cs, Command cmd, String label, String[] args)
     {
-        final List<String> com = new ArrayList<>(Arrays.asList("roleplay", "handel", "flüstern", "rufen"));
+        final List<String> com = new ArrayList<String>(Arrays.asList("roleplay", "handel", "flüstern", "rufen"));
         //StringUtil.copyPartialMatches(args[0], com, com);
         Collections.sort(com);
         return com;

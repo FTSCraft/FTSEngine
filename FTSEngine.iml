@@ -34,9 +34,10 @@
       <sourceFolder url="file://$MODULE_DIR$/src/main/resources" type="java-resource" />
       <excludeFolder url="file://$MODULE_DIR$/target" />
     </content>
-    <orderEntry type="jdk" jdkName="16" jdkType="JavaSDK" />
+    <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="library" name="ProtocolLib (1)" level="project" />
+    <orderEntry type="library" name="Shopkeepers-2.14.0" level="project" />
     <orderEntry type="library" name="Maven: com.comphenix.protocol:ProtocolLib-API:4.4.0" level="project" />
     <orderEntry type="library" name="Maven: cglib:cglib-nodep:3.2.5" level="project" />
     <orderEntry type="library" name="Maven: com.comphenix.executors:BukkitExecutors:1.1-SNAPSHOT" level="project" />
@@ -72,6 +73,5 @@
     <orderEntry type="library" scope="PROVIDED" name="Maven: org.ow2.asm:asm-analysis:9.2" level="project" />
     <orderEntry type="library" name="Maven: com.comphenix.protocol:ProtocolLib:4.4.0" level="project" />
     <orderEntry type="library" name="Maven: org.apache.commons:commons-lang3:3.12.0" level="project" />
-    <orderEntry type="library" name="Shopkeepers-2.14.0" level="project" />
   </component>
 </module>

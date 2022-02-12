@@ -32,7 +32,7 @@ public class PlayerInteractListener implements Listener {
     private final Engine plugin;
     private final ProtocolManager protocolManager;
 
-    private final ArrayList<Player> hornCooldown = new ArrayList<>();
+    private final ArrayList<Player> hornCooldown = new ArrayList<Player>();
 
     public PlayerInteractListener(Engine plugin) {
         this.plugin = plugin;
@@ -43,7 +43,7 @@ public class PlayerInteractListener implements Listener {
     @EventHandler
     public void onClick(PlayerInteractEvent e) {
 
-        if(e.getItem() != null) {
+        if (e.getItem() != null) {
 
             if (e.getItem().getType() == Material.BOW) {
                 ItemStack is = e.getItem();
@@ -75,9 +75,9 @@ public class PlayerInteractListener implements Listener {
 
                     if (item.getItemMeta().getDisplayName().equalsIgnoreCase("§6Horn")) {
 
-                        Player p = e.getPlayer();
+                        final Player p = e.getPlayer();
 
-                        if(hornCooldown.contains(p)) {
+                        if (hornCooldown.contains(p)) {
                             return;
                         }
 
@@ -97,10 +97,10 @@ public class PlayerInteractListener implements Listener {
                             }
                         }
 
-                        Bukkit.getScheduler().runTaskLater(plugin, () -> {
-
-                            hornCooldown.remove(p);
-
+                        Bukkit.getScheduler().runTaskLater(plugin, new Runnable() {
+                            public void run() {
+                                hornCooldown.remove(p);
+                            }
                         }, 20 * 2);
 
                     }
@@ -122,9 +122,9 @@ public class PlayerInteractListener implements Listener {
             if (e.getClickedBlock().getBlockData() instanceof WallSign || e.getClickedBlock().getBlockData() instanceof Sign) {
                 org.bukkit.block.Sign sign = (org.bukkit.block.Sign) e.getClickedBlock().getState();
                 if (sign.getLine(0).equalsIgnoreCase("§4Schwarzes Brett")) {
-                    if(sign.getLine(1).equalsIgnoreCase("§bGlobal")) {
+                    if (sign.getLine(1).equalsIgnoreCase("§bGlobal")) {
                         for (Brett value : plugin.bretter.values()) {
-                            if(value.getName().equalsIgnoreCase("Global")) {
+                            if (value.getName().equalsIgnoreCase("Global")) {
                                 plugin.getPlayer().get(e.getPlayer()).setBrett(value);
                                 value.getGui().open(e.getPlayer(), 1);
                                 value.checkForRunOut();
@@ -170,11 +170,11 @@ public class PlayerInteractListener implements Listener {
                             }
                         }
                     }
-            } else if(e.getPlayer().getInventory().getItemInMainHand().getType() == Material.LANTERN) {
+            } else if (e.getPlayer().getInventory().getItemInMainHand().getType() == Material.LANTERN) {
 
                 ItemStack itemInHand = e.getPlayer().getInventory().getItemInMainHand();
-                if(itemInHand.getItemMeta().hasDisplayName()) {
-                    if(itemInHand.getItemMeta().getDisplayName().equalsIgnoreCase("§cWeihrauchlaterne")) {
+                if (itemInHand.getItemMeta().hasDisplayName()) {
+                    if (itemInHand.getItemMeta().getDisplayName().equalsIgnoreCase("§cWeihrauchlaterne")) {
 
                         Player p = e.getPlayer();
                         p.spawnParticle(Particle.CAMPFIRE_COSY_SMOKE, p.getLocation().add(0, 1.5, 0), 8, 0.0D, 0, 0.01D, 0.01D);

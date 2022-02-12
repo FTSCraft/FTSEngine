@@ -37,7 +37,7 @@ public class BrettNote
         item = new ItemStack(Material.PAPER, 1);
         ItemMeta im = item.getItemMeta();
         im.setDisplayName("§6"+ StringUtils.abbreviate(title, 30));
-        List<String> lore = new ArrayList<>();
+        List<String> lore = new ArrayList<String>();
         lore.add("§7"+StringUtils.abbreviate(content, 30));
         lore.add("§8Von: §2"+creator);
         im.setLore(lore);
@@ -77,7 +77,7 @@ public class BrettNote
             item = new ItemStack(Material.PAPER, 1);
             ItemMeta im = item.getItemMeta();
             im.setDisplayName("§6"+StringUtils.abbreviate(title, 20));
-            List<String> lore = new ArrayList<>();
+            List<String> lore = new ArrayList<String>();
             lore.add("§7"+ StringUtils.abbreviate(content, 30));
             lore.add("§8Von: §2"+creator);
             im.setLore(lore);

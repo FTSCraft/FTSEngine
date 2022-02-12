@@ -16,7 +16,7 @@ public class Runner implements Runnable
     private final int tablist_status = 0;
     private ArrayList<String> footer;
 
-    private final ArrayList<Player> sentUserMessage = new ArrayList<>();
+    private final ArrayList<Player> sentUserMessage = new ArrayList<Player>();
 
     public Runner(Engine plugin)
     {
@@ -27,15 +27,17 @@ public class Runner implements Runnable
     @Override
     public void run()
     {
-        for (Player p : Bukkit.getOnlinePlayers()) {
+        for (final Player p : Bukkit.getOnlinePlayers()) {
             if (plugin.getChat().getPrimaryGroup(p).equalsIgnoreCase("default")) {
                 if (p.getStatistic(Statistic.PLAY_ONE_MINUTE) >= 50 * 60 * 60 * 20) {
                     if(!sentUserMessage.contains(p)) {
                         if(p.hasPermission("group.reisender")) {
                             sentUserMessage.add(p);
-                            Bukkit.getScheduler().runTaskLater(plugin, () -> {
-                                p.sendMessage("§cDu spielst seit mehr als 50 Stunden auf Parsifal und bist noch immer Reisender? Bitte erstelle dir langsam einen Ausweis und eine Charvorstellung im Forum!");
-                                p.playSound(p.getLocation(), Sound.BLOCK_NOTE_BLOCK_PLING, 10, 1);
+                            Bukkit.getScheduler().runTaskLater(plugin, new Runnable() {
+                                public void run() {
+                                    p.sendMessage("§cDu spielst seit mehr als 50 Stunden auf Parsifal und bist noch immer Reisender? Bitte erstelle dir langsam einen Ausweis und eine Charvorstellung im Forum!");
+                                    p.playSound(p.getLocation(), Sound.BLOCK_NOTE_BLOCK_PLING, 10, 1);
+                                }
                             }, 20 * 5);
                         }
                     }

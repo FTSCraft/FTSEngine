@@ -10,7 +10,7 @@
         <module name="Personalausweis" />
       </profile>
     </annotationProcessing>
-    <bytecodeTargetLevel>
+    <bytecodeTargetLevel target="1.8">
       <module name="FTSEngine" target="8" />
     </bytecodeTargetLevel>
   </component>

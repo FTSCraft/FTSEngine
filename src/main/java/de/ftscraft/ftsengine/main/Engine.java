@@ -7,7 +7,6 @@ import com.comphenix.protocol.events.PacketContainer;
 import com.comphenix.protocol.wrappers.WrappedChatComponent;
 import com.nisovin.shopkeepers.api.ShopkeepersPlugin;
 import de.ftscraft.ftsengine.backpacks.Backpack;
-import de.ftscraft.ftsengine.backpacks.BackpackType;
 import de.ftscraft.ftsengine.brett.Brett;
 import de.ftscraft.ftsengine.brett.BrettNote;
 import de.ftscraft.ftsengine.commands.*;
@@ -27,7 +26,6 @@ import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.*;
 import org.bukkit.inventory.meta.ItemMeta;
-import org.bukkit.inventory.meta.LeatherArmorMeta;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scoreboard.Scoreboard;
@@ -62,7 +60,7 @@ public class Engine extends JavaPlugin implements Listener {
 
     private static final Logger log = Logger.getLogger("Minecraft");
 
-    public List<Material> mats = new ArrayList<>();
+    public List<Material> mats = new ArrayList<Material>();
     private ProtocolManager protocolManager;
     private ShopkeepersPlugin shopkeepersPlugin;
 
@@ -103,18 +101,18 @@ public class Engine extends JavaPlugin implements Listener {
         biggestBpId = 0;
         biggestPferdId = 0;
         biggestBriefId = 0;
-        playerBrettNote = new HashMap<>();
-        bretter = new HashMap<>();
+        playerBrettNote = new HashMap<Player, BrettNote>();
+        bretter = new HashMap<Location, Brett>();
         //sitting = new HashMap<>();
         msgs = new Messages();
-        backpacks = new HashMap<>();
-        briefkasten = new HashMap<>();
-        ausweis = new HashMap<>();
+        backpacks = new HashMap<Integer, Backpack>();
+        briefkasten = new HashMap<UUID, Briefkasten>();
+        ausweis = new HashMap<String, Ausweis>();
         uF = new UUIDFetcher();
-        briefe = new HashMap<>();
+        briefe = new HashMap<Integer, Brief>();
         itemStacks = new ItemStacks();
-        reiter = new ArrayList<>();
-        player = new HashMap<>();
+        reiter = new ArrayList<Player>();
+        player = new HashMap<Player, FTSUser>();
         var = new Var(this);
 
 
@@ -173,7 +171,7 @@ public class Engine extends JavaPlugin implements Listener {
         return chat;
     }
 
-    private final HashMap<OfflinePlayer, Long> ausweisCooldown = new HashMap<>();
+    private final HashMap<OfflinePlayer, Long> ausweisCooldown = new HashMap<OfflinePlayer, Long>();
 
     @EventHandler
     public void onItemInteract(PlayerInteractEvent e) {
@@ -373,7 +371,7 @@ public class Engine extends JavaPlugin implements Listener {
         horn.addIngredient(Material.NOTE_BLOCK);
         getServer().addRecipe(horn);
 
-        List<Recipe> backup = new ArrayList<>();
+        List<Recipe> backup = new ArrayList<Recipe>();
         Iterator<Recipe> a = getServer().recipeIterator();
 
         while (a.hasNext()) {
@@ -640,6 +638,7 @@ public class Engine extends JavaPlugin implements Listener {
         cpick.setItemMeta(cpickM);
         cpick.addEnchantment(Enchantment.DURABILITY, 2);
         cpick.addEnchantment(Enchantment.DIG_SPEED, 2);
+        cpick.addItemFlags(ItemFlag.HIDE_ENCHANTS);
 
         ShapedRecipe cpickr = new ShapedRecipe(cpickkey, cpick);
         cpickr.shape("CCC", "*S*", "*S*");
@@ -656,6 +655,7 @@ public class Engine extends JavaPlugin implements Listener {
         caxe.setItemMeta(caxeM);
         caxe.addEnchantment(Enchantment.DURABILITY, 2);
         caxe.addEnchantment(Enchantment.DIG_SPEED, 2);
+        caxe.addItemFlags(ItemFlag.HIDE_ENCHANTS);
 
         ShapedRecipe caxer = new ShapedRecipe(caxekey, caxe);
         caxer.shape("*CC", "*SC", "*S*");
@@ -664,21 +664,21 @@ public class Engine extends JavaPlugin implements Listener {
         caxer.setIngredient('*', Material.AIR);
         getServer().addRecipe(caxer);
 
-        ShapedRecipe caxel = new ShapedRecipe(caxekey, caxe);
+        ShapedRecipe caxel = new ShapedRecipe(new NamespacedKey(this, "FTSkupferaxt2"), caxe);
         caxel.shape("CC*", "CS*", "*S*");
         caxel.setIngredient('C', Material.COPPER_INGOT);
         caxel.setIngredient('S', Material.STICK);
         caxel.setIngredient('*', Material.AIR);
         getServer().addRecipe(caxel);
 
-        ShapedRecipe caxell = new ShapedRecipe(caxekey, caxe);
+        ShapedRecipe caxell = new ShapedRecipe(new NamespacedKey(this, "FTSkupferaxt3"), caxe);
         caxell.shape("CC*", "SC*", "S**");
         caxell.setIngredient('C', Material.COPPER_INGOT);
         caxell.setIngredient('S', Material.STICK);
         caxell.setIngredient('*', Material.AIR);
         getServer().addRecipe(caxell);
 
-        ShapedRecipe caxerr = new ShapedRecipe(caxekey, caxe);
+        ShapedRecipe caxerr = new ShapedRecipe(new NamespacedKey(this, "FTSkupferaxt4"), caxe);
         caxerr.shape("*CC", "*CS", "**S");
         caxerr.setIngredient('C', Material.COPPER_INGOT);
         caxerr.setIngredient('S', Material.STICK);
@@ -693,6 +693,7 @@ public class Engine extends JavaPlugin implements Listener {
         csword.setItemMeta(cswordM);
         csword.addEnchantment(Enchantment.DURABILITY, 2);
         csword.addEnchantment(Enchantment.DAMAGE_ALL, 2);
+        csword.addItemFlags(ItemFlag.HIDE_ENCHANTS);
 
         ShapedRecipe cswordl = new ShapedRecipe(cswordkey, csword);
         cswordl.shape("C**", "C**", "S**");
@@ -701,14 +702,14 @@ public class Engine extends JavaPlugin implements Listener {
         cswordl.setIngredient('*', Material.AIR);
         getServer().addRecipe(cswordl);
 
-        ShapedRecipe cswordr = new ShapedRecipe(cswordkey, csword);
+        ShapedRecipe cswordr = new ShapedRecipe(new NamespacedKey(this, "FTSkupferschwert2"), csword);
         cswordr.shape("**C", "**C", "**S");
         cswordr.setIngredient('C', Material.COPPER_INGOT);
         cswordr.setIngredient('S', Material.STICK);
         cswordr.setIngredient('*', Material.AIR);
         getServer().addRecipe(cswordr);
 
-        ShapedRecipe cswordm = new ShapedRecipe(cswordkey, csword);
+        ShapedRecipe cswordm = new ShapedRecipe(new NamespacedKey(this, "FTSkupferschwert3"), csword);
         cswordm.shape("*C*", "*C*", "*S*");
         cswordm.setIngredient('C', Material.COPPER_INGOT);
         cswordm.setIngredient('S', Material.STICK);
@@ -731,21 +732,21 @@ public class Engine extends JavaPlugin implements Listener {
         choel.setIngredient('*', Material.AIR);
         getServer().addRecipe(choel);
 
-        ShapedRecipe choer = new ShapedRecipe(choekey, choe);
+        ShapedRecipe choer = new ShapedRecipe(new NamespacedKey(this, "FTSkupferhacke2"), choe);
         choer.shape("*CC", "*S*", "*s*");
         choer.setIngredient('C', Material.COPPER_INGOT);
         choer.setIngredient('S', Material.STICK);
         choer.setIngredient('*', Material.AIR);
         getServer().addRecipe(choer);
 
-        ShapedRecipe choerr = new ShapedRecipe(choekey, choe);
+        ShapedRecipe choerr = new ShapedRecipe(new NamespacedKey(this, "FTSkupferhacke3"), choe);
         choerr.shape("*CC", "**S", "**S");
         choerr.setIngredient('C', Material.COPPER_INGOT);
         choerr.setIngredient('S', Material.STICK);
         choerr.setIngredient('*', Material.AIR);
         getServer().addRecipe(choerr);
 
-        ShapedRecipe choell = new ShapedRecipe(choekey, choe);
+        ShapedRecipe choell = new ShapedRecipe(new NamespacedKey(this, "FTSkupferhacke4"), choe);
         choell.shape("CC*", "S**", "S**");
         choell.setIngredient('C', Material.COPPER_INGOT);
         choell.setIngredient('S', Material.STICK);
@@ -768,14 +769,14 @@ public class Engine extends JavaPlugin implements Listener {
         cshovell.setIngredient('*', Material.AIR);
         getServer().addRecipe(cshovell);
 
-        ShapedRecipe cshovelr = new ShapedRecipe(cshovelkey, cshovel);
+        ShapedRecipe cshovelr = new ShapedRecipe(new NamespacedKey(this, "FTSkupferschaufel2"), cshovel);
         cshovelr.shape("**C", "**S", "**S");
         cshovelr.setIngredient('C', Material.COPPER_INGOT);
         cshovell.setIngredient('S', Material.STICK);
         cshovell.setIngredient('*', Material.AIR);
         getServer().addRecipe(cshovelr);
 
-        ShapedRecipe cshovelm = new ShapedRecipe(cshovelkey, cshovel);
+        ShapedRecipe cshovelm = new ShapedRecipe(new NamespacedKey(this, "FTSkupferschaufel3"), cshovel);
         cshovelm.shape("*C*", "*S*", "*S*");
         cshovelm.setIngredient('C', Material.COPPER_INGOT);
         cshovelm.setIngredient('S', Material.STICK);

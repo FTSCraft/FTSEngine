@@ -12,6 +12,7 @@ import org.bukkit.inventory.meta.LeatherArmorMeta;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 public class ItemStacks {
@@ -34,7 +35,7 @@ public class ItemStacks {
 
     private void init() {
 
-        disabledDefaultRecipes = new ArrayList<>();
+        disabledDefaultRecipes = new ArrayList<Material>();
         disabledDefaultRecipes.addAll(Arrays.asList(
                 Material.DIAMOND_BOOTS,
                 Material.DIAMOND_LEGGINGS,
@@ -70,7 +71,7 @@ public class ItemStacks {
         ender_bpM.setColor(Color.PURPLE);
         ender_bpM.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
         ender_bpM.setDisplayName(BackpackType.ENDER.getName());
-        tiny_bpM.setLore(Arrays.asList(BackpackType.ENDER.getLore()));
+        tiny_bpM.setLore(Collections.singletonList(BackpackType.ENDER.getLore()));
         ender_bp.setItemMeta(ender_bpM);
 
         //BP KEY

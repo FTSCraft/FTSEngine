@@ -134,11 +134,11 @@ public class Var
         String lore = backpack.getItemMeta().getLore().get(1);
         String idS = lore.replaceAll(".*#", "");
 
-        Integer id = -1;
+        int id = -1;
 
         try
         {
-            id = Integer.valueOf(idS);
+            id = Integer.parseInt(idS);
         } catch (NumberFormatException e)
         {
             return -1;
@@ -169,11 +169,10 @@ public class Var
             weeks++;
         }
 
-        String a = "§c"+weeks+" Wochen, "+days+" Tage, "+hours+" Stunden, "+minutes+" Minuten und "+seconds+" Sekunden";
-        return a;
+        return "§c"+weeks+" Wochen, "+days+" Tage, "+hours+" Stunden, "+minutes+" Minuten und "+seconds+" Sekunden";
     }
 
-    private final List<Material> carpets = new ArrayList<>();
+    private final List<Material> carpets = new ArrayList<Material>();
 
     public List<Material> getCarpets() {
 
@@ -192,7 +191,7 @@ public class Var
 
     }
 
-    private final List<Material> noStairs = new ArrayList<>();
+    private final List<Material> noStairs = new ArrayList<Material>();
 
     public List<Material> getNoStairs() {
 

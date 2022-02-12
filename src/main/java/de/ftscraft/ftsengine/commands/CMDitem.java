@@ -23,8 +23,8 @@ public class CMDitem implements CommandExecutor {
     public CMDitem(Engine plugin) {
         plugin.getCommand("item").setExecutor(this);
 
-        forbiddenItems = new ArrayList<>();
-        forbiddenNames = new ArrayList<>();
+        forbiddenItems = new ArrayList<String>();
+        forbiddenNames = new ArrayList<String>();
 
         forbiddenItems.addAll(Arrays.asList(BackpackType.LARGE.getName(), BackpackType.TINY.getName(), BackpackType.ENDER.getName()));
 
@@ -45,7 +45,6 @@ public class CMDitem implements CommandExecutor {
                 "Süßer Fisch"));
     }
 
-    @Override
     public boolean onCommand(CommandSender cs, Command cmd, String label, String[] args) {
 
 
@@ -131,7 +130,7 @@ public class CMDitem implements CommandExecutor {
 
                         String[] lines = all.split("\\|");
 
-                        List<String> lore = new ArrayList<>();
+                        List<String> lore = new ArrayList<String>();
 
                         for (String line : lines) {
                             line.replace("|", "");
