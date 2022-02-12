@@ -6,7 +6,6 @@ import com.comphenix.protocol.ProtocolManager;
 import com.comphenix.protocol.events.PacketContainer;
 import com.comphenix.protocol.wrappers.WrappedChatComponent;
 import com.nisovin.shopkeepers.api.ShopkeepersPlugin;
-import com.sun.tools.javac.util.Names;
 import de.ftscraft.ftsengine.backpacks.Backpack;
 import de.ftscraft.ftsengine.backpacks.BackpackType;
 import de.ftscraft.ftsengine.brett.Brett;
@@ -399,7 +398,7 @@ public class Engine extends JavaPlugin implements Listener {
         iron_helmet.setIngredient('B', Material.IRON_BLOCK);
         getServer().addRecipe(iron_helmet);
 
-        NamespacedKey ihkey2 = new NamespacedKey(this, "FTSironhelmet");
+        NamespacedKey ihkey2 = new NamespacedKey(this, "FTSironhelmet2");
         ShapedRecipe iron_helmet2 = new ShapedRecipe(ihkey2, itemStacks.getIron_helmet());
         iron_helmet2.shape("***", "III", "IBI");
         iron_helmet2.setIngredient('I', Material.IRON_INGOT);
@@ -437,7 +436,7 @@ public class Engine extends JavaPlugin implements Listener {
         iron_boots.setIngredient('B', Material.IRON_BLOCK);
         getServer().addRecipe(iron_boots);
 
-        NamespacedKey ibkey2 = new NamespacedKey(this, "FTSironboots");
+        NamespacedKey ibkey2 = new NamespacedKey(this, "FTSironboots2");
         ShapedRecipe iron_boots2 = new ShapedRecipe(ibkey2, itemStacks.getIron_boots());
         iron_boots2.shape("IBI", "I*I", "***");
         iron_boots2.setIngredient('I', Material.IRON_INGOT);
@@ -455,7 +454,7 @@ public class Engine extends JavaPlugin implements Listener {
         chain_helmet.setIngredient('*', Material.AIR);
         getServer().addRecipe(chain_helmet);
 
-        NamespacedKey chkey2 = new NamespacedKey(this, "FTSchainhelmet");
+        NamespacedKey chkey2 = new NamespacedKey(this, "FTSchainhelmet2");
         ShapedRecipe chain_helmet2 = new ShapedRecipe(chkey2, itemStacks.getChainmail_helmet());
         chain_helmet2.shape("***", "III", "I*I");
         chain_helmet2.setIngredient('I', Material.IRON_INGOT);
@@ -489,7 +488,7 @@ public class Engine extends JavaPlugin implements Listener {
         chain_boots.setIngredient('*', Material.AIR);
         getServer().addRecipe(chain_boots);
 
-        NamespacedKey cbkey2 = new NamespacedKey(this, "FTSchainboots");
+        NamespacedKey cbkey2 = new NamespacedKey(this, "FTSchainboots2");
         ShapedRecipe chain_boots2 = new ShapedRecipe(cbkey2, itemStacks.getChainmail_boots());
         chain_boots2.shape("I*I", "I*I", "***");
         chain_boots2.setIngredient('I', Material.IRON_INGOT);
@@ -506,9 +505,9 @@ public class Engine extends JavaPlugin implements Listener {
         diamond_helmet.setIngredient('*', Material.AIR);
         getServer().addRecipe(diamond_helmet);
 
-        NamespacedKey dhkey2 = new NamespacedKey(this, "FTSdiamondhelmet");
+        NamespacedKey dhkey2 = new NamespacedKey(this, "FTSdiamondhelmet2");
         ShapedRecipe diamond_helmet2 = new ShapedRecipe(dhkey2, itemStacks.getDiamond_helmet());
-        diamond_helmet2.shape("***", "DDD", "D*D");
+        diamond_helmet2.shape("***", "DDD", "DBD");
         diamond_helmet2.setIngredient('D', Material.DIAMOND);
         diamond_helmet2.setIngredient('B', Material.DIAMOND_BLOCK);
         diamond_helmet2.setIngredient('*', Material.AIR);
@@ -544,7 +543,7 @@ public class Engine extends JavaPlugin implements Listener {
         diamond_boots.setIngredient('*', Material.AIR);
         getServer().addRecipe(diamond_boots);
 
-        NamespacedKey dbkey2 = new NamespacedKey(this, "FTSdiamondboots");
+        NamespacedKey dbkey2 = new NamespacedKey(this, "FTSdiamondboots2");
         ShapedRecipe diamond_boots2 = new ShapedRecipe(dbkey2, itemStacks.getDiamond_boots());
         diamond_boots2.shape("***", "DBD", "D*D");
         diamond_boots2.setIngredient('D', Material.DIAMOND);
