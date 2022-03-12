@@ -4,6 +4,7 @@ import de.ftscraft.ftsengine.main.Engine;
 import de.ftscraft.ftsengine.utils.Ausweis;
 import de.ftscraft.ftsengine.utils.Gender;
 import de.ftscraft.ftsengine.utils.Messages;
+import de.ftscraft.ftsengine.utils.Var;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -59,7 +60,7 @@ public class CMDausweis implements CommandExecutor {
                     }
                     if (args.length == 2) {
                         String link = args[1];
-                        if(!link.startsWith("https://forum.ftscraft.de/")) {
+                        if (!link.startsWith("https://forum.ftscraft.de/")) {
                             p.sendMessage("§cDer Link muss mit unserer URL des Forums anfangen! (https://forum.ftscraft.de/)");
                             return true;
                         }
@@ -105,7 +106,8 @@ public class CMDausweis implements CommandExecutor {
                         String race = args[1];
                         plugin.getAusweis(p).setRace(race);
                         p.sendMessage(Messages.SUCC_CMD_AUSWEIS.replace("%s", "Rasse").replace("%v", race));
-                    } else p.sendMessage(Messages.PREFIX + "Bitte benutze den Befehl so:" + " §c/ausweis rasse [Rasse]");
+                    } else
+                        p.sendMessage(Messages.PREFIX + "Bitte benutze den Befehl so:" + " §c/ausweis rasse [Rasse]");
                     break;
                 case "nation":
 
@@ -118,7 +120,8 @@ public class CMDausweis implements CommandExecutor {
                         String nation = args[1];
                         plugin.getAusweis(p).setNation(nation);
                         p.sendMessage(Messages.SUCC_CMD_AUSWEIS.replace("%s", "Nation").replace("%v", nation));
-                    } else p.sendMessage(Messages.PREFIX + "Bitte benutze den Befehl so:" + " §c/ausweis nation [Nation]");
+                    } else
+                        p.sendMessage(Messages.PREFIX + "Bitte benutze den Befehl so:" + " §c/ausweis nation [Nation]");
 
                     break;
                 case "beschreibung":
@@ -195,6 +198,15 @@ public class CMDausweis implements CommandExecutor {
                     }
                     p.getInventory().addItem(item);
                     p.sendMessage(Messages.SUCC_COPY_AUSWEIS.replace("%s", name));
+                    break;
+                case "anschauen":
+                    if(p.hasPermission("ftsengine.ausweis.anschauen")) {
+                        if (args.length == 2) {
+                            if (plugin.hasAusweis(args[1])) {
+                                new Var(plugin).sendAusweisMsg(p, plugin.getAusweis(args[1]));
+                            } else p.sendMessage(Messages.TARGET_NO_AUSWEIS);
+                        } else p.sendMessage("§cBitte gebe einen Namen an");
+                    } else p.sendMessage("§cDafür hast du keine Rechte");
                     break;
                 case "list":
                     for (Ausweis a : plugin.ausweis.values()) {

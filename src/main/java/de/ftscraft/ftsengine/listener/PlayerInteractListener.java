@@ -7,10 +7,7 @@ import de.ftscraft.ftsengine.backpacks.Backpack;
 import de.ftscraft.ftsengine.backpacks.BackpackType;
 import de.ftscraft.ftsengine.brett.Brett;
 import de.ftscraft.ftsengine.main.Engine;
-import org.bukkit.Bukkit;
-import org.bukkit.Material;
-import org.bukkit.Particle;
-import org.bukkit.Sound;
+import org.bukkit.*;
 import org.bukkit.block.data.type.Sign;
 import org.bukkit.block.data.type.Slab;
 import org.bukkit.block.data.type.Stairs;
@@ -93,7 +90,7 @@ public class PlayerInteractListener implements Listener {
                             if (n instanceof Player) {
                                 Player playerInRadius = (Player) n;
 
-                                playerInRadius.playSound(p.getLocation(), Sound.EVENT_RAID_HORN, 300, r);
+                                playerInRadius.playSound(p.getLocation(), Sound.EVENT_RAID_HORN, SoundCategory.VOICE, 300, r);
                             }
                         }
 
