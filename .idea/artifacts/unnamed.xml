@@ -1,6 +1,6 @@
 <component name="ArtifactManager">
   <artifact type="jar" name="unnamed">
-    <output-path>$USER_HOME$/Documents/FTS/Testserver/plugins</output-path>
+    <output-path>$PROJECT_DIR$/../../Ablage</output-path>
     <root id="archive" name="FTSEngine.jar">
       <element id="module-output" name="FTSEngine" />
       <element id="file-copy" path="$PROJECT_DIR$/src/main/resources/plugin.yml" />
