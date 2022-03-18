@@ -46,6 +46,7 @@ public class CMDwürfel implements CommandExecutor {
         DiceType dice = DiceType.getDiceTypeByName(ausweis.getRace());
 
         boolean magic = false;
+        boolean action = false;
 
         if (args.length <= 2 && args.length > 0) {
             if (dice == null) {
@@ -53,8 +54,11 @@ public class CMDwürfel implements CommandExecutor {
                 if (args.length == 2)
                     if (args[1].equalsIgnoreCase("magie"))
                         magic = true;
+                    if (args[1].equalsIgnoreCase("aktion"))
+                        action = true;
             } else {
                 magic = args[0].equalsIgnoreCase("magie");
+                action = args[0].equalsIgnoreCase("aktion");
             }
         }
 
@@ -78,6 +82,10 @@ public class CMDwürfel implements CommandExecutor {
 
                 sb.append((total >= dice.getMagicMin() && total <= dice.getMagicMax()) ? "§2" : "§c").append(total).append(" §5[Magie]");
 
+            }else if  (action) {
+                total = ThreadLocalRandom.current().nextInt(1, 20 + 1);
+
+                sb.append((total >= dice.getActionMin() && total <= dice.getActionMax()) ? "§2" : "§c").append(total).append(" §5[Aktion]");
             } else {
 
                 int value = ThreadLocalRandom.current().nextInt(1, 100 + 1);
@@ -98,7 +106,7 @@ public class CMDwürfel implements CommandExecutor {
 
 
         } else {
-            cs.sendMessage("§cBitte würfel so: §e/würfel [Mensch/Zwerg/Elf/Ork/Goblin] <Magie>");
+            cs.sendMessage("§cBitte würfel so: §e/würfel [Mensch/Zwerg/Elf/Ork/Goblin] <Magie> <Aktion>");
         }
 
         return false;
@@ -106,11 +114,11 @@ public class CMDwürfel implements CommandExecutor {
 
     public enum DiceType {
 
-        ORK("Ork", "Orkin", 60, 4, 8),
-        ZWERG("Zwerg", "Zwergin", 50, 4, 8),
-        MENSCH("Mensch", "Mensch", 40, 6, 8),
-        ELF("Elf", "Elfin", 25, 2, 10),
-        GOBLIN("Goblin", "Goblin", 15, 3, 9);
+        ORK("Ork", "Orkin", 60, 4, 8, 1, 20),
+        ZWERG("Zwerg", "Zwergin", 50, 4, 8, 1, 20),
+        MENSCH("Mensch", "Mensch", 40, 6, 8, 1, 20),
+        ELF("Elf", "Elfin", 25, 2, 10, 1, 20),
+        GOBLIN("Goblin", "Goblin", 15, 3, 9,1, 20);
 
         private final String mName;
         private final String fName;
@@ -118,14 +126,19 @@ public class CMDwürfel implements CommandExecutor {
         private final int chance;
         private final int magicMin;
         private final int magicMax;
+        private final int actionMin;
+        private final int actionMax;
 
-        DiceType(String mName, String fName, int chance, int magicMin, int magicMax) {
+        DiceType(String mName, String fName, int chance, int magicMin, int magicMax, int actionMin, int actionMax) {
             this.mName = mName;
             this.fName = fName;
+
             this.pips = pips;
             this.chance = chance;
             this.magicMin = magicMin;
             this.magicMax = magicMax;
+            this.actionMin = actionMin;
+            this.actionMax = actionMax;
         }
 
         public String getMName() {
@@ -151,6 +164,10 @@ public class CMDwürfel implements CommandExecutor {
         public int getMagicMin() {
             return magicMin;
         }
+
+        public int getActionMax() {return actionMax;}
+
+        public int getActionMin() {return actionMin;}
 
         public static DiceType getDiceTypeByName(String race) {
             for (DiceType value : DiceType.values()) {
