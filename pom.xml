@@ -28,6 +28,10 @@
 
     <repositories>
         <repository>
+            <id>jitpack.io</id>
+            <url>https://jitpack.io</url>
+        </repository>
+        <repository>
             <id>vault-repo</id>
             <url>https://nexus.hc.to/content/repositories/pub_releases</url>
         </repository>
@@ -46,6 +50,11 @@
             <groupId>com.comphenix.protocol</groupId>
             <artifactId>ProtocolLib-API</artifactId>
             <version>4.4.0</version>
+        </dependency>
+        <dependency>
+            <groupId>com.github.Shopkeepers.Shopkeepers</groupId>
+            <artifactId>ShopkeepersAPI</artifactId>
+            <version>v2.13.3</version>
         </dependency>
         <dependency>
             <groupId>me.lucko.luckperms</groupId>
