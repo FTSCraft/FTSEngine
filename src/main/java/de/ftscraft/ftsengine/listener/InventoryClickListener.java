@@ -102,7 +102,7 @@ public class InventoryClickListener implements Listener {
                     //
 
                     p.closeInventory();
-                    p.sendMessage("§7[§bSchwarzes Brett§7] §bBitte gebe jetzt den Titel ein. §c(Max. 50 Ziechen)");
+                    p.sendMessage("§cBitte achte auf einen RPlichen Schreibstil \n §7[§bSchwarzes Brett§7] §bBitte gebe jetzt den Titel ein. §c(Max. 50 Ziechen)");
                     ArrayList<String> al = new ArrayList<String>();
                     al.add(" ");
                     BrettNote brettNote = new BrettNote(brett, p.getName(), true);

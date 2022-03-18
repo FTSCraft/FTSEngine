@@ -200,7 +200,7 @@ public class Engine extends JavaPlugin implements Listener {
                             id = Integer.valueOf(idS);
                         } catch (NumberFormatException ex) {
                             e.getPlayer().sendMessage("Irgendwas ist falsch! guck mal Konsole " +
-                                    "(sag Musc gescheid, dass er halberfan sagen soll: " +
+                                    "(sag Musc bescheid, dass er halberfan sagen soll: " +
                                     "\"Fehler bei Main - onItemInteract - NumberFormatException\"");
                             return;
                         }
@@ -634,7 +634,7 @@ public class Engine extends JavaPlugin implements Listener {
         NamespacedKey cpickkey = new NamespacedKey(this, "FTSkupferpicke");
         ItemStack cpick = new ItemStack(Material.STONE_PICKAXE, 1);
         ItemMeta cpickM = cpick.getItemMeta();
-        cpickM.setDisplayName("Kupferspitzhacke");
+        cpickM.setDisplayName("§fKupferspitzhacke");
         cpick.setItemMeta(cpickM);
         cpick.addEnchantment(Enchantment.DURABILITY, 2);
         cpick.addEnchantment(Enchantment.DIG_SPEED, 2);
@@ -651,7 +651,7 @@ public class Engine extends JavaPlugin implements Listener {
         NamespacedKey caxekey = new NamespacedKey(this, "FTSkupferaxt");
         ItemStack caxe = new ItemStack(Material.STONE_AXE, 1);
         ItemMeta caxeM = cpick.getItemMeta();
-        caxeM.setDisplayName("Kupferaxt");
+        caxeM.setDisplayName("§fKupferaxt");
         caxe.setItemMeta(caxeM);
         caxe.addEnchantment(Enchantment.DURABILITY, 2);
         caxe.addEnchantment(Enchantment.DIG_SPEED, 2);
@@ -689,7 +689,7 @@ public class Engine extends JavaPlugin implements Listener {
         NamespacedKey cswordkey = new NamespacedKey(this, "FTSkupferschwert");
         ItemStack csword = new ItemStack(Material.STONE_SWORD, 1);
         ItemMeta cswordM = csword.getItemMeta();
-        cswordM.setDisplayName("Kupferschwert");
+        cswordM.setDisplayName("§fKupferschwert");
         csword.setItemMeta(cswordM);
         csword.addEnchantment(Enchantment.DURABILITY, 2);
         csword.addEnchantment(Enchantment.DAMAGE_ALL, 2);
@@ -720,10 +720,11 @@ public class Engine extends JavaPlugin implements Listener {
         NamespacedKey choekey = new NamespacedKey(this, "FTSkupferhacke");
         ItemStack choe = new ItemStack(Material.STONE_HOE, 1);
         ItemMeta choeM = choe.getItemMeta();
-        choeM.setDisplayName("Kupferhacke");
+        choeM.setDisplayName("§fKupferhacke");
         choe.setItemMeta(choeM);
         choe.addEnchantment(Enchantment.DURABILITY, 2);
         choe.addEnchantment(Enchantment.DIG_SPEED, 2);
+        choe.addItemFlags(ItemFlag.HIDE_ENCHANTS);
 
         ShapedRecipe choel = new ShapedRecipe(choekey, choe);
         choel.shape("CC*", "*S*", "*S*");
@@ -757,23 +758,17 @@ public class Engine extends JavaPlugin implements Listener {
         NamespacedKey cshovelkey = new NamespacedKey(this, "FTSkupferschaufel");
         ItemStack cshovel = new ItemStack(Material.STONE_SHOVEL, 1);
         ItemMeta cshovelM = cshovel.getItemMeta();
-        cshovelM.setDisplayName("Kupferschaufel");
+        cshovelM.setDisplayName("§fKupferschaufel");
         cshovel.setItemMeta(cshovelM);
         cshovel.addEnchantment(Enchantment.DURABILITY, 2);
         cshovel.addEnchantment(Enchantment.DIG_SPEED, 2);
-
-        ShapedRecipe cshovell = new ShapedRecipe(cshovelkey, cshovel);
-        cshovell.shape("C**", "S**", "S**");
-        cshovell.setIngredient('C', Material.COPPER_INGOT);
-        cshovell.setIngredient('S', Material.STICK);
-        cshovell.setIngredient('*', Material.AIR);
-        getServer().addRecipe(cshovell);
+        cshovel.addItemFlags(ItemFlag.HIDE_ENCHANTS);
 
         ShapedRecipe cshovelr = new ShapedRecipe(new NamespacedKey(this, "FTSkupferschaufel2"), cshovel);
         cshovelr.shape("**C", "**S", "**S");
         cshovelr.setIngredient('C', Material.COPPER_INGOT);
-        cshovell.setIngredient('S', Material.STICK);
-        cshovell.setIngredient('*', Material.AIR);
+        cshovelr.setIngredient('S', Material.STICK);
+        cshovelr.setIngredient('*', Material.AIR);
         getServer().addRecipe(cshovelr);
 
         ShapedRecipe cshovelm = new ShapedRecipe(new NamespacedKey(this, "FTSkupferschaufel3"), cshovel);
