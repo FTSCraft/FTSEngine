@@ -126,6 +126,7 @@ public class Engine extends JavaPlugin implements Listener {
         new CMDschlagen(this);
         new CMDfasten(this);
         new CMDohrfeige(this);
+        new CMDplaytime(this);
         new CMDumarmen(this);
         new CMDremovearmorstand(this);
         new CMDspucken(this);
