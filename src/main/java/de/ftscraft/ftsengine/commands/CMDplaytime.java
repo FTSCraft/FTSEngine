@@ -26,7 +26,7 @@ public class CMDplaytime implements CommandExecutor {
             int hour = minute / 60;
 
             if (cmd.getName().equalsIgnoreCase("spielzeit")) ;
-            p.sendMessage("§bDu spielst schon §c" + hour + " Stunden§b. \n§bAb §c50 Stunden §b solltest du eine Charaktervorstellung im Forum schreiben \n§bDu willst wissen wie das geht? Schau hier: https://forum.ftscraft.de/t/tutorial-eine-charaktervorstellung-schreiben/1586 ");
+            p.sendMessage("§bDu spielst schon §c" + hour + " Stunden§b. \n§bAb §c50 Stunden §b solltest du eine Charaktervorstellung im Forum schreiben \n§bDu willst wissen wie das geht? Schau hier: §chttps://forum.ftscraft.de/t/tutorial-eine-charaktervorstellung-schreiben/1586 ");
         } else {
             cs.sendMessage("Du musst ein Spieler sein");
         }
