@@ -1,4 +1,4 @@
-package de.ftscraft.ftsengine.commands;
+package de.ftscraft.ftsengine.commands.emotes;
 
 import de.ftscraft.ftsengine.main.Engine;
 import de.ftscraft.ftsengine.utils.Messages;

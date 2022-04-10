@@ -10,6 +10,7 @@ import de.ftscraft.ftsengine.backpacks.Backpack;
 import de.ftscraft.ftsengine.brett.Brett;
 import de.ftscraft.ftsengine.brett.BrettNote;
 import de.ftscraft.ftsengine.commands.*;
+import de.ftscraft.ftsengine.commands.emotes.*;
 import de.ftscraft.ftsengine.courier.Brief;
 import de.ftscraft.ftsengine.courier.Briefkasten;
 import de.ftscraft.ftsengine.listener.*;

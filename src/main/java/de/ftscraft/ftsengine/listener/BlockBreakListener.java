@@ -32,6 +32,10 @@ public class BlockBreakListener implements Listener
     public void onBreak(BlockBreakEvent event)
     {
 
+        if(event.isCancelled()) {
+            return;
+        }
+
         //Schwarzes Brett und Briefkasten
         if (event.getBlock().getBlockData() instanceof WallSign || event.getBlock().getBlockData() instanceof org.bukkit.block.data.type.Sign)
         {

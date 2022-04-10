@@ -34,7 +34,7 @@ public class Var
         p.sendMessage("§cGeschlecht: §e" + (a.getGender() == Gender.MALE ? "Mann" : a.getGender() == Gender.FEMALE ? "Frau" : a.getGender() == Gender.DIVERS ? "Divers" : "N/A"));
         p.sendMessage("§cRasse: §e" + (a.getRace() != null ? a.getRace() : "N/A"));
         p.sendMessage("§cNation: §e" + (a.getNation() != null ? a.getNation() : "N/A"));
-        p.sendMessage("§cBeschreibung: §e" + (a.getDesc() != null ? a.getDesc() : "N/A"));
+        p.sendMessage("§cAussehen: §e" + (a.getDesc() != null ? a.getDesc() : "N/A"));
         p.sendMessage("§cReligion: §e" + (a.getReligion() != null ? a.getReligion() : "N/A"));
         if(a.getForumLink() != null ){
             ComponentBuilder componentBuilder = new ComponentBuilder("§e[KLICK]");
@@ -42,8 +42,6 @@ public class Var
             p.sendMessage(new ComponentBuilder("§cVorstellung: ").append(componentBuilder.create()).create());
         } else {
             ComponentBuilder componentBuilder = new ComponentBuilder("§e[NICHT VORHANDEN]");
-            componentBuilder.event(new ClickEvent(ClickEvent.Action.OPEN_URL, "https://www.youtube.com/watch?v=mFWsQ2cZrVE"));
-            componentBuilder.event(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ComponentBuilder("§6Klick trotzdem Mal ;)").create()));
             p.sendMessage(new ComponentBuilder("§cVorstellung: ").append(componentBuilder.create()).create());
         }
 

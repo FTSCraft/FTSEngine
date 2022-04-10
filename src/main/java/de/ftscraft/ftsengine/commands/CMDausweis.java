@@ -9,19 +9,24 @@ import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.command.TabCompleter;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
-import java.util.UUID;
+import java.util.*;
 
-public class CMDausweis implements CommandExecutor {
+public class CMDausweis implements CommandExecutor, TabCompleter {
 
     private final Engine plugin;
     private final Messages msgs;
+    private ArrayList<String> arguments;
 
     public CMDausweis(Engine plugin) {
         this.plugin = plugin;
         this.msgs = plugin.msgs;
+        this.arguments = new ArrayList<>(Arrays.asList("name", "geschlecht", "spitzname", "rasse", "nation", "aussehen", "religion", "link", "kopieren", "anschauen"));
         plugin.getCommand("ausweis").setExecutor(this);
     }
 
@@ -124,7 +129,7 @@ public class CMDausweis implements CommandExecutor {
                         p.sendMessage(Messages.PREFIX + "Bitte benutze den Befehl so:" + " §c/ausweis nation [Nation]");
 
                     break;
-                case "beschreibung":
+                case "aussehen":
 
                     if (!plugin.hasAusweis(p)) {
                         p.sendMessage(Messages.NEED_AUSWEIS);
@@ -142,10 +147,10 @@ public class CMDausweis implements CommandExecutor {
 
                         plugin.getAusweis(p).setDesc(desc);
 
-                        p.sendMessage(Messages.SUCC_CMD_AUSWEIS.replace("%s", "Beschreibung").replace("%v", desc));
+                        p.sendMessage(Messages.SUCC_CMD_AUSWEIS.replace("%s", "Aussehen").replace("%v", desc));
 
                     } else
-                        p.sendMessage(Messages.PREFIX + "Bitte benutze den Befehl so:" + " §c/ausweis beschreibung [Beschreibung (mind. 4 Wörter)]");
+                        p.sendMessage(Messages.PREFIX + "Bitte benutze den Befehl so:" + " §c/ausweis aussehen [Aussehen (mind. 4 Wörter)]");
 
                     break;
                 case "religion":
@@ -233,5 +238,22 @@ public class CMDausweis implements CommandExecutor {
 
         } else plugin.getVar().sendHelpMsg(p);
         return false;
+    }
+
+    @Override
+    public @Nullable List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command command, @NotNull String alias, @NotNull String[] args) {
+
+        ArrayList<String> result = new ArrayList<>();
+
+        if (args.length == 1) {
+            for (int i = 0; i < arguments.size(); i++) {
+                if (arguments.get(i).toLowerCase().startsWith(args[0].toLowerCase()))
+                    result.add(arguments.get(i));
+            }
+            return result;
+        }
+
+        return result;
+
     }
 }
