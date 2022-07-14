@@ -41,6 +41,7 @@ public class CMDitem implements CommandExecutor {
                 "Handschellen",
                 "Horn",
                 "Marmelade",
+                "§cÜberreste",
                 "schloss",
                 "Süßer Fisch"));
     }
@@ -55,22 +56,14 @@ public class CMDitem implements CommandExecutor {
             if(p.hasPermission("ftsengine.item")) {
 
                 if (args.length >= 1) {
-
                     ItemStack is = p.getInventory().getItemInMainHand();
-
                     if(is.hasItemMeta()) {
-
                         if(forbiddenItems.contains(is.getItemMeta().getDisplayName())) {
-
                             p.sendMessage("§cDu darfst dieses Item nicht bearbeiten!");
-
                             return true;
                         }
-
                     }
-
                     if (args[0].equalsIgnoreCase("name")) {
-
 
                         StringBuilder stringBuilder = new StringBuilder();
 
@@ -84,11 +77,9 @@ public class CMDitem implements CommandExecutor {
 
                         if (is != null && is.getType() != Material.AIR) {
 
-                            if(name.equalsIgnoreCase("§cÜberreste") || name.contains("schloss") || forbiddenNames.contains(name)) {
-
+                            if(forbiddenNames.contains(name)) {
                                 p.sendMessage("§cDas Item so zu nennen ist nicht erlaubt!");
                                 return true;
-
                             }
 
                             ItemMeta im = is.getItemMeta();
@@ -100,23 +91,7 @@ public class CMDitem implements CommandExecutor {
                         } else
                             p.sendMessage("§cDu musst ein Item in deiner Hand haben!");
 
-                    } /*else if (args[0].equalsIgnoreCase("glow")) {
-
-                        ItemStack item = p.getInventory().getItemInMainHand();
-
-                        if (item != null && item.getType() != Material.AIR) {
-
-                            ItemMeta itemStackMeta = item.getItemMeta();
-
-                            if (!itemStackMeta.hasEnchants()) {
-                                itemStackMeta.addEnchant(Enchantment.LURE, 0, true);
-                                itemStackMeta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
-                                item.setItemMeta(itemStackMeta);
-                                p.sendMessage("§cDein Item §4g§2l§1ä§5n§1z§7t §cnun!");
-                            } else p.sendMessage("§cDas Item ist schon am krass glänzen!");
-                        } else p.sendMessage("§cBite nehme das Item in die Hand!");
-
-                    } */ else if (args[0].equalsIgnoreCase("lore")) {
+                    } else if (args[0].equalsIgnoreCase("lore")) {
 
                         StringBuilder stringBuilderAll = new StringBuilder();
 
@@ -139,7 +114,12 @@ public class CMDitem implements CommandExecutor {
 
                         ItemStack item = p.getInventory().getItemInMainHand();
 
-                        if (item != null && item.getType() != Material.AIR) {
+                        if (forbiddenItems.contains(item.getItemMeta().displayName())) {
+                            p.sendMessage("§cDieses Item darfst du nicht bearbeiten");
+                            return true;
+                        }
+
+                        if (item.getType() != null && item.getType() != Material.AIR) {
 
                             ItemMeta itemStackMeta = item.getItemMeta();
                             itemStackMeta.setLore(lore);
@@ -147,7 +127,7 @@ public class CMDitem implements CommandExecutor {
 
                             p.sendMessage("§cDu hast die Lore gesetzt!");
 
-                        } else p.sendMessage("§cBite nehme das Item in die Hand!");
+                        } else p.sendMessage("§cBitte nehme das Item in die Hand!");
 
                     } else p.sendMessage(help());
 
@@ -164,7 +144,6 @@ public class CMDitem implements CommandExecutor {
     private String help() {
 
         return "§c/item name §4NAME §7(ColorCodes mit '&', Leerzeichen ist möglich) \n" +
-                "§c/item glow \n" +
                 "§c/item lore §4LORE §7(ColorCodes mit '&', Leerzeichen ist möglich, neue Zeile mit '|')";
 
     }
