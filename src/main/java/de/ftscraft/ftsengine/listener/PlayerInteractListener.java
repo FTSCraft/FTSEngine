@@ -7,7 +7,12 @@ import de.ftscraft.ftsengine.backpacks.Backpack;
 import de.ftscraft.ftsengine.backpacks.BackpackType;
 import de.ftscraft.ftsengine.brett.Brett;
 import de.ftscraft.ftsengine.main.Engine;
-import org.bukkit.*;
+import de.ftscraft.ftsengine.utils.Ausweis;
+import net.kyori.adventure.key.Key;
+import net.kyori.adventure.sound.Sound;
+import org.bukkit.Bukkit;
+import org.bukkit.Material;
+import org.bukkit.Particle;
 import org.bukkit.block.data.type.Sign;
 import org.bukkit.block.data.type.Slab;
 import org.bukkit.block.data.type.Stairs;
@@ -39,6 +44,45 @@ public class PlayerInteractListener implements Listener {
 
     @EventHandler
     public void onClick(PlayerInteractEvent e) {
+
+        if (e.getAction() == Action.LEFT_CLICK_AIR) {
+            for (Player reiter : plugin.getReiter()) {
+                if (e.getPlayer().getPassengers().contains(reiter)) {
+                    e.getPlayer().removePassenger(reiter);
+                }
+            }
+        }
+
+        if (e.getAction() == Action.RIGHT_CLICK_BLOCK || e.getAction() == Action.RIGHT_CLICK_AIR) {
+            if (e.getPlayer().getInventory().getItemInMainHand().getType() != Material.AIR) {
+                String iName = e.getPlayer().getInventory().getItemInMainHand().getItemMeta().getDisplayName();
+                if (iName.startsWith("§6Personalausweis")) {
+                    if (plugin.ausweisCooldown.containsKey(e.getPlayer())) {
+                        if (plugin.ausweisCooldown.get(e.getPlayer()) > System.currentTimeMillis())
+                            return;
+                    }
+                    plugin.ausweisCooldown.put(e.getPlayer(), System.currentTimeMillis() + 1000);
+                    String idS = iName.replaceAll(".*#", "");
+                    int id;
+                    //Bei Fehlern bei Item gucken : Id da?
+                    try {
+                        id = Integer.valueOf(idS);
+                    } catch (NumberFormatException ex) {
+                        e.getPlayer().sendMessage("Irgendwas ist falsch! guck mal Konsole " +
+                                "(sag Musc bescheid, dass er halberfan sagen soll: " +
+                                "\"Fehler bei Main - onItemInteract - NumberFormatException\"");
+                        return;
+                    }
+                    for (Ausweis a : plugin.ausweis.values()) {
+                        if (a.id == id) {
+                            plugin.getVar().sendAusweisMsg(e.getPlayer(), a);
+                            break;
+                        }
+                    }
+
+                }
+            }
+        }
 
         if (e.getItem() != null) {
 
@@ -84,13 +128,15 @@ public class PlayerInteractListener implements Listener {
                         Random random = new Random();
                         int r = random.nextInt(50) + 10;
 
-                        p.playSound(p.getLocation(), Sound.EVENT_RAID_HORN, 100, r);
+                        //p.playSound(p.getLocation(), Sound.EVENT_RAID_HORN, 100, r);
+                        p.playSound(Sound.sound(Key.key("event.raid.horn"), Sound.Source.VOICE, 100, r), Sound.Emitter.self());
 
                         for (Entity n : p.getNearbyEntities(70, 70, 70)) {
                             if (n instanceof Player) {
                                 Player playerInRadius = (Player) n;
 
-                                playerInRadius.playSound(p.getLocation(), Sound.EVENT_RAID_HORN, SoundCategory.VOICE, 300, r);
+                                n.playSound(Sound.sound(Key.key("event.raid.horn"), Sound.Source.VOICE, 100, r), p);
+                                //playerInRadius.playSound(p.getLocation(), Sound.EVENT_RAID_HORN, SoundCategory.VOICE, 300, r);
                             }
                         }
 

@@ -52,11 +52,11 @@ public class Var
     {
         p.sendMessage("§c----- §e/ausweis §c-----");
         p.sendMessage("§e/ausweis name [Vorname] [Nachname] §bÄndert deinen Namen und erstellt beim 1. Mal einen Ausweis");
-        p.sendMessage("§e/ausweis geschlecht [m/f] §bSetzt das Geschlecht (m - Mann | f - Frau | d - Divers)");
+        p.sendMessage("§e/ausweis geschlecht [m/f] §bSetzt das Geschlecht (m - Mann | f - Frau)");
         p.sendMessage("§e/ausweis spitzname [Spitzname] §bGebe dir einen Spitznamen");
         p.sendMessage("§e/ausweis rasse [Rasse] §bSetzt deine Rasse");
         p.sendMessage("§e/ausweis nation [Nation] §bSetzt deine Nation");
-        p.sendMessage("§e/ausweis beschreibung [Beschr.] §bSetzt deine kurze Beschreibung von dir (Mind. 4 Wörter)");
+        p.sendMessage("§e/ausweis aussehen [Beschr.] §bSetzt dein Aussehen (Mind. 4 Wörter)");
         p.sendMessage("§e/ausweis religion [Religion] §bSetzt deine Religion");
         p.sendMessage("§e/ausweis link [Link] §bSetzt den Link zu deiner Charvorstellung im Forum");
         p.sendMessage("§e/ausweis kopieren §bKopiert deinen Ausweis");
@@ -82,26 +82,6 @@ public class Var
         p.sendMessage("§e/reisepunkt ziel [Name] §bSetzt das Ziel eines Reisepunkts");
         p.sendMessage("§e/reisepunkt list §bListet alle Reisepunkte auf");
         p.sendMessage("§e/reisepunk löschen [Name] §bEntfernt ein Reisepunkt");
-    }
-
-    public void ChatInRoleplay(Player p, String msg)
-    {
-
-    }
-
-    public void ChatInHandel(Player p, String msg)
-    {
-
-    }
-
-    public void ChatInFlüster(Player p, String msg)
-    {
-
-    }
-
-    public void ChatInRufen(Player p, String msg)
-    {
-
     }
 
     public float getYawByBlockFace(BlockFace bf)
@@ -170,9 +150,9 @@ public class Var
         return "§c"+weeks+" Wochen, "+days+" Tage, "+hours+" Stunden, "+minutes+" Minuten und "+seconds+" Sekunden";
     }
 
-    private final List<Material> carpets = new ArrayList<Material>();
+    private static final List<Material> carpets = new ArrayList<Material>();
 
-    public List<Material> getCarpets() {
+    public static List<Material> getCarpets() {
 
         if(carpets.isEmpty()) {
 

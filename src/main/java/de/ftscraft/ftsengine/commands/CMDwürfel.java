@@ -51,11 +51,12 @@ public class CMDwürfel implements CommandExecutor {
         if (args.length <= 2 && args.length > 0) {
             if (dice == null) {
                 dice = DiceType.getDiceTypeByName(args[0]);
-                if (args.length == 2)
+                if (args.length == 2) {
                     if (args[1].equalsIgnoreCase("magie"))
                         magic = true;
                     if (args[1].equalsIgnoreCase("aktion"))
                         action = true;
+                }
             } else {
                 magic = args[0].equalsIgnoreCase("magie");
                 action = args[0].equalsIgnoreCase("aktion");
@@ -82,7 +83,7 @@ public class CMDwürfel implements CommandExecutor {
 
                 sb.append((total >= dice.getMagicMin() && total <= dice.getMagicMax()) ? "§2" : "§c").append(total).append(" §5[Magie]");
 
-            }else if  (action) {
+            } else if (action) {
                 total = ThreadLocalRandom.current().nextInt(1, 20 + 1);
 
                 sb.append((total >= dice.getActionMin() && total <= dice.getActionMax()) ? "§2" : "§c").append(total).append(" §5[Aktion]");
@@ -90,7 +91,7 @@ public class CMDwürfel implements CommandExecutor {
 
                 int value = ThreadLocalRandom.current().nextInt(1, 100 + 1);
 
-                if(value <= dice.getNeeds()) {
+                if (value <= dice.getNeeds()) {
                     sb.append("§2").append(value).append(" §6und hat damit den Wurf §2geschafft!");
                 } else {
                     sb.append("§c").append(value).append(" §6hätte aber §c").append(dice.getNeeds()).append(" §6oder niedriger würfeln müssen!");
@@ -106,7 +107,7 @@ public class CMDwürfel implements CommandExecutor {
 
 
         } else {
-            cs.sendMessage("§cBitte würfel so: §e/würfel [Mensch/Zwerg/Elf/Ork/Goblin] <Magie> <Aktion>");
+            cs.sendMessage("§cBitte würfel so: §e/würfel [Mensch/Zwerg/Elf/Ork/Goblin] <Magie/Aktion>");
         }
 
         return false;
@@ -118,7 +119,7 @@ public class CMDwürfel implements CommandExecutor {
         ZWERG("Zwerg", "Zwergin", 50, 4, 8, 1, 20),
         MENSCH("Mensch", "Mensch", 40, 6, 8, 1, 20),
         ELF("Elf", "Elfin", 25, 2, 10, 1, 20),
-        GOBLIN("Goblin", "Goblin", 15, 3, 9,1, 20);
+        GOBLIN("Goblin", "Goblin", 15, 3, 9, 1, 20);
 
         private final String mName;
         private final String fName;
@@ -165,9 +166,13 @@ public class CMDwürfel implements CommandExecutor {
             return magicMin;
         }
 
-        public int getActionMax() {return actionMax;}
+        public int getActionMax() {
+            return actionMax;
+        }
 
-        public int getActionMin() {return actionMin;}
+        public int getActionMin() {
+            return actionMin;
+        }
 
         public static DiceType getDiceTypeByName(String race) {
             for (DiceType value : DiceType.values()) {

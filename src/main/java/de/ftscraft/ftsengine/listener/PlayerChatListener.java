@@ -22,7 +22,6 @@ public class PlayerChatListener implements Listener {
     @EventHandler
     public void onChat(AsyncPlayerChatEvent e) {
 
-
         if (plugin.playerBrettNote.containsKey(e.getPlayer())) {
             Player p = e.getPlayer();
 

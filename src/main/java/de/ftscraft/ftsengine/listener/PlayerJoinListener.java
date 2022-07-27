@@ -28,6 +28,10 @@ public class PlayerJoinListener implements Listener
         FTSUser user = new FTSUser(plugin, p);
         plugin.getPlayer().put(e.getPlayer(), user);
 
+        plugin.sendTablistHeaderAndFooter(p, " §cHeutiger Tipp: \nGeht voten!", "\n" +
+                " §6[C] §r- Communityhelfer \n" +
+                "§7[RP] §r- RP-Modus");
+
         //Map
         if(p.getInventory().getItemInMainHand() != null) {
             if(p.getInventory().getItemInMainHand().getType() == Material.FILLED_MAP) {

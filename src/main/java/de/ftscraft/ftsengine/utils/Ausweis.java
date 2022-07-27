@@ -51,7 +51,6 @@ public class Ausweis {
         this.UUID = player.getUniqueId().toString();
         this.plugin = plugin;
         plugin.addAusweis(this);
-
     }
 
     public boolean save() {

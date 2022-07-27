@@ -53,17 +53,17 @@ public class CMDitem implements CommandExecutor {
 
             Player p = (Player) cs;
 
-            if(p.hasPermission("ftsengine.item")) {
+            if (p.hasPermission("ftsengine.item")) {
 
                 if (args.length >= 1) {
                     ItemStack is = p.getInventory().getItemInMainHand();
-                    if(is.hasItemMeta()) {
-                        if(forbiddenItems.contains(is.getItemMeta().getDisplayName())) {
+                    if (is.hasItemMeta()) {
+                        if (forbiddenItems.contains(is.getItemMeta().getDisplayName())) {
                             p.sendMessage("§cDu darfst dieses Item nicht bearbeiten!");
                             return true;
                         }
                     }
-                    if (args[0].equalsIgnoreCase("name")) {
+                    if (args[0].equalsIgnoreCase("name") && args.length >= 2) {
 
                         StringBuilder stringBuilder = new StringBuilder();
 
@@ -77,7 +77,7 @@ public class CMDitem implements CommandExecutor {
 
                         if (is != null && is.getType() != Material.AIR) {
 
-                            if(forbiddenNames.contains(name)) {
+                            if (forbiddenNames.contains(name)) {
                                 p.sendMessage("§cDas Item so zu nennen ist nicht erlaubt!");
                                 return true;
                             }
@@ -91,7 +91,7 @@ public class CMDitem implements CommandExecutor {
                         } else
                             p.sendMessage("§cDu musst ein Item in deiner Hand haben!");
 
-                    } else if (args[0].equalsIgnoreCase("lore")) {
+                    } else if (args[0].equalsIgnoreCase("lore") && args.length >= 2) {
 
                         StringBuilder stringBuilderAll = new StringBuilder();
 
@@ -133,10 +133,11 @@ public class CMDitem implements CommandExecutor {
 
 
                 } else p.sendMessage(help());
-            } else p.sendMessage("§cDieser Befehl ist nur für Leute die einen Rang gekauft haben. §6Du kannst das auch! http://musc1.buycraft.net/");
+            } else
+                p.sendMessage("§cDieser Befehl ist nur für Leute die einen Rang gekauft haben. §6Du kannst das auch! http://musc1.buycraft.net/");
 
         } else cs
-                .sendMessage("§cDer Befehl ist nur für krasse User!");
+                .sendMessage("§cDieser Befehl ist nur für Leute die einen Rang gekauft haben. §6Du kannst das auch! http://musc1.buycraft.net/");
 
         return true;
     }

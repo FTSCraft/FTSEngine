@@ -4,6 +4,7 @@ import com.comphenix.protocol.wrappers.WrappedGameProfile;
 import de.ftscraft.ftsengine.brett.Brett;
 import de.ftscraft.ftsengine.courier.Briefkasten;
 import de.ftscraft.ftsengine.utils.Ausweis;
+import de.ftscraft.ftsengine.utils.Var;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -93,7 +94,7 @@ public class FTSUser {
                 }
             } else {
                 Location loc2 = block.getLocation().clone().add(0.5D, 0.0D, 0.5D).subtract(0, 0.75D, 0);
-                if (plugin.getVar().getCarpets().contains(block.getType())) {
+                if (Var.getCarpets().contains(block.getType())) {
                     loc2 = block.getLocation().clone().add(0.5D, 0.0D, 0.5D).subtract(0, 1.65D, 0);
                 }
                 loc2.setYaw(player.getLocation().getYaw());

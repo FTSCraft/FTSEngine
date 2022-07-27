@@ -49,6 +49,11 @@
             <id>papermc</id>
             <url>https://papermc.io/repo/repository/maven-public/</url>
         </repository>
+        <repository>
+            <id>reposilite-repository-releases</id>
+            <name>TriumphTeam Repository</name>
+            <url>https://repo.triumphteam.dev/releases</url>
+        </repository>
     </repositories>
     <dependencies>
         <!--Protocol Lib-->
@@ -90,6 +95,12 @@
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-lang3</artifactId>
             <version>3.12.0</version>
+        </dependency>
+        <!-- GUI Framework -->
+        <dependency>
+            <groupId>dev.triumphteam</groupId>
+            <artifactId>triumph-gui</artifactId>
+            <version>3.1.1</version>
         </dependency>
     </dependencies>
 

@@ -87,6 +87,62 @@ public class UserIO {
 
     }
 
+    private void loadRaces() {
+
+        //Ordner Instanz
+        File raceFolder = new File(plugin.getDataFolder() + "/races/");
+
+        //Ordner erstellen, falls noch nicht vorhanden
+        if (!raceFolder.exists()) {
+            raceFolder.mkdirs();
+        }
+
+        //Erstelle eine Beispieldatei wenn es noch keine anderen Dateien gibt.
+        if (raceFolder.listFiles().length == 0) {
+
+            File defaultRaceFile = new File(raceFolder + "/beispielrasse.yml");
+            YamlConfiguration defaultRaceCfg = YamlConfiguration.loadConfiguration(defaultRaceFile);
+
+            defaultRaceCfg.set("skill.nahkampf", 2);
+            defaultRaceCfg.set("skill.fernkampf", 13);
+            defaultRaceCfg.set("skill.agilitaet", 10);
+            defaultRaceCfg.set("skill.magie", 15);
+            defaultRaceCfg.set("skill.leben", 0);
+            defaultRaceCfg.set("meta.name", "Hochelf");
+            defaultRaceCfg.set("meta.oberrassen_name", "Elf");
+            defaultRaceCfg.set("meta.textureValue", "ewogICJ0aW1lc3RhbXAiIDogMTY1MTgyOTMxNTk3MCwKICAicHJvZmlsZUlkIiA6ICIyYWFhYzk2YWIxZTA0ZWMzYjAzMmNkYjNlNjkxMzRkNCIsCiAgInByb2ZpbGVOYW1lIiA6ICJVbHRpbWF0ZXdhZmZlbCIsCiAgInNpZ25hdHVyZVJlcXVpcmVkIiA6IHRydWUsCiAgInRleHR1cmVzIiA6IHsKICAgICJTS0lOIiA6IHsKICAgICAgInVybCIgOiAiaHR0cDovL3RleHR1cmVzLm1pbmVjcmFmdC5uZXQvdGV4dHVyZS9kZWE3NzhmMmFmZTMxYzMxMjJjNjFhY2VjNWQ0MzI0YmZjYWI4MGZiMGIzNjNlNWM2NWU3YWI5MTQ4ZmEzYTRmIgogICAgfQogIH0KfQ==");
+            defaultRaceCfg.set("meta.id", -1);
+
+            try {
+                defaultRaceCfg.save(defaultRaceFile);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+        }
+
+        //Lade die Rassen
+        for (File file : raceFolder.listFiles()) {
+
+            YamlConfiguration cfg = YamlConfiguration.loadConfiguration(file);
+
+            Race race = new Race(
+                    cfg.getInt("skill.nahkampf"),
+                    cfg.getInt("skill.fernkampf"),
+                    cfg.getInt("skill.agilitaet"),
+                    cfg.getInt("skill.magie"),
+                    cfg.getInt("skill.leben"),
+                    cfg.getString("meta.name"),
+                    cfg.getString("meta.oberrassen_name"),
+                    cfg.getString("meta.textureValue"),
+                    cfg.getInt("meta.id")
+            );
+
+            plugin.getRaces().put(race.getId(), race);
+
+        }
+    }
+
     private void getBackpacks() {
         File aFolder = new File(folder + "//backpacks//");
 
@@ -102,7 +158,6 @@ public class UserIO {
                 else type = BackpackType.LARGE;
 
                 if(c.getList("inventory") == null) {
-                    System.out.println("Korrumpierter Rucksack: " + aFile.getName());
                     continue;
                 }
                 List itemsList = c.getList("inventory");
@@ -111,7 +166,6 @@ public class UserIO {
                 inv.setContents(items);
 
                 if(!c.contains("id")) {
-                    System.out.println("Korrumpierter Rucksack: " + aFile.getName());
                     continue;
                 }
                 id = c.getInt("id");

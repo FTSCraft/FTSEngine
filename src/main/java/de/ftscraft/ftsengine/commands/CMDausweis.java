@@ -21,7 +21,7 @@ public class CMDausweis implements CommandExecutor, TabCompleter {
 
     private final Engine plugin;
     private final Messages msgs;
-    private ArrayList<String> arguments;
+    private final ArrayList<String> arguments;
 
     public CMDausweis(Engine plugin) {
         this.plugin = plugin;
