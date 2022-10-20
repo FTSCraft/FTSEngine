@@ -2,16 +2,16 @@ package de.ftscraft.ftsengine.utils;
 
 import de.ftscraft.ftsengine.backpacks.BackpackType;
 import de.ftscraft.ftsengine.main.Engine;
-import org.bukkit.Bukkit;
-import org.bukkit.Color;
-import org.bukkit.Material;
-import org.bukkit.NamespacedKey;
+import net.kyori.adventure.text.Component;
+import org.bukkit.*;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.*;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.LeatherArmorMeta;
+import org.bukkit.ChatColor;
 
 import java.util.*;
+import java.util.List;
 
 public class ItemStacks {
 
@@ -707,5 +707,28 @@ public class ItemStacks {
         cshovelm.setIngredient('S', Material.STICK);
         cshovelm.setIngredient('*', Material.AIR);
         plugin.getServer().addRecipe(cshovelm);
+
+        // FallAxt
+        ItemStack lumberAxeStack = new ItemStack(Material.IRON_AXE, 1);
+        ItemMeta lumberAxeMeta = lumberAxeStack.getItemMeta();
+        lumberAxeMeta.displayName(Component.text(ChatColor.DARK_PURPLE + "FallAxt"));
+        lumberAxeMeta.setCustomModelData(1001);
+        lumberAxeStack.setItemMeta(lumberAxeMeta);
+        lumberAxeStack.addEnchantment(Enchantment.DURABILITY, 3);
+        lumberAxeStack.addItemFlags(ItemFlag.HIDE_ENCHANTS);
+
+        ShapedRecipe lumberAxeRecipe = new ShapedRecipe(new NamespacedKey(plugin, "FTSfallaxt"), lumberAxeStack);
+        lumberAxeRecipe.shape("*EE", "*SE", "*S*");
+        lumberAxeRecipe.setIngredient('E', Material.EMERALD);
+        lumberAxeRecipe.setIngredient('S', Material.STICK);
+        lumberAxeRecipe.setIngredient('*', Material.AIR);
+        plugin.getServer().addRecipe(lumberAxeRecipe);
+
+        ShapedRecipe lumberAxeRecipe2 = new ShapedRecipe(new NamespacedKey(plugin, "FTSfallaxt2"), lumberAxeStack);
+        lumberAxeRecipe2.shape("EE*", "ES*", "*S*");
+        lumberAxeRecipe2.setIngredient('E', Material.EMERALD);
+        lumberAxeRecipe2.setIngredient('S', Material.STICK);
+        lumberAxeRecipe2.setIngredient('*', Material.AIR);
+        plugin.getServer().addRecipe(lumberAxeRecipe2);
     }
 }

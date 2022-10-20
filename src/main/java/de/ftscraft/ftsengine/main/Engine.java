@@ -135,6 +135,8 @@ public class Engine extends JavaPlugin implements Listener {
         new CMDkussen(this);
         new UserIO(this);
 
+
+        new AnvilEntchamentBlockingListener(this);
         new EntityClickListener(this);
         new DamageListener(this);
         new SneakListener(this);
