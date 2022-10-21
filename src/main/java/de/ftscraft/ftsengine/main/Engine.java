@@ -133,6 +133,7 @@ public class Engine extends JavaPlugin implements Listener {
         new CMDklopfen(this);
         new CMDbrief(this);
         new CMDkussen(this);
+        new CMDewürfel(this);
         new UserIO(this);
 
         new EntityClickListener(this);
