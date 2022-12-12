@@ -709,12 +709,12 @@ public class ItemStacks {
         plugin.getServer().addRecipe(cshovelm);
 
         // FallAxt
-        ItemStack lumberAxeStack = new ItemStack(Material.IRON_AXE, 1);
+        ItemStack lumberAxeStack = new ItemStack(Material.DIAMOND_AXE, 1);
         ItemMeta lumberAxeMeta = lumberAxeStack.getItemMeta();
         lumberAxeMeta.displayName(Component.text(ChatColor.DARK_PURPLE + "FallAxt"));
         lumberAxeMeta.setCustomModelData(1001);
         lumberAxeStack.setItemMeta(lumberAxeMeta);
-        lumberAxeStack.addEnchantment(Enchantment.DURABILITY, 3);
+        lumberAxeStack.addEnchantment(Enchantment.DURABILITY, 2);
         lumberAxeStack.addItemFlags(ItemFlag.HIDE_ENCHANTS);
 
         ShapedRecipe lumberAxeRecipe = new ShapedRecipe(new NamespacedKey(plugin, "FTSfallaxt"), lumberAxeStack);
