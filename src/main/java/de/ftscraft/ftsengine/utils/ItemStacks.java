@@ -3,15 +3,16 @@ package de.ftscraft.ftsengine.utils;
 import de.ftscraft.ftsengine.backpacks.BackpackType;
 import de.ftscraft.ftsengine.main.Engine;
 import net.kyori.adventure.text.Component;
-import org.bukkit.*;
+import org.bukkit.ChatColor;
+import org.bukkit.Color;
+import org.bukkit.Material;
+import org.bukkit.NamespacedKey;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.*;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.LeatherArmorMeta;
-import org.bukkit.ChatColor;
 
 import java.util.*;
-import java.util.List;
 
 public class ItemStacks {
 

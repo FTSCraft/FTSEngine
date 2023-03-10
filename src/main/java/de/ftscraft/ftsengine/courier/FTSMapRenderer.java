@@ -2,7 +2,10 @@ package de.ftscraft.ftsengine.courier;
 
 import de.ftscraft.ftsengine.main.Engine;
 import org.bukkit.entity.Player;
-import org.bukkit.map.*;
+import org.bukkit.map.MapCanvas;
+import org.bukkit.map.MapCursorCollection;
+import org.bukkit.map.MapView;
+import org.bukkit.map.MinecraftFont;
 
 import java.util.Calendar;
 

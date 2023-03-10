@@ -3,8 +3,6 @@ package de.ftscraft.ftsengine.commands;
 import de.ftscraft.ftsengine.main.Engine;
 import de.ftscraft.ftsengine.utils.CountdownScheduler;
 import de.ftscraft.ftsengine.utils.Messages;
-import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.event.ClickEvent;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Sound;

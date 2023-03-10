@@ -3,7 +3,6 @@ package de.ftscraft.ftsengine.utils;
 import de.ftscraft.ftsengine.main.Engine;
 import net.md_5.bungee.api.chat.ClickEvent;
 import net.md_5.bungee.api.chat.ComponentBuilder;
-import net.md_5.bungee.api.chat.HoverEvent;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.BlockFace;
