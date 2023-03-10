@@ -265,11 +265,11 @@ public class ItemStacks {
         plugin.getServer().addRecipe(large_backpack);
 
         //GOLD INGOT
-        NamespacedKey goldKey = new NamespacedKey(plugin, "FTSGOLD");
+/*        NamespacedKey goldKey = new NamespacedKey(plugin, "FTSGOLD");
         ShapelessRecipe goldRec = new ShapelessRecipe(goldKey, this.getGold());
         goldRec.addIngredient(2, Material.RAW_GOLD);
         goldRec.addIngredient(Material.COPPER_INGOT);
-        plugin.getServer().addRecipe(goldRec);
+        plugin.getServer().addRecipe(goldRec);*/
 
 
         //ENDER BACKPACK

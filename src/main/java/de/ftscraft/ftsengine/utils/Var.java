@@ -4,8 +4,10 @@ import de.ftscraft.ftsengine.main.Engine;
 import net.md_5.bungee.api.chat.ClickEvent;
 import net.md_5.bungee.api.chat.ComponentBuilder;
 import net.md_5.bungee.api.chat.HoverEvent;
+import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.BlockFace;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
@@ -30,12 +32,12 @@ public class Var
         p.sendMessage("§c------ Ausweis von §e" + uF.getName(UUID.fromString(a.getUUID())) + " §c------");
         p.sendMessage("§cNachname: §e" + a.getLastName());
         p.sendMessage("§cVorname: §e" + a.getFirstName());
-        p.sendMessage("§cSpitzname: §e" + (a.getSpitzname() != null ? a.getSpitzname().replace('_', ' ') : "N/A"));
+//        p.sendMessage("§cSpitzname: §e" + (a.getSpitzname() != null ? a.getSpitzname().replace('_', ' ') : "N/A"));
         p.sendMessage("§cGeschlecht: §e" + (a.getGender() == Gender.MALE ? "Mann" : a.getGender() == Gender.FEMALE ? "Frau" : a.getGender() == Gender.DIVERS ? "Divers" : "N/A"));
         p.sendMessage("§cRasse: §e" + (a.getRace() != null ? a.getRace() : "N/A"));
-        p.sendMessage("§cNation: §e" + (a.getNation() != null ? a.getNation() : "N/A"));
+//        p.sendMessage("§cNation: §e" + (a.getNation() != null ? a.getNation() : "N/A"));
         p.sendMessage("§cAussehen: §e" + (a.getDesc() != null ? a.getDesc() : "N/A"));
-        p.sendMessage("§cReligion: §e" + (a.getReligion() != null ? a.getReligion() : "N/A"));
+//        p.sendMessage("§cReligion: §e" + (a.getReligion() != null ? a.getReligion() : "N/A"));
         if(a.getForumLink() != null ){
             ComponentBuilder componentBuilder = new ComponentBuilder("§e[KLICK]");
             componentBuilder.event(new ClickEvent(ClickEvent.Action.OPEN_URL, a.getForumLink()));
@@ -52,15 +54,15 @@ public class Var
     {
         p.sendMessage("§c----- §e/ausweis §c-----");
         p.sendMessage("§e/ausweis name [Vorname] [Nachname] §bÄndert deinen Namen und erstellt beim 1. Mal einen Ausweis");
-        p.sendMessage("§e/ausweis geschlecht [m/f] §bSetzt das Geschlecht (m - Mann | f - Frau)");
-        p.sendMessage("§e/ausweis spitzname [Spitzname] §bGebe dir einen Spitznamen");
+        p.sendMessage("§e/ausweis geschlecht [m/f] §bSetzt die Ansprache (m - Männliche | f - Weibliche)");
+        //p.sendMessage("§e/ausweis spitzname [Spitzname] §bGebe dir einen Spitznamen");
         p.sendMessage("§e/ausweis rasse [Rasse] §bSetzt deine Rasse");
-        p.sendMessage("§e/ausweis nation [Nation] §bSetzt deine Nation");
+        //p.sendMessage("§e/ausweis nation [Nation] §bSetzt deine Nation");
         p.sendMessage("§e/ausweis aussehen [Beschr.] §bSetzt dein Aussehen (Mind. 4 Wörter)");
-        p.sendMessage("§e/ausweis religion [Religion] §bSetzt deine Religion");
+        //p.sendMessage("§e/ausweis religion [Religion] §bSetzt deine Religion");
         p.sendMessage("§e/ausweis link [Link] §bSetzt den Link zu deiner Charvorstellung im Forum");
-        p.sendMessage("§e/ausweis kopieren §bKopiert deinen Ausweis");
-        p.sendMessage("§6FTSEngine von §5halberfan §6für FTS-Craft");
+        //p.sendMessage("§e/ausweis kopieren §bKopiert deinen Ausweis");
+        //p.sendMessage("§6FTSEngine von §5halberfan §6für FTS-Craft");
     }
 
     public void sendPferdHelpMsg(Player p)
@@ -103,6 +105,15 @@ public class Var
         }
 
         return yaw;
+    }
+
+    public static void sendMessageToPlayersNear(Location loc, int radius, String message) {
+        for (Entity nearbyEntity : loc.getNearbyEntities(radius, radius, radius)) {
+            if(nearbyEntity instanceof Player) {
+                Player p = (Player) nearbyEntity;
+                p.sendMessage(message);
+            }
+        }
     }
 
 

@@ -26,7 +26,7 @@ public class CMDausweis implements CommandExecutor, TabCompleter {
     public CMDausweis(Engine plugin) {
         this.plugin = plugin;
         this.msgs = plugin.msgs;
-        this.arguments = new ArrayList<>(Arrays.asList("name", "geschlecht", "spitzname", "rasse", "nation", "aussehen", "religion", "link", "kopieren", "anschauen"));
+        this.arguments = new ArrayList<>(Arrays.asList("name", "geschlecht", "rasse", "aussehen", "link", "anschauen"));
         plugin.getCommand("ausweis").setExecutor(this);
     }
 
@@ -114,21 +114,6 @@ public class CMDausweis implements CommandExecutor, TabCompleter {
                     } else
                         p.sendMessage(Messages.PREFIX + "Bitte benutze den Befehl so:" + " §c/ausweis rasse [Rasse]");
                     break;
-                case "nation":
-
-                    if (!plugin.hasAusweis(p)) {
-                        p.sendMessage(Messages.NEED_AUSWEIS);
-                        return true;
-                    }
-
-                    if (args.length == 2) {
-                        String nation = args[1];
-                        plugin.getAusweis(p).setNation(nation);
-                        p.sendMessage(Messages.SUCC_CMD_AUSWEIS.replace("%s", "Nation").replace("%v", nation));
-                    } else
-                        p.sendMessage(Messages.PREFIX + "Bitte benutze den Befehl so:" + " §c/ausweis nation [Nation]");
-
-                    break;
                 case "aussehen":
 
                     if (!plugin.hasAusweis(p)) {
@@ -153,7 +138,7 @@ public class CMDausweis implements CommandExecutor, TabCompleter {
                         p.sendMessage(Messages.PREFIX + "Bitte benutze den Befehl so:" + " §c/ausweis aussehen [Aussehen (mind. 4 Wörter)]");
 
                     break;
-                case "religion":
+                /*case "religion":
 
                     if (!plugin.hasAusweis(p)) {
                         p.sendMessage(Messages.NEED_AUSWEIS);
@@ -165,8 +150,8 @@ public class CMDausweis implements CommandExecutor, TabCompleter {
                     } else
                         p.sendMessage(Messages.PREFIX + "Bitte benutze den Befehl so:" + " §c/ausweis religion [Religion]");
 
-                    break;
-                case "spitzname":
+                    break;*/
+               /* case "spitzname":
 
                     if (!plugin.hasAusweis(p)) {
                         p.sendMessage(Messages.NEED_AUSWEIS);
@@ -177,8 +162,8 @@ public class CMDausweis implements CommandExecutor, TabCompleter {
                         p.sendMessage(Messages.SUCC_CMD_AUSWEIS.replace("%s", "Spitzname").replace("%v", args[1]));
                     } else
                         p.sendMessage(Messages.PREFIX + "Bitte benutze den Befehl so:" + " §c/ausweis spitzname [Spitzname]");
-                    break;
-                case "kopieren":
+                    break;*/
+                /*case "kopieren":
                     ItemStack item;
                     String name;
                     if (args.length == 1) {
@@ -203,7 +188,7 @@ public class CMDausweis implements CommandExecutor, TabCompleter {
                     }
                     p.getInventory().addItem(item);
                     p.sendMessage(Messages.SUCC_COPY_AUSWEIS.replace("%s", name));
-                    break;
+                    break;*/
                 case "anschauen":
                     if(p.hasPermission("ftsengine.ausweis.anschauen")) {
                         if (args.length == 2) {
@@ -213,10 +198,10 @@ public class CMDausweis implements CommandExecutor, TabCompleter {
                         } else p.sendMessage("§cBitte gebe einen Namen an");
                     } else p.sendMessage("§cDafür hast du keine Rechte");
                     break;
-                case "list":
+                /*case "list":
                     for (Ausweis a : plugin.ausweis.values()) {
                         p.sendMessage("§e" + Bukkit.getOfflinePlayer(UUID.fromString(a.getUUID())).getName());
-                    }
+                    }*/
                 case "admin":
                     break;
                 default:

@@ -1,7 +1,7 @@
 name: FTSEngine
 author: halberfan
 main: de.ftscraft.ftsengine.main.Engine
-version: "1.9"
+version: "2.0"
 api-version: 1.18
 depend: [Vault, ProtocolLib, LuckPerms]
 softdepend: [Shopkeepers, Dynmap]
@@ -16,6 +16,7 @@ commands:
     reiten:
     taube:
     schlagen:
+    buch:
     removearmorstand:
         premission: ftsengine.armorstand
     #pferd:

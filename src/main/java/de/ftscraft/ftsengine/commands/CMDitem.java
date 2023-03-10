@@ -42,6 +42,7 @@ public class CMDitem implements CommandExecutor {
                 "Horn",
                 "Marmelade",
                 "§cÜberreste",
+                "horse",
                 "schloss",
                 "Süßer Fisch"));
     }
@@ -119,7 +120,12 @@ public class CMDitem implements CommandExecutor {
                             return true;
                         }
 
-                        if (item.getType() != null && item.getType() != Material.AIR) {
+                        if (item.getType() != Material.AIR) {
+
+                            if (forbiddenNames.contains(lore.get(0))) {
+                                p.sendMessage("§cDas Item so zu nennen ist nicht erlaubt!");
+                                return true;
+                            }
 
                             ItemMeta itemStackMeta = item.getItemMeta();
                             itemStackMeta.setLore(lore);

@@ -129,6 +129,7 @@ public class Engine extends JavaPlugin implements Listener {
         new CMDgehen(this);
         new CMDzauber(this);
         new CMDitem(this);
+        new CMDbuch(this);
         new CMDftsengine(this);
         new CMDklopfen(this);
         new CMDbrief(this);
