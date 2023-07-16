@@ -31,12 +31,9 @@ public class CMDremovearmorstand implements CommandExecutor
 
             Player p = (Player)cs;
 
-            for(Entity e : p.getWorld().getEntities()) {
-                if(e instanceof ArmorStand) {
-                    if(!((ArmorStand) e).isVisible()) {
-                        e.remove();
-                    }
-                }
+            for (ArmorStand armorStand : p.getLocation().getNearbyEntitiesByType(ArmorStand.class, 5)) {
+                if(!armorStand.isVisible())
+                    armorStand.remove();
             }
 
         }
