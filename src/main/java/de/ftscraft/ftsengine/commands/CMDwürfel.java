@@ -1,5 +1,6 @@
 package de.ftscraft.ftsengine.commands;
 
+import com.dre.brewery.api.BreweryApi;
 import de.ftscraft.ftsengine.main.Engine;
 import de.ftscraft.ftsengine.utils.Ausweis;
 import de.ftscraft.ftsengine.utils.Gender;
@@ -94,6 +95,10 @@ public class CMDwürfel implements CommandExecutor {
 
                 if (value <= dice.getNeeds()) {
                     sb.append("§2").append(value).append(" §6und hat damit den Wurf §2geschafft!");
+                    int drunkeness = BreweryApi.getBPlayer(p).getDrunkeness();
+                    if(drunkeness > 60) {
+                        sb.append(" ").append("Müsste aber aufgrund von Alkoholkonsum - wenn noch nicht geschehen - den Wurf erneut schaffen.");
+                    }
                 } else {
                     sb.append("§c").append(value).append(" §6hätte aber §c").append(dice.getNeeds()).append(" §6oder niedriger würfeln müssen!");
                 }
