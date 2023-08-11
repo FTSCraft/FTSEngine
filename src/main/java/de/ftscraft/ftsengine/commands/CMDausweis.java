@@ -31,7 +31,8 @@ public class CMDausweis implements CommandExecutor, TabCompleter {
 
     public boolean onCommand(@NotNull CommandSender cs, @NotNull Command cmd, @NotNull String label, String[] args) {
         if (!(cs instanceof Player)) {
-            cs.sendMessage(Messages.ONLY_PLAYER);
+            cs.sendPlainMessage(Messages.ONLY_PLAYER);
+            return true;
         }
 
         Player p = (Player) cs;
@@ -53,29 +54,29 @@ public class CMDausweis implements CommandExecutor, TabCompleter {
                             a.setLastName(lName);
                             plugin.addAusweis(a);
                         }
-                        p.sendMessage(Messages.SUCC_CMD_AUSWEIS.replace("%s", "Name").replace("%v", fName + " " + lName));
+                        p.sendPlainMessage(Messages.SUCC_CMD_AUSWEIS.replace("%s", "Name").replace("%v", fName + " " + lName));
                     } else
-                        p.sendMessage(Messages.PREFIX + "Bitte benutze den Befehl so:" + " §c/ausweis name [Vorname] [Nachname]");
+                        p.sendPlainMessage(Messages.PREFIX + "Bitte benutze den Befehl so:" + " §c/ausweis name [Vorname] [Nachname]");
                     break;
                 case "link":
                     if (!plugin.hasAusweis(p)) {
-                        p.sendMessage(Messages.NEED_AUSWEIS);
+                        p.sendPlainMessage(Messages.NEED_AUSWEIS);
                         return true;
                     }
                     if (args.length == 2) {
                         String link = args[1];
                         if (!link.startsWith("https://forum.ftscraft.de/")) {
-                            p.sendMessage("§cDer Link muss mit unserer URL des Forums anfangen! (https://forum.ftscraft.de/)");
+                            p.sendPlainMessage("§cDer Link muss mit unserer URL des Forums anfangen! (https://forum.ftscraft.de/)");
                             return true;
                         }
                         plugin.getAusweis(p).setForumLink(link);
-                        p.sendMessage(Messages.SUCC_CMD_AUSWEIS.replace("%s", "Charaktervorstellung").replace("%v", link));
+                        p.sendPlainMessage(Messages.SUCC_CMD_AUSWEIS.replace("%s", "Charaktervorstellung").replace("%v", link));
                     } else
-                        p.sendMessage(Messages.PREFIX + "Bitte benutze den Befehl so: §c/ausweis link [Forumlink deiner Charvorstellung]");
+                        p.sendPlainMessage(Messages.PREFIX + "Bitte benutze den Befehl so: §c/ausweis link [Forumlink deiner Charvorstellung]");
                     break;
                 case "geschlecht":
                     if (!plugin.hasAusweis(p)) {
-                        p.sendMessage(Messages.NEED_AUSWEIS);
+                        p.sendPlainMessage(Messages.NEED_AUSWEIS);
                         return true;
                     }
                     if (args.length == 2) {
@@ -90,33 +91,33 @@ public class CMDausweis implements CommandExecutor, TabCompleter {
                                 g = Gender.DIVERS;
                             }
                             if (g == null) {
-                                p.sendMessage(Messages.PREFIX + "Fehler!");
+                                p.sendPlainMessage(Messages.PREFIX + "Fehler!");
                             }
                             plugin.getAusweis(p).setGender(g);
-                            p.sendMessage(Messages.SUCC_CMD_AUSWEIS.replace("%s", "Geschlecht").replace("%v", (g == Gender.MALE ? "Mann" : g == Gender.FEMALE ? "Frau" : "Divers")));
+                            p.sendPlainMessage(Messages.SUCC_CMD_AUSWEIS.replace("%s", "Geschlecht").replace("%v", (g == Gender.MALE ? "Mann" : g == Gender.FEMALE ? "Frau" : "Divers")));
                         } else
-                            p.sendMessage(Messages.PREFIX + "Bitte benutze den Befehl so:" + " §c/ausweis geschlecht [\"m\"/\"f\"/\"d\"]");
+                            p.sendPlainMessage(Messages.PREFIX + "Bitte benutze den Befehl so:" + " §c/ausweis geschlecht [\"m\"/\"f\"/\"d\"]");
                     } else
-                        p.sendMessage(Messages.PREFIX + "Bitte benutze den Befehl so:" + " §c/ausweis geschlecht [\"m\"/\"f\"]");
+                        p.sendPlainMessage(Messages.PREFIX + "Bitte benutze den Befehl so:" + " §c/ausweis geschlecht [\"m\"/\"f\"]");
                     break;
                 case "rasse":
 
                     if (!plugin.hasAusweis(p)) {
-                        p.sendMessage(Messages.NEED_AUSWEIS);
+                        p.sendPlainMessage(Messages.NEED_AUSWEIS);
                         return true;
                     }
                     if (args.length == 2) {
 
                         String race = args[1];
                         plugin.getAusweis(p).setRace(race);
-                        p.sendMessage(Messages.SUCC_CMD_AUSWEIS.replace("%s", "Rasse").replace("%v", race));
+                        p.sendPlainMessage(Messages.SUCC_CMD_AUSWEIS.replace("%s", "Rasse").replace("%v", race));
                     } else
-                        p.sendMessage(Messages.PREFIX + "Bitte benutze den Befehl so:" + " §c/ausweis rasse [Rasse]");
+                        p.sendPlainMessage(Messages.PREFIX + "Bitte benutze den Befehl so:" + " §c/ausweis rasse [Rasse]");
                     break;
                 case "aussehen":
 
                     if (!plugin.hasAusweis(p)) {
-                        p.sendMessage(Messages.NEED_AUSWEIS);
+                        p.sendPlainMessage(Messages.NEED_AUSWEIS);
                         return true;
                     }
 
@@ -131,93 +132,24 @@ public class CMDausweis implements CommandExecutor, TabCompleter {
 
                         plugin.getAusweis(p).setDesc(desc.toString());
 
-                        p.sendMessage(Messages.SUCC_CMD_AUSWEIS.replace("%s", "Aussehen").replace("%v", desc.toString()));
+                        p.sendPlainMessage(Messages.SUCC_CMD_AUSWEIS.replace("%s", "Aussehen").replace("%v", desc.toString()));
 
                     } else
-                        p.sendMessage(Messages.PREFIX + "Bitte benutze den Befehl so:" + " §c/ausweis aussehen [Aussehen (mind. 4 Wörter)]");
+                        p.sendPlainMessage(Messages.PREFIX + "Bitte benutze den Befehl so:" + " §c/ausweis aussehen [Aussehen (mind. 4 Wörter)]");
 
                     break;
-                /*case "religion":
-
-                    if (!plugin.hasAusweis(p)) {
-                        p.sendMessage(Messages.NEED_AUSWEIS);
-                        return true;
-                    }
-                    if (args.length == 2) {
-                        plugin.getAusweis(p).setReligion(args[1]);
-                        p.sendMessage(Messages.SUCC_CMD_AUSWEIS.replace("%s", "Religion").replace("%v", args[1]));
-                    } else
-                        p.sendMessage(Messages.PREFIX + "Bitte benutze den Befehl so:" + " §c/ausweis religion [Religion]");
-
-                    break;*/
-               /* case "spitzname":
-
-                    if (!plugin.hasAusweis(p)) {
-                        p.sendMessage(Messages.NEED_AUSWEIS);
-                        return true;
-                    }
-                    if (args.length == 2) {
-                        plugin.getAusweis(p).setSpitzname(args[1]);
-                        p.sendMessage(Messages.SUCC_CMD_AUSWEIS.replace("%s", "Spitzname").replace("%v", args[1]));
-                    } else
-                        p.sendMessage(Messages.PREFIX + "Bitte benutze den Befehl so:" + " §c/ausweis spitzname [Spitzname]");
-                    break;*/
-                /*case "kopieren":
-                    ItemStack item;
-                    String name;
-                    if (args.length == 1) {
-                        if (plugin.hasAusweis(p)) {
-                            name = "Dir";
-                            item = plugin.getAusweis(p).getAsItem();
-                        } else {
-                            p.sendMessage(Messages.PREFIX + "Mach dir erstmal einen Ausweis!");
-                            return true;
-                        }
-                    } else if (args.length == 2 && p.hasPermission("ftsengine.helfer")) {
-                        name = args[1];
-                        if (plugin.hasAusweis(name)) {
-                            item = plugin.getAusweis(name).getAsItem();
-                        } else {
-                            p.sendMessage(Messages.PREFIX + "Dieser Spieler hat keinen Ausweis");
-                            return true;
-                        }
-                    } else {
-                        p.sendMessage(Messages.PREFIX + "Dafür hast du keine Rechte");
-                        return true;
-                    }
-                    p.getInventory().addItem(item);
-                    p.sendMessage(Messages.SUCC_COPY_AUSWEIS.replace("%s", name));
-                    break;*/
                 case "anschauen":
-                    if(p.hasPermission("ftsengine.ausweis.anschauen")) {
+                    if (p.hasPermission("ftsengine.ausweis.anschauen")) {
                         if (args.length == 2) {
                             if (plugin.hasAusweis(args[1])) {
                                 new Var(plugin).sendAusweisMsg(p, plugin.getAusweis(args[1]));
-                            } else p.sendMessage(Messages.TARGET_NO_AUSWEIS);
-                        } else p.sendMessage("§cBitte gebe einen Namen an");
-                    } else p.sendMessage("§cDafür hast du keine Rechte");
-                    break;
-                /*case "list":
-                    for (Ausweis a : plugin.ausweis.values()) {
-                        p.sendMessage("§e" + Bukkit.getOfflinePlayer(UUID.fromString(a.getUUID())).getName());
-                    }*/
-                case "admin":
+                            } else p.sendPlainMessage(Messages.TARGET_NO_AUSWEIS);
+                        } else p.sendPlainMessage(Messages.PREFIX + "Bitte gebe den MC-Namen des Users an dessen Ausweis du anschauen möchtest");
+                    } else p.sendPlainMessage("§cDafür hast du keine Rechte");
                     break;
                 default:
                     plugin.getVar().sendHelpMsg(p);
                     break;
-            }
-
-            if (sub.equalsIgnoreCase("admin")) {
-
-                if (args.length >= 3) {
-
-                    if (p.hasPermission("ftsengine.admin")) {
-
-
-                    } else p.sendMessage("§cDafür hast du keine Rechte LOL");
-                }
-
             }
 
         } else plugin.getVar().sendHelpMsg(p);
