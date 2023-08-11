@@ -14,7 +14,6 @@ import org.jetbrains.annotations.NotNull;
 public class CMDohrfeige implements CommandExecutor {
 
     private final Engine plugin;
-    private final Messages messages = new Messages();
 
     public CMDohrfeige(Engine plugin) {
         this.plugin = plugin;

@@ -20,17 +20,16 @@ import java.util.List;
 public class CMDausweis implements CommandExecutor, TabCompleter {
 
     private final Engine plugin;
-    private final Messages msgs;
     private final ArrayList<String> arguments;
 
     public CMDausweis(Engine plugin) {
         this.plugin = plugin;
-        this.msgs = plugin.msgs;
+        Messages msgs = plugin.msgs;
         this.arguments = new ArrayList<>(Arrays.asList("name", "geschlecht", "rasse", "aussehen", "link", "anschauen"));
         plugin.getCommand("ausweis").setExecutor(this);
     }
 
-    public boolean onCommand(CommandSender cs, Command cmd, String label, String[] args) {
+    public boolean onCommand(@NotNull CommandSender cs, @NotNull Command cmd, @NotNull String label, String[] args) {
         if (!(cs instanceof Player)) {
             cs.sendMessage(Messages.ONLY_PLAYER);
         }
@@ -123,16 +122,16 @@ public class CMDausweis implements CommandExecutor, TabCompleter {
 
                     if (args.length > 4) {
 
-                        String desc = "";
+                        StringBuilder desc = new StringBuilder();
                         for (int i = 1; i < args.length; i++) {
-                            desc += " " + args[i];
+                            desc.append(" ").append(args[i]);
                         }
 
-                        desc = desc.replaceFirst(" ", "");
+                        desc = new StringBuilder(desc.toString().replaceFirst(" ", ""));
 
-                        plugin.getAusweis(p).setDesc(desc);
+                        plugin.getAusweis(p).setDesc(desc.toString());
 
-                        p.sendMessage(Messages.SUCC_CMD_AUSWEIS.replace("%s", "Aussehen").replace("%v", desc));
+                        p.sendMessage(Messages.SUCC_CMD_AUSWEIS.replace("%s", "Aussehen").replace("%v", desc.toString()));
 
                     } else
                         p.sendMessage(Messages.PREFIX + "Bitte benutze den Befehl so:" + " §c/ausweis aussehen [Aussehen (mind. 4 Wörter)]");
@@ -231,9 +230,9 @@ public class CMDausweis implements CommandExecutor, TabCompleter {
         ArrayList<String> result = new ArrayList<>();
 
         if (args.length == 1) {
-            for (int i = 0; i < arguments.size(); i++) {
-                if (arguments.get(i).toLowerCase().startsWith(args[0].toLowerCase()))
-                    result.add(arguments.get(i));
+            for (String argument : arguments) {
+                if (argument.toLowerCase().startsWith(args[0].toLowerCase()))
+                    result.add(argument);
             }
             return result;
         }

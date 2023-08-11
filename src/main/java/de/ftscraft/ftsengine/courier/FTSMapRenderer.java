@@ -6,6 +6,7 @@ import org.bukkit.map.MapCanvas;
 import org.bukkit.map.MapCursorCollection;
 import org.bukkit.map.MapView;
 import org.bukkit.map.MinecraftFont;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.Calendar;
 
@@ -26,7 +27,7 @@ public class FTSMapRenderer extends org.bukkit.map.MapRenderer {
     }
 
     @Override
-    public void render(MapView mapView, MapCanvas mapCanvas, Player player) {
+    public void render(@NotNull MapView mapView, @NotNull MapCanvas mapCanvas, @NotNull Player player) {
 
         for (int x = 0; x < 150; x++) {
             for (int y = 0; y < 150; y++) {

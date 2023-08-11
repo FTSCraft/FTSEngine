@@ -9,6 +9,7 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.concurrent.ThreadLocalRandom;
 
@@ -25,7 +26,7 @@ public class CMDwürfel implements CommandExecutor {
     }
 
     @Override
-    public boolean onCommand(CommandSender cs, Command cmd, String label, String[] args) {
+    public boolean onCommand(@NotNull CommandSender cs, @NotNull Command cmd, @NotNull String label, String[] args) {
         if (!(cs instanceof Player)) {
             cs.sendMessage(Messages.ONLY_PLAYER);
             return true;
@@ -99,7 +100,7 @@ public class CMDwürfel implements CommandExecutor {
 
             }
 
-            for (Entity nearbyEntity : p.getLocation().getNearbyEntities(20, 20, 20)) {
+            for (Entity nearbyEntity : p.getLocation().getWorld().getNearbyEntities(p.getLocation(), 20, 20, 20)) {
                 if (nearbyEntity instanceof Player) {
                     nearbyEntity.sendMessage(sb.toString());
                 }
@@ -134,7 +135,6 @@ public class CMDwürfel implements CommandExecutor {
             this.mName = mName;
             this.fName = fName;
 
-            this.pips = pips;
             this.chance = chance;
             this.magicMin = magicMin;
             this.magicMax = magicMax;

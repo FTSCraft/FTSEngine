@@ -10,6 +10,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -23,8 +24,8 @@ public class CMDitem implements CommandExecutor {
     public CMDitem(Engine plugin) {
         plugin.getCommand("item").setExecutor(this);
 
-        forbiddenItems = new ArrayList<String>();
-        forbiddenNames = new ArrayList<String>();
+        forbiddenItems = new ArrayList<>();
+        forbiddenNames = new ArrayList<>();
 
         forbiddenItems.addAll(Arrays.asList(BackpackType.LARGE.getName(), BackpackType.TINY.getName(), BackpackType.ENDER.getName()));
 
@@ -47,7 +48,7 @@ public class CMDitem implements CommandExecutor {
                 "Süßer Fisch"));
     }
 
-    public boolean onCommand(CommandSender cs, Command cmd, String label, String[] args) {
+    public boolean onCommand(@NotNull CommandSender cs, @NotNull Command cmd, @NotNull String label, String[] args) {
 
 
         if (cs instanceof Player) {
@@ -69,14 +70,14 @@ public class CMDitem implements CommandExecutor {
                         StringBuilder stringBuilder = new StringBuilder();
 
                         for (int i = 1; i < args.length; i++) {
-                            stringBuilder.append(args[i] + " ");
+                            stringBuilder.append(args[i]).append(" ");
                         }
 
                         stringBuilder.deleteCharAt(stringBuilder.toString().length() - 1);
 
                         String name = ChatColor.translateAlternateColorCodes('&', stringBuilder.toString());
 
-                        if (is != null && is.getType() != Material.AIR) {
+                        if (is.getType() != Material.AIR) {
 
                             if (forbiddenNames.contains(name)) {
                                 p.sendMessage("§cDas Item so zu nennen ist nicht erlaubt!");
@@ -97,7 +98,7 @@ public class CMDitem implements CommandExecutor {
                         StringBuilder stringBuilderAll = new StringBuilder();
 
                         for (int i = 1; i < args.length; i++) {
-                            stringBuilderAll.append(args[i] + " ");
+                            stringBuilderAll.append(args[i]).append(" ");
                         }
 
                         stringBuilderAll.deleteCharAt(stringBuilderAll.toString().length() - 1);
@@ -106,7 +107,7 @@ public class CMDitem implements CommandExecutor {
 
                         String[] lines = all.split("\\|");
 
-                        List<String> lore = new ArrayList<String>();
+                        List<String> lore = new ArrayList<>();
 
                         for (String line : lines) {
                             line.replace("|", "");

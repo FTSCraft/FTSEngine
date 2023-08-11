@@ -18,7 +18,7 @@ import java.util.List;
 
 public class CMDbuch implements CommandExecutor {
 
-    private Engine plugin;
+    private final Engine plugin;
     private final String IDENTIFIER = "§B§U§C§H§F§T§S";
 
     public CMDbuch(Engine plugin) {

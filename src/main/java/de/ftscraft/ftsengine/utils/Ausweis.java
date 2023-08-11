@@ -1,12 +1,10 @@
 package de.ftscraft.ftsengine.utils;
 
 import de.ftscraft.ftsengine.main.Engine;
-import org.bukkit.Material;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.ItemMeta;
 
 import java.io.File;
 import java.io.IOException;
@@ -155,11 +153,11 @@ public class Ausweis {
     }
 
     public ItemStack getAsItem() {
-        ItemStack is = new ItemStack(Material.FLOWER_BANNER_PATTERN, 1);
-        ItemMeta im = is.getItemMeta();
-        im.setDisplayName("§6Personalausweis " + lastName + " #" + id);
-        is.setItemMeta(im);
-        return is;
+        //ItemStack is = new ItemStack(Material., 1);
+        //ItemMeta im = is.getItemMeta();
+        //im.setDisplayName("§6Personalausweis " + lastName + " #" + id);
+        //is.setItemMeta(im);
+        return null;
     }
 
     public void setSpitzname(String spitzname) {

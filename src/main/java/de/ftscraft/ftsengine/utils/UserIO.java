@@ -221,7 +221,7 @@ public class UserIO {
                         String note_creator = cfg.getString("brett.note." + keys + ".creator");
                         long time = cfg.getLong("brett.note." + keys + ".creation");
                         if (!title.equalsIgnoreCase("null"))
-                            brett.addNote(title, content, note_creator, time, Integer.valueOf(keys));
+                            brett.addNote(title, content, note_creator, time, Integer.parseInt(keys));
                     }
                 } catch (Exception ignored) {
 
@@ -241,7 +241,7 @@ public class UserIO {
             String message = cfg.getString(keys + ".message");
             String creator = cfg.getString(keys + ".creator");
             long creation = cfg.getLong(keys + ".creation");
-            int id = Integer.valueOf(keys);
+            int id = Integer.parseInt(keys);
             new Brief(plugin, creator, message, creation, id);
             if (id > plugin.biggestBriefId)
                 plugin.biggestBriefId = id;

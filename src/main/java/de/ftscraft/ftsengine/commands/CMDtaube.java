@@ -10,6 +10,7 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.jetbrains.annotations.NotNull;
 
 public class CMDtaube implements CommandExecutor {
 
@@ -21,7 +22,7 @@ public class CMDtaube implements CommandExecutor {
     }
 
     @Override
-    public boolean onCommand(CommandSender cs, Command cmd, String label, String[] args) {
+    public boolean onCommand(@NotNull CommandSender cs, @NotNull Command cmd, @NotNull String label, String[] args) {
         if (!(cs instanceof Player)) {
             cs.sendMessage(Messages.ONLY_PLAYER);
             return true;
@@ -50,17 +51,17 @@ public class CMDtaube implements CommandExecutor {
                         }
                         int seconds = 6;
 
-                        String msg = "";
+                        StringBuilder msg = new StringBuilder();
 
                         for (int i2 = 1; i2 < args.length; i2++) {
-                            msg += " " + args[i2];
+                            msg.append(" ").append(args[i2]);
                         }
 
                         p.sendMessage("§eEine Taube fliegt zu §c" + t.getName() + "§7.");
 
                         p.playSound(p.getLocation(), Sound.ENTITY_BAT_LOOP, 3, -20);
 
-                        new CountdownScheduler(plugin, seconds, p, t, msg);
+                        new CountdownScheduler(plugin, seconds, p, t, msg.toString());
                     }
                 }
 
@@ -70,39 +71,39 @@ public class CMDtaube implements CommandExecutor {
 
             //If you want to send a taube to only one or more specific player*s
 
-            for (int i = 0; i < player.length; i++) {
+            for (String s : player) {
 
-                Player t = Bukkit.getPlayer(player[i]);
+                Player t = Bukkit.getPlayer(s);
                 if (t == null) {
-                    p.sendMessage(Messages.PREFIX + "§7Der Spieler §c" + player[i] + " §7wurde nicht gefunden");
+                    p.sendMessage(Messages.PREFIX + "§7Der Spieler §c" + s + " §7wurde nicht gefunden");
                 } else {
                     Location tl = t.getLocation();
-                    if (pl.getWorld().getName() != tl.getWorld().getName()) {
-                        p.sendMessage(Messages.NOT_IN_WORLD.replace("%s", args[i]));
-                        return true;
-                    }
-                    double distance = t.getLocation().distance(p.getLocation());
                     int seconds;
-
-                    if(distance > 10000) {
-                        seconds = 60 * 3;
-                    } else if(distance < 350) {
-                        seconds = 5;
+                    if (pl.getWorld() != tl.getWorld()) {
+                        seconds = 180;
                     } else {
-                        seconds = (int) distance / 70;
+                        double distance = t.getLocation().distance(p.getLocation());
+
+                        if (distance > 10000) {
+                            seconds = 180;
+                        } else if (distance < 350) {
+                            seconds = 5;
+                        } else {
+                            seconds = (int) distance / 70;
+                        }
                     }
 
-                    String msg = "";
+                    StringBuilder msg = new StringBuilder();
 
                     for (int i2 = 1; i2 < args.length; i2++) {
-                        msg += " " + args[i2];
+                        msg.append(" ").append(args[i2]);
                     }
 
                     p.sendMessage("§eEine Taube fliegt zu §c" + t.getName() + "§7.");
 
                     p.playSound(p.getLocation(), Sound.ENTITY_BAT_LOOP, 3, -20);
 
-                    new CountdownScheduler(plugin, seconds, p, t, msg);
+                    new CountdownScheduler(plugin, seconds, p, t, msg.toString());
                 }
 
             }

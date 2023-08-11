@@ -34,7 +34,7 @@ public class PlayerInteractListener implements Listener {
     private final Engine plugin;
     private final ProtocolManager protocolManager;
 
-    private final ArrayList<Player> hornCooldown = new ArrayList<Player>();
+    private final ArrayList<Player> hornCooldown = new ArrayList<>();
 
     public PlayerInteractListener(Engine plugin) {
         this.plugin = plugin;
@@ -66,7 +66,7 @@ public class PlayerInteractListener implements Listener {
                     int id;
                     //Bei Fehlern bei Item gucken : Id da?
                     try {
-                        id = Integer.valueOf(idS);
+                        id = Integer.parseInt(idS);
                     } catch (NumberFormatException ex) {
                         e.getPlayer().sendMessage("Irgendwas ist falsch! guck mal Konsole " +
                                 "(sag Musc bescheid, dass er halberfan sagen soll: " +
@@ -140,11 +140,7 @@ public class PlayerInteractListener implements Listener {
                             }
                         }
 
-                        Bukkit.getScheduler().runTaskLater(plugin, new Runnable() {
-                            public void run() {
-                                hornCooldown.remove(p);
-                            }
-                        }, 20 * 2);
+                        Bukkit.getScheduler().runTaskLater(plugin, () -> hornCooldown.remove(p), 20 * 2);
 
                     }
 

@@ -12,7 +12,6 @@ import org.jetbrains.annotations.NotNull;
 
 public class CMDwinken implements CommandExecutor {
     private final Engine plugin;
-    private final Messages messages = new Messages();
 
     public CMDwinken(Engine plugin) {
         this.plugin = plugin;

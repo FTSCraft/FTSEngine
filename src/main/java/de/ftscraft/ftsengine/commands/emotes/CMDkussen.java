@@ -9,11 +9,11 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
+import org.jetbrains.annotations.NotNull;
 
 public class CMDkussen implements CommandExecutor {
 
     private final Engine plugin;
-    private final Messages messages = new Messages();
 
     public CMDkussen(Engine plugin) {
         this.plugin = plugin;
@@ -21,7 +21,7 @@ public class CMDkussen implements CommandExecutor {
     }
 
     @Override
-    public boolean onCommand(CommandSender cs, Command cmd, String label, String[] args) {
+    public boolean onCommand(@NotNull CommandSender cs, @NotNull Command cmd, @NotNull String label, String[] args) {
 
         if (!(cs instanceof Player)) {
             return true;

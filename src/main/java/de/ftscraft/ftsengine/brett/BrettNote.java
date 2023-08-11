@@ -1,7 +1,7 @@
 package de.ftscraft.ftsengine.brett;
 
 import de.ftscraft.ftsengine.main.Engine;
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.bukkit.Material;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.inventory.ItemStack;
@@ -37,7 +37,7 @@ public class BrettNote
         item = new ItemStack(Material.PAPER, 1);
         ItemMeta im = item.getItemMeta();
         im.setDisplayName("§6"+ StringUtils.abbreviate(title, 30));
-        List<String> lore = new ArrayList<String>();
+        List<String> lore = new ArrayList<>();
         lore.add("§7"+StringUtils.abbreviate(content, 30));
         lore.add("§8Von: §2"+creator);
         im.setLore(lore);
@@ -60,7 +60,7 @@ public class BrettNote
             for(String keys : cfg.getConfigurationSection("brett.note").getKeys(false))
                 if (cfg.getString("brett.note." + keys + ".title").equalsIgnoreCase("null"))
                 {
-                    this.id = Integer.valueOf(keys);
+                    this.id = Integer.parseInt(keys);
                     break;
                 }
         }
@@ -77,7 +77,7 @@ public class BrettNote
             item = new ItemStack(Material.PAPER, 1);
             ItemMeta im = item.getItemMeta();
             im.setDisplayName("§6"+StringUtils.abbreviate(title, 20));
-            List<String> lore = new ArrayList<String>();
+            List<String> lore = new ArrayList<>();
             lore.add("§7"+ StringUtils.abbreviate(content, 30));
             lore.add("§8Von: §2"+creator);
             im.setLore(lore);

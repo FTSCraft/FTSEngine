@@ -38,7 +38,7 @@ public class ItemStacks {
 
     private void init() {
 
-        disabledDefaultRecipes = new ArrayList<Material>();
+        disabledDefaultRecipes = new ArrayList<>();
         disabledDefaultRecipes.addAll(Arrays.asList(
                 Material.DIAMOND_BOOTS,
                 Material.DIAMOND_LEGGINGS,
@@ -302,7 +302,7 @@ public class ItemStacks {
         horn.addIngredient(Material.NOTE_BLOCK);
         plugin.getServer().addRecipe(horn);
 
-        List<Recipe> backup = new ArrayList<Recipe>();
+        List<Recipe> backup = new ArrayList<>();
         Iterator<Recipe> a = plugin.getServer().recipeIterator();
 
         while (a.hasNext()) {

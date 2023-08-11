@@ -105,7 +105,7 @@ public class InventoryClickListener implements Listener {
 
                     p.closeInventory();
                     p.sendMessage("§cBitte achte auf einen RPlichen Schreibstil \n §7[§bSchwarzes Brett§7] §bBitte gebe jetzt den Titel ein. §c(Max. 50 Ziechen)");
-                    ArrayList<String> al = new ArrayList<String>();
+                    ArrayList<String> al = new ArrayList<>();
                     al.add(" ");
                     BrettNote brettNote = new BrettNote(brett, p.getName(), true);
                     plugin.playerBrettNote.put(p, brettNote);
@@ -118,7 +118,7 @@ public class InventoryClickListener implements Listener {
                             return;
                         int page;
                         try {
-                            page = Integer.valueOf(pageS);
+                            page = Integer.parseInt(pageS);
                         } catch (NumberFormatException e) {
                             return;
                         }

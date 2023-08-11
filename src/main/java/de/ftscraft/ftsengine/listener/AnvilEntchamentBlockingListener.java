@@ -12,11 +12,9 @@ import java.util.Arrays;
 import java.util.List;
 
 public class AnvilEntchamentBlockingListener implements Listener {
-    private final Engine plugin;
     private final List<Integer> customModelValues = new ArrayList<>(Arrays.asList(1000, 1001));
 
     public AnvilEntchamentBlockingListener(Engine plugin) {
-        this.plugin = plugin;
         plugin.getServer().getPluginManager().registerEvents(this, plugin);
     }
 
@@ -45,7 +43,7 @@ public class AnvilEntchamentBlockingListener implements Listener {
     private boolean checkModelData(ItemMeta item) {
 
         for (Integer integer : customModelValues) {
-            if (item.getCustomModelData() == integer.intValue()) return true;
+            if (item.getCustomModelData() == integer) return true;
         }
         return false;
     }

@@ -13,7 +13,6 @@ import org.jetbrains.annotations.NotNull;
 
 public class CMDumarmen implements CommandExecutor {
     private final Engine plugin;
-    private final Messages  messages = new Messages();
 
     public CMDumarmen(Engine plugin) {
         this.plugin = plugin;

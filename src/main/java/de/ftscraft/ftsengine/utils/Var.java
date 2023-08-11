@@ -160,7 +160,7 @@ public class Var
         return "§c"+weeks+" Wochen, "+days+" Tage, "+hours+" Stunden, "+minutes+" Minuten und "+seconds+" Sekunden";
     }
 
-    private static final List<Material> carpets = new ArrayList<Material>();
+    private static final List<Material> carpets = new ArrayList<>();
 
     public static List<Material> getCarpets() {
 
@@ -179,7 +179,7 @@ public class Var
 
     }
 
-    private final List<Material> noStairs = new ArrayList<Material>();
+    private final List<Material> noStairs = new ArrayList<>();
 
     public List<Material> getNoStairs() {
 

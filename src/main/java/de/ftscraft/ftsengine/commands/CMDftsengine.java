@@ -6,6 +6,7 @@ import de.ftscraft.ftsengine.main.Engine;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
+import org.jetbrains.annotations.NotNull;
 
 public class CMDftsengine implements CommandExecutor {
 
@@ -17,7 +18,7 @@ public class CMDftsengine implements CommandExecutor {
     }
 
     @Override
-    public boolean onCommand(CommandSender cs, Command cmd, String label, String[] args) {
+    public boolean onCommand(@NotNull CommandSender cs, @NotNull Command cmd, @NotNull String label, String[] args) {
 
         if (args.length == 5) {
 

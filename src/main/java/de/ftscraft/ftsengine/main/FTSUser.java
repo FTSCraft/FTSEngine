@@ -115,16 +115,13 @@ public class FTSUser {
 
     public void abortSitting() {
 
-        Bukkit.getScheduler().runTaskLater(plugin, new Runnable() {
-            public void run() {
+        Bukkit.getScheduler().runTaskLater(plugin, () -> {
 
-                sit_stand.remove();
-                if (player.teleport(beforeSitting)) {
-
-                }
-                sits = false;
+            sit_stand.remove();
+            if (player.teleport(beforeSitting)) {
 
             }
+            sits = false;
 
         }, 3);
 

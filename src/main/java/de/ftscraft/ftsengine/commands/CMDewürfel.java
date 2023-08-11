@@ -15,11 +15,8 @@ import java.util.Random;
 
 public class CMDewürfel implements CommandExecutor {
 
-    private Engine plugin;
-
     public CMDewürfel(Engine plugin) {
 
-        this.plugin = plugin;
         plugin.getCommand("ewürfel").setExecutor(this);
     }
 

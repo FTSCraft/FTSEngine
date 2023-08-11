@@ -62,7 +62,6 @@ public class PlayerChatListener implements Listener {
             }
         }
 
-        return;
     }
         /*
         Player p = e.getPlayer();

@@ -45,7 +45,7 @@ public class BrettGUI {
         ItemStack create = new ItemStack(Material.PAPER, 1);
         ItemMeta createMeta = create.getItemMeta();
         createMeta.setDisplayName("§cErstelle Notiz");
-        List<String> createLore = new ArrayList<String>();
+        List<String> createLore = new ArrayList<>();
         createLore.add("§bErstelle eine Notiz! \n §cAchte auf einen RPlichen Schreibstil");
         createLore.add(" ");
 

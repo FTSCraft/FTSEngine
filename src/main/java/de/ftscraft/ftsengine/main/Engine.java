@@ -42,7 +42,6 @@ public class Engine extends JavaPlugin implements Listener {
     private Team team;
     private UUIDFetcher uF;
     private Var var;
-    private ItemStacks itemStacks;
     public int highestId;
     public int biggestBpId;
     public int biggestBriefId;
@@ -62,7 +61,7 @@ public class Engine extends JavaPlugin implements Listener {
 
     private static final Logger log = Logger.getLogger("Minecraft");
 
-    public List<Material> mats = new ArrayList<Material>();
+    public List<Material> mats = new ArrayList<>();
     private ProtocolManager protocolManager;
     private ShopkeepersPlugin shopkeepersPlugin;
 
@@ -103,18 +102,17 @@ public class Engine extends JavaPlugin implements Listener {
         biggestBpId = 0;
         biggestPferdId = 0;
         biggestBriefId = 0;
-        playerBrettNote = new HashMap<Player, BrettNote>();
-        bretter = new HashMap<Location, Brett>();
+        playerBrettNote = new HashMap<>();
+        bretter = new HashMap<>();
         //sitting = new HashMap<>();
-        msgs = new Messages();
-        backpacks = new HashMap<Integer, Backpack>();
-        briefkasten = new HashMap<UUID, Briefkasten>();
-        ausweis = new HashMap<String, Ausweis>();
+        backpacks = new HashMap<>();
+        briefkasten = new HashMap<>();
+        ausweis = new HashMap<>();
         uF = new UUIDFetcher();
-        briefe = new HashMap<Integer, Brief>();
-        itemStacks = new ItemStacks(this);
-        reiter = new ArrayList<Player>();
-        player = new HashMap<Player, FTSUser>();
+        briefe = new HashMap<>();
+        ItemStacks itemStacks = new ItemStacks(this);
+        reiter = new ArrayList<>();
+        player = new HashMap<>();
         var = new Var(this);
 
 
@@ -176,7 +174,7 @@ public class Engine extends JavaPlugin implements Listener {
         return chat;
     }
 
-    public final HashMap<OfflinePlayer, Long> ausweisCooldown = new HashMap<OfflinePlayer, Long>();
+    public final HashMap<OfflinePlayer, Long> ausweisCooldown = new HashMap<>();
 
     private boolean setupEconomy() {
         if (getServer().getPluginManager().getPlugin("Vault") == null) {
@@ -206,15 +204,11 @@ public class Engine extends JavaPlugin implements Listener {
     public Messages msgs;
 
     public Ausweis getAusweis(Player player) {
-        if (ausweis.containsKey(player.getName())) {
-            return ausweis.get(player.getName());
-        } else return null;
+        return ausweis.getOrDefault(player.getName(), null);
     }
 
     public Ausweis getAusweis(String player) {
-        if (ausweis.containsKey(player)) {
-            return ausweis.get(player);
-        } else return null;
+        return ausweis.getOrDefault(player, null);
     }
 
     public boolean hasAusweis(Player player) {

@@ -27,7 +27,7 @@ public class Brett
         this.name = name;
         this.creator = creator;
         this.admin = admin;
-        this.notes = new ArrayList<BrettNote>();
+        this.notes = new ArrayList<>();
         this.plugin = plugin;
         this.gui = new BrettGUI(this, plugin);
         this.sign = new BrettSign(sign, location, creator);
@@ -62,7 +62,7 @@ public class Brett
         this.creator = creator;
         this.admin = admin;
         this.gui = new BrettGUI(this, plugin);
-        this.notes = new ArrayList<BrettNote>();
+        this.notes = new ArrayList<>();
         this.plugin = plugin;
         this.sign = new BrettSign(sign, location, creator);
         this.file = new File(plugin.getDataFolder() + "//bretter//" + name + ".yml");

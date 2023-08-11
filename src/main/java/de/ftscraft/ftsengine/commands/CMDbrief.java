@@ -11,6 +11,7 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
 import java.util.UUID;
@@ -25,7 +26,7 @@ public class CMDbrief implements CommandExecutor {
     }
 
     @Override
-    public boolean onCommand(CommandSender cs, Command cmd, String label, String[] args) {
+    public boolean onCommand(@NotNull CommandSender cs, @NotNull Command cmd, @NotNull String label, String[] args) {
         if (!(cs instanceof Player)) {
             cs.sendMessage(Messages.ONLY_PLAYER);
             return true;
@@ -97,20 +98,21 @@ public class CMDbrief implements CommandExecutor {
 
         if (args.length >= 1) {
 
-            String msg = "";
+            StringBuilder msg = new StringBuilder();
             String name = p.getName();
             for (String arg : args) {
-                msg += " " + arg;
+                msg.append(" ").append(arg);
             }
-            msg = msg.replace("ä", "ae");
-            msg = msg.replaceAll("ü", "ue");
-            msg = msg.replaceAll("ß", "ss");
-            msg = msg.replaceAll("ö", "oe");
-            if (msg.startsWith(" anonym")) {
+            msg = new StringBuilder(msg.toString().replace("ä", "ae"));
+            msg = new StringBuilder(msg.toString().replaceAll("ü", "ue"));
+            msg = new StringBuilder(msg.toString().replaceAll("ß", "ss"));
+            msg = new StringBuilder(msg.toString().replaceAll("ö", "oe"));
+            msg = new StringBuilder(msg.toString().replaceAll("[^a-zA-Z0-9]", ""));
+            if (msg.toString().startsWith(" anonym")) {
                 if (plugin.getEcon().has(p, 2)) {
                     plugin.getEcon().withdrawPlayer(p, 2);
                     p.sendMessage("§cDieser Brief ist nun Anonym!");
-                    msg = msg.replaceFirst(" anonym", " ");
+                    msg = new StringBuilder(msg.toString().replaceFirst(" anonym", " "));
                     name = "XXXX";
                 } else {
                     p.sendMessage("Dafür hast du kein Geld!");
@@ -119,7 +121,7 @@ public class CMDbrief implements CommandExecutor {
             }
 
 
-            Brief brief = new Brief(plugin, name, msg, p.getWorld().getName());
+            Brief brief = new Brief(plugin, name, msg.toString(), p.getWorld().getName());
             if(!brief.isError())
                 p.getInventory().addItem(brief.getMap(p.getWorld()));
 

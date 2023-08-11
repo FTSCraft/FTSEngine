@@ -7,6 +7,7 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.jetbrains.annotations.NotNull;
 
 public class CMDcountdown implements CommandExecutor {
 
@@ -19,7 +20,7 @@ public class CMDcountdown implements CommandExecutor {
     }
 
     @Override
-    public boolean onCommand(CommandSender cs, Command cmd, String label, String[] args) {
+    public boolean onCommand(@NotNull CommandSender cs, @NotNull Command cmd, @NotNull String label, String[] args) {
         if (!(cs instanceof Player)) {
             cs.sendMessage(Messages.ONLY_PLAYER);
             return true;
@@ -29,7 +30,7 @@ public class CMDcountdown implements CommandExecutor {
             int secs;
 
             try {
-                secs = Integer.valueOf(args[0]);
+                secs = Integer.parseInt(args[0]);
             } catch (NumberFormatException e) {
                 cs.sendMessage(Messages.USAGE_NUMBER);
                 return true;
