@@ -41,14 +41,14 @@ public class FTSMapRenderer extends org.bukkit.map.MapRenderer {
 
         final int SPACE = 12;
 
-        String[] wörter = msg.split(" ");
+        String[] woerter = msg.split(" ");
         String text = "";
         int zeilen = 0;
 
-        for (int i = 0; i < wörter.length; i++) {
-            if (wörter[i].length() + text.length() < 20) {
-                text = text + " " + wörter[i];
-                if (i + 1 == wörter.length)
+        for (int i = 0; i < woerter.length; i++) {
+            if (woerter[i].length() + text.length() < 20) {
+                text = text + " " + woerter[i];
+                if (i + 1 == woerter.length)
                     try {
                         mapCanvas.drawText(0, zeilen * 10 + SPACE, MinecraftFont.Font, text);
                     } catch (IllegalArgumentException ignored) {
@@ -57,7 +57,7 @@ public class FTSMapRenderer extends org.bukkit.map.MapRenderer {
                         return;
                     }
             } else {
-                text = text + " " + wörter[i];
+                text = text + " " + woerter[i];
                 mapCanvas.drawText(0, zeilen * 10 + SPACE, MinecraftFont.Font, text);
                 zeilen++;
                 text = " ";
