@@ -107,7 +107,7 @@ public class CMDbrief implements CommandExecutor {
             msg = new StringBuilder(msg.toString().replaceAll("ü", "ue"));
             msg = new StringBuilder(msg.toString().replaceAll("ß", "ss"));
             msg = new StringBuilder(msg.toString().replaceAll("ö", "oe"));
-            msg = new StringBuilder(msg.toString().replaceAll("[^a-zA-Z0-9 \r\n]", ""));
+            msg = new StringBuilder(msg.toString().replaceAll("[^a-zA-Z0-9 \r\n.+\":;,-]", ""));
             if (msg.toString().startsWith(" anonym")) {
                 if (plugin.getEcon().has(p, 2)) {
                     plugin.getEcon().withdrawPlayer(p, 2);
@@ -131,6 +131,5 @@ public class CMDbrief implements CommandExecutor {
 
         return true;
     }
-
 }
 
