@@ -1,6 +1,7 @@
 package de.ftscraft.ftsengine.commands;
 
 import de.ftscraft.ftsengine.main.Engine;
+import org.bukkit.Material;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -23,6 +24,8 @@ public class CMDgehen implements CommandExecutor {
 
             for (ItemStack armorContent : p.getInventory().getArmorContents()) {
                 if(armorContent == null)
+                    armorNulls++;
+                else if(armorContent.getType() == Material.CARVED_PUMPKIN)
                     armorNulls++;
             }
 
