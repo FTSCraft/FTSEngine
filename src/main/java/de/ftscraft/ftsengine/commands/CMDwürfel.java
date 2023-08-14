@@ -95,9 +95,11 @@ public class CMDwürfel implements CommandExecutor {
 
                 if (value <= dice.getNeeds()) {
                     sb.append("§2").append(value).append(" §6und hat damit den Wurf §2geschafft!");
-                    int drunkenness = BreweryApi.getBPlayer(p).getDrunkeness();
-                    if(drunkenness > 60) {
-                        sb.append("§6").append("Musste aber aufgrund von Alkoholkonsum - wenn noch nicht geschehen - den Wurf erneut schaffen.");
+                    if (BreweryApi.getBPlayer(p) != null) {
+                        int drunkenness = BreweryApi.getBPlayer(p).getDrunkeness();
+                        if (drunkenness > 60) {
+                            sb.append("§6").append("Musste aber aufgrund von Alkoholkonsum - wenn noch nicht geschehen - den Wurf erneut schaffen.");
+                        }
                     }
                 } else {
                     sb.append("§c").append(value).append(" §6hätte aber §c").append(dice.getNeeds()).append(" §6oder niedriger würfeln müssen!");
