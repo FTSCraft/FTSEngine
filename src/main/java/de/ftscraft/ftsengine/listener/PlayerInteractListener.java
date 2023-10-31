@@ -150,12 +150,15 @@ public class PlayerInteractListener implements Listener {
 
         }
 
+        /*
+        Sitzfunktion entfernt weil GSit existiert
         if (e.getAction() == Action.RIGHT_CLICK_BLOCK) {
             if (plugin.mats.contains(e.getClickedBlock().getType()) || (e.getClickedBlock().getBlockData() instanceof Stairs) || (e.getClickedBlock().getBlockData() instanceof Slab)) {
                 if (e.getPlayer().getInventory().getItemInMainHand().getType() == Material.AIR)
                     plugin.getPlayer().get(e.getPlayer()).setSitting(e.getClickedBlock());
             }
         }
+        */
 
         if (e.getAction().equals(Action.RIGHT_CLICK_BLOCK)) {
             if (e.getClickedBlock().getBlockData() instanceof WallSign || e.getClickedBlock().getBlockData() instanceof Sign) {
