@@ -5,6 +5,7 @@ import de.ftscraft.ftsengine.main.Engine;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.OfflinePlayer;
+import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.block.Sign;
@@ -14,6 +15,7 @@ import org.bukkit.block.data.type.WallSign;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
+import org.bukkit.inventory.ItemStack;
 
 import java.io.File;
 
@@ -34,6 +36,11 @@ public class BlockBreakListener implements Listener
 
         if(event.isCancelled()) {
             return;
+        }
+
+        if(event.getBlock().getType() == Material.GOLD_BLOCK && event.getBlock().getWorld().getEnvironment() == World.Environment.NETHER) {
+            event.setDropItems(false);
+            event.getBlock().getWorld().dropItemNaturally(event.getBlock().getLocation(), new ItemStack(Material.GOLD_INGOT));
         }
 
         //Schwarzes Brett und Briefkasten
