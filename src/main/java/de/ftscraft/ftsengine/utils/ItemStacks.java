@@ -552,15 +552,6 @@ public class ItemStacks {
         diamond_boots_air2.setIngredient('*', Material.AIR);
         plugin.getServer().addRecipe(diamond_boots_air2);
 
-        //Quarz
-
-        NamespacedKey quartzkey = new NamespacedKey(plugin, "FTSquartz");
-        ShapedRecipe quartzRecipie = new ShapedRecipe(quartzkey, new ItemStack(Material.QUARTZ, 2));
-        quartzRecipie.shape("GGG", "GLG", "GGG");
-        quartzRecipie.setIngredient('G', Material.POLISHED_DIORITE);
-        quartzRecipie.setIngredient('L', Material.LAPIS_LAZULI);
-        plugin.getServer().addRecipe(quartzRecipie);
-
         //Copperpickaxe
         NamespacedKey cpickkey = new NamespacedKey(plugin, "FTSkupferpicke");
         ItemStack cpick = new ItemStack(Material.STONE_PICKAXE, 1);
