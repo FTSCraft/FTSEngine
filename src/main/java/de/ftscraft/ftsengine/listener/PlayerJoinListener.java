@@ -11,13 +11,11 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.inventory.ItemStack;
 
-public class PlayerJoinListener implements Listener
-{
+public class PlayerJoinListener implements Listener {
 
     private final Engine plugin;
 
-    public PlayerJoinListener(Engine plugin)
-    {
+    public PlayerJoinListener(Engine plugin) {
         this.plugin = plugin;
         plugin.getServer().getPluginManager().registerEvents(this, plugin);
     }
@@ -29,15 +27,14 @@ public class PlayerJoinListener implements Listener
         plugin.getPlayer().put(e.getPlayer(), user);
 
         plugin.sendTablistHeaderAndFooter(p, " §cHeutiger Tipp: \nGeht voten!", "\n" +
-                                                                                " §6[C] §r- Communityhelfer \n" +
-                                                                                "§7[RP] §r- RP-Modus");
+                "§7[RP] §r- RP-Modus");
 
         //Map
-        if(p.getInventory().getItemInMainHand() != null) {
-            if(p.getInventory().getItemInMainHand().getType() == Material.FILLED_MAP) {
+        if (p.getInventory().getItemInMainHand() != null) {
+            if (p.getInventory().getItemInMainHand().getType() == Material.FILLED_MAP) {
                 ItemStack itemMap = p.getInventory().getItemInMainHand();
                 Brief brief = plugin.briefe.get((int) itemMap.getDurability());
-                if(brief != null) {
+                if (brief != null) {
                     brief.loadMap(itemMap);
                 }
             }
