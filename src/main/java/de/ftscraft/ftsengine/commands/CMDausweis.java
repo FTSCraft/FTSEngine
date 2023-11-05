@@ -142,17 +142,19 @@ public class CMDausweis implements CommandExecutor, TabCompleter {
                     if (p.hasPermission("ftsengine.ausweis.anschauen")) {
                         if (args.length == 2) {
                             if (plugin.hasAusweis(args[1])) {
-                                new Var(plugin).sendAusweisMsg(p, plugin.getAusweis(args[1]));
+                                Var.sendAusweisMsg(p, plugin.getAusweis(args[1]));
                             } else p.sendPlainMessage(Messages.TARGET_NO_AUSWEIS);
-                        } else p.sendPlainMessage(Messages.PREFIX + "Bitte gebe den MC-Namen des Users an dessen Ausweis du anschauen möchtest");
+                        } else {
+                            Var.sendAusweisMsg(p, plugin.getAusweis(p));
+                        }
                     } else p.sendPlainMessage("§cDafür hast du keine Rechte");
                     break;
                 default:
-                    plugin.getVar().sendHelpMsg(p);
+                    Var.sendHelpMsg(p);
                     break;
             }
 
-        } else plugin.getVar().sendHelpMsg(p);
+        } else Var.sendHelpMsg(p);
         return false;
     }
 
