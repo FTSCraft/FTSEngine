@@ -18,17 +18,10 @@ import java.util.UUID;
 public class Var
 {
 
-    private final UUIDFetcher uF;
-
-    public Var(Engine plugin)
-    {
-        this.uF = new UUIDFetcher();
-    }
-
-    public void sendAusweisMsg(Player p, Ausweis a)
+    public static void sendAusweisMsg(Player p, Ausweis a)
     {
         p.sendMessage(" ");
-        p.sendMessage("§c------ Ausweis von §e" + uF.getName(UUID.fromString(a.getUUID())) + " §c------");
+        p.sendMessage("§c------ Ausweis von §e" + UUIDFetcher.getName(UUID.fromString(a.getUUID())) + " §c------");
         p.sendMessage("§cNachname: §e" + a.getLastName());
         p.sendMessage("§cVorname: §e" + a.getFirstName());
         p.sendMessage("§cGeschlecht: §e" + (a.getGender() == Gender.MALE ? "Mann" : a.getGender() == Gender.FEMALE ? "Frau" : a.getGender() == Gender.DIVERS ? "Divers" : "N/A"));
@@ -46,7 +39,7 @@ public class Var
         p.sendMessage("§7ID: #" + a.id);
     }
 
-    public void sendHelpMsg(Player p)
+    public static void sendHelpMsg(Player p)
     {
         p.sendMessage("§c----- §e/ausweis §c-----");
         p.sendMessage("§e/ausweis name [Vorname] [Nachname] §bÄndert deinen Namen und erstellt beim 1. Mal einen Ausweis");
@@ -57,7 +50,7 @@ public class Var
         p.sendMessage("§e/ausweis anschauen [Spieler] §bSchau den Ausweis eines Spielers an");
     }
 
-    public void sendReisepunkHelpMsg(Player p) {
+    public static void sendReisepunkHelpMsg(Player p) {
         p.sendMessage("§c--- §e/reisepunk §c---");
         p.sendMessage("§e/reisepunkt setzen [Name] [Dauer] §bSetzt ein Reisepunk");
         p.sendMessage("§e/reisepunkt ziel [Name] §bSetzt das Ziel eines Reisepunkts");
@@ -65,7 +58,7 @@ public class Var
         p.sendMessage("§e/reisepunk löschen [Name] §bEntfernt ein Reisepunkt");
     }
 
-    public float getYawByBlockFace(BlockFace bf)
+    public static float getYawByBlockFace(BlockFace bf)
     {
         float yaw = 0;
 
@@ -96,7 +89,7 @@ public class Var
     }
 
 
-    public int getBackpackID(ItemStack backpack)
+    public static int getBackpackID(ItemStack backpack)
     {
 
         String lore = backpack.getItemMeta().getLore().get(1);
@@ -159,9 +152,9 @@ public class Var
 
     }
 
-    private final List<Material> noStairs = new ArrayList<>();
+    private static final List<Material> noStairs = new ArrayList<>();
 
-    public List<Material> getNoStairs() {
+    public static List<Material> getNoStairs() {
 
         if(noStairs.isEmpty()) {
 

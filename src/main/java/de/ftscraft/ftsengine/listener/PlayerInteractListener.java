@@ -8,6 +8,7 @@ import de.ftscraft.ftsengine.backpacks.BackpackType;
 import de.ftscraft.ftsengine.brett.Brett;
 import de.ftscraft.ftsengine.main.Engine;
 import de.ftscraft.ftsengine.utils.Ausweis;
+import de.ftscraft.ftsengine.utils.Var;
 import net.kyori.adventure.key.Key;
 import net.kyori.adventure.sound.Sound;
 import org.bukkit.Bukkit;
@@ -75,7 +76,7 @@ public class PlayerInteractListener implements Listener {
                     }
                     for (Ausweis a : plugin.ausweis.values()) {
                         if (a.id == id) {
-                            plugin.getVar().sendAusweisMsg(e.getPlayer(), a);
+                            Var.sendAusweisMsg(e.getPlayer(), a);
                             break;
                         }
                     }
@@ -192,7 +193,7 @@ public class PlayerInteractListener implements Listener {
                             Player p = e.getPlayer();
                             ItemStack chest = e.getPlayer().getInventory().getChestplate();
                             if (BackpackType.getBackpackByName(chest.getItemMeta().getDisplayName()) != null && BackpackType.getBackpackByName(chest.getItemMeta().getDisplayName()) != BackpackType.ENDER) {
-                                int id = plugin.getVar().getBackpackID(chest);
+                                int id = Var.getBackpackID(chest);
 
                                 if (id == -1) {
                                     new Backpack(plugin, BackpackType.getBackpackByName(chest.getItemMeta().getDisplayName()), p);

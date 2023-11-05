@@ -113,7 +113,6 @@ public class Engine extends JavaPlugin implements Listener {
         ItemStacks itemStacks = new ItemStacks(this);
         reiter = new ArrayList<>();
         player = new HashMap<>();
-        var = new Var(this);
 
 
         new CMDausweis(this);
@@ -227,10 +226,6 @@ public class Engine extends JavaPlugin implements Listener {
 
     public Economy getEcon() {
         return econ;
-    }
-
-    public Var getVar() {
-        return var;
     }
 
     public Team getTeam() {

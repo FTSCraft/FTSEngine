@@ -71,7 +71,7 @@ public class FTSUser {
         } else {
 
             if (!plugin.mats.contains(block.getType())) {
-                if (plugin.getVar().getNoStairs().contains(block.getType())) {
+                if (Var.getNoStairs().contains(block.getType())) {
                     Location loc2 = block.getLocation().clone().subtract(-0.5D, 1.2D, -0.4D);
                     sit_stand = block.getLocation().getWorld().spawn(loc2, ArmorStand.class);
                 } else {
@@ -85,7 +85,7 @@ public class FTSUser {
                         if (face == BlockFace.DOWN)
                             return;
                         Location loc2 = block.getLocation().clone().subtract(-0.5D, 1.2D, -0.4D);
-                        loc2.setYaw(plugin.getVar().getYawByBlockFace(face));
+                        loc2.setYaw(Var.getYawByBlockFace(face));
                         sit_stand = block.getLocation().getWorld().spawn(loc2, ArmorStand.class);
                         player.teleport(sit_stand);
                     } catch (Exception ignored) {

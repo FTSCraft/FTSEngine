@@ -18,7 +18,8 @@ public class Messages
                         ONLY_PLAYER = PREFIX + "Dieser Befehl ist nur für Spieler!",
                         NOW_YOUR_HORSE = PREFIX + "Du besitzt nun dieses Pferd!",
                         PLAYER_TOO_FAR_AWAY = PREFIX + "Der Spieler ist zu weit entfernt!",
-                        TARGET_NO_AUSWEIS = PREFIX + "Der Spieler hat keinen Ausweis!";
+                        TARGET_NO_AUSWEIS = PREFIX + "Der Spieler hat keinen Ausweis!",
+                        NO_PERMISSIONS = PREFIX + "Dafür hast du keine Rechte!";
 
 
 }
