@@ -27,12 +27,10 @@ public class CMDbrief implements CommandExecutor {
 
     @Override
     public boolean onCommand(@NotNull CommandSender cs, @NotNull Command cmd, @NotNull String label, String[] args) {
-        if (!(cs instanceof Player)) {
+        if (!(cs instanceof Player p)) {
             cs.sendMessage(Messages.ONLY_PLAYER);
             return true;
         }
-
-        Player p = (Player) cs;
 
         if (args.length == 2) {
 
@@ -55,9 +53,9 @@ public class CMDbrief implements CommandExecutor {
 
                 if (item.getType() == Material.FILLED_MAP || item.getType() == Material.WRITTEN_BOOK || item.getType() == Material.WRITABLE_BOOK) {
 
-                    boolean sucess = briefkasten.putItemIntoChest(item);
+                    boolean success = briefkasten.putItemIntoChest(item);
 
-                    if (sucess) {
+                    if (success) {
 
                         p.sendMessage("§cDein Brief wurde erfolgreich versendet!");
 
@@ -94,7 +92,7 @@ public class CMDbrief implements CommandExecutor {
                 return true;
 
             }
-        }
+        } else p.sendMessage(Messages.PREFIX + "Bitte nutze den Befehl so: /brief [Nachricht]");
 
         if (args.length >= 1) {
 

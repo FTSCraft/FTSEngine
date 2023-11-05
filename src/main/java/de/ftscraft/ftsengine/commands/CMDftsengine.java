@@ -3,6 +3,7 @@ package de.ftscraft.ftsengine.commands;
 import de.ftscraft.ftsengine.brett.Brett;
 import de.ftscraft.ftsengine.brett.BrettNote;
 import de.ftscraft.ftsengine.main.Engine;
+import de.ftscraft.ftsengine.utils.Messages;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -19,6 +20,11 @@ public class CMDftsengine implements CommandExecutor {
 
     @Override
     public boolean onCommand(@NotNull CommandSender cs, @NotNull Command cmd, @NotNull String label, String[] args) {
+
+        if (!cs.hasPermission("ftsengine.helfer")) {
+            cs.sendMessage(Messages.NO_PERMISSIONS);
+            return true;
+        }
 
         if (args.length == 5) {
 
@@ -53,12 +59,12 @@ public class CMDftsengine implements CommandExecutor {
                         }
                     }
 
-                    if(note == null) {
+                    if (note == null) {
                         cs.sendMessage("§7[§bSchwarzes Brett§7] Diese Notiz wurde nicht gefunden.");
                         return true;
                     }
 
-                    if(note.getCreator().equals(cs.getName()) || cs.hasPermission("brett.admin")) {
+                    if (note.getCreator().equals(cs.getName()) || cs.hasPermission("brett.admin")) {
                         note.remove();
                         cs.sendMessage("§7[§bSchwarzes Brett§7] Die Notiz wurde entfernt.");
                         return true;
@@ -71,7 +77,6 @@ public class CMDftsengine implements CommandExecutor {
                 }
             }
 
-            
 
         }
 
