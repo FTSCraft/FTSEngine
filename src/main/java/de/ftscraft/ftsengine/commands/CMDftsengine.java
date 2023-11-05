@@ -47,7 +47,7 @@ public class CMDftsengine implements CommandExecutor {
                     }
 
                     if (brett == null) {
-                        cs.sendMessage("§cDa hat was nicht geklappt! Ich habe das Brett nicht gefunden");
+                        cs.sendMessage(Messages.PREFIX + "Da hat was nicht geklappt! Ich habe das Brett nicht gefunden");
                         return true;
                     }
 
@@ -60,16 +60,16 @@ public class CMDftsengine implements CommandExecutor {
                     }
 
                     if (note == null) {
-                        cs.sendMessage("§7[§bSchwarzes Brett§7] Diese Notiz wurde nicht gefunden.");
+                        cs.sendMessage(Messages.PREFIX + "Diese Notiz wurde nicht gefunden.");
                         return true;
                     }
 
                     if (note.getCreator().equals(cs.getName()) || cs.hasPermission("brett.admin")) {
                         note.remove();
-                        cs.sendMessage("§7[§bSchwarzes Brett§7] Die Notiz wurde entfernt.");
+                        cs.sendMessage(Messages.PREFIX + "Die Notiz wurde entfernt.");
                         return true;
                     } else {
-                        cs.sendMessage("§7[§bSchwarzes Brett§7] Du bist nicht dazu in der Lage diese Notiz zu löschen. Tut mir leid, aber so sind die Regeln");
+                        cs.sendMessage(Messages.PREFIX + "Du bist nicht dazu in der Lage diese Notiz zu löschen. Tut mir leid, aber so sind die Regeln");
                         return true;
                     }
 

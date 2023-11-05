@@ -2,6 +2,7 @@ package de.ftscraft.ftsengine.listener;
 
 import de.ftscraft.ftsengine.brett.Brett;
 import de.ftscraft.ftsengine.main.Engine;
+import de.ftscraft.ftsengine.utils.Messages;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.OfflinePlayer;
@@ -73,7 +74,7 @@ public class BlockBreakListener implements Listener
 
                     event.setCancelled(true);
 
-                    event.getPlayer().sendMessage("§cBitte kontaktiere einen Admin falls das dein Briefkasten ist. Stichwort: UUID nicht vorhanden");
+                    event.getPlayer().sendMessage(Messages.PREFIX + "Bitte kontaktiere einen Admin falls das dein Briefkasten ist. Stichwort: UUID nicht vorhanden");
                     return;
                 }
 
@@ -92,10 +93,10 @@ public class BlockBreakListener implements Listener
 
                     file.delete();
 
-                    event.getPlayer().sendMessage("§cDu hast deinen Briefkasten erfolgreich entfernt!");
+                    event.getPlayer().sendMessage(Messages.PREFIX + "Du hast deinen Briefkasten erfolgreich entfernt!");
 
                 } else {
-                    event.getPlayer().sendMessage("§cDas ist nicht dein Briefkasten!");
+                    event.getPlayer().sendMessage(Messages.PREFIX + "Das ist nicht dein Briefkasten!");
                 }
 
 
@@ -128,7 +129,7 @@ public class BlockBreakListener implements Listener
 
             if(briefkasten) {
 
-                event.getPlayer().sendMessage("§cFalls das dein Briefkasten ist, zerstöre erst das Schild");
+                event.getPlayer().sendMessage(Messages.PREFIX + "Falls das dein Briefkasten ist, zerstöre erst das Schild");
 
                 event.setCancelled(true);
 

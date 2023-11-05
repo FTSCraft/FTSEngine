@@ -30,7 +30,7 @@ public class CMDohrfeige implements CommandExecutor {
         Player p = (Player) cs;
 
         if (plugin.getAusweis(p) == null) {
-            p.sendMessage("§cDu hast noch kein Ausweis. Mach dir einen mit /ausweis!");
+            p.sendMessage(Messages.PREFIX + "Du hast noch kein Ausweis. Mach dir einen mit /ausweis!");
             return true;
         }
 
@@ -56,7 +56,7 @@ public class CMDohrfeige implements CommandExecutor {
 
                     } else p.sendMessage(Messages.PLAYER_TOO_FAR_AWAY);
                 } else p.sendMessage(Messages.TARGET_NO_AUSWEIS);
-            } else p.sendMessage("Der Spieler ist derzeit nicht online");
+            } else p.sendMessage(Messages.PREFIX + "Der Spieler ist derzeit nicht online");
         } else p.sendMessage(Messages.NO_PLAYER_GIVEN);
 
         return false;

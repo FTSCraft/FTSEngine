@@ -1,6 +1,7 @@
 package de.ftscraft.ftsengine.backpacks;
 
 import de.ftscraft.ftsengine.main.Engine;
+import de.ftscraft.ftsengine.utils.Messages;
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
@@ -46,7 +47,7 @@ public class Backpack
         is.setItemMeta(im);
         p.getInventory().setChestplate(is);
 
-        p.sendMessage("§eDein Rucksack ist nun Regestriert. " + this.id);
+        p.sendMessage(Messages.PREFIX + "Dein Rucksack ist nun Registriert. (ID: " + this.id + ")");
 
         plugin.backpacks.put(this.id, this);
     }

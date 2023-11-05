@@ -8,6 +8,7 @@ import de.ftscraft.ftsengine.backpacks.BackpackType;
 import de.ftscraft.ftsengine.brett.Brett;
 import de.ftscraft.ftsengine.main.Engine;
 import de.ftscraft.ftsengine.utils.Ausweis;
+import de.ftscraft.ftsengine.utils.Messages;
 import de.ftscraft.ftsengine.utils.Var;
 import net.kyori.adventure.key.Key;
 import net.kyori.adventure.sound.Sound;
@@ -69,7 +70,7 @@ public class PlayerInteractListener implements Listener {
                     try {
                         id = Integer.parseInt(idS);
                     } catch (NumberFormatException ex) {
-                        e.getPlayer().sendMessage("Irgendwas ist falsch! guck mal Konsole " +
+                        e.getPlayer().sendMessage(Messages.PREFIX + "Irgendwas ist falsch! guck mal Konsole " +
                                 "(sag Musc bescheid, dass er halberfan sagen soll: " +
                                 "\"Fehler bei Main - onItemInteract - NumberFormatException\"");
                         return;
@@ -201,7 +202,7 @@ public class PlayerInteractListener implements Listener {
                                     Backpack bp = plugin.backpacks.get(id);
 
                                     if (bp == null) {
-                                        p.sendMessage("§eDieser Rucksack ist (warum auch immer) nicht regestriert?");
+                                        p.sendMessage(Messages.PREFIX + "Dieser Rucksack ist (warum auch immer) nicht regestriert?");
                                         return;
                                     }
 

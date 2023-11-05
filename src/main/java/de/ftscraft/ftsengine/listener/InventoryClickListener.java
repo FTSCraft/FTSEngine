@@ -76,7 +76,7 @@ public class InventoryClickListener implements Listener {
                     int price;
                     price = 0;
                     if (!plugin.getEcon().has(p, price)) {
-                        p.sendMessage("§cDu hast nicht genug Geld!");
+                        p.sendMessage(Messages.PREFIX + "Du hast nicht genug Geld!");
                         return;
                     }
 
@@ -104,7 +104,7 @@ public class InventoryClickListener implements Listener {
                     //
 
                     p.closeInventory();
-                    p.sendMessage("§cBitte achte auf einen RPlichen Schreibstil \n §7[§bSchwarzes Brett§7] §bBitte gebe jetzt den Titel ein. §c(Max. 50 Ziechen)");
+                    p.sendMessage(Messages.PREFIX + "Bitte achte auf einen RPlichen Schreibstil \n §7[§bSchwarzes Brett§7] §bBitte gebe jetzt den Titel ein. §c(Max. 50 Ziechen)");
                     ArrayList<String> al = new ArrayList<>();
                     al.add(" ");
                     BrettNote brettNote = new BrettNote(brett, p.getName(), true);
@@ -221,7 +221,7 @@ public class InventoryClickListener implements Listener {
                 if (BackpackType.getBackpackByName(event.getCurrentItem().getItemMeta().getDisplayName()) != null) {
                     if (!event.getWhoClicked().hasPermission("ftsengine.backpack.move")) {
                         event.setCancelled(true);
-                        event.getWhoClicked().sendMessage("§3Du kannst kein Rucksack in ein Rucksack packen!");
+                        event.getWhoClicked().sendMessage(Messages.PREFIX + "Du kannst kein Rucksack in ein Rucksack packen!");
                     }
                 }
             }

@@ -1,6 +1,7 @@
 package de.ftscraft.ftsengine.commands;
 
 import de.ftscraft.ftsengine.main.Engine;
+import de.ftscraft.ftsengine.utils.Messages;
 import org.bukkit.Statistic;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -26,7 +27,7 @@ public class CMDplaytime implements CommandExecutor {
             int minute = second / 60;
             int hour = minute / 60;
 
-            p.sendMessage("§bDu spielst schon §c" + hour + " Stunden§b. \n§bAb §c50 Stunden §bsolltest du eine Charaktervorstellung im Forum schreiben \n§bDu willst wissen wie das geht? Schau hier: §chttps://forum.ftscraft.de/t/tutorial-eine-charaktervorstellung-schreiben/1586 ");
+            p.sendMessage(Messages.PREFIX + "Du spielst schon §c" + hour + " Stunden§b. \n§7Ab §c50 Stunden §bsolltest du eine Charaktervorstellung im Forum schreiben \n§7Du willst wissen wie das geht? Schau hier: §chttps://forum.ftscraft.de/t/tutorial-eine-charaktervorstellung-schreiben/1586 ");
 
         } else {
             cs.sendMessage("Du musst ein Spieler sein");

@@ -2,6 +2,7 @@ package de.ftscraft.ftsengine.commands;
 
 import de.ftscraft.ftsengine.backpacks.BackpackType;
 import de.ftscraft.ftsengine.main.Engine;
+import de.ftscraft.ftsengine.utils.Messages;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.command.Command;
@@ -61,7 +62,7 @@ public class CMDitem implements CommandExecutor {
                     ItemStack is = p.getInventory().getItemInMainHand();
                     if (is.hasItemMeta()) {
                         if (forbiddenItems.contains(is.getItemMeta().getDisplayName())) {
-                            p.sendMessage("§cDu darfst dieses Item nicht bearbeiten!");
+                            p.sendMessage(Messages.PREFIX + "Du darfst dieses Item nicht bearbeiten!");
                             return true;
                         }
                     }
@@ -80,7 +81,7 @@ public class CMDitem implements CommandExecutor {
                         if (is.getType() != Material.AIR) {
 
                             if (forbiddenNames.contains(name)) {
-                                p.sendMessage("§cDas Item so zu nennen ist nicht erlaubt!");
+                                p.sendMessage(Messages.PREFIX + "Das Item so zu nennen ist nicht erlaubt!");
                                 return true;
                             }
 
@@ -88,10 +89,10 @@ public class CMDitem implements CommandExecutor {
                             im.setDisplayName(name);
                             is.setItemMeta(im);
 
-                            p.sendMessage("§cDein Item heißt nun: §e" + name);
+                            p.sendMessage(Messages.PREFIX + "Dein Item heißt nun: §e" + name);
 
                         } else
-                            p.sendMessage("§cDu musst ein Item in deiner Hand haben!");
+                            p.sendMessage(Messages.PREFIX + "Du musst ein Item in deiner Hand haben!");
 
                     } else if (args[0].equalsIgnoreCase("lore") && args.length >= 2) {
 
@@ -117,14 +118,14 @@ public class CMDitem implements CommandExecutor {
                         ItemStack item = p.getInventory().getItemInMainHand();
 
                         if (forbiddenItems.contains(item.getItemMeta().displayName())) {
-                            p.sendMessage("§cDieses Item darfst du nicht bearbeiten");
+                            p.sendMessage(Messages.PREFIX + "Dieses Item darfst du nicht bearbeiten");
                             return true;
                         }
 
                         if (item.getType() != Material.AIR) {
 
                             if (forbiddenNames.contains(lore.get(0))) {
-                                p.sendMessage("§cDas Item so zu nennen ist nicht erlaubt!");
+                                p.sendMessage(Messages.PREFIX + "Das Item so zu nennen ist nicht erlaubt!");
                                 return true;
                             }
 
@@ -132,19 +133,19 @@ public class CMDitem implements CommandExecutor {
                             itemStackMeta.setLore(lore);
                             item.setItemMeta(itemStackMeta);
 
-                            p.sendMessage("§cDu hast die Lore gesetzt!");
+                            p.sendMessage(Messages.PREFIX + "Du hast die Lore gesetzt!");
 
-                        } else p.sendMessage("§cBitte nehme das Item in die Hand!");
+                        } else p.sendMessage(Messages.PREFIX + "Bitte nehme das Item in die Hand!");
 
                     } else p.sendMessage(help());
 
 
                 } else p.sendMessage(help());
             } else
-                p.sendMessage("§cDieser Befehl ist nur für Leute die einen Rang gekauft haben. §6Du kannst das auch! http://musc1.buycraft.net/");
+                p.sendMessage(Messages.PREFIX + "Dieser Befehl ist nur für Leute die einen Rang gekauft haben. §6Du kannst das auch! http://musc1.buycraft.net/");
 
         } else cs
-                .sendMessage("§cDieser Befehl ist nur für Leute die einen Rang gekauft haben. §6Du kannst das auch! http://musc1.buycraft.net/");
+                .sendMessage(Messages.PREFIX + "Dieser Befehl ist nur für Leute die einen Rang gekauft haben. §6Du kannst das auch! http://musc1.buycraft.net/");
 
         return true;
     }

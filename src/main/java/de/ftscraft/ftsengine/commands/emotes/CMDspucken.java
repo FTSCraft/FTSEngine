@@ -35,12 +35,12 @@ public class CMDspucken implements CommandExecutor {
             Player t = Bukkit.getPlayer(tString);
 
             if (t == null) {
-                p.sendMessage(ChatColor.RED + "Dieser Spieler ist nicht online!");
+                p.sendMessage(Messages.PREFIX + "Dieser Spieler ist nicht online!");
                 return true;
             }
 
             if (t.getLocation().distance(p.getLocation()) > 4) {
-                p.sendMessage(ChatColor.RED + "Dieser Spieler ist zu weit weg!");
+                p.sendMessage(Messages.PREFIX + "Dieser Spieler ist zu weit weg!");
                 return true;
             }
 
@@ -49,8 +49,8 @@ public class CMDspucken implements CommandExecutor {
             LlamaSpit llamaSpit = p.launchProjectile(LlamaSpit.class, pLoc.getDirection().multiply(0.5));
             llamaSpit.setShooter(p);
 
-            p.sendMessage(ChatColor.GRAY + "Du hast den Spieler " + ChatColor.RED + t.getName() + ChatColor.GRAY + " angespuckt");
-            t.sendMessage(ChatColor.GRAY + "Der Spieler " + ChatColor.RED + p.getName() + ChatColor.GRAY + " hat dich angespuckt!");
+            p.sendMessage("§eDu hast den Spieler " + ChatColor.RED + t.getName() + ChatColor.GRAY + " angespuckt");
+            t.sendMessage("§eDer Spieler " + ChatColor.RED + p.getName() + ChatColor.GRAY + " hat dich angespuckt!");
 
 
         } else p.sendMessage(Messages.NO_PLAYER_GIVEN);

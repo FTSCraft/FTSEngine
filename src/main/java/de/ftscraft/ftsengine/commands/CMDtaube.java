@@ -57,7 +57,7 @@ public class CMDtaube implements CommandExecutor {
                             msg.append(" ").append(args[i2]);
                         }
 
-                        p.sendMessage("§eEine Taube fliegt zu §c" + t.getName() + "§7.");
+                        p.sendMessage(Messages.PREFIX + "Eine Taube fliegt zu §c" + t.getName() + "§7.");
 
                         p.playSound(p.getLocation(), Sound.ENTITY_BAT_LOOP, 3, -20);
 
@@ -99,7 +99,7 @@ public class CMDtaube implements CommandExecutor {
                         msg.append(" ").append(args[i2]);
                     }
 
-                    p.sendMessage("§eEine Taube fliegt zu §c" + t.getName() + "§7.");
+                    p.sendMessage(Messages.PREFIX + "Eine Taube fliegt zu §c" + t.getName() + "§7.");
 
                     p.playSound(p.getLocation(), Sound.ENTITY_BAT_LOOP, 3, -20);
 

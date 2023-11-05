@@ -4,6 +4,7 @@ import de.ftscraft.ftsengine.brett.Brett;
 import de.ftscraft.ftsengine.courier.Briefkasten;
 import de.ftscraft.ftsengine.main.Engine;
 import de.ftscraft.ftsengine.main.FTSUser;
+import de.ftscraft.ftsengine.utils.Messages;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -52,7 +53,7 @@ public class SignWriteListener implements Listener {
                             p.sendMessage("§cDu hast bereits einen Briefkasten, zerstöre diesen, bevor du einen neuen erstellst");
                             p.sendMessage("§cFalls du vergessen hast wo er ist, hier die Koordinaten:");
                             p.sendMessage("§cX: " + briefkasten.getLocation().getX() + " Y: " + briefkasten.getLocation().getY() + " Z: " + briefkasten.getLocation().getZ());
-
+                            p.sendMessage("§cFalls da keiner ist, kannst du auch /brief removekasten eingeben");
                             event.setCancelled(true);
 
                             return;
@@ -65,7 +66,7 @@ public class SignWriteListener implements Listener {
                         event.setLine(0, "§7[§2Briefkasten§7]");
                         event.setLine(1, p.getName());
 
-                        p.sendMessage("§cDu hast deinen Briefkasten erfolgreich erstellt!");
+                        p.sendMessage(Messages.PREFIX + "Du hast deinen Briefkasten erfolgreich erstellt!");
 
                     }
 
@@ -86,7 +87,7 @@ public class SignWriteListener implements Listener {
                         admin = true;
                     } else {
                         event.setCancelled(true);
-                        event.getPlayer().sendMessage("§cDu darfst keine Admin-Schilder erstellen!");
+                        event.getPlayer().sendMessage(Messages.PREFIX + "Du darfst keine Admin-Schilder erstellen!");
                         return;
                     }
                 }
@@ -95,7 +96,7 @@ public class SignWriteListener implements Listener {
                         global = true;
                     } else {
                         event.setCancelled(true);
-                        event.getPlayer().sendMessage("§cDu darfst keine Admin-Schilder erstellen!");
+                        event.getPlayer().sendMessage(Messages.PREFIX + "Du darfst keine Admin-Schilder erstellen!");
                         return;
                     }
                 }
@@ -121,7 +122,7 @@ public class SignWriteListener implements Listener {
                                 firstGlobal = false;
                                 break;
                             }
-                            event.getPlayer().sendMessage("§cDieser Name ist schon vorhanden. Probier ein anderen");
+                            event.getPlayer().sendMessage(Messages.PREFIX + "Dieser Name ist schon vorhanden. Probier ein anderen");
                             event.setCancelled(true);
                             return;
                         }

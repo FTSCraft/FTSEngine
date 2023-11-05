@@ -34,7 +34,7 @@ public class Runner implements Runnable
                         if(p.hasPermission("group.reisender")) {
                             sentUserMessage.add(p);
                             Bukkit.getScheduler().runTaskLater(plugin, () -> {
-                                p.sendMessage("§cDu spielst seit mehr als 50 Stunden auf Parsifal und bist noch immer Reisender? Bitte erstelle dir langsam einen Ausweis und eine Charvorstellung im Forum!");
+                                p.sendMessage(Messages.PREFIX + "Du spielst seit mehr als 50 Stunden auf Parsifal und bist noch immer Reisender? Bitte erstelle dir langsam einen Ausweis und eine Charvorstellung im Forum!");
                                 p.playSound(p.getLocation(), Sound.BLOCK_NOTE_BLOCK_PLING, 10, 1);
                             }, 20 * 5);
                         }

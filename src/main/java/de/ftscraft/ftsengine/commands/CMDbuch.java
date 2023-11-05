@@ -30,7 +30,7 @@ public class CMDbuch implements CommandExecutor {
     public boolean onCommand(@NotNull CommandSender cs, @NotNull Command cmd, @NotNull String label, @NotNull String[] args) {
 
         if (!(cs instanceof Player)) {
-            cs.sendMessage("Dieser Befehl ist nur für Spieler");
+            cs.sendMessage(Messages.ONLY_PLAYER);
             return true;
         }
 
@@ -62,7 +62,7 @@ public class CMDbuch implements CommandExecutor {
                 title = title.substring(12);
             else title = "";
             if(!title.equals(p.getName())) {
-                p.sendMessage("§cDas ist nicht dein Brief!");
+                p.sendMessage(Messages.PREFIX + "Das ist nicht dein Brief!");
                 return true;
             }
             if(bookMeta.getPageCount() == 50) {

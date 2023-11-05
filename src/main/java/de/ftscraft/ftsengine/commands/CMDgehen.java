@@ -1,6 +1,7 @@
 package de.ftscraft.ftsengine.commands;
 
 import de.ftscraft.ftsengine.main.Engine;
+import de.ftscraft.ftsengine.utils.Messages;
 import org.bukkit.Material;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -33,13 +34,13 @@ public class CMDgehen implements CommandExecutor {
 
                 if(p.getWalkSpeed() == 0.1f) {
                     p.setWalkSpeed(0.2f);
-                    p.sendMessage("§cDu gehst jetzt wieder normal");
+                    p.sendMessage(Messages.PREFIX + "Du gehst jetzt wieder normal");
                 } else {
                     p.setWalkSpeed(0.1f);
-                    p.sendMessage("§cDu gehst jetzt langsam");
+                    p.sendMessage(Messages.PREFIX + "Du gehst jetzt langsam");
                 }
 
-            } else p.sendMessage("§cDu kannst diesen Befehl nicht benutzen wenn du eine Rüstung trägst!");
+            } else p.sendMessage(Messages.PREFIX + "Du kannst diesen Befehl nicht benutzen wenn du eine Rüstung trägst!");
 
 
         }

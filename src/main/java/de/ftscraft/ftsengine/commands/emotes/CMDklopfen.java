@@ -1,6 +1,7 @@
 package de.ftscraft.ftsengine.commands.emotes;
 
 import de.ftscraft.ftsengine.main.Engine;
+import de.ftscraft.ftsengine.utils.Messages;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -22,7 +23,7 @@ public class CMDklopfen implements CommandExecutor {
         if (cs instanceof Player) {
             Player p = (Player) cs;
             if (plugin.getAusweis(p) == null) {
-                p.sendMessage("§cDu hast noch kein Ausweis. Mach dir einen mit /ausweis!");
+                p.sendMessage(Messages.PREFIX + "Du hast noch kein Ausweis. Mach dir einen mit /ausweis!");
                 return true;
             }
             String message = "§c" + plugin.getAusweis(p).getFirstName() + " " + plugin.getAusweis(p).getLastName() + "§e klopft an der Tür";

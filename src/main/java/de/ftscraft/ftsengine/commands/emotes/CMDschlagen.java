@@ -40,7 +40,7 @@ public class CMDschlagen implements CommandExecutor {
             }
 
             if (!isNear) {
-                p.sendMessage("§eDer Spieler ist nicht in Schlagreichweite");
+                p.sendMessage(Messages.PREFIX + "Der Spieler ist nicht in Schlagreichweite");
                 return true;
             }
 

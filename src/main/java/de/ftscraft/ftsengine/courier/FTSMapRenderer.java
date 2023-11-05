@@ -1,6 +1,7 @@
 package de.ftscraft.ftsengine.courier;
 
 import de.ftscraft.ftsengine.main.Engine;
+import de.ftscraft.ftsengine.utils.Messages;
 import org.bukkit.entity.Player;
 import org.bukkit.map.MapCanvas;
 import org.bukkit.map.MapCursorCollection;
@@ -52,7 +53,7 @@ public class FTSMapRenderer extends org.bukkit.map.MapRenderer {
                     try {
                         mapCanvas.drawText(0, zeilen * 10 + SPACE, MinecraftFont.Font, text);
                     } catch (IllegalArgumentException ignored) {
-                        player.sendMessage("Da sind Zeichen im Brief die nicht gehen!");
+                        player.sendMessage(Messages.PREFIX + "Da sind Zeichen im Brief die nicht gehen!");
                         brief.error();
                         return;
                     }

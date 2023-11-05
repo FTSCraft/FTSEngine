@@ -41,7 +41,7 @@ public class CMDbrief implements CommandExecutor {
 
                 if (!plugin.briefkasten.containsKey(tUUID)) {
 
-                    p.sendMessage("§cDieser Spieler besitzt keinen Briefkasten!");
+                    p.sendMessage(Messages.PREFIX + "Dieser Spieler besitzt keinen Briefkasten!");
 
                     return true;
 
@@ -57,25 +57,26 @@ public class CMDbrief implements CommandExecutor {
 
                     if (success) {
 
-                        p.sendMessage("§cDein Brief wurde erfolgreich versendet!");
+                        p.sendMessage(Messages.PREFIX + "Dein Brief wurde erfolgreich versendet!");
 
                         item.setAmount(0);
 
-                    } else p.sendMessage("§cDa hat was nicht geklappt! (wahrscheinlich fehlt platz im kasten)");
+                    } else
+                        p.sendMessage(Messages.PREFIX + "Da hat was nicht geklappt! (wahrscheinlich fehlt platz im kasten)");
 
                     return true;
 
-                } else p.sendMessage("§cDu musst einen Brief oder ein Buch senden!");
+                } else p.sendMessage(Messages.PREFIX + "Du musst einen Brief oder ein Buch senden!");
 
                 return true;
 
             }
 
-        } else if(args.length == 1) {
-            if(args[0].equalsIgnoreCase("removekasten")) {
+        } else if (args.length == 1) {
+            if (args[0].equalsIgnoreCase("removekasten")) {
 
-                if(!plugin.briefkasten.containsKey(p.getUniqueId())) {
-                    p.sendMessage("§cDu hast keinen Briefkasten!");
+                if (!plugin.briefkasten.containsKey(p.getUniqueId())) {
+                    p.sendMessage(Messages.PREFIX + "Du hast keinen Briefkasten!");
                     return true;
                 }
 
@@ -87,7 +88,7 @@ public class CMDbrief implements CommandExecutor {
 
                 file.delete();
 
-                p.sendMessage("§cDu hast deinen Briefkasten erfolgreich entfernt!");
+                p.sendMessage(Messages.PREFIX + "Du hast deinen Briefkasten erfolgreich entfernt!");
 
                 return true;
 
@@ -109,19 +110,18 @@ public class CMDbrief implements CommandExecutor {
             if (msg.toString().startsWith(" anonym")) {
                 if (plugin.getEcon().has(p, 2)) {
                     plugin.getEcon().withdrawPlayer(p, 2);
-                    p.sendMessage("§cDieser Brief ist nun Anonym!");
+                    p.sendMessage(Messages.PREFIX + "Dieser Brief ist nun Anonym!");
                     msg = new StringBuilder(msg.toString().replaceFirst(" anonym", " "));
                     name = "XXXX";
                 } else {
-                    p.sendMessage("Dafür hast du kein Geld!");
+                    p.sendMessage(Messages.PREFIX + "Dafür hast du kein Geld!");
                     return true;
                 }
             }
 
 
             Brief brief = new Brief(plugin, name, msg.toString(), p.getWorld().getName());
-            if(!brief.isError())
-                p.getInventory().addItem(brief.getMap(p.getWorld()));
+            if (!brief.isError()) p.getInventory().addItem(brief.getMap(p.getWorld()));
 
             return false;
         }

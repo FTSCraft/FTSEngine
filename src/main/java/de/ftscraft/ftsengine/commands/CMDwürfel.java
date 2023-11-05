@@ -38,7 +38,7 @@ public class CMDwürfel implements CommandExecutor {
         Ausweis ausweis = plugin.getAusweis(p);
 
         if (ausweis == null || ausweis.getGender() == null || ausweis.getRace() == null) {
-            p.sendMessage("§6Bitte lege dir zuerst einen Ausweis an (/ausweis). Für das Würfeln ist folgendes wichtig: §cName, Rasse, Geschlecht");
+            p.sendMessage(Messages.PREFIX + "Bitte lege dir zuerst einen Ausweis an (/ausweis). Für das Würfeln ist folgendes wichtig: §cName, Rasse, Geschlecht");
             return true;
         }
 
@@ -115,7 +115,7 @@ public class CMDwürfel implements CommandExecutor {
 
 
         } else {
-            cs.sendMessage("§cBitte würfel so: §e/würfel [Mensch/Zwerg/Elf/Ork/Goblin] <Magie/Aktion>");
+            cs.sendMessage(Messages.PREFIX + "Bitte würfel so: §e/würfel [Mensch/Zwerg/Elf/Ork/Goblin] <Magie/Aktion>");
         }
 
         return false;
