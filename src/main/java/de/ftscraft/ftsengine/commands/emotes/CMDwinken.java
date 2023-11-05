@@ -53,7 +53,8 @@ public class CMDwinken implements CommandExecutor {
                     p.sendMessage(Messages.TARGET_NO_AUSWEIS);
             }else
                 p.sendMessage("Der Spieler ist derzeit nicht online!");
-        }
+        } else
+            p.sendMessage(Messages.PREFIX + "Bitte gebe einen Spieler an");
         return false;
     }
 }
