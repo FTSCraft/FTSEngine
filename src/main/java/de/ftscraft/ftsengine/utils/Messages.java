@@ -19,6 +19,7 @@ public class Messages
                         NOW_YOUR_HORSE = PREFIX + "Du besitzt nun dieses Pferd!",
                         PLAYER_TOO_FAR_AWAY = PREFIX + "Der Spieler ist zu weit entfernt!",
                         TARGET_NO_AUSWEIS = PREFIX + "Der Spieler hat keinen Ausweis!",
+                        NO_PLAYER_GIVEN = PREFIX + "Bitte gebe einen Spieler an",
                         NO_PERMISSIONS = PREFIX + "Dafür hast du keine Rechte!";
 
 

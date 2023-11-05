@@ -43,18 +43,14 @@ public class CMDwinken implements CommandExecutor {
                         String message = "§c" + plugin.getAusweis(p).getFirstName() + " " + plugin.getAusweis(p).getLastName() + "§e winkt §c" + plugin.getAusweis(target).getFirstName() + " " + plugin.getAusweis(target).getLastName() + "§e zu.";
                         p.sendMessage(message);
                         for (Entity n : p.getNearbyEntities(45, 45, 45)) {
-                            if(n instanceof Player){
+                            if (n instanceof Player) {
                                 n.sendMessage(message);
                             }
                         }
-                    }else
-                        p.sendMessage(Messages.PLAYER_TOO_FAR_AWAY);
-                }else
-                    p.sendMessage(Messages.TARGET_NO_AUSWEIS);
-            }else
-                p.sendMessage("Der Spieler ist derzeit nicht online!");
-        } else
-            p.sendMessage(Messages.PREFIX + "Bitte gebe einen Spieler an");
+                    } else p.sendMessage(Messages.PLAYER_TOO_FAR_AWAY);
+                } else p.sendMessage(Messages.TARGET_NO_AUSWEIS);
+            } else p.sendMessage("Der Spieler ist derzeit nicht online!");
+        } else p.sendMessage(Messages.NO_PLAYER_GIVEN);
         return false;
     }
 }

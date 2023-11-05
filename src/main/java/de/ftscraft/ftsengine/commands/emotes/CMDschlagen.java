@@ -11,51 +11,48 @@ import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
-public class CMDschlagen implements CommandExecutor
-{
+public class CMDschlagen implements CommandExecutor {
 
-    public CMDschlagen(Engine plugin)
-    {
+    public CMDschlagen(Engine plugin) {
         plugin.getCommand("schlagen").setExecutor(this);
     }
 
     @Override
-    public boolean onCommand(@NotNull CommandSender cs, @NotNull Command cmd, @NotNull String label, String[] args)
-    {
-        if(!(cs instanceof Player)) {
+    public boolean onCommand(@NotNull CommandSender cs, @NotNull Command cmd, @NotNull String label, String[] args) {
+        if (!(cs instanceof Player)) {
             cs.sendMessage(Messages.ONLY_PLAYER);
             return true;
         }
 
-        Player p = (Player)cs;
+        Player p = (Player) cs;
 
-        if(args.length == 1) {
+        if (args.length == 1) {
             boolean isNear = false;
             Player t = null;
-            for(Entity e : p.getNearbyEntities(5,5,5)) {
-                if(e.getName().equalsIgnoreCase(args[0])) {
-                    t = (Player)e;
+            for (Entity e : p.getNearbyEntities(5, 5, 5)) {
+                if (e.getName().equalsIgnoreCase(args[0])) {
+                    t = (Player) e;
                     Location loc = t.getLocation();
-                    loc.getWorld().spawnParticle(Particle.VILLAGER_ANGRY, loc.clone().add(0,1.5D, 0), 4, 0.3,0,0.3);
-                    t.sendMessage("§e"+p.getName()+" hat dich geschlagen");
+                    loc.getWorld().spawnParticle(Particle.VILLAGER_ANGRY, loc.clone().add(0, 1.5D, 0), 4, 0.3, 0, 0.3);
+                    t.sendMessage("§e" + p.getName() + " hat dich geschlagen");
                     isNear = true;
                 }
             }
 
-            if(!isNear) {
+            if (!isNear) {
                 p.sendMessage("§eDer Spieler ist nicht in Schlagreichweite");
                 return true;
             }
 
-            for(Entity e : p.getNearbyEntities(5,5,5)) {
-                if(e instanceof Player) {
-                    e.sendMessage("§e"+p.getName()+" §7hat §e"+t.getName()+" §7geschlagen!");
+            for (Entity e : p.getNearbyEntities(5, 5, 5)) {
+                if (e instanceof Player) {
+                    e.sendMessage("§e" + p.getName() + " §7hat §e" + t.getName() + " §7geschlagen!");
                 }
             }
 
-            p.sendMessage("§eDu hast erfolgreich §c"+t.getName()+" §7geschlagen!");
+            p.sendMessage("§eDu hast erfolgreich §c" + t.getName() + " §7geschlagen!");
 
-        }
+        } else p.sendMessage(Messages.NO_PLAYER_GIVEN);
 
         return false;
     }

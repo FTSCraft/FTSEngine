@@ -19,17 +19,16 @@ public class CMDklopfen implements CommandExecutor {
 
     @Override
     public boolean onCommand(@NotNull CommandSender cs, @NotNull Command cmd, @NotNull String label, String[] args) {
-        if(cs instanceof Player) {
-            Player p = (Player)cs;
-            if(plugin.getAusweis(p) == null) {
+        if (cs instanceof Player) {
+            Player p = (Player) cs;
+            if (plugin.getAusweis(p) == null) {
                 p.sendMessage("§cDu hast noch kein Ausweis. Mach dir einen mit /ausweis!");
                 return true;
             }
-            String message = "§c"+plugin.getAusweis(p).getFirstName() + " " + plugin.getAusweis(p).getLastName()+"§e klopft an der Tür";
+            String message = "§c" + plugin.getAusweis(p).getFirstName() + " " + plugin.getAusweis(p).getLastName() + "§e klopft an der Tür";
             p.sendMessage(message);
-            for(Entity n : p.getNearbyEntities(20, 20, 20)) {
-                if(n instanceof Player)
-                    n.sendMessage(message);
+            for (Entity n : p.getNearbyEntities(20, 20, 20)) {
+                if (n instanceof Player) n.sendMessage(message);
             }
         }
         return false;

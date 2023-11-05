@@ -53,18 +53,15 @@ public class CMDkussen implements CommandExecutor {
                         }
 
                         //for (int i = 0; i < 4; i++) {
-                            p.getWorld().spawnParticle(Particle.HEART, p.getLocation().add(0,2.2,0), 4, 0.2, 0.3, 0.2);
-                            target.getWorld().spawnParticle(Particle.HEART, p.getLocation().add(0,2.2,0), 4, 0.2, 0.3, 0.2);
+                        p.getWorld().spawnParticle(Particle.HEART, p.getLocation().add(0, 2.2, 0), 4, 0.2, 0.3, 0.2);
+                        target.getWorld().spawnParticle(Particle.HEART, p.getLocation().add(0, 2.2, 0), 4, 0.2, 0.3, 0.2);
                         //}
 
-                    } else
-                        p.sendMessage(Messages.PREFIX + "Der Spieler ist zu weit entfernt");
-                } else
-                    p.sendMessage(Messages.PREFIX + "Der Spieler hat keinen Ausweis");
-            }else
-                p.sendMessage("Der Spieler ist derzeit nicht online!");
+                    } else p.sendMessage(Messages.PREFIX + "Der Spieler ist zu weit entfernt");
+                } else p.sendMessage(Messages.PREFIX + "Der Spieler hat keinen Ausweis");
+            } else p.sendMessage("Der Spieler ist derzeit nicht online!");
 
-        }
+        } else p.sendMessage(Messages.NO_PLAYER_GIVEN);
 
         return false;
     }
