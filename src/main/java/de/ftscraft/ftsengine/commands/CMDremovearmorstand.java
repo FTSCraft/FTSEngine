@@ -21,19 +21,17 @@ public class CMDremovearmorstand implements CommandExecutor
     public boolean onCommand(CommandSender cs, @NotNull Command cmd, @NotNull String label, String[] args)
     {
         if(cs.hasPermission("ftsengine.armorstand")) {
-            if(!(cs instanceof Player)) {
-                cs.sendMessage(Messages.PREFIX);
+            if(!(cs instanceof Player p)) {
+                cs.sendMessage(Messages.ONLY_PLAYER);
                 return true;
             }
-
-            Player p = (Player)cs;
 
             for (ArmorStand armorStand : p.getLocation().getNearbyEntitiesByType(ArmorStand.class, 5)) {
                 if(!armorStand.isVisible())
                     armorStand.remove();
             }
 
-        }
+        } else cs.sendMessage(Messages.NO_PERMISSIONS);
         return false;
     }
 }
