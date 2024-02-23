@@ -2,7 +2,6 @@ package de.ftscraft.ftsengine.commands;
 
 import de.ftscraft.ftsengine.main.Engine;
 import de.ftscraft.ftsengine.utils.Ausweis;
-import de.ftscraft.ftsengine.utils.Gender;
 import de.ftscraft.ftsengine.utils.Messages;
 import de.ftscraft.ftsengine.utils.Var;
 import org.bukkit.command.Command;
@@ -80,23 +79,20 @@ public class CMDausweis implements CommandExecutor, TabCompleter {
                         return true;
                     }
                     if (args.length == 2) {
-                        Gender g = null;
+                        Ausweis.Gender g = null;
                         if (args[1].equalsIgnoreCase("m") || args[1].equalsIgnoreCase("f") || args[1].equalsIgnoreCase("d")) {
                             if (args[1].equalsIgnoreCase("m"))
-                                g = Gender.MALE;
-                            if (args[1].equalsIgnoreCase("f")) {
-                                g = Gender.FEMALE;
-                            }
-                            if (args[1].equalsIgnoreCase("d")) {
-                                g = Gender.DIVERS;
-                            }
+                                g = Ausweis.Gender.MALE;
+                            else if (args[1].equalsIgnoreCase("f"))
+                                g = Ausweis.Gender.FEMALE;
+
                             if (g == null) {
                                 p.sendPlainMessage(Messages.PREFIX + "Fehler!");
                             }
                             plugin.getAusweis(p).setGender(g);
-                            p.sendPlainMessage(Messages.SUCC_CMD_AUSWEIS.replace("%s", "Geschlecht").replace("%v", (g == Gender.MALE ? "Mann" : g == Gender.FEMALE ? "Frau" : "Divers")));
+                            p.sendPlainMessage(Messages.SUCC_CMD_AUSWEIS.replace("%s", "Geschlecht").replace("%v", (g == Ausweis.Gender.MALE ? "Mann" : g == Ausweis.Gender.FEMALE ? "Frau" : "Divers")));
                         } else
-                            p.sendPlainMessage(Messages.PREFIX + "Bitte benutze den Befehl so:" + " §c/ausweis geschlecht [\"m\"/\"f\"/\"d\"]");
+                            p.sendPlainMessage(Messages.PREFIX + "Bitte benutze den Befehl so:" + " §c/ausweis geschlecht [\"m\"/\"f\"]");
                     } else
                         p.sendPlainMessage(Messages.PREFIX + "Bitte benutze den Befehl so:" + " §c/ausweis geschlecht [\"m\"/\"f\"]");
                     break;

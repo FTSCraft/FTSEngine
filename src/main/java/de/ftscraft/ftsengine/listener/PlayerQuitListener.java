@@ -1,6 +1,5 @@
 package de.ftscraft.ftsengine.listener;
 
-
 import de.ftscraft.ftsengine.main.Engine;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -21,7 +20,7 @@ public class PlayerQuitListener implements Listener
         if(e.getPlayer().getVehicle() != null) {
             e.getPlayer().getVehicle().removePassenger(e.getPlayer());
         }
-        plugin.getPlayer().get(e.getPlayer()).leave();
+        plugin.getPlayer().remove(e.getPlayer());
     }
 
 }

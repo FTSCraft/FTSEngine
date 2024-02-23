@@ -10,6 +10,7 @@ import de.ftscraft.ftsengine.main.Engine;
 import de.ftscraft.ftsengine.utils.Ausweis;
 import de.ftscraft.ftsengine.utils.Messages;
 import de.ftscraft.ftsengine.utils.Var;
+import de.ftscraft.ftsutils.items.ItemReader;
 import net.kyori.adventure.key.Key;
 import net.kyori.adventure.sound.Sound;
 import org.bukkit.Bukkit;
@@ -55,42 +56,12 @@ public class PlayerInteractListener implements Listener {
             }
         }
 
-        if (e.getAction() == Action.RIGHT_CLICK_BLOCK || e.getAction() == Action.RIGHT_CLICK_AIR) {
-            if (e.getPlayer().getInventory().getItemInMainHand().getType() != Material.AIR) {
-                String iName = e.getPlayer().getInventory().getItemInMainHand().getItemMeta().getDisplayName();
-                if (iName.startsWith("§6Personalausweis")) {
-                    if (plugin.ausweisCooldown.containsKey(e.getPlayer())) {
-                        if (plugin.ausweisCooldown.get(e.getPlayer()) > System.currentTimeMillis())
-                            return;
-                    }
-                    plugin.ausweisCooldown.put(e.getPlayer(), System.currentTimeMillis() + 1000);
-                    String idS = iName.replaceAll(".*#", "");
-                    int id;
-                    //Bei Fehlern bei Item gucken : Id da?
-                    try {
-                        id = Integer.parseInt(idS);
-                    } catch (NumberFormatException ex) {
-                        e.getPlayer().sendMessage(Messages.PREFIX + "Irgendwas ist falsch! guck mal Konsole " +
-                                "(sag Musc bescheid, dass er halberfan sagen soll: " +
-                                "\"Fehler bei Main - onItemInteract - NumberFormatException\"");
-                        return;
-                    }
-                    for (Ausweis a : plugin.ausweis.values()) {
-                        if (a.id == id) {
-                            Var.sendAusweisMsg(e.getPlayer(), a);
-                            break;
-                        }
-                    }
-
-                }
-            }
-        }
-
         if (e.getItem() != null) {
 
             if (e.getItem().getType() == Material.BOW) {
                 ItemStack is = e.getItem();
                 if (is.hasItemMeta()) {
+                    //TODO HÄÄ??
                     if (is.getItemMeta().getDisplayName().equalsIgnoreCase("§6Harfe")) {
 
                         PacketContainer packet = protocolManager.createPacket(PacketType.Play.Client.BLOCK_DIG);
@@ -115,8 +86,8 @@ public class PlayerInteractListener implements Listener {
                 ItemStack item = e.getPlayer().getInventory().getItemInMainHand();
 
                 if (item.hasItemMeta()) {
-
-                    if (item.getItemMeta().getDisplayName().equalsIgnoreCase("§6Horn")) {
+                    String sign = ItemReader.getSign(item);
+                    if (sign != null && sign.equals("HORN")) {
 
                         final Player p = e.getPlayer();
 
@@ -152,16 +123,6 @@ public class PlayerInteractListener implements Listener {
 
         }
 
-        /*
-        Sitzfunktion entfernt weil GSit existiert
-        if (e.getAction() == Action.RIGHT_CLICK_BLOCK) {
-            if (plugin.mats.contains(e.getClickedBlock().getType()) || (e.getClickedBlock().getBlockData() instanceof Stairs) || (e.getClickedBlock().getBlockData() instanceof Slab)) {
-                if (e.getPlayer().getInventory().getItemInMainHand().getType() == Material.AIR)
-                    plugin.getPlayer().get(e.getPlayer()).setSitting(e.getClickedBlock());
-            }
-        }
-        */
-
         if (e.getAction().equals(Action.RIGHT_CLICK_BLOCK)) {
             if (e.getClickedBlock().getBlockData() instanceof WallSign || e.getClickedBlock().getBlockData() instanceof Sign) {
                 org.bukkit.block.Sign sign = (org.bukkit.block.Sign) e.getClickedBlock().getState();
@@ -188,32 +149,34 @@ public class PlayerInteractListener implements Listener {
         if (e.getAction() == Action.RIGHT_CLICK_BLOCK || e.getAction() == Action.RIGHT_CLICK_AIR) {
 
             if (e.getPlayer().getInventory().getChestplate() != null && e.getPlayer().getInventory().getChestplate().getType() == Material.LEATHER_CHESTPLATE) {
-                if (e.getPlayer().getInventory().getItemInMainHand() != null)
-                    if (e.getPlayer().getInventory().getItemInMainHand().getType() != Material.AIR && e.getPlayer().getInventory().getItemInMainHand().getItemMeta().getDisplayName() != null) {
-                        if (e.getPlayer().getInventory().getItemInMainHand().getItemMeta().getDisplayName().equalsIgnoreCase("§5Rucksack Schlüssel")) {
-                            Player p = e.getPlayer();
-                            ItemStack chest = e.getPlayer().getInventory().getChestplate();
-                            if (BackpackType.getBackpackByName(chest.getItemMeta().getDisplayName()) != null && BackpackType.getBackpackByName(chest.getItemMeta().getDisplayName()) != BackpackType.ENDER) {
-                                int id = Var.getBackpackID(chest);
+                if (e.getPlayer().getInventory().getItemInMainHand().getType() != Material.AIR) {
+                    ItemStack chest = e.getPlayer().getInventory().getChestplate();
+                    String chestplateSign = ItemReader.getSign(chest);
+                    String handSign = ItemReader.getSign(e.getPlayer().getInventory().getItemInMainHand());
+                    if (handSign != null && handSign.equals("BACKPACK_KEY")) {
+                        Player p = e.getPlayer();
+                        BackpackType type = BackpackType.getBackpackByItem(e.getPlayer().getInventory().getChestplate());
+                        if (type != null && type != BackpackType.ENDER) {
+                            int id = Var.getBackpackID(chest);
 
-                                if (id == -1) {
-                                    new Backpack(plugin, BackpackType.getBackpackByName(chest.getItemMeta().getDisplayName()), p);
-                                } else {
-                                    Backpack bp = plugin.backpacks.get(id);
+                            if (id == -1) {
+                                new Backpack(plugin, type, p);
+                            } else {
+                                Backpack bp = plugin.backpacks.get(id);
 
-                                    if (bp == null) {
-                                        p.sendMessage(Messages.PREFIX + "Dieser Rucksack ist (warum auch immer) nicht regestriert?");
-                                        return;
-                                    }
-
-                                    bp.open(p);
-
+                                if (bp == null) {
+                                    p.sendMessage(Messages.PREFIX + "Dieser Rucksack ist (warum auch immer) nicht regestriert?");
+                                    return;
                                 }
-                            } else if (BackpackType.getBackpackByName(chest.getItemMeta().getDisplayName()) == BackpackType.ENDER) {
-                                p.openInventory(p.getEnderChest());
+
+                                bp.open(p);
+
                             }
+                        } else if (type == BackpackType.ENDER) {
+                            p.openInventory(p.getEnderChest());
                         }
                     }
+                }
             } else if (e.getPlayer().getInventory().getItemInMainHand().getType() == Material.LANTERN) {
 
                 ItemStack itemInHand = e.getPlayer().getInventory().getItemInMainHand();

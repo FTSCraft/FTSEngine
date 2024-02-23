@@ -3,7 +3,6 @@ package de.ftscraft.ftsengine.commands;
 import com.dre.brewery.api.BreweryApi;
 import de.ftscraft.ftsengine.main.Engine;
 import de.ftscraft.ftsengine.utils.Ausweis;
-import de.ftscraft.ftsengine.utils.Gender;
 import de.ftscraft.ftsengine.utils.Messages;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -42,7 +41,7 @@ public class CMDwürfel implements CommandExecutor {
             return true;
         }
 
-        Gender gender = ausweis.getGender();
+        Ausweis.Gender gender = ausweis.getGender();
         String name = ausweis.getFirstName() + " " + ausweis.getLastName();
 
         DiceType dice = DiceType.getDiceTypeByName(ausweis.getRace());
@@ -71,7 +70,7 @@ public class CMDwürfel implements CommandExecutor {
 
             StringBuilder sb;
 
-            if (gender == Gender.FEMALE) {
+            if (gender == Ausweis.Gender.FEMALE) {
                 if (dice.getMName().equalsIgnoreCase(dice.getFName())) {
                     sb = new StringBuilder("§6Der §o" + dice.getMName() + " §r§e" + name + " §6würfelt: §e");
                 } else

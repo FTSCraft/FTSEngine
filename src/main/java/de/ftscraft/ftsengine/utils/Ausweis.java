@@ -4,7 +4,6 @@ import de.ftscraft.ftsengine.main.Engine;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
-import org.bukkit.inventory.ItemStack;
 
 import java.io.File;
 import java.io.IOException;
@@ -152,14 +151,6 @@ public class Ausweis {
         this.religion = religion;
     }
 
-    public ItemStack getAsItem() {
-        //ItemStack is = new ItemStack(Material., 1);
-        //ItemMeta im = is.getItemMeta();
-        //im.setDisplayName("§6Personalausweis " + lastName + " #" + id);
-        //is.setItemMeta(im);
-        return null;
-    }
-
     public void setSpitzname(String spitzname) {
         this.spitzname = spitzname;
     }
@@ -176,5 +167,9 @@ public class Ausweis {
 
     public String getForumLink() {
         return forumLink;
+    }
+
+    public enum Gender {
+        MALE, FEMALE, DIVERS
     }
 }

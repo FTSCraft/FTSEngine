@@ -6,7 +6,7 @@
 
     <groupId>de.ftscraft.ftsengine</groupId>
     <artifactId>FTSEngine</artifactId>
-    <version>2.3.1</version>
+    <version>2.3.3</version>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -59,7 +59,7 @@
         <dependency>
             <groupId>io.papermc.paper</groupId>
             <artifactId>paper-api</artifactId>
-            <version>1.20.1-R0.1-20230810.132859-99</version>
+            <version>1.20.4-R0.1-SNAPSHOT</version>
         </dependency>
         <!--Protocol Lib-->
         <dependency>
@@ -100,6 +100,11 @@
             <artifactId>Brewery</artifactId>
             <version>3.1.1</version>
             <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.github.halberfan</groupId>
+            <artifactId>FTSUtils</artifactId>
+            <version>4d9dadd865</version>
         </dependency>
 
     </dependencies>

@@ -1,6 +1,6 @@
 package de.ftscraft.ftsengine.utils;
 
-import de.ftscraft.ftsengine.main.Engine;
+import de.ftscraft.ftsutils.uuidfetcher.UUIDFetcher;
 import net.md_5.bungee.api.chat.ClickEvent;
 import net.md_5.bungee.api.chat.ComponentBuilder;
 import org.bukkit.Location;
@@ -24,7 +24,7 @@ public class Var
         p.sendMessage("§c------ Ausweis von §e" + UUIDFetcher.getName(UUID.fromString(a.getUUID())) + " §c------");
         p.sendMessage("§cNachname: §e" + a.getLastName());
         p.sendMessage("§cVorname: §e" + a.getFirstName());
-        p.sendMessage("§cGeschlecht: §e" + (a.getGender() == Gender.MALE ? "Mann" : a.getGender() == Gender.FEMALE ? "Frau" : a.getGender() == Gender.DIVERS ? "Divers" : "N/A"));
+        p.sendMessage("§cGeschlecht: §e" + (a.getGender() == Ausweis.Gender.MALE ? "Mann" : a.getGender() == Ausweis.Gender.FEMALE ? "Frau" : a.getGender() == Ausweis.Gender.DIVERS ? "Divers" : "N/A"));
         p.sendMessage("§cRasse: §e" + (a.getRace() != null ? a.getRace() : "N/A"));
         p.sendMessage("§cAussehen: §e" + (a.getDesc() != null ? a.getDesc() : "N/A"));
         if(a.getForumLink() != null ){

@@ -15,6 +15,7 @@ import de.ftscraft.ftsengine.courier.Brief;
 import de.ftscraft.ftsengine.courier.Briefkasten;
 import de.ftscraft.ftsengine.listener.*;
 import de.ftscraft.ftsengine.utils.*;
+import de.ftscraft.ftsutils.uuidfetcher.UUIDFetcher;
 import net.milkbowl.vault.chat.Chat;
 import net.milkbowl.vault.economy.Economy;
 import net.milkbowl.vault.permission.Permission;
@@ -40,7 +41,6 @@ public class Engine extends JavaPlugin implements Listener {
     public HashMap<String, Ausweis> ausweis;
     private HashMap<Player, FTSUser> player;
     private Team team;
-    private UUIDFetcher uF;
     private Var var;
     public int highestId;
     public int biggestBpId;
@@ -52,7 +52,6 @@ public class Engine extends JavaPlugin implements Listener {
     public HashMap<Location, Brett> bretter;
     public HashMap<Player, BrettNote> playerBrettNote;
     public HashMap<UUID, Briefkasten> briefkasten;
-    private HashMap<Integer, Race> races;
     private Scoreboard sb;
 
     private static Economy econ = null;
@@ -108,13 +107,21 @@ public class Engine extends JavaPlugin implements Listener {
         backpacks = new HashMap<>();
         briefkasten = new HashMap<>();
         ausweis = new HashMap<>();
-        uF = new UUIDFetcher();
         briefe = new HashMap<>();
         ItemStacks itemStacks = new ItemStacks(this);
         reiter = new ArrayList<>();
         player = new HashMap<>();
 
+        initCommands();
+        new UserIO(this);
 
+        initListeners();
+
+        //setupScoreboad();
+
+    }
+
+    private void initCommands() {
         new CMDausweis(this);
         new CMDwürfel(this);
         new CMDreiten(this);
@@ -138,9 +145,8 @@ public class Engine extends JavaPlugin implements Listener {
         new CMDbrief(this);
         new CMDkussen(this);
         new CMDewürfel(this);
-        new UserIO(this);
-
-
+    }
+    private void initListeners() {
         new AnvilEntchamentBlockingListener(this);
         new EntityClickListener(this);
         new DamageListener(this);
@@ -157,12 +163,7 @@ public class Engine extends JavaPlugin implements Listener {
         new VillagerTradeListener(this);
         new ProjectileHitListener(this);
         new PacketReciveListener(this);
-
-        new Runner(this);
-        getServer().getPluginManager().registerEvents(this, this);
-
-        //setupScoreboad();
-
+        new OvenListener(this);
     }
 
     public Permission getPerms() {
@@ -219,10 +220,9 @@ public class Engine extends JavaPlugin implements Listener {
     }
 
     public void addAusweis(Ausweis a) {
-        String name = uF.getName(UUID.fromString(a.getUUID()));
+        String name = UUIDFetcher.getName(UUID.fromString(a.getUUID()));
         ausweis.put(name, a);
     }
-
 
     public Economy getEcon() {
         return econ;
@@ -244,18 +244,6 @@ public class Engine extends JavaPlugin implements Listener {
         return backpacks;
     }
 
-    public void sendTablistHeaderAndFooter(Player p, String header, String footer) {
-        PacketContainer pc = protocolManager.createPacket(PacketType.Play.Server.PLAYER_LIST_HEADER_FOOTER);
-
-        pc.getChatComponents().write(0, WrappedChatComponent.fromText(header)).write(1, WrappedChatComponent.fromText(footer));
-
-        try {
-            protocolManager.sendServerPacket(p, pc);
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        }
-    }
-
 
     public ProtocolManager getProtocolManager() {
         return protocolManager;
@@ -265,7 +253,4 @@ public class Engine extends JavaPlugin implements Listener {
         return shopkeepersPlugin;
     }
 
-    public HashMap<Integer, Race> getRaces() {
-        return races;
-    }
 }

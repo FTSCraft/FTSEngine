@@ -18,19 +18,6 @@ public class SneakListener implements Listener {
     @EventHandler
     public void onDismount(EntityDismountEvent e) {
 
-        /*plugin.getPlayer().get(e.getPlayer()).abortSitting();*/
-
-        if (e.getEntity() instanceof Player) {
-            Player p = (Player) e.getEntity();
-
-            if (plugin.getPlayer().get(p) == null) {
-                return;
-            }
-            if (plugin.getPlayer().get(p).isSitting()) {
-                plugin.getPlayer().get(p).abortSitting();
-            }
-        }
-
 
     }
 

@@ -3,14 +3,18 @@ package de.ftscraft.ftsengine.commands;
 import de.ftscraft.ftsengine.backpacks.BackpackType;
 import de.ftscraft.ftsengine.main.Engine;
 import de.ftscraft.ftsengine.utils.Messages;
+import de.ftscraft.ftsutils.items.ItemBuilder;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.persistence.PersistentDataType;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
@@ -30,23 +34,7 @@ public class CMDitem implements CommandExecutor {
 
         forbiddenItems.addAll(Arrays.asList(BackpackType.LARGE.getName(), BackpackType.TINY.getName(), BackpackType.ENDER.getName()));
 
-        forbiddenNames.addAll(Arrays.asList("§5Dietrich",
-                "Pfeife",
-                "Goldene Pfeife",
-                "Misteltabak",
-                "Tropischer Tabak",
-                "Netherwarzen Tabak",
-                "Pilztabak",
-                "tabak",
-                "DocWeed",
-                "Rucksack",
-                "Handschellen",
-                "Horn",
-                "Marmelade",
-                "§cÜberreste",
-                "horse",
-                "schloss",
-                "Süßer Fisch"));
+        forbiddenNames.addAll(Arrays.asList("§5Dietrich", "Pfeife", "Goldene Pfeife", "Misteltabak", "Tropischer Tabak", "Netherwarzen Tabak", "Pilztabak", "tabak", "DocWeed", "Rucksack", "Handschellen", "Horn", "Marmelade", "§cÜberreste", "horse", "schloss", "Süßer Fisch"));
     }
 
     public boolean onCommand(@NotNull CommandSender cs, @NotNull Command cmd, @NotNull String label, String[] args) {
@@ -91,9 +79,11 @@ public class CMDitem implements CommandExecutor {
 
                             p.sendMessage(Messages.PREFIX + "Dein Item heißt nun: §e" + name);
 
-                        } else
-                            p.sendMessage(Messages.PREFIX + "Du musst ein Item in deiner Hand haben!");
+                        } else p.sendMessage(Messages.PREFIX + "Du musst ein Item in deiner Hand haben!");
 
+                    } else if (args[0].equalsIgnoreCase("glow")) {
+                        new ItemBuilder(is).enchant(Enchantment.DURABILITY, 1).addPDC("glow", true, PersistentDataType.BOOLEAN).build();
+                        is.addItemFlags(ItemFlag.HIDE_ENCHANTS);
                     } else if (args[0].equalsIgnoreCase("lore") && args.length >= 2) {
 
                         StringBuilder stringBuilderAll = new StringBuilder();
@@ -132,6 +122,9 @@ public class CMDitem implements CommandExecutor {
                             ItemMeta itemStackMeta = item.getItemMeta();
                             itemStackMeta.setLore(lore);
                             item.setItemMeta(itemStackMeta);
+                            new ItemBuilder(item)
+                                    .addPDC("edited", true, PersistentDataType.BOOLEAN)
+                                    .build();
 
                             p.sendMessage(Messages.PREFIX + "Du hast die Lore gesetzt!");
 
@@ -144,16 +137,18 @@ public class CMDitem implements CommandExecutor {
             } else
                 p.sendMessage(Messages.PREFIX + "Dieser Befehl ist nur für Leute die einen Rang gekauft haben. §6Du kannst das auch! http://musc1.buycraft.net/");
 
-        } else cs
-                .sendMessage(Messages.PREFIX + "Dieser Befehl ist nur für Leute die einen Rang gekauft haben. §6Du kannst das auch! http://musc1.buycraft.net/");
+        } else
+            cs.sendMessage(Messages.PREFIX + "Dieser Befehl ist nur für Leute die einen Rang gekauft haben. §6Du kannst das auch! http://musc1.buycraft.net/");
 
         return true;
     }
 
     private String help() {
 
-        return "§c/item name §4NAME §7(ColorCodes mit '&', Leerzeichen ist möglich) \n" +
-                "§c/item lore §4LORE §7(ColorCodes mit '&', Leerzeichen ist möglich, neue Zeile mit '|')";
+        return """
+                §c/item name §4NAME §7(ColorCodes mit '&', Leerzeichen ist möglich)
+                §c/item glow
+                §c/item lore §4LORE §7(ColorCodes mit '&', Leerzeichen ist möglich, neue Zeile mit '|')""";
 
     }
 
