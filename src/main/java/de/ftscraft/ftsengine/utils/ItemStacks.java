@@ -29,7 +29,7 @@ public class ItemStacks {
     private List<Material> disabledDefaultRecipes;
 
     private final Engine plugin;
-    
+
     public ItemStacks(Engine plugin) {
         this.plugin = plugin;
         init();
@@ -229,8 +229,7 @@ public class ItemStacks {
 
     private void initRecipes() {
         NamespacedKey lanzeKey = new NamespacedKey(plugin, "FTSlanze");
-        ItemStack lanzeItemStack = new ItemStack(Material.STICK, 1);
-        lanzeItemStack = new ItemBuilder(Material.STICK)
+        ItemStack lanzeItemStack = new ItemBuilder(Material.STICK)
                 .name("§6Lanze")
                 .sign("LANZE")
                 .build();
@@ -702,6 +701,7 @@ public class ItemStacks {
         lumberAxeStack.setItemMeta(lumberAxeMeta);
         lumberAxeStack.addEnchantment(Enchantment.DURABILITY, 2);
         lumberAxeStack.addItemFlags(ItemFlag.HIDE_ENCHANTS);
+        lumberAxeStack = new ItemBuilder(lumberAxeStack).sign("FALLAXT").build();
 
         ShapedRecipe lumberAxeRecipe = new ShapedRecipe(new NamespacedKey(plugin, "FTSfallaxt"), lumberAxeStack);
         lumberAxeRecipe.shape("*EE", "*SE", "*S*");
