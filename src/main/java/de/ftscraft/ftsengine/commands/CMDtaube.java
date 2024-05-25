@@ -36,39 +36,6 @@ public class CMDtaube implements CommandExecutor {
 
             Location pl = p.getLocation();
 
-            //If you wand to send a Taube to all players
-
-            if(player[0].equalsIgnoreCase("all")) {
-
-                for (Player t : Bukkit.getOnlinePlayers()) {
-                    if (t == null) {
-                        p.sendMessage(Messages.PREFIX + "§7Der Spieler §c" + t.getName() + " §7wurde nicht gefunden");
-                    } else {
-                        Location tl = t.getLocation();
-                        if (!pl.getWorld().getName().equals(tl.getWorld().getName())) {
-                            p.sendMessage(Messages.NOT_IN_WORLD.replace("%s", t.getName()));
-                            return true;
-                        }
-                        int seconds = 6;
-
-                        StringBuilder msg = new StringBuilder();
-
-                        for (int i2 = 1; i2 < args.length; i2++) {
-                            msg.append(" ").append(args[i2]);
-                        }
-
-                        p.sendMessage(Messages.PREFIX + "Eine Taube fliegt zu §c" + t.getName() + "§7.");
-
-                        p.playSound(p.getLocation(), Sound.ENTITY_BAT_LOOP, 3, -20);
-
-                        new CountdownScheduler(plugin, seconds, p, t, msg.toString());
-                    }
-                }
-
-                return true;
-
-            }
-
             //If you want to send a taube to only one or more specific player*s
 
             for (String s : player) {
@@ -80,17 +47,16 @@ public class CMDtaube implements CommandExecutor {
                     Location tl = t.getLocation();
                     int seconds;
                     if (pl.getWorld() != tl.getWorld()) {
-                        seconds = 180;
+                        seconds = 120;
                     } else {
                         double distance = t.getLocation().distance(p.getLocation());
-
-                        if (distance > 10000) {
-                            seconds = 180;
-                        } else if (distance < 350) {
+                        if (distance < 350) {
                             seconds = 5;
                         } else {
                             seconds = (int) distance / 70;
                         }
+                        if (seconds > 120)
+                            seconds = 120;
                     }
 
                     StringBuilder msg = new StringBuilder();
