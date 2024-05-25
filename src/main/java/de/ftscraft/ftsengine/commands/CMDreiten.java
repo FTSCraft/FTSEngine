@@ -54,7 +54,7 @@ public class CMDreiten implements CommandExecutor
                     PacketContainer pc = event.getPacket();
                     Player player = event.getPlayer();
                     Entity vehicle = player.getVehicle();
-                    if (vehicle == null || vehicle instanceof Vehicle)
+                    if (vehicle == null || vehicle instanceof Vehicle || vehicle instanceof Player)
                         return;
 
                     float side = pc.getFloat().read(0);
