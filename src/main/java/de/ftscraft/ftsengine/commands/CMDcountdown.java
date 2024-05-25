@@ -41,7 +41,8 @@ public class CMDcountdown implements CommandExecutor {
                 return true;
             }
 
-            new CountdownScheduler(plugin, secs, (Player) cs);
+            CountdownScheduler scheduler = new CountdownScheduler(plugin, secs, (Player) cs);
+            scheduler.run();
 
             cs.sendMessage(Messages.PREFIX + "Der Countdown wurde gestartet!");
 
