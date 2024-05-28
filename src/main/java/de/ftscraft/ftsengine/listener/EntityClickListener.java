@@ -8,9 +8,9 @@ import org.bukkit.entity.Pig;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.entity.EntityDismountEvent;
+import org.bukkit.event.entity.EntityMountEvent;
 import org.bukkit.event.player.PlayerInteractEntityEvent;
-import org.spigotmc.event.entity.EntityDismountEvent;
-import org.spigotmc.event.entity.EntityMountEvent;
 
 public class EntityClickListener implements Listener
 {
@@ -34,14 +34,6 @@ public class EntityClickListener implements Listener
             }
             e.getRightClicked().setPassenger(e.getPlayer());
             plugin.getReiter().remove(e.getPlayer());
-        }
-
-        for (Player reiter : plugin.getReiter())
-        {
-            if (e.getPlayer().getPassengers().contains(reiter))
-            {
-                e.getPlayer().removePassenger(reiter);
-            }
         }
 
     }

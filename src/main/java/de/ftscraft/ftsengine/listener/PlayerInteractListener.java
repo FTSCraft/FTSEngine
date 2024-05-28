@@ -49,10 +49,9 @@ public class PlayerInteractListener implements Listener {
     public void onClick(PlayerInteractEvent e) {
 
         if (e.getAction() == Action.LEFT_CLICK_AIR) {
-            for (Player reiter : plugin.getReiter()) {
-                if (e.getPlayer().getPassengers().contains(reiter)) {
-                    e.getPlayer().removePassenger(reiter);
-                }
+            Object[] passengers = e.getPlayer().getPassengers().toArray();
+            for (Object passenger : passengers) {
+                e.getPlayer().removePassenger((Entity) passenger);
             }
         }
 
