@@ -67,11 +67,10 @@ public class CMDftsengine implements CommandExecutor {
                     if (note.getCreator().equals(cs.getName()) || cs.hasPermission("brett.admin")) {
                         note.remove();
                         cs.sendMessage(Messages.PREFIX + "Die Notiz wurde entfernt.");
-                        return true;
                     } else {
                         cs.sendMessage(Messages.PREFIX + "Du bist nicht dazu in der Lage diese Notiz zu löschen. Tut mir leid, aber so sind die Regeln");
-                        return true;
                     }
+                    return true;
 
 
                 }

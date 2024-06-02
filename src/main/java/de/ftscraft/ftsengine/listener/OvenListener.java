@@ -24,6 +24,9 @@ public class OvenListener implements Listener {
     public void onOven(FurnaceBurnEvent event) {
         if (event.getFuel().getType() == Material.LAVA_BUCKET) {
             event.setCancelled(true);
+        } else if (event.getFuel().getType() == Material.CHARCOAL) {
+            event.setCancelled(false);
+            event.setBurnTime(30 * 20);
         }
     }
 
