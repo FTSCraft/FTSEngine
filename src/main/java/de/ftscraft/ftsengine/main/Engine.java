@@ -163,7 +163,6 @@ public class Engine extends JavaPlugin implements Listener {
         new VillagerTradeListener(this);
         new ProjectileHitListener(this);
         new PacketReciveListener(this);
-        new OvenListener(this);
     }
 
     public Permission getPerms() {
