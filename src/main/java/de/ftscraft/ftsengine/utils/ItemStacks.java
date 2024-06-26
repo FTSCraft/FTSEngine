@@ -19,10 +19,11 @@ public class ItemStacks {
     private ItemStack largeBackpack, tinyBackpack, backpackKey, enderBackpack;
     private ItemStack ironHelmet, ironChestplate, ironLeggings, ironBoots,
             chainmailHelmet, chainmailChestplate, chainmailLeggings, chainmailBoots,
-            diamondHelmet, diamondChestplate, diamondLeggings, diamondBoots, gold_ingot;
+            diamondHelmet, diamondChestplate, diamondLeggings, diamondBoots;
     private ItemStack diamondHelmetReplacement, diamondChestplateReplacement, diamondLeggingsReplacement, diamondBootsReplacement;
     private ItemStack leatherHorse, ironHorse, diamondHorse;
     private ItemStack gold;
+    private ItemStack dragonBreath;
 
     private ItemStack horn;
 
@@ -115,14 +116,12 @@ public class ItemStacks {
 
         gold = new ItemStack(Material.GOLD_INGOT, 1);
 
+        dragonBreath = new ItemStack(Material.DRAGON_BREATH, 1);
+
     }
 
     public ItemStack getLargeBackpack() {
         return largeBackpack;
-    }
-
-    public ItemStack getGold() {
-        return gold;
     }
 
     public ItemStack getTinyBackpack() {
@@ -221,12 +220,6 @@ public class ItemStacks {
         return horn;
     }
 
-    public ItemStack getAir() {
-
-        return new ItemStack(Material.DIAMOND, 0);
-
-    }
-
     private void initRecipes() {
         NamespacedKey lanzeKey = new NamespacedKey(plugin, "FTSlanze");
         ItemStack lanzeItemStack = new ItemBuilder(Material.STICK)
@@ -294,8 +287,6 @@ public class ItemStacks {
         horn.addIngredient(Material.NAUTILUS_SHELL);
         horn.addIngredient(Material.NOTE_BLOCK);
         plugin.getServer().addRecipe(horn);
-
-        List<Recipe> backup = new ArrayList<>();
         Iterator<Recipe> a = plugin.getServer().recipeIterator();
 
         while (a.hasNext()) {
@@ -670,7 +661,6 @@ public class ItemStacks {
         plugin.getServer().addRecipe(choell);
 
         //Coppershovel
-        NamespacedKey cshovelkey = new NamespacedKey(plugin, "FTSkupferschaufel");
         ItemStack cshovel = new ItemBuilder(Material.STONE_SHOVEL)
                 .name("§fKupferschaufel")
                 .enchant(Enchantment.DURABILITY, 2)
@@ -716,5 +706,14 @@ public class ItemStacks {
         lumberAxeRecipe2.setIngredient('S', Material.STICK);
         lumberAxeRecipe2.setIngredient('*', Material.AIR);
         plugin.getServer().addRecipe(lumberAxeRecipe2);
+
+        // Dragon Breath
+
+        ShapedRecipe dragonBreathRecipe = new ShapedRecipe(new NamespacedKey(plugin, "FTS_DRAGONBREATH"), dragonBreath);
+        dragonBreathRecipe.shape("RLR", "LRL", "LWL");
+        dragonBreathRecipe.setIngredient('R', Material.REDSTONE);
+        dragonBreathRecipe.setIngredient('L', Material.LAPIS_LAZULI);
+        dragonBreathRecipe.setIngredient('W', Material.POTION);
+        plugin.getServer().addRecipe(dragonBreathRecipe);
     }
 }
