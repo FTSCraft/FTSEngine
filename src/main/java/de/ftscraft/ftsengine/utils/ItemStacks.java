@@ -24,6 +24,7 @@ public class ItemStacks {
     private ItemStack leatherHorse, ironHorse, diamondHorse;
     private ItemStack gold;
     private ItemStack dragonBreath;
+    private ItemStack meissel;
 
     private ItemStack horn;
 
@@ -118,98 +119,8 @@ public class ItemStacks {
 
         dragonBreath = new ItemStack(Material.DRAGON_BREATH, 1);
 
-    }
+        meissel = new ItemBuilder(Material.LIGHTNING_ROD).name("§6Meißel").lore("§7Ein nützliches Werkzeug zum Steine verarbeiten").sign("MEISSEL").build();
 
-    public ItemStack getLargeBackpack() {
-        return largeBackpack;
-    }
-
-    public ItemStack getTinyBackpack() {
-        return tinyBackpack;
-    }
-
-    public ItemStack getBackpackKey() {
-        return backpackKey;
-    }
-
-    public ItemStack getEnderBackpack() {
-        return enderBackpack;
-    }
-
-    public ItemStack getIronChestplate() {
-        return ironChestplate;
-    }
-
-    public ItemStack getChainmailChestplate() {
-        return chainmailChestplate;
-    }
-
-    public ItemStack getIronHelmet() {
-        return ironHelmet;
-    }
-
-    public ItemStack getIronLeggings() {
-        return ironLeggings;
-    }
-
-    public ItemStack getIronBoots() {
-        return ironBoots;
-    }
-
-    public ItemStack getChainmailHelmet() {
-        return chainmailHelmet;
-    }
-
-    public ItemStack getChainmailLeggings() {
-        return chainmailLeggings;
-    }
-
-    public ItemStack getChainmailBoots() {
-        return chainmailBoots;
-    }
-
-    public ItemStack getDiamondHelmet() {
-        return diamondHelmet;
-    }
-
-    public ItemStack getDiamondChestplate() {
-        return diamondChestplate;
-    }
-
-    public ItemStack getDiamondLeggings() {
-        return diamondLeggings;
-    }
-
-    public ItemStack getDiamondBoots() {
-        return diamondBoots;
-    }
-
-    public ItemStack getLeatherHorse() {
-        return leatherHorse;
-    }
-
-    public ItemStack getIronHorse() {
-        return ironHorse;
-    }
-
-    public ItemStack getDiamondHelmetReplacement() {
-        return diamondHelmetReplacement;
-    }
-
-    public ItemStack getDiamondChestplateReplacement() {
-        return diamondChestplateReplacement;
-    }
-
-    public ItemStack getDiamondLeggingsReplacement() {
-        return diamondLeggingsReplacement;
-    }
-
-    public ItemStack getDiamondBootsReplacement() {
-        return diamondBootsReplacement;
-    }
-
-    public ItemStack getDiamondHorse() {
-        return diamondHorse;
     }
 
     public List<Material> getDisabledDefaultRecipes() {
@@ -243,7 +154,7 @@ public class ItemStacks {
 
         NamespacedKey tbpkey = new NamespacedKey(plugin, "FTStinybackpack");
 
-        ShapedRecipe tiny_backpack = new ShapedRecipe(tbpkey, this.getTinyBackpack());
+        ShapedRecipe tiny_backpack = new ShapedRecipe(tbpkey, tinyBackpack);
         tiny_backpack.shape("HHH", "HCH", "HHH");
         tiny_backpack.setIngredient('H', Material.RABBIT_HIDE);
         tiny_backpack.setIngredient('C', Material.CHEST);
@@ -252,17 +163,17 @@ public class ItemStacks {
         //LARGE BACKPACK
 
         NamespacedKey lbpkey = new NamespacedKey(plugin, "FTSlargebackpack");
-        ShapedRecipe large_backpack = new ShapedRecipe(lbpkey, this.getLargeBackpack());
+        ShapedRecipe large_backpack = new ShapedRecipe(lbpkey, largeBackpack);
         large_backpack.shape("LLL", "LRL", "LLL");
         large_backpack.setIngredient('L', Material.LEATHER);
-        large_backpack.setIngredient('R', this.getTinyBackpack());
+        large_backpack.setIngredient('R', tinyBackpack);
         plugin.getServer().addRecipe(large_backpack);
 
 
         //ENDER BACKPACK
 
         NamespacedKey ebpkey = new NamespacedKey(plugin, "FTSenderbackpack");
-        ShapedRecipe ender_backpack = new ShapedRecipe(ebpkey, this.getEnderBackpack());
+        ShapedRecipe ender_backpack = new ShapedRecipe(ebpkey, enderBackpack);
         ender_backpack.shape("LLL", "LEL", "LLL");
         ender_backpack.setIngredient('L', Material.LEATHER);
         ender_backpack.setIngredient('E', Material.ENDER_CHEST);
@@ -272,7 +183,7 @@ public class ItemStacks {
 
         NamespacedKey bpkkey = new NamespacedKey(plugin, "FTSbackpackkey");
 
-        ShapedRecipe backpack_key = new ShapedRecipe(bpkkey, this.getBackpackKey());
+        ShapedRecipe backpack_key = new ShapedRecipe(bpkkey, backpackKey);
         backpack_key.shape("I*I", "*F*", "I*I");
         backpack_key.setIngredient('I', Material.IRON_INGOT);
         backpack_key.setIngredient('*', Material.AIR);
@@ -304,7 +215,7 @@ public class ItemStacks {
         //Iron Helmet
 
         NamespacedKey ihkey = new NamespacedKey(plugin, "FTSironhelmet");
-        ShapedRecipe iron_helmet = new ShapedRecipe(ihkey, this.getIronHelmet());
+        ShapedRecipe iron_helmet = new ShapedRecipe(ihkey, ironHelmet);
         iron_helmet.shape("III", "IBI", "***");
         iron_helmet.setIngredient('I', Material.IRON_INGOT);
         iron_helmet.setIngredient('*', Material.AIR);
@@ -312,7 +223,7 @@ public class ItemStacks {
         plugin.getServer().addRecipe(iron_helmet);
 
         NamespacedKey ihkey2 = new NamespacedKey(plugin, "FTSironhelmet2");
-        ShapedRecipe iron_helmet2 = new ShapedRecipe(ihkey2, this.getIronHelmet());
+        ShapedRecipe iron_helmet2 = new ShapedRecipe(ihkey2, ironHelmet);
         iron_helmet2.shape("***", "III", "IBI");
         iron_helmet2.setIngredient('I', Material.IRON_INGOT);
         iron_helmet2.setIngredient('*', Material.AIR);
@@ -322,7 +233,7 @@ public class ItemStacks {
         //IronChestplate
 
         NamespacedKey icpkey = new NamespacedKey(plugin, "FTSironchestplate");
-        ShapedRecipe iron_chestplate = new ShapedRecipe(icpkey, this.getIronChestplate());
+        ShapedRecipe iron_chestplate = new ShapedRecipe(icpkey, ironChestplate);
         iron_chestplate.shape("I*I", "IBI", "III");
         iron_chestplate.setIngredient('I', Material.IRON_INGOT);
         iron_chestplate.setIngredient('*', Material.AIR);
@@ -332,7 +243,7 @@ public class ItemStacks {
         //IronLeggings
 
         NamespacedKey ilkey = new NamespacedKey(plugin, "FTSironleggings");
-        ShapedRecipe iron_leggings = new ShapedRecipe(ilkey, this.getIronLeggings());
+        ShapedRecipe iron_leggings = new ShapedRecipe(ilkey, ironLeggings);
         iron_leggings.shape("III", "IBI", "I*I");
         iron_leggings.setIngredient('I', Material.IRON_INGOT);
         iron_leggings.setIngredient('*', Material.AIR);
@@ -342,7 +253,7 @@ public class ItemStacks {
         //IronBoots
 
         NamespacedKey ibkey = new NamespacedKey(plugin, "FTSironboots");
-        ShapedRecipe iron_boots = new ShapedRecipe(ibkey, this.getIronBoots());
+        ShapedRecipe iron_boots = new ShapedRecipe(ibkey, ironBoots);
         iron_boots.shape("***", "IBI", "I*I");
         iron_boots.setIngredient('I', Material.IRON_INGOT);
         iron_boots.setIngredient('*', Material.AIR);
@@ -350,7 +261,7 @@ public class ItemStacks {
         plugin.getServer().addRecipe(iron_boots);
 
         NamespacedKey ibkey2 = new NamespacedKey(plugin, "FTSironboots2");
-        ShapedRecipe iron_boots2 = new ShapedRecipe(ibkey2, this.getIronBoots());
+        ShapedRecipe iron_boots2 = new ShapedRecipe(ibkey2, ironBoots);
         iron_boots2.shape("IBI", "I*I", "***");
         iron_boots2.setIngredient('I', Material.IRON_INGOT);
         iron_boots2.setIngredient('*', Material.AIR);
@@ -361,14 +272,14 @@ public class ItemStacks {
         //ChainmailHelmet
 
         NamespacedKey chkey = new NamespacedKey(plugin, "FTSchainhelmet");
-        ShapedRecipe chain_helmet = new ShapedRecipe(chkey, this.getChainmailHelmet());
+        ShapedRecipe chain_helmet = new ShapedRecipe(chkey, chainmailHelmet);
         chain_helmet.shape("III", "I*I", "***");
         chain_helmet.setIngredient('I', Material.IRON_INGOT);
         chain_helmet.setIngredient('*', Material.AIR);
         plugin.getServer().addRecipe(chain_helmet);
 
         NamespacedKey chkey2 = new NamespacedKey(plugin, "FTSchainhelmet2");
-        ShapedRecipe chain_helmet2 = new ShapedRecipe(chkey2, this.getChainmailHelmet());
+        ShapedRecipe chain_helmet2 = new ShapedRecipe(chkey2, chainmailHelmet);
         chain_helmet2.shape("***", "III", "I*I");
         chain_helmet2.setIngredient('I', Material.IRON_INGOT);
         chain_helmet2.setIngredient('*', Material.AIR);
@@ -377,7 +288,7 @@ public class ItemStacks {
         //ChainmailChestplate
 
         NamespacedKey ccpkey = new NamespacedKey(plugin, "FTSchainmailchestplate");
-        ShapedRecipe chainmail_chestplate = new ShapedRecipe(ccpkey, this.getChainmailChestplate());
+        ShapedRecipe chainmail_chestplate = new ShapedRecipe(ccpkey, chainmailChestplate);
         chainmail_chestplate.shape("I*I", "III", "III");
         chainmail_chestplate.setIngredient('I', Material.IRON_INGOT);
         chainmail_chestplate.setIngredient('*', Material.AIR);
@@ -386,7 +297,7 @@ public class ItemStacks {
         //ChainmailLeggings
 
         NamespacedKey clkey = new NamespacedKey(plugin, "FTSchainleggings");
-        ShapedRecipe chain_leggings = new ShapedRecipe(clkey, this.getChainmailLeggings());
+        ShapedRecipe chain_leggings = new ShapedRecipe(clkey, chainmailLeggings);
         chain_leggings.shape("III", "I*I", "I*I");
         chain_leggings.setIngredient('I', Material.IRON_INGOT);
         chain_leggings.setIngredient('*', Material.AIR);
@@ -395,14 +306,14 @@ public class ItemStacks {
         //ChainmailBoots
 
         NamespacedKey cbkey = new NamespacedKey(plugin, "FTSchainboots");
-        ShapedRecipe chain_boots = new ShapedRecipe(cbkey, this.getChainmailBoots());
+        ShapedRecipe chain_boots = new ShapedRecipe(cbkey, chainmailBoots);
         chain_boots.shape("***", "I*I", "I*I");
         chain_boots.setIngredient('I', Material.IRON_INGOT);
         chain_boots.setIngredient('*', Material.AIR);
         plugin.getServer().addRecipe(chain_boots);
 
         NamespacedKey cbkey2 = new NamespacedKey(plugin, "FTSchainboots2");
-        ShapedRecipe chain_boots2 = new ShapedRecipe(cbkey2, this.getChainmailBoots());
+        ShapedRecipe chain_boots2 = new ShapedRecipe(cbkey2, chainmailBoots);
         chain_boots2.shape("I*I", "I*I", "***");
         chain_boots2.setIngredient('I', Material.IRON_INGOT);
         chain_boots2.setIngredient('*', Material.AIR);
@@ -411,7 +322,7 @@ public class ItemStacks {
         //Diamond Helmet
 
         NamespacedKey dhkey = new NamespacedKey(plugin, "FTSdiamondhelmet");
-        ShapedRecipe diamond_helmet = new ShapedRecipe(dhkey, this.getDiamondHelmet());
+        ShapedRecipe diamond_helmet = new ShapedRecipe(dhkey, diamondHelmet);
         diamond_helmet.shape("DDD", "DBD", "***");
         diamond_helmet.setIngredient('D', Material.DIAMOND);
         diamond_helmet.setIngredient('B', Material.DIAMOND_BLOCK);
@@ -419,7 +330,7 @@ public class ItemStacks {
         plugin.getServer().addRecipe(diamond_helmet);
 
         NamespacedKey dhkey2 = new NamespacedKey(plugin, "FTSdiamondhelmet2");
-        ShapedRecipe diamond_helmet2 = new ShapedRecipe(dhkey2, this.getDiamondHelmet());
+        ShapedRecipe diamond_helmet2 = new ShapedRecipe(dhkey2, diamondHelmet);
         diamond_helmet2.shape("***", "DDD", "DBD");
         diamond_helmet2.setIngredient('D', Material.DIAMOND);
         diamond_helmet2.setIngredient('B', Material.DIAMOND_BLOCK);
@@ -429,7 +340,7 @@ public class ItemStacks {
         //Diamond Chestplate
 
         NamespacedKey dckey = new NamespacedKey(plugin, "FTSdiamondchest");
-        ShapedRecipe diamond_chest = new ShapedRecipe(dckey, this.getDiamondChestplate());
+        ShapedRecipe diamond_chest = new ShapedRecipe(dckey, diamondChestplate);
         diamond_chest.shape("D*D", "DBD", "DDD");
         diamond_chest.setIngredient('D', Material.DIAMOND);
         diamond_chest.setIngredient('B', Material.DIAMOND_BLOCK);
@@ -439,7 +350,7 @@ public class ItemStacks {
         //Diamond Leggings
 
         NamespacedKey dlkey = new NamespacedKey(plugin, "FTSdiamondlegs");
-        ShapedRecipe diamond_leggings = new ShapedRecipe(dlkey, this.getDiamondLeggings());
+        ShapedRecipe diamond_leggings = new ShapedRecipe(dlkey, diamondLeggings);
         diamond_leggings.shape("DDD", "DBD", "D*D");
         diamond_leggings.setIngredient('D', Material.DIAMOND);
         diamond_leggings.setIngredient('B', Material.DIAMOND_BLOCK);
@@ -449,7 +360,7 @@ public class ItemStacks {
         //Diamond Boots
 
         NamespacedKey dbkey = new NamespacedKey(plugin, "FTSdiamondboots");
-        ShapedRecipe diamond_boots = new ShapedRecipe(dbkey, this.getDiamondBoots());
+        ShapedRecipe diamond_boots = new ShapedRecipe(dbkey, diamondBoots);
         diamond_boots.shape("***", "DBD", "D*D");
         diamond_boots.setIngredient('D', Material.DIAMOND);
         diamond_boots.setIngredient('B', Material.DIAMOND_BLOCK);
@@ -457,7 +368,7 @@ public class ItemStacks {
         plugin.getServer().addRecipe(diamond_boots);
 
         NamespacedKey dbkey2 = new NamespacedKey(plugin, "FTSdiamondboots2");
-        ShapedRecipe diamond_boots2 = new ShapedRecipe(dbkey2, this.getDiamondBoots());
+        ShapedRecipe diamond_boots2 = new ShapedRecipe(dbkey2, diamondBoots);
         diamond_boots2.shape("***", "DBD", "D*D");
         diamond_boots2.setIngredient('D', Material.DIAMOND);
         diamond_boots2.setIngredient('B', Material.DIAMOND_BLOCK);
@@ -467,7 +378,7 @@ public class ItemStacks {
         //Horse Leather Armor
 
         NamespacedKey lhakey = new NamespacedKey(plugin, "FTSleatherhorse");
-        ShapedRecipe leatherHorseArmor = new ShapedRecipe(lhakey, this.getLeatherHorse());
+        ShapedRecipe leatherHorseArmor = new ShapedRecipe(lhakey, leatherHorse);
         leatherHorseArmor.shape("LLL", "LSL", "LLL");
         leatherHorseArmor.setIngredient('L', Material.LEATHER);
         leatherHorseArmor.setIngredient('S', Material.SADDLE);
@@ -476,7 +387,7 @@ public class ItemStacks {
         //Horse Iron Armor
 
         NamespacedKey ihakey = new NamespacedKey(plugin, "FTSironhorse");
-        ShapedRecipe ironHorseArmor = new ShapedRecipe(ihakey, this.getIronHorse());
+        ShapedRecipe ironHorseArmor = new ShapedRecipe(ihakey, ironHorse);
         ironHorseArmor.shape("III", "ISI", "III");
         ironHorseArmor.setIngredient('I', Material.IRON_INGOT);
         ironHorseArmor.setIngredient('S', Material.SADDLE);
@@ -485,7 +396,7 @@ public class ItemStacks {
         //Horse Diamond Armor
 
         NamespacedKey dhakey = new NamespacedKey(plugin, "FTSdiamondhorse");
-        ShapedRecipe diamondHorseArmor = new ShapedRecipe(dhakey, this.getDiamondHorse());
+        ShapedRecipe diamondHorseArmor = new ShapedRecipe(dhakey, diamondHorse);
         diamondHorseArmor.shape("DDD", "DSD", "DDD");
         diamondHorseArmor.setIngredient('D', Material.DIAMOND);
         diamondHorseArmor.setIngredient('S', Material.SADDLE);
@@ -494,7 +405,7 @@ public class ItemStacks {
         //Diamond Helmet Replacement
 
         NamespacedKey dhairkey = new NamespacedKey(plugin, "FTSdiamondhelmetair");
-        ShapedRecipe diamond_helmet_air = new ShapedRecipe(dhairkey, this.getDiamondHelmetReplacement());
+        ShapedRecipe diamond_helmet_air = new ShapedRecipe(dhairkey, diamondHelmetReplacement);
         diamond_helmet_air.shape("DDD", "D*D", "***");
         diamond_helmet_air.setIngredient('D', Material.DIAMOND);
         diamond_helmet_air.setIngredient('*', Material.AIR);
@@ -503,7 +414,7 @@ public class ItemStacks {
         //Diamond Chestplate Replacement
 
         NamespacedKey dcairkey = new NamespacedKey(plugin, "FTSdiamondchestair");
-        ShapedRecipe diamond_chest_air = new ShapedRecipe(dcairkey, this.getDiamondChestplateReplacement());
+        ShapedRecipe diamond_chest_air = new ShapedRecipe(dcairkey, diamondChestplateReplacement);
         diamond_chest_air.shape("D*D", "DDD", "DDD");
         diamond_chest_air.setIngredient('D', Material.DIAMOND);
         diamond_chest_air.setIngredient('*', Material.AIR);
@@ -512,7 +423,7 @@ public class ItemStacks {
         //Diamond Leggings Replacement
 
         NamespacedKey dlairkey = new NamespacedKey(plugin, "FTSdiamondlegsair");
-        ShapedRecipe diamond_leggings_air = new ShapedRecipe(dlairkey, this.getDiamondLeggingsReplacement());
+        ShapedRecipe diamond_leggings_air = new ShapedRecipe(dlairkey, diamondLeggingsReplacement);
         diamond_leggings_air.shape("DDD", "D*D", "D*D");
         diamond_leggings_air.setIngredient('D', Material.DIAMOND);
         diamond_leggings_air.setIngredient('*', Material.AIR);
@@ -521,7 +432,7 @@ public class ItemStacks {
         //Diamond Boots Replacement
 
         NamespacedKey dbairkey = new NamespacedKey(plugin, "FTSdiamondbootsair");
-        ShapedRecipe diamond_boots_air = new ShapedRecipe(dbairkey, this.getDiamondBootsReplacement());
+        ShapedRecipe diamond_boots_air = new ShapedRecipe(dbairkey, diamondBootsReplacement);
         diamond_boots_air.shape("***", "D*D", "D*D");
         diamond_boots_air.setIngredient('D', Material.DIAMOND);
         diamond_boots_air.setIngredient('*', Material.AIR);
@@ -530,7 +441,7 @@ public class ItemStacks {
         //Diamond Boots Replacement 2
 
         NamespacedKey dbairkey2 = new NamespacedKey(plugin, "FTSdiamondbootsair2");
-        ShapedRecipe diamond_boots_air2 = new ShapedRecipe(dbairkey2, this.getDiamondBootsReplacement());
+        ShapedRecipe diamond_boots_air2 = new ShapedRecipe(dbairkey2, diamondBootsReplacement);
         diamond_boots_air2.shape("D*D", "D*D", "***");
         diamond_boots_air2.setIngredient('D', Material.DIAMOND);
         diamond_boots_air2.setIngredient('*', Material.AIR);
@@ -715,5 +626,14 @@ public class ItemStacks {
         dragonBreathRecipe.setIngredient('L', Material.LAPIS_LAZULI);
         dragonBreathRecipe.setIngredient('W', Material.POTION);
         plugin.getServer().addRecipe(dragonBreathRecipe);
+
+        //Meissel
+
+        ShapedRecipe meisselRecipe = new ShapedRecipe(new NamespacedKey(plugin, "FTS_MEISSEL"), meissel);
+        meisselRecipe.shape("AAA", "AIA", "EEE");
+        meisselRecipe.setIngredient('A', Material.AIR);
+        meisselRecipe.setIngredient('I', Material.IRON_INGOT);
+        meisselRecipe.setIngredient('E', Material.EMERALD);
+        plugin.getServer().addRecipe(meisselRecipe);
     }
 }

@@ -25,7 +25,9 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
+import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.inventory.InventoryView;
 import org.bukkit.inventory.ItemStack;
 
 import java.lang.reflect.InvocationTargetException;
@@ -118,6 +120,11 @@ public class PlayerInteractListener implements Listener {
 
                 }
 
+            } else if(e.getPlayer().getInventory().getItemInMainHand().getType() == Material.LIGHTNING_ROD) {
+                String sign = ItemReader.getSign(e.getPlayer().getInventory().getItemInMainHand());
+                if (sign != null && sign.equals("MEISSEL")) {
+                    e.getPlayer().openInventory(Bukkit.createInventory(e.getPlayer(), InventoryType.STONECUTTER));
+                }
             }
 
         }
