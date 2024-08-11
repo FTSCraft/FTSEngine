@@ -123,7 +123,8 @@ public class PlayerInteractListener implements Listener {
             } else if(e.getPlayer().getInventory().getItemInMainHand().getType() == Material.LIGHTNING_ROD) {
                 String sign = ItemReader.getSign(e.getPlayer().getInventory().getItemInMainHand());
                 if (sign != null && sign.equals("MEISSEL")) {
-                    e.getPlayer().openInventory(Bukkit.createInventory(e.getPlayer(), InventoryType.STONECUTTER));
+                    e.getPlayer().openStonecutter(null, true);
+                    return;
                 }
             }
 

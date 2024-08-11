@@ -33,7 +33,7 @@ public class CMDschlagen implements CommandExecutor {
                 if (e.getName().equalsIgnoreCase(args[0])) {
                     t = (Player) e;
                     Location loc = t.getLocation();
-                    loc.getWorld().spawnParticle(Particle.VILLAGER_ANGRY, loc.clone().add(0, 1.5D, 0), 4, 0.3, 0, 0.3);
+                    loc.getWorld().spawnParticle(Particle.ANGRY_VILLAGER, loc.clone().add(0, 1.5D, 0), 4, 0.3, 0, 0.3);
                     t.sendMessage("§e" + p.getName() + " hat dich geschlagen");
                     isNear = true;
                 }

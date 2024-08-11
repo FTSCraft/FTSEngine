@@ -48,8 +48,8 @@ public class CMDumarmen implements CommandExecutor {
                         }
 
                         //for (int = 0; i < 4; i++){
-                        p.getWorld().spawnParticle(Particle.VILLAGER_HAPPY, p.getLocation().add(0, 2.2, 0), 4, 0.2, 0.3, 0.2);
-                        target.getWorld().spawnParticle(Particle.VILLAGER_HAPPY, p.getLocation().add(0, 2.2, 0), 4, 0.2, 0.3, 0.2);
+                        p.getWorld().spawnParticle(Particle.HAPPY_VILLAGER, p.getLocation().add(0, 2.2, 0), 4, 0.2, 0.3, 0.2);
+                        target.getWorld().spawnParticle(Particle.HAPPY_VILLAGER, p.getLocation().add(0, 2.2, 0), 4, 0.2, 0.3, 0.2);
                         //}
 
                     } else p.sendMessage(Messages.PLAYER_TOO_FAR_AWAY);

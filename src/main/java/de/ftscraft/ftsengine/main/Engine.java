@@ -123,7 +123,7 @@ public class Engine extends JavaPlugin implements Listener {
 
     private void initCommands() {
         new CMDausweis(this);
-        new CMDwürfel(this);
+        //new CMDwürfel(this);
         new CMDreiten(this);
         //new CMDchannel(this);
         new CMDtaube(this);
@@ -150,7 +150,6 @@ public class Engine extends JavaPlugin implements Listener {
         new AnvilEntchamentBlockingListener(this);
         new EntityClickListener(this);
         new DamageListener(this);
-        new SneakListener(this);
         //new HorseListener(this);
         new PlayerJoinListener(this);
         new SignWriteListener(this);
