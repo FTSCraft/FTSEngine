@@ -82,7 +82,7 @@ public class CMDitem implements CommandExecutor {
                         } else p.sendMessage(Messages.PREFIX + "Du musst ein Item in deiner Hand haben!");
 
                     } else if (args[0].equalsIgnoreCase("glow")) {
-                        new ItemBuilder(is).enchant(Enchantment.DURABILITY, 1).addPDC("glow", true, PersistentDataType.BOOLEAN).build();
+                        new ItemBuilder(is).enchant(Enchantment.UNBREAKING, 1).addPDC("glow", true, PersistentDataType.BOOLEAN).build();
                         is.addItemFlags(ItemFlag.HIDE_ENCHANTS);
                     } else if (args[0].equalsIgnoreCase("lore") && args.length >= 2) {
 

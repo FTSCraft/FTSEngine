@@ -139,11 +139,10 @@ public class ItemStacks {
                 .build();
 
         ShapedRecipe lanzeRecipe = new ShapedRecipe(lanzeKey, lanzeItemStack);
-        lanzeRecipe.shape("F**", "*S*", "**E");
+        lanzeRecipe.shape("F  ", " S ", "  E");
         lanzeRecipe.setIngredient('F', Material.FLINT);
         lanzeRecipe.setIngredient('S', Material.STICK);
         lanzeRecipe.setIngredient('E', Material.IRON_INGOT);
-        lanzeRecipe.setIngredient('*', Material.AIR);
         plugin.getServer().addRecipe(lanzeRecipe);
 
         plugin.mats.add(Material.DIRT_PATH);
@@ -186,7 +185,6 @@ public class ItemStacks {
         ShapedRecipe backpack_key = new ShapedRecipe(bpkkey, backpackKey);
         backpack_key.shape("I*I", "*F*", "I*I");
         backpack_key.setIngredient('I', Material.IRON_INGOT);
-        backpack_key.setIngredient('*', Material.AIR);
         backpack_key.setIngredient('F', Material.FEATHER);
         plugin.getServer().addRecipe(backpack_key);
 
@@ -218,7 +216,6 @@ public class ItemStacks {
         ShapedRecipe iron_helmet = new ShapedRecipe(ihkey, ironHelmet);
         iron_helmet.shape("III", "IBI", "***");
         iron_helmet.setIngredient('I', Material.IRON_INGOT);
-        iron_helmet.setIngredient('*', Material.AIR);
         iron_helmet.setIngredient('B', Material.IRON_BLOCK);
         plugin.getServer().addRecipe(iron_helmet);
 
@@ -226,7 +223,6 @@ public class ItemStacks {
         ShapedRecipe iron_helmet2 = new ShapedRecipe(ihkey2, ironHelmet);
         iron_helmet2.shape("***", "III", "IBI");
         iron_helmet2.setIngredient('I', Material.IRON_INGOT);
-        iron_helmet2.setIngredient('*', Material.AIR);
         iron_helmet2.setIngredient('B', Material.IRON_BLOCK);
         plugin.getServer().addRecipe(iron_helmet2);
 
@@ -236,7 +232,6 @@ public class ItemStacks {
         ShapedRecipe iron_chestplate = new ShapedRecipe(icpkey, ironChestplate);
         iron_chestplate.shape("I*I", "IBI", "III");
         iron_chestplate.setIngredient('I', Material.IRON_INGOT);
-        iron_chestplate.setIngredient('*', Material.AIR);
         iron_chestplate.setIngredient('B', Material.IRON_BLOCK);
         plugin.getServer().addRecipe(iron_chestplate);
 
@@ -246,7 +241,6 @@ public class ItemStacks {
         ShapedRecipe iron_leggings = new ShapedRecipe(ilkey, ironLeggings);
         iron_leggings.shape("III", "IBI", "I*I");
         iron_leggings.setIngredient('I', Material.IRON_INGOT);
-        iron_leggings.setIngredient('*', Material.AIR);
         iron_leggings.setIngredient('B', Material.IRON_BLOCK);
         plugin.getServer().addRecipe(iron_leggings);
 
@@ -256,7 +250,6 @@ public class ItemStacks {
         ShapedRecipe iron_boots = new ShapedRecipe(ibkey, ironBoots);
         iron_boots.shape("***", "IBI", "I*I");
         iron_boots.setIngredient('I', Material.IRON_INGOT);
-        iron_boots.setIngredient('*', Material.AIR);
         iron_boots.setIngredient('B', Material.IRON_BLOCK);
         plugin.getServer().addRecipe(iron_boots);
 
@@ -264,7 +257,6 @@ public class ItemStacks {
         ShapedRecipe iron_boots2 = new ShapedRecipe(ibkey2, ironBoots);
         iron_boots2.shape("IBI", "I*I", "***");
         iron_boots2.setIngredient('I', Material.IRON_INGOT);
-        iron_boots2.setIngredient('*', Material.AIR);
         iron_boots2.setIngredient('B', Material.IRON_BLOCK);
         plugin.getServer().addRecipe(iron_boots2);
 
@@ -275,14 +267,12 @@ public class ItemStacks {
         ShapedRecipe chain_helmet = new ShapedRecipe(chkey, chainmailHelmet);
         chain_helmet.shape("III", "I*I", "***");
         chain_helmet.setIngredient('I', Material.IRON_INGOT);
-        chain_helmet.setIngredient('*', Material.AIR);
         plugin.getServer().addRecipe(chain_helmet);
 
         NamespacedKey chkey2 = new NamespacedKey(plugin, "FTSchainhelmet2");
         ShapedRecipe chain_helmet2 = new ShapedRecipe(chkey2, chainmailHelmet);
         chain_helmet2.shape("***", "III", "I*I");
         chain_helmet2.setIngredient('I', Material.IRON_INGOT);
-        chain_helmet2.setIngredient('*', Material.AIR);
         plugin.getServer().addRecipe(chain_helmet2);
 
         //ChainmailChestplate
@@ -291,7 +281,6 @@ public class ItemStacks {
         ShapedRecipe chainmail_chestplate = new ShapedRecipe(ccpkey, chainmailChestplate);
         chainmail_chestplate.shape("I*I", "III", "III");
         chainmail_chestplate.setIngredient('I', Material.IRON_INGOT);
-        chainmail_chestplate.setIngredient('*', Material.AIR);
         plugin.getServer().addRecipe(chainmail_chestplate);
 
         //ChainmailLeggings
@@ -300,7 +289,6 @@ public class ItemStacks {
         ShapedRecipe chain_leggings = new ShapedRecipe(clkey, chainmailLeggings);
         chain_leggings.shape("III", "I*I", "I*I");
         chain_leggings.setIngredient('I', Material.IRON_INGOT);
-        chain_leggings.setIngredient('*', Material.AIR);
         plugin.getServer().addRecipe(chain_leggings);
 
         //ChainmailBoots
@@ -309,14 +297,12 @@ public class ItemStacks {
         ShapedRecipe chain_boots = new ShapedRecipe(cbkey, chainmailBoots);
         chain_boots.shape("***", "I*I", "I*I");
         chain_boots.setIngredient('I', Material.IRON_INGOT);
-        chain_boots.setIngredient('*', Material.AIR);
         plugin.getServer().addRecipe(chain_boots);
 
         NamespacedKey cbkey2 = new NamespacedKey(plugin, "FTSchainboots2");
         ShapedRecipe chain_boots2 = new ShapedRecipe(cbkey2, chainmailBoots);
         chain_boots2.shape("I*I", "I*I", "***");
         chain_boots2.setIngredient('I', Material.IRON_INGOT);
-        chain_boots2.setIngredient('*', Material.AIR);
         plugin.getServer().addRecipe(chain_boots2);
 
         //Diamond Helmet
@@ -326,7 +312,6 @@ public class ItemStacks {
         diamond_helmet.shape("DDD", "DBD", "***");
         diamond_helmet.setIngredient('D', Material.DIAMOND);
         diamond_helmet.setIngredient('B', Material.DIAMOND_BLOCK);
-        diamond_helmet.setIngredient('*', Material.AIR);
         plugin.getServer().addRecipe(diamond_helmet);
 
         NamespacedKey dhkey2 = new NamespacedKey(plugin, "FTSdiamondhelmet2");
@@ -334,7 +319,6 @@ public class ItemStacks {
         diamond_helmet2.shape("***", "DDD", "DBD");
         diamond_helmet2.setIngredient('D', Material.DIAMOND);
         diamond_helmet2.setIngredient('B', Material.DIAMOND_BLOCK);
-        diamond_helmet2.setIngredient('*', Material.AIR);
         plugin.getServer().addRecipe(diamond_helmet2);
 
         //Diamond Chestplate
@@ -344,7 +328,6 @@ public class ItemStacks {
         diamond_chest.shape("D*D", "DBD", "DDD");
         diamond_chest.setIngredient('D', Material.DIAMOND);
         diamond_chest.setIngredient('B', Material.DIAMOND_BLOCK);
-        diamond_chest.setIngredient('*', Material.AIR);
         plugin.getServer().addRecipe(diamond_chest);
 
         //Diamond Leggings
@@ -354,7 +337,6 @@ public class ItemStacks {
         diamond_leggings.shape("DDD", "DBD", "D*D");
         diamond_leggings.setIngredient('D', Material.DIAMOND);
         diamond_leggings.setIngredient('B', Material.DIAMOND_BLOCK);
-        diamond_leggings.setIngredient('*', Material.AIR);
         plugin.getServer().addRecipe(diamond_leggings);
 
         //Diamond Boots
@@ -364,7 +346,6 @@ public class ItemStacks {
         diamond_boots.shape("***", "DBD", "D*D");
         diamond_boots.setIngredient('D', Material.DIAMOND);
         diamond_boots.setIngredient('B', Material.DIAMOND_BLOCK);
-        diamond_boots.setIngredient('*', Material.AIR);
         plugin.getServer().addRecipe(diamond_boots);
 
         NamespacedKey dbkey2 = new NamespacedKey(plugin, "FTSdiamondboots2");
@@ -372,7 +353,6 @@ public class ItemStacks {
         diamond_boots2.shape("***", "DBD", "D*D");
         diamond_boots2.setIngredient('D', Material.DIAMOND);
         diamond_boots2.setIngredient('B', Material.DIAMOND_BLOCK);
-        diamond_boots2.setIngredient('*', Material.AIR);
         plugin.getServer().addRecipe(diamond_boots2);
 
         //Horse Leather Armor
@@ -408,7 +388,6 @@ public class ItemStacks {
         ShapedRecipe diamond_helmet_air = new ShapedRecipe(dhairkey, diamondHelmetReplacement);
         diamond_helmet_air.shape("DDD", "D*D", "***");
         diamond_helmet_air.setIngredient('D', Material.DIAMOND);
-        diamond_helmet_air.setIngredient('*', Material.AIR);
         plugin.getServer().addRecipe(diamond_helmet_air);
 
         //Diamond Chestplate Replacement
@@ -417,7 +396,6 @@ public class ItemStacks {
         ShapedRecipe diamond_chest_air = new ShapedRecipe(dcairkey, diamondChestplateReplacement);
         diamond_chest_air.shape("D*D", "DDD", "DDD");
         diamond_chest_air.setIngredient('D', Material.DIAMOND);
-        diamond_chest_air.setIngredient('*', Material.AIR);
         plugin.getServer().addRecipe(diamond_chest_air);
 
         //Diamond Leggings Replacement
@@ -426,7 +404,6 @@ public class ItemStacks {
         ShapedRecipe diamond_leggings_air = new ShapedRecipe(dlairkey, diamondLeggingsReplacement);
         diamond_leggings_air.shape("DDD", "D*D", "D*D");
         diamond_leggings_air.setIngredient('D', Material.DIAMOND);
-        diamond_leggings_air.setIngredient('*', Material.AIR);
         plugin.getServer().addRecipe(diamond_leggings_air);
 
         //Diamond Boots Replacement
@@ -435,7 +412,6 @@ public class ItemStacks {
         ShapedRecipe diamond_boots_air = new ShapedRecipe(dbairkey, diamondBootsReplacement);
         diamond_boots_air.shape("***", "D*D", "D*D");
         diamond_boots_air.setIngredient('D', Material.DIAMOND);
-        diamond_boots_air.setIngredient('*', Material.AIR);
         plugin.getServer().addRecipe(diamond_boots_air);
 
         //Diamond Boots Replacement 2
@@ -444,15 +420,14 @@ public class ItemStacks {
         ShapedRecipe diamond_boots_air2 = new ShapedRecipe(dbairkey2, diamondBootsReplacement);
         diamond_boots_air2.shape("D*D", "D*D", "***");
         diamond_boots_air2.setIngredient('D', Material.DIAMOND);
-        diamond_boots_air2.setIngredient('*', Material.AIR);
         plugin.getServer().addRecipe(diamond_boots_air2);
 
         //Copperpickaxe
         NamespacedKey cpickkey = new NamespacedKey(plugin, "FTSkupferpicke");
         ItemStack cpick = new ItemBuilder(Material.STONE_PICKAXE)
                 .name("§fKupferspitzhacke")
-                .enchant(Enchantment.DURABILITY, 2)
-                .enchant(Enchantment.DIG_SPEED, 2)
+                .enchant(Enchantment.UNBREAKING, 2)
+                .enchant(Enchantment.EFFICIENCY, 2)
                 .sign("COPPER_PICKAXE")
                 .build();
         cpick.addItemFlags(ItemFlag.HIDE_ENCHANTS);
@@ -461,15 +436,14 @@ public class ItemStacks {
         cpickr.shape("CCC", "*S*", "*S*");
         cpickr.setIngredient('C', Material.COPPER_INGOT);
         cpickr.setIngredient('S', Material.STICK);
-        cpickr.setIngredient('*', Material.AIR);
         plugin.getServer().addRecipe(cpickr);
 
         //Copperaxe
         NamespacedKey caxekey = new NamespacedKey(plugin, "FTSkupferaxt");
         ItemStack caxe = new ItemBuilder(Material.STONE_AXE, 1)
                 .name("§fKupferaxt")
-                .enchant(Enchantment.DURABILITY, 2)
-                .enchant(Enchantment.DIG_SPEED, 2)
+                .enchant(Enchantment.UNBREAKING, 2)
+                .enchant(Enchantment.EFFICIENCY, 2)
                 .sign("COPPER_AXE")
                 .build();
         caxe.addItemFlags(ItemFlag.HIDE_ENCHANTS);
@@ -478,36 +452,31 @@ public class ItemStacks {
         caxer.shape("*CC", "*SC", "*S*");
         caxer.setIngredient('C', Material.COPPER_INGOT);
         caxer.setIngredient('S', Material.STICK);
-        caxer.setIngredient('*', Material.AIR);
         plugin.getServer().addRecipe(caxer);
 
         ShapedRecipe caxel = new ShapedRecipe(new NamespacedKey(plugin, "FTSkupferaxt2"), caxe);
         caxel.shape("CC*", "CS*", "*S*");
         caxel.setIngredient('C', Material.COPPER_INGOT);
         caxel.setIngredient('S', Material.STICK);
-        caxel.setIngredient('*', Material.AIR);
         plugin.getServer().addRecipe(caxel);
 
         ShapedRecipe caxell = new ShapedRecipe(new NamespacedKey(plugin, "FTSkupferaxt3"), caxe);
         caxell.shape("CC*", "SC*", "S**");
         caxell.setIngredient('C', Material.COPPER_INGOT);
         caxell.setIngredient('S', Material.STICK);
-        caxell.setIngredient('*', Material.AIR);
         plugin.getServer().addRecipe(caxell);
 
         ShapedRecipe caxerr = new ShapedRecipe(new NamespacedKey(plugin, "FTSkupferaxt4"), caxe);
         caxerr.shape("*CC", "*CS", "**S");
         caxerr.setIngredient('C', Material.COPPER_INGOT);
         caxerr.setIngredient('S', Material.STICK);
-        caxerr.setIngredient('*', Material.AIR);
         plugin.getServer().addRecipe(caxerr);
 
         //Coppersword
         NamespacedKey cswordkey = new NamespacedKey(plugin, "FTSkupferschwert");
         ItemStack csword = new ItemBuilder(Material.STONE_SWORD)
                 .name("§fKupferschwert")
-                .enchant(Enchantment.DURABILITY, 2)
-                .enchant(Enchantment.DIG_SPEED, 2)
+                .enchant(Enchantment.UNBREAKING, 2)
                 .sign("COPPER_SWORD")
                 .build();
         csword.addItemFlags(ItemFlag.HIDE_ENCHANTS);
@@ -516,29 +485,26 @@ public class ItemStacks {
         cswordl.shape("C**", "C**", "S**");
         cswordl.setIngredient('C', Material.COPPER_INGOT);
         cswordl.setIngredient('S', Material.STICK);
-        cswordl.setIngredient('*', Material.AIR);
         plugin.getServer().addRecipe(cswordl);
 
         ShapedRecipe cswordr = new ShapedRecipe(new NamespacedKey(plugin, "FTSkupferschwert2"), csword);
         cswordr.shape("**C", "**C", "**S");
         cswordr.setIngredient('C', Material.COPPER_INGOT);
         cswordr.setIngredient('S', Material.STICK);
-        cswordr.setIngredient('*', Material.AIR);
         plugin.getServer().addRecipe(cswordr);
 
         ShapedRecipe cswordm = new ShapedRecipe(new NamespacedKey(plugin, "FTSkupferschwert3"), csword);
         cswordm.shape("*C*", "*C*", "*S*");
         cswordm.setIngredient('C', Material.COPPER_INGOT);
         cswordm.setIngredient('S', Material.STICK);
-        cswordm.setIngredient('*', Material.AIR);
         plugin.getServer().addRecipe(cswordm);
 
         //Copperhoe
         NamespacedKey choekey = new NamespacedKey(plugin, "FTSkupferhacke");
         ItemStack choe = new ItemBuilder(Material.STONE_HOE)
                 .name("§fKupferhacke")
-                .enchant(Enchantment.DURABILITY, 2)
-                .enchant(Enchantment.DIG_SPEED, 2)
+                .enchant(Enchantment.EFFICIENCY, 2)
+                .enchant(Enchantment.UNBREAKING, 2)
                 .sign("COPPER_HOE")
                 .build();
         choe.addItemFlags(ItemFlag.HIDE_ENCHANTS);
@@ -547,35 +513,31 @@ public class ItemStacks {
         choel.shape("CC*", "*S*", "*S*");
         choel.setIngredient('C', Material.COPPER_INGOT);
         choel.setIngredient('S', Material.STICK);
-        choel.setIngredient('*', Material.AIR);
         plugin.getServer().addRecipe(choel);
 
         ShapedRecipe choer = new ShapedRecipe(new NamespacedKey(plugin, "FTSkupferhacke2"), choe);
         choer.shape("*CC", "*S*", "*s*");
         choer.setIngredient('C', Material.COPPER_INGOT);
         choer.setIngredient('S', Material.STICK);
-        choer.setIngredient('*', Material.AIR);
         plugin.getServer().addRecipe(choer);
 
         ShapedRecipe choerr = new ShapedRecipe(new NamespacedKey(plugin, "FTSkupferhacke3"), choe);
         choerr.shape("*CC", "**S", "**S");
         choerr.setIngredient('C', Material.COPPER_INGOT);
         choerr.setIngredient('S', Material.STICK);
-        choerr.setIngredient('*', Material.AIR);
         plugin.getServer().addRecipe(choerr);
 
         ShapedRecipe choell = new ShapedRecipe(new NamespacedKey(plugin, "FTSkupferhacke4"), choe);
         choell.shape("CC*", "S**", "S**");
         choell.setIngredient('C', Material.COPPER_INGOT);
         choell.setIngredient('S', Material.STICK);
-        choell.setIngredient('*', Material.AIR);
         plugin.getServer().addRecipe(choell);
 
         //Coppershovel
         ItemStack cshovel = new ItemBuilder(Material.STONE_SHOVEL)
                 .name("§fKupferschaufel")
-                .enchant(Enchantment.DURABILITY, 2)
-                .enchant(Enchantment.DIG_SPEED, 2)
+                .enchant(Enchantment.EFFICIENCY, 2)
+                .enchant(Enchantment.UNBREAKING, 2)
                 .sign("COPPER_SHOVEL")
                 .build();
         cshovel.addItemFlags(ItemFlag.HIDE_ENCHANTS);
@@ -584,14 +546,12 @@ public class ItemStacks {
         cshovelr.shape("**C", "**S", "**S");
         cshovelr.setIngredient('C', Material.COPPER_INGOT);
         cshovelr.setIngredient('S', Material.STICK);
-        cshovelr.setIngredient('*', Material.AIR);
         plugin.getServer().addRecipe(cshovelr);
 
         ShapedRecipe cshovelm = new ShapedRecipe(new NamespacedKey(plugin, "FTSkupferschaufel3"), cshovel);
         cshovelm.shape("*C*", "*S*", "*S*");
         cshovelm.setIngredient('C', Material.COPPER_INGOT);
         cshovelm.setIngredient('S', Material.STICK);
-        cshovelm.setIngredient('*', Material.AIR);
         plugin.getServer().addRecipe(cshovelm);
 
         // FallAxt
@@ -600,7 +560,7 @@ public class ItemStacks {
         lumberAxeMeta.displayName(Component.text(ChatColor.DARK_PURPLE + "FallAxt"));
         lumberAxeMeta.setCustomModelData(1001);
         lumberAxeStack.setItemMeta(lumberAxeMeta);
-        lumberAxeStack.addEnchantment(Enchantment.DURABILITY, 2);
+        lumberAxeStack.addEnchantment(Enchantment.UNBREAKING, 2);
         lumberAxeStack.addItemFlags(ItemFlag.HIDE_ENCHANTS);
         lumberAxeStack = new ItemBuilder(lumberAxeStack).sign("FALLAXT").build();
 
@@ -608,14 +568,12 @@ public class ItemStacks {
         lumberAxeRecipe.shape("*EE", "*SE", "*S*");
         lumberAxeRecipe.setIngredient('E', Material.EMERALD);
         lumberAxeRecipe.setIngredient('S', Material.STICK);
-        lumberAxeRecipe.setIngredient('*', Material.AIR);
         plugin.getServer().addRecipe(lumberAxeRecipe);
 
         ShapedRecipe lumberAxeRecipe2 = new ShapedRecipe(new NamespacedKey(plugin, "FTSfallaxt2"), lumberAxeStack);
         lumberAxeRecipe2.shape("EE*", "ES*", "*S*");
         lumberAxeRecipe2.setIngredient('E', Material.EMERALD);
         lumberAxeRecipe2.setIngredient('S', Material.STICK);
-        lumberAxeRecipe2.setIngredient('*', Material.AIR);
         plugin.getServer().addRecipe(lumberAxeRecipe2);
 
         // Dragon Breath
@@ -631,7 +589,6 @@ public class ItemStacks {
 
         ShapedRecipe meisselRecipe = new ShapedRecipe(new NamespacedKey(plugin, "FTS_MEISSEL"), meissel);
         meisselRecipe.shape("AAA", "AIA", "EEE");
-        meisselRecipe.setIngredient('A', Material.AIR);
         meisselRecipe.setIngredient('I', Material.IRON_INGOT);
         meisselRecipe.setIngredient('E', Material.EMERALD);
         plugin.getServer().addRecipe(meisselRecipe);
