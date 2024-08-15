@@ -17,7 +17,6 @@ jobs:
         key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
         restore-keys: |
           ${{ runner.os }}-maven-
-    - run: ls -al FTSEngine/target 
     - run: mvn clean package
     - run: ls -al FTSEngine/target 
     - uses: actions/upload-artifact@v3
