@@ -18,8 +18,8 @@ jobs:
         restore-keys: |
           ${{ runner.os }}-maven-
     - run: mvn clean package
-    - run: find . -name "target"
+    - run: find . -name "FTSEngine*.jar"
     - uses: actions/upload-artifact@v3
       with:
         name: 'FTSEngine (Dev Build)'
-        path: FTSEngine/target/FTSEngine*.jar
+        path: .target/FTSEngine*.jar
