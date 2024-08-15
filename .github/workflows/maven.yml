@@ -21,4 +21,4 @@ jobs:
     - uses: actions/upload-artifact@v3
       with:
         name: 'FTSEngine (Dev Build)'
-        path: ftsengine/target/ftsengine*.jar
+        path: FTSEngine/target/FTSEngine*.jar
