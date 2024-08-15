@@ -16,6 +16,8 @@ public class CMDgehen implements CommandExecutor {
         plugin.getCommand("gehen").setExecutor(this);
     }
 
+    final float SLOW_SPEED = 0.1f;
+
     @Override
     public boolean onCommand(@NotNull CommandSender cs, @NotNull Command cmd, @NotNull String label, String[] args) {
         if(cs instanceof Player) {
@@ -32,11 +34,11 @@ public class CMDgehen implements CommandExecutor {
 
             if(armorNulls == 4) {
 
-                if(p.getWalkSpeed() == 0.1f) {
+                if(p.getWalkSpeed() == SLOW_SPEED) {
                     p.setWalkSpeed(0.2f);
                     p.sendMessage(Messages.PREFIX + "Du gehst jetzt wieder normal");
                 } else {
-                    p.setWalkSpeed(0.1f);
+                    p.setWalkSpeed(SLOW_SPEED);
                     p.sendMessage(Messages.PREFIX + "Du gehst jetzt langsam");
                 }
 
