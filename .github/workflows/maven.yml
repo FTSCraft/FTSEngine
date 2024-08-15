@@ -18,7 +18,7 @@ jobs:
         restore-keys: |
           ${{ runner.os }}-maven-
     - run: mvn clean package
-    - run: ls -al FTSEngine/target 
+    - run: find . -name "target"
     - uses: actions/upload-artifact@v3
       with:
         name: 'FTSEngine (Dev Build)'
