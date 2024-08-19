@@ -25,8 +25,7 @@ public class CMDreiten implements CommandExecutor
     {
         this.plugin = plugin;
         plugin.getCommand("reiten").setExecutor(this);
-        if (plugin.getProtocolManager() != null)
-            addPacketListener();
+        addPacketListener();
     }
 
     @Override
