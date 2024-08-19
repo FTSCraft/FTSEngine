@@ -37,13 +37,11 @@ import java.util.Random;
 public class PlayerInteractListener implements Listener {
 
     private final Engine plugin;
-    private final ProtocolManager protocolManager;
 
     private final ArrayList<Player> hornCooldown = new ArrayList<>();
 
     public PlayerInteractListener(Engine plugin) {
         this.plugin = plugin;
-        this.protocolManager = plugin.getProtocolManager();
         plugin.getServer().getPluginManager().registerEvents(this, plugin);
     }
 
@@ -58,29 +56,6 @@ public class PlayerInteractListener implements Listener {
         }
 
         if (e.getItem() != null) {
-
-            if (e.getItem().getType() == Material.BOW) {
-                ItemStack is = e.getItem();
-                if (is.hasItemMeta()) {
-                    //TODO HÄÄ??
-                    if (is.getItemMeta().getDisplayName().equalsIgnoreCase("§6Harfe")) {
-
-                        PacketContainer packet = protocolManager.createPacket(PacketType.Play.Client.BLOCK_DIG);
-                        packet.getModifier().writeDefaults();
-                        //Index 4 = The action the player is taking against the block
-                        packet.getIntegers().write(0, 5);
-                        //Index 0-3 = Standard values which have to be set on 0
-                        packet.getIntegers().write(0, 0);
-                        packet.getIntegers().write(0, 0);
-                        try {
-                            protocolManager.sendServerPacket(e.getPlayer(), packet);
-                        } catch (InvocationTargetException ex) {
-                            ex.printStackTrace();
-                        }
-
-                    }
-                }
-            }
 
             if (e.getPlayer().getInventory().getItemInMainHand().getType() == Material.NAUTILUS_SHELL) {
 

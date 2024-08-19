@@ -31,7 +31,8 @@ public class PlayerJoinListener implements Listener {
         FTSUser user = new FTSUser(plugin, p);
         plugin.getPlayer().put(e.getPlayer(), user);
 
-        sendTablistHeaderAndFooter(p, " §cHeutiger Tipp: \nGeht voten!", "");
+        if (plugin.getProtocolManager() != null)
+            sendTablistHeaderAndFooter(p, " §cHeutiger Tipp: \nGeht voten!", "");
 
         //Map
         p.getInventory().getItemInMainHand();
