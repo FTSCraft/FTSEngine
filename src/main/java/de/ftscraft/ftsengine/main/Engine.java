@@ -16,9 +16,7 @@ import de.ftscraft.ftsengine.courier.Briefkasten;
 import de.ftscraft.ftsengine.listener.*;
 import de.ftscraft.ftsengine.utils.*;
 import de.ftscraft.ftsutils.uuidfetcher.UUIDFetcher;
-import net.milkbowl.vault.chat.Chat;
 import net.milkbowl.vault.economy.Economy;
-import net.milkbowl.vault.permission.Permission;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -55,8 +53,6 @@ public class Engine extends JavaPlugin implements Listener {
     private Scoreboard sb;
 
     private static Economy econ = null;
-    private Permission perms = null;
-    private Chat chat = null;
 
     private static final Logger log = Logger.getLogger("Minecraft");
 
@@ -67,8 +63,6 @@ public class Engine extends JavaPlugin implements Listener {
     @Override
     public void onEnable() {
         setupEconomy();
-        setupPermissions();
-        setupChat();
         init();
         for (Player a : Bukkit.getOnlinePlayers()) {
             FTSUser user = new FTSUser(this, a);
@@ -76,21 +70,9 @@ public class Engine extends JavaPlugin implements Listener {
         }
     }
 
-    private boolean setupChat() {
-        RegisteredServiceProvider<Chat> rsp = getServer().getServicesManager().getRegistration(Chat.class);
-        chat = rsp.getProvider();
-        return chat != null;
-    }
-
     @Override
     public void onDisable() {
         safeAll();
-    }
-
-    private boolean setupPermissions() {
-        RegisteredServiceProvider<Permission> rsp = getServer().getServicesManager().getRegistration(Permission.class);
-        perms = rsp.getProvider();
-        return perms != null;
     }
 
     private void init() {
@@ -124,9 +106,10 @@ public class Engine extends JavaPlugin implements Listener {
 
     private void initCommands() {
         new CMDausweis(this);
-        //new CMDwürfel(this);
-        new CMDreiten(this);
-        //new CMDchannel(this);
+
+        if (getProtocolManager() != null)
+            new CMDreiten(this);
+
         new CMDtaube(this);
         new CMDwinken(this);
         new CMDschlagen(this);
@@ -163,14 +146,6 @@ public class Engine extends JavaPlugin implements Listener {
         new VillagerTradeListener(this);
         new ProjectileHitListener(this);
         new PacketReciveListener(this);
-    }
-
-    public Permission getPerms() {
-        return perms;
-    }
-
-    public Chat getChat() {
-        return chat;
     }
 
     public final HashMap<OfflinePlayer, Long> ausweisCooldown = new HashMap<>();
