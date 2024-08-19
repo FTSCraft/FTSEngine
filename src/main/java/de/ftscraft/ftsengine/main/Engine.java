@@ -61,8 +61,8 @@ public class Engine extends JavaPlugin implements Listener {
     private static final Logger log = Logger.getLogger("Minecraft");
 
     public List<Material> mats = new ArrayList<>();
-    private ProtocolManager protocolManager;
-    private ShopkeepersPlugin shopkeepersPlugin;
+    private ProtocolManager protocolManager = null;
+    private ShopkeepersPlugin shopkeepersPlugin = null;
 
     @Override
     public void onEnable() {
@@ -94,7 +94,8 @@ public class Engine extends JavaPlugin implements Listener {
     }
 
     private void init() {
-        this.protocolManager = ProtocolLibrary.getProtocolManager();
+        if (getServer().getPluginManager().isPluginEnabled("ProtocolLib"))
+            this.protocolManager = ProtocolLibrary.getProtocolManager();
         if (getServer().getPluginManager().isPluginEnabled("Shopkeepers"))
             this.shopkeepersPlugin = ShopkeepersPlugin.getInstance();
         highestId = 0;

@@ -3,8 +3,8 @@ author: halberfan
 main: de.ftscraft.ftsengine.main.Engine
 version: ${project.version}
 api-version: 1.20
-depend: [Vault, ProtocolLib, LuckPerms, FTSUtils]
-softdepend: [Shopkeepers, Dynmap]
+depend: [Vault, FTSUtils]
+softdepend: [ProtocolLib, Shopkeepers, Dynmap]
 
 commands:
     ausweis:
