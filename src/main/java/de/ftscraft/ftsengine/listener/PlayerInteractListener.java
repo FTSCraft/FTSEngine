@@ -185,7 +185,17 @@ public class PlayerInteractListener implements Listener {
         if (e.getPlayer().getInventory().getItemInMainHand().getType() == Material.RECOVERY_COMPASS) {
             String sign = ItemReader.getSign(e.getPlayer().getInventory().getItemInMainHand());
             if (sign != null && sign.equals("LOGPORT")) {
+
+                if (player.getOpenInventory().getType() != org.bukkit.event.inventory.InventoryType.CRAFTING) {
+                    e.setCancelled(true);
+                    return;
+                }
+
                 if (e.getAction().toString().contains("RIGHT_CLICK")) {
+                    if (e.getPlayer().isSneaking()) {  // Überprüfen, ob der Spieler schleicht (Shift gedrückt hält)
+                        logportManager.reloadLogport(player, item);
+                        return;
+                    }
 
                     if (!player.isOnGround()) {
                         player.sendMessage(Messages.PREFIX + ChatColor.RED + "Du kannst keinen Teleportpunkt in der Luft setzen!");

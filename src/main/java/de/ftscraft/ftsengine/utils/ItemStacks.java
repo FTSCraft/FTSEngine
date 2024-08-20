@@ -1,6 +1,7 @@
 package de.ftscraft.ftsengine.utils;
 
 import de.ftscraft.ftsengine.backpacks.BackpackType;
+import de.ftscraft.ftsengine.logport.LogportManager;
 import de.ftscraft.ftsengine.main.Engine;
 import de.ftscraft.ftsutils.items.ItemBuilder;
 import net.kyori.adventure.text.Component;
@@ -11,6 +12,8 @@ import org.bukkit.NamespacedKey;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.*;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.persistence.PersistentDataContainer;
+import org.bukkit.persistence.PersistentDataType;
 
 import java.util.*;
 
@@ -32,9 +35,11 @@ public class ItemStacks {
     private List<Material> disabledDefaultRecipes;
 
     private final Engine plugin;
+    private final LogportManager logportManager;
 
     public ItemStacks(Engine plugin) {
         this.plugin = plugin;
+        logportManager = plugin.getLogportManager();
         init();
         initRecipes();
     }
@@ -121,7 +126,15 @@ public class ItemStacks {
         dragonBreath = new ItemStack(Material.DRAGON_BREATH, 1);
 
         meissel = new ItemBuilder(Material.LIGHTNING_ROD).name("§6Meißel").lore("§7Ein nützliches Werkzeug zum Steine verarbeiten").sign("MEISSEL").build();
+
         logport = new ItemBuilder(Material.RECOVERY_COMPASS).name("§6Logport").lore("§7Teleportiert dich zu einem vorher festgelegten Punkt").sign("LOGPORT").build();
+        ItemMeta logportMeta = logport.getItemMeta();
+        PersistentDataContainer data = logportMeta.getPersistentDataContainer();
+        data.set(new NamespacedKey(plugin, LogportManager.USES_LEFT_KEY), PersistentDataType.INTEGER, 5);
+        data.set(new NamespacedKey(plugin, LogportManager.MAX_USES_KEY), PersistentDataType.INTEGER, 5);
+
+        logportManager.updateLogportLore(logportMeta);
+        logport.setItemMeta(logportMeta);
     }
 
     public List<Material> getDisabledDefaultRecipes() {
