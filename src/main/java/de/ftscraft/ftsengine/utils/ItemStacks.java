@@ -25,6 +25,7 @@ public class ItemStacks {
     private ItemStack gold;
     private ItemStack dragonBreath;
     private ItemStack meissel;
+    private ItemStack logport;
 
     private ItemStack horn;
 
@@ -120,7 +121,7 @@ public class ItemStacks {
         dragonBreath = new ItemStack(Material.DRAGON_BREATH, 1);
 
         meissel = new ItemBuilder(Material.LIGHTNING_ROD).name("§6Meißel").lore("§7Ein nützliches Werkzeug zum Steine verarbeiten").sign("MEISSEL").build();
-
+        logport = new ItemBuilder(Material.RECOVERY_COMPASS).name("§6Logport").lore("§7Teleportiert dich zu einem vorher festgelegten Punkt").sign("LOGPORT").build();
     }
 
     public List<Material> getDisabledDefaultRecipes() {
@@ -592,5 +593,13 @@ public class ItemStacks {
         meisselRecipe.setIngredient('I', Material.IRON_INGOT);
         meisselRecipe.setIngredient('E', Material.EMERALD);
         plugin.getServer().addRecipe(meisselRecipe);
+
+        //Logport
+
+        ShapedRecipe logportRecipe = new ShapedRecipe(new NamespacedKey(plugin, "FTS_LOGPORT"), logport);
+        logportRecipe.shape("EEE", "ECE", "EEE");
+        logportRecipe.setIngredient('C', Material.COMPASS);
+        logportRecipe.setIngredient('E', Material.EMERALD);
+        plugin.getServer().addRecipe(logportRecipe);
     }
 }

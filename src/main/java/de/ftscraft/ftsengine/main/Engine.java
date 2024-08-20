@@ -14,6 +14,7 @@ import de.ftscraft.ftsengine.commands.emotes.*;
 import de.ftscraft.ftsengine.courier.Brief;
 import de.ftscraft.ftsengine.courier.Briefkasten;
 import de.ftscraft.ftsengine.listener.*;
+import de.ftscraft.ftsengine.logport.LogportManager;
 import de.ftscraft.ftsengine.utils.*;
 import de.ftscraft.ftsutils.uuidfetcher.UUIDFetcher;
 import net.milkbowl.vault.economy.Economy;
@@ -50,6 +51,7 @@ public class Engine extends JavaPlugin implements Listener {
     public HashMap<Location, Brett> bretter;
     public HashMap<Player, BrettNote> playerBrettNote;
     public HashMap<UUID, Briefkasten> briefkasten;
+    public LogportManager logportManager;
     private Scoreboard sb;
 
     private static Economy econ = null;
@@ -73,6 +75,7 @@ public class Engine extends JavaPlugin implements Listener {
     @Override
     public void onDisable() {
         safeAll();
+        logportManager.onDisableLogic();
     }
 
     private void init() {
@@ -80,6 +83,7 @@ public class Engine extends JavaPlugin implements Listener {
             this.protocolManager = ProtocolLibrary.getProtocolManager();
         if (getServer().getPluginManager().isPluginEnabled("Shopkeepers"))
             this.shopkeepersPlugin = ShopkeepersPlugin.getInstance();
+        logportManager = new LogportManager(this);
         highestId = 0;
         biggestBpId = 0;
         biggestPferdId = 0;
@@ -218,7 +222,6 @@ public class Engine extends JavaPlugin implements Listener {
         return backpacks;
     }
 
-
     public ProtocolManager getProtocolManager() {
         return protocolManager;
     }
@@ -226,5 +229,7 @@ public class Engine extends JavaPlugin implements Listener {
     public ShopkeepersPlugin getShopkeepersPlugin() {
         return shopkeepersPlugin;
     }
+
+    public LogportManager getLogportManager() {return logportManager;}
 
 }
