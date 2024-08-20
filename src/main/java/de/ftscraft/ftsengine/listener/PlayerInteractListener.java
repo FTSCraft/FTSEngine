@@ -6,6 +6,7 @@ import com.comphenix.protocol.events.PacketContainer;
 import de.ftscraft.ftsengine.backpacks.Backpack;
 import de.ftscraft.ftsengine.backpacks.BackpackType;
 import de.ftscraft.ftsengine.brett.Brett;
+import de.ftscraft.ftsengine.logport.LogportManager;
 import de.ftscraft.ftsengine.main.Engine;
 import de.ftscraft.ftsengine.utils.Ausweis;
 import de.ftscraft.ftsengine.utils.Messages;
@@ -13,9 +14,7 @@ import de.ftscraft.ftsengine.utils.Var;
 import de.ftscraft.ftsutils.items.ItemReader;
 import net.kyori.adventure.key.Key;
 import net.kyori.adventure.sound.Sound;
-import org.bukkit.Bukkit;
-import org.bukkit.Material;
-import org.bukkit.Particle;
+import org.bukkit.*;
 import org.bukkit.block.data.type.Sign;
 import org.bukkit.block.data.type.Slab;
 import org.bukkit.block.data.type.Stairs;
@@ -27,8 +26,12 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.InventoryView;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.persistence.PersistentDataContainer;
+import org.bukkit.persistence.PersistentDataType;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
@@ -37,11 +40,12 @@ import java.util.Random;
 public class PlayerInteractListener implements Listener {
 
     private final Engine plugin;
-
+    private final LogportManager logportManager;
     private final ArrayList<Player> hornCooldown = new ArrayList<>();
 
     public PlayerInteractListener(Engine plugin) {
         this.plugin = plugin;
+        logportManager = plugin.getLogportManager();
         plugin.getServer().getPluginManager().registerEvents(this, plugin);
     }
 
@@ -95,7 +99,7 @@ public class PlayerInteractListener implements Listener {
 
                 }
 
-            } else if(e.getPlayer().getInventory().getItemInMainHand().getType() == Material.LIGHTNING_ROD) {
+            } else if (e.getPlayer().getInventory().getItemInMainHand().getType() == Material.LIGHTNING_ROD) {
                 String sign = ItemReader.getSign(e.getPlayer().getInventory().getItemInMainHand());
                 if (sign != null && sign.equals("MEISSEL")) {
                     e.getPlayer().openStonecutter(null, true);
@@ -172,8 +176,36 @@ public class PlayerInteractListener implements Listener {
                 }
 
             }
+        }
 
+        //Logport
+        ItemStack item = e.getItem();
+        Player player = e.getPlayer();
 
+        if (e.getPlayer().getInventory().getItemInMainHand().getType() == Material.RECOVERY_COMPASS) {
+            String sign = ItemReader.getSign(e.getPlayer().getInventory().getItemInMainHand());
+            if (sign != null && sign.equals("LOGPORT")) {
+                if (e.getAction().toString().contains("RIGHT_CLICK")) {
+
+                    if (!player.isOnGround()) {
+                        player.sendMessage(Messages.PREFIX + ChatColor.RED + "Du kannst keinen Teleportpunkt in der Luft setzen!");
+                        return;
+                    }
+
+                    if (player.isInsideVehicle()) {
+                        player.sendMessage(Messages.PREFIX + ChatColor.RED + "Du kannst keinen Teleportpunkt setzen, während du auf einem Reittier sitzt!");
+                        return;
+                    }
+
+                    logportManager.saveLocationToItem(player, item);
+                } else if (e.getAction().toString().contains("LEFT_CLICK")) {
+                    logportManager.startTeleportCountdown(player, item);
+                }
+                if (e.getHand() == EquipmentSlot.HAND) {
+                    e.setCancelled(true);
+                }
+            }
         }
     }
+
 }
