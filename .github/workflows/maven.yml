@@ -89,7 +89,9 @@ jobs:
 
     - name: Create Tag
       if: env.LAST_VERSION != '' && env.CURRENT_VERSION != env.LAST_VERSION
+      env:
+        GITHUB_TOKEN: ${{ secrets.ACTIONS_TOKEN }}
       run: |
         echo "Creating tag v${CURRENT_VERSION}"
         git tag "v${CURRENT_VERSION}"
-        git push origin "v${CURRENT_VERSION}"
+        git push https://${{ secrets.ACTIONS_TOKEN }}@github.com/FTSCraft/FTSEngine.git "v${CURRENT_VERSION}"
