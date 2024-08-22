@@ -12,6 +12,8 @@ jobs:
 
     steps:
     - uses: actions/checkout@v4
+      with:
+        fetch-depth: 0  # Fetch the entire history
     - uses: actions/setup-java@v4
       with:
         distribution: 'temurin'
@@ -30,6 +32,8 @@ jobs:
     
     steps:
     - uses: actions/checkout@v4
+      with:
+        fetch-depth: 0  # Fetch the entire history
     - uses: actions/setup-java@v4
       with:
         distribution: 'temurin'
@@ -46,3 +50,46 @@ jobs:
       with:
         name: 'FTSEngine (Master Build)'
         path: ./target/FTSEngine*.jar
+
+  tag_version:
+    if: github.ref == 'refs/heads/master'
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v4
+      with:
+        fetch-depth: 0  # Fetch the entire history
+    - uses: actions/setup-java@v4
+      with:
+        distribution: 'temurin'
+        java-version: 21
+
+    - name: Get current version
+      id: get_version
+      run: |
+        current_version=$(mvn help:evaluate -Dexpression=project.version -q -DforceStdout)
+        echo "Current version: $current_version"
+        echo "CURRENT_VERSION=$current_version" >> $GITHUB_ENV
+
+    - name: Check for previous commit and pom.xml file
+      run: |
+        if git rev-parse HEAD~1 >/dev/null 2>&1; then
+          if git show HEAD~1:pom.xml >/dev/null 2>&1; then
+            last_version=$(git show HEAD~1:pom.xml | grep -oPm1 "(?<=<version>)[^<]+")
+            echo "Last version: $last_version"
+          else
+            echo "pom.xml not found in the previous commit."
+            last_version=""
+          fi
+        else
+          echo "No previous commit found."
+          last_version=""
+        fi
+        echo "LAST_VERSION=$last_version" >> $GITHUB_ENV
+
+    - name: Create Tag
+      if: env.LAST_VERSION != '' && env.CURRENT_VERSION != env.LAST_VERSION
+      run: |
+        echo "Creating tag v${CURRENT_VERSION}"
+        git tag "v${CURRENT_VERSION}"
+        git push origin "v${CURRENT_VERSION}"
