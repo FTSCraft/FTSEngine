@@ -12,6 +12,8 @@ jobs:
 
     steps:
     - uses: actions/checkout@v4
+      with:
+        fetch-depth: 0  # Fetch the entire history
     - uses: actions/setup-java@v4
       with:
         distribution: 'temurin'
@@ -30,6 +32,8 @@ jobs:
     
     steps:
     - uses: actions/checkout@v4
+      with:
+        fetch-depth: 0  # Fetch the entire history
     - uses: actions/setup-java@v4
       with:
         distribution: 'temurin'
@@ -53,6 +57,8 @@ jobs:
 
     steps:
     - uses: actions/checkout@v4
+      with:
+        fetch-depth: 0  # Fetch the entire history
     - uses: actions/setup-java@v4
       with:
         distribution: 'temurin'
@@ -82,8 +88,8 @@ jobs:
         echo "LAST_VERSION=$last_version" >> $GITHUB_ENV
 
     - name: Create Tag
-      if: env.TAG_VERSION != ''
+      if: env.LAST_VERSION != '' && env.CURRENT_VERSION != env.LAST_VERSION
       run: |
-        echo "Creating tag v${TAG_VERSION}"
-        git tag "v${TAG_VERSION}"
-        git push origin "v${TAG_VERSION}"
+        echo "Creating tag v${CURRENT_VERSION}"
+        git tag "v${CURRENT_VERSION}"
+        git push origin "v${CURRENT_VERSION}"
