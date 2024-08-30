@@ -621,7 +621,7 @@ public class ItemStacks {
 
         //Dünger
 
-        ShapedRecipe fertilizerRecipe = new ShapedRecipe(new NamespacedKey(plugin, "FTS_FERTILIZER"), fertilizer);
+        ShapedRecipe fertilizerRecipe = new ShapedRecipe(new NamespacedKey(plugin, "FERTILIZER"), fertilizer);
         fertilizerRecipe.shape("BBB", "BLB", "BRB");
         fertilizerRecipe.setIngredient('B', Material.BONE_MEAL);
         fertilizerRecipe.setIngredient('L', Material.LAPIS_LAZULI);
