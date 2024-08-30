@@ -192,25 +192,32 @@ public class PlayerInteractListener implements Listener {
                 }
 
                 if (e.getAction().toString().contains("RIGHT_CLICK")) {
-                    if (e.getPlayer().isSneaking()) {  // Überprüfen, ob der Spieler schleicht (Shift gedrückt hält)
+                    if (e.getPlayer().isSneaking()) {
                         logportManager.reloadLogport(player, item);
                         return;
-                    }
-
-                    if (!player.isOnGround()) {
-                        player.sendMessage(Messages.PREFIX + ChatColor.RED + "Du kannst keinen Teleportpunkt in der Luft setzen!");
+                    } else {
+                        logportManager.startTeleportCountdown(player, item);
                         return;
                     }
 
-                    if (player.isInsideVehicle()) {
-                        player.sendMessage(Messages.PREFIX + ChatColor.RED + "Du kannst keinen Teleportpunkt setzen, während du auf einem Reittier sitzt!");
-                        return;
-                    }
 
-                    logportManager.saveLocationToItem(player, item);
                 } else if (e.getAction().toString().contains("LEFT_CLICK")) {
-                    logportManager.startTeleportCountdown(player, item);
+                    if (e.getPlayer().isSneaking()) {
+                        if (!player.isOnGround()) {
+                            player.sendMessage(Messages.PREFIX + ChatColor.RED + "Du kannst keinen Teleportpunkt in der Luft setzen!");
+                            return;
+                        }
+
+                        if (player.isInsideVehicle()) {
+                            player.sendMessage(Messages.PREFIX + ChatColor.RED + "Du kannst keinen Teleportpunkt setzen, während du auf einem Reittier sitzt!");
+                            return;
+                        }
+
+                        logportManager.saveLocationToItem(player, item);
+                        return;
+                    }
                 }
+
                 if (e.getHand() == EquipmentSlot.HAND) {
                     e.setCancelled(true);
                 }

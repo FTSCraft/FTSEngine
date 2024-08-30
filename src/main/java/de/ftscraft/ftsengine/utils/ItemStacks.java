@@ -29,6 +29,7 @@ public class ItemStacks {
     private ItemStack dragonBreath;
     private ItemStack meissel;
     private ItemStack logport;
+    private ItemStack fertilizer;
 
     private ItemStack horn;
 
@@ -126,6 +127,9 @@ public class ItemStacks {
         dragonBreath = new ItemStack(Material.DRAGON_BREATH, 1);
 
         meissel = new ItemBuilder(Material.LIGHTNING_ROD).name("§6Meißel").lore("§7Ein nützliches Werkzeug zum Steine verarbeiten").sign("MEISSEL").build();
+
+        fertilizer = new ItemBuilder(Material.BONE_MEAL, 4).name("§6Dünger").lore("§7Lässt Pflanzen wachsen!").sign("FERTILIZER").build();
+
 
         logport = new ItemBuilder(Material.RECOVERY_COMPASS).name("§6Logport").lore("§7Teleportiert dich zu einem vorher festgelegten Punkt").sign("LOGPORT").build();
         ItemMeta logportMeta = logport.getItemMeta();
@@ -614,5 +618,14 @@ public class ItemStacks {
         logportRecipe.setIngredient('C', Material.COMPASS);
         logportRecipe.setIngredient('E', Material.EMERALD);
         plugin.getServer().addRecipe(logportRecipe);
+
+        //Dünger
+
+        ShapedRecipe fertilizerRecipe = new ShapedRecipe(new NamespacedKey(plugin, "FERTILIZER"), fertilizer);
+        fertilizerRecipe.shape("BBB", "BLB", "BRB");
+        fertilizerRecipe.setIngredient('B', Material.BONE_MEAL);
+        fertilizerRecipe.setIngredient('L', Material.LAPIS_LAZULI);
+        fertilizerRecipe.setIngredient('R', Material.REDSTONE);
+        plugin.getServer().addRecipe(fertilizerRecipe);
     }
 }
