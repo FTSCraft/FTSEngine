@@ -15,6 +15,8 @@ import de.ftscraft.ftsutils.items.ItemReader;
 import net.kyori.adventure.key.Key;
 import net.kyori.adventure.sound.Sound;
 import org.bukkit.*;
+import org.bukkit.block.Block;
+import org.bukkit.block.BlockFace;
 import org.bukkit.block.data.type.Sign;
 import org.bukkit.block.data.type.Slab;
 import org.bukkit.block.data.type.Stairs;
@@ -222,7 +224,35 @@ public class PlayerInteractListener implements Listener {
                     e.setCancelled(true);
                 }
             }
+
+
         }
+
+        //Dünger
+        if(e.getPlayer().getInventory().getItemInMainHand().isEmpty() || (e.getPlayer().getInventory().getItemInMainHand() == null))
+            return;
+
+        String sign = ItemReader.getSign(e.getPlayer().getInventory().getItemInMainHand());
+        if ((e.getItem().getType() == Material.BONE_MEAL) && (e.getAction() == Action.RIGHT_CLICK_BLOCK)) {
+            if (sign.equals("FERTILIZER")) {
+                applyBonemealToArea(e.getClickedBlock());
+            }
+        }
+    }
+
+    private void applyBonemealToArea(Block centerBlock) {
+        for (int yOffset = 0; yOffset >= -1; yOffset--) {
+            for (int xOffset = -1; xOffset <= 1; xOffset++) {
+                for (int zOffset = -1; zOffset <= 1; zOffset++) {
+                    Block targetBlock = centerBlock.getRelative(xOffset, yOffset, zOffset);
+                    applyBonemealToBlock(targetBlock);
+                }
+            }
+        }
+    }
+
+    private void applyBonemealToBlock(Block block) {
+        block.applyBoneMeal(BlockFace.UP);
     }
 
 }
