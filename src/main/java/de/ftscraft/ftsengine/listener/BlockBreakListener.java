@@ -10,6 +10,7 @@ import org.bukkit.OfflinePlayer;
 import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
+import org.bukkit.block.BlockType;
 import org.bukkit.block.Sign;
 import org.bukkit.block.data.BlockData;
 import org.bukkit.block.data.Directional;
@@ -139,18 +140,34 @@ public class BlockBreakListener implements Listener {
         if (event.getPlayer().getInventory().getItemInMainHand().getType() == Material.DIAMOND_PICKAXE) {
             String sign = ItemReader.getSign(event.getPlayer().getInventory().getItemInMainHand());
             if (sign.equals("EMERALDPICKAXE")) {
-                excavateArea(event.getBlock(), event.getPlayer().getInventory().getItemInMainHand());
+                excavateArea(event.getBlock(), event.getPlayer().getInventory().getItemInMainHand(), event.getPlayer().getTargetBlockFace(10));
             }
         }
     }
 
-    public void excavateArea(Block centerBlock, ItemStack tool) {
-        for (int xOffset = -1; xOffset <= 1; xOffset++) {
-            for (int yOffset = -1; yOffset <= 1; yOffset++) {
+    public void excavateArea(Block centerBlock, ItemStack tool, BlockFace direction) {
+        if (direction == BlockFace.UP || direction == BlockFace.DOWN) {
+            for (int xOffset = -1; xOffset <= 1; xOffset++) {
                 for (int zOffset = -1; zOffset <= 1; zOffset++) {
-                    Block targetBlock = centerBlock.getRelative(xOffset, yOffset, zOffset);
-                    if(breakBlockWithTool(targetBlock, tool))
-                        return;
+                    Block targetBlock = centerBlock.getRelative(xOffset, 0, zOffset);
+                    breakBlockWithTool(targetBlock, tool);
+                }
+            }
+        } else {
+            if (direction == BlockFace.EAST || direction == BlockFace.WEST) {
+                for (int yOffset = -1; yOffset <= 1; yOffset++) {
+                    for (int zOffset = -1; zOffset <= 1; zOffset++) {
+                        Block targetBlock = centerBlock.getRelative(0, yOffset, zOffset);
+                        breakBlockWithTool(targetBlock, tool);
+                    }
+                }
+            } else if (direction == BlockFace.NORTH || direction == BlockFace.SOUTH) {
+                for (int yOffset = -1; yOffset <= 1; yOffset++) {
+                    for (int xOffset = -1; xOffset <= 1; xOffset++) {
+                        Block targetBlock = centerBlock.getRelative(xOffset, yOffset, 0);
+                        if(targetBlock.getType() != Material.AIR)
+                            breakBlockWithTool(targetBlock, tool);
+                    }
                 }
             }
         }
@@ -158,7 +175,6 @@ public class BlockBreakListener implements Listener {
 
     private boolean breakBlockWithTool(Block block, ItemStack tool) {
         block.breakNaturally(tool);
-
         if (tool.getType().getMaxDurability() > 0) {
             tool.setDurability((short) (tool.getDurability() + 1));
 
