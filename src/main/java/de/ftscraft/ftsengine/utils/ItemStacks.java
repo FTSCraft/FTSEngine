@@ -30,6 +30,7 @@ public class ItemStacks {
     private ItemStack meissel;
     private ItemStack logport;
     private ItemStack fertilizer;
+    private ItemStack emeraldPickaxe;
 
     private ItemStack horn;
 
@@ -128,8 +129,10 @@ public class ItemStacks {
 
         meissel = new ItemBuilder(Material.LIGHTNING_ROD).name("§6Meißel").lore("§7Ein nützliches Werkzeug zum Steine verarbeiten").sign("MEISSEL").build();
 
-        fertilizer = new ItemBuilder(Material.BONE_MEAL, 4).name("§6Dünger").lore("§7Lässt Pflanzen wachsen!").sign("FERTILIZER").build();
+        fertilizer = new ItemBuilder(Material.BONE_MEAL).name("§6Dünger").lore("§7Lässt Pflanzen wachsen!").sign("FERTILIZER").build();
 
+        emeraldPickaxe = new ItemBuilder(Material.DIAMOND_PICKAXE).name("§6Smaragdspitzhacke").lore("§7Baut mehr auf einmal ab!").sign("EMERALDPICKAXE").enchant(Enchantment.UNBREAKING, 2).build();
+        emeraldPickaxe.addItemFlags(ItemFlag.HIDE_ENCHANTS);
 
         logport = new ItemBuilder(Material.RECOVERY_COMPASS).name("§6Logport").lore("§7Teleportiert dich zu einem vorher festgelegten Punkt").sign("LOGPORT").build();
         ItemMeta logportMeta = logport.getItemMeta();
@@ -627,5 +630,13 @@ public class ItemStacks {
         fertilizerRecipe.setIngredient('L', Material.LAPIS_LAZULI);
         fertilizerRecipe.setIngredient('R', Material.REDSTONE);
         plugin.getServer().addRecipe(fertilizerRecipe);
+
+        //Smaragdspitzhacke
+
+        ShapedRecipe emeraldPickAxeRecipe = new ShapedRecipe(new NamespacedKey(plugin, "EMERALDPICKAXE"), emeraldPickaxe);
+        emeraldPickAxeRecipe.shape("SSS", "*I*", "*I*");
+        emeraldPickAxeRecipe.setIngredient('S', Material.EMERALD);
+        emeraldPickAxeRecipe.setIngredient('I', Material.STICK);
+        plugin.getServer().addRecipe(emeraldPickAxeRecipe);
     }
 }
