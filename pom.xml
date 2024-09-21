@@ -104,7 +104,7 @@
         <dependency>
             <groupId>com.github.halberfan</groupId>
             <artifactId>FTSUtils</artifactId>
-            <version>4d9dadd865</version>
+            <version>1.4</version>
         </dependency>
 
     </dependencies>
