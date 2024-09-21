@@ -139,7 +139,7 @@ public class BlockBreakListener implements Listener {
 
         if (event.getPlayer().getInventory().getItemInMainHand().getType() == Material.DIAMOND_PICKAXE) {
             String sign = ItemReader.getSign(event.getPlayer().getInventory().getItemInMainHand());
-            if (sign.equals("EMERALDPICKAXE")) {
+            if (sign != null && sign.equals("EMERALDPICKAXE")) {
                 excavateArea(event.getBlock(), event.getPlayer().getInventory().getItemInMainHand(), event.getPlayer().getTargetBlockFace(10));
             }
         }
