@@ -4,7 +4,7 @@ public class Messages
 {
 
     public static final String PREFIX = "§7[§5FTS-Engine§7] ",
-                        MINI_PREFIX = "<gray>[<dark_purple>FTS-Engine<gray>] ",
+                        MINI_PREFIX = "<gray>[<dark_purple>FTS-Engine</dark_purple>] ",
                         NEED_AUSWEIS = PREFIX + "Du solltest dir erstmal ein Namen geben! (/ausweis name [Vorname] [Nachname]",
                         SUCC_CMD_AUSWEIS = PREFIX+"Dein*e §e%s §7ist nun §e%v§c.",
                         SUCC_COPY_AUSWEIS = PREFIX+"Du hast erfolgreich den Ausweis von %s kopiert!",

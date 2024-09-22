@@ -12,7 +12,7 @@ import java.util.GregorianCalendar;
 public class TimeManager {
 
     private static GregorianCalendar calendar;
-    private static final SimpleDateFormat format = new SimpleDateFormat("dd.MM.yyyy HH:mm");
+    private static final SimpleDateFormat format = new SimpleDateFormat("dd.MM - HH:mm");
 
     public static void init() {
         ConfigManager configManager = Engine.getConfigManager();

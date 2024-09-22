@@ -10,6 +10,8 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.Calendar;
+
 public class CMDzeit implements CommandExecutor {
 
     public CMDzeit(Engine plugin) {
@@ -22,7 +24,9 @@ public class CMDzeit implements CommandExecutor {
             sender.sendMessage(TimeManager.getFormattedTime());
             return true;
         }
-        MiniMsg.msg(p, Messages.MINI_PREFIX + "Es ist folgendes Datum auf Eldoria: \n  <red>" + TimeManager.getFormattedTime() + " Uhr<gray>.");
+        MiniMsg.msg(p, Messages.MINI_PREFIX + "Datum und Uhrzeit: <red>" + TimeManager.getFormattedTime() + "</red> Uhr \n" +
+                "Menschenjahr: <red>" + (TimeManager.getCalendar().get(Calendar.YEAR) - 22900) + "</red>\n" +
+                "Eldoriajahr: <red>" + TimeManager.getCalendar().get(Calendar.YEAR) + "</red>");
 
         return false;
     }
