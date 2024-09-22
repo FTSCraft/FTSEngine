@@ -1,5 +1,6 @@
 package de.ftscraft.ftsengine.listener;
 
+import com.destroystokyo.paper.event.entity.EntityPathfindEvent;
 import de.ftscraft.ftsengine.main.Engine;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.attribute.AttributeInstance;
@@ -10,6 +11,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDismountEvent;
 import org.bukkit.event.entity.EntityMountEvent;
+import org.bukkit.event.entity.EntityTargetEvent;
 import org.bukkit.event.player.PlayerInteractEntityEvent;
 
 public class EntityClickListener implements Listener
@@ -45,12 +47,9 @@ public class EntityClickListener implements Listener
 
         if(event.getEntity() instanceof Player) {
 
-            Player p = (Player) event.getEntity();
-
             if(event.getMount().getType() == EntityType.PIG) {
 
                 Pig pig = (Pig) event.getMount();
-
                 AttributeInstance ms = pig.getAttribute(Attribute.GENERIC_MOVEMENT_SPEED);
 
                 ms.setBaseValue(ms.getBaseValue() + SPEED_MODIFIER);
@@ -61,12 +60,22 @@ public class EntityClickListener implements Listener
 
     }
 
+    // If a player sits on a pig, don't let the pig wander around
+    @EventHandler
+    public void onPigPath(EntityPathfindEvent event) {
+        if (event.getEntity().getType() == EntityType.PIG) {
+
+            Pig pig = (Pig) event.getEntity();
+            if (!pig.getPassengers().isEmpty())
+                event.setCancelled(true);
+
+        }
+    }
+
     @EventHandler
     public void onDismount(EntityDismountEvent event) {
 
         if(event.getEntity() instanceof Player) {
-
-            Player p = (Player) event.getEntity();
 
             if(event.getDismounted().getType() == EntityType.PIG) {
 
