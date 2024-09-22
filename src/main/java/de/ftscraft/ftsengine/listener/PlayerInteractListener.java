@@ -53,190 +53,146 @@ public class PlayerInteractListener implements Listener {
 
     @EventHandler
     public void onClick(PlayerInteractEvent e) {
+        Player player = e.getPlayer();
+        ItemStack itemInHand = e.getItem();
+        Block clickedBlock = e.getClickedBlock();
 
         if (e.getAction() == Action.LEFT_CLICK_AIR) {
-            Object[] passengers = e.getPlayer().getPassengers().toArray();
-            for (Object passenger : passengers) {
-                e.getPlayer().removePassenger((Entity) passenger);
+            removePassengers(player);
+        }
+
+        if (itemInHand != null) {
+            handleHorn(player, itemInHand);
+            handleMeissel(player, itemInHand);
+            handleLogport(e, player, itemInHand);
+            handleWeihrauchlaterne(player, itemInHand);
+            handleBackpack(player, itemInHand);
+            handleFertilizer(e, clickedBlock);
+        }
+
+        if (clickedBlock != null) {
+            handleSchwarzesBrett(player, clickedBlock);
+        }
+    }
+
+    // Entfernt Passagiere bei Links-Klick in die Luft
+    private void removePassengers(Player player) {
+        Object[] passengers = player.getPassengers().toArray();
+        for (Object passenger : passengers) {
+            player.removePassenger((Entity) passenger);
+        }
+    }
+
+    // Horn Handlers
+    private void handleHorn(Player player, ItemStack item) {
+        if (item.getType() == Material.NAUTILUS_SHELL) {
+            String sign = ItemReader.getSign(item);
+            if ("HORN".equals(sign)) {
+                playHornSound(player);
+            }
+        }
+    }
+
+    private void playHornSound(Player player) {
+        if (hornCooldown.contains(player)) return;
+
+        hornCooldown.add(player);
+        Random random = new Random();
+        int r = random.nextInt(50) + 10;
+
+        player.playSound(Sound.sound(Key.key("event.raid.horn"), Sound.Source.VOICE, 100, r), Sound.Emitter.self());
+
+        for (Entity entity : player.getNearbyEntities(70, 70, 70)) {
+            if (entity instanceof Player nearbyPlayer) {
+                nearbyPlayer.playSound(Sound.sound(Key.key("event.raid.horn"), Sound.Source.VOICE, 100, r), player);
             }
         }
 
-        if (e.getItem() != null) {
+        Bukkit.getScheduler().runTaskLater(plugin, () -> hornCooldown.remove(player), 20 * 2);
+    }
 
-            if (e.getPlayer().getInventory().getItemInMainHand().getType() == Material.NAUTILUS_SHELL) {
+    private void handleMeissel(Player player, ItemStack item) {
+        if (item.getType() == Material.LIGHTNING_ROD && "MEISSEL".equals(ItemReader.getSign(item))) {
+            player.openStonecutter(null, true);
+        }
+    }
 
-                ItemStack item = e.getPlayer().getInventory().getItemInMainHand();
+    private void handleLogport(PlayerInteractEvent event, Player player, ItemStack item) {
+        if (item.getType() == Material.RECOVERY_COMPASS && "LOGPORT".equals(ItemReader.getSign(item))) {
+            if (player.getOpenInventory().getType() != InventoryType.CRAFTING) {
+                event.setCancelled(true);
+                return;
+            }
 
-                if (item.hasItemMeta()) {
-                    String sign = ItemReader.getSign(item);
-                    if (sign != null && sign.equals("HORN")) {
-
-                        final Player p = e.getPlayer();
-
-                        if (hornCooldown.contains(p)) {
-                            return;
-                        }
-
-
-                        hornCooldown.add(p);
-
-                        Random random = new Random();
-                        int r = random.nextInt(50) + 10;
-
-                        //p.playSound(p.getLocation(), Sound.EVENT_RAID_HORN, 100, r);
-                        p.playSound(Sound.sound(Key.key("event.raid.horn"), Sound.Source.VOICE, 100, r), Sound.Emitter.self());
-
-                        for (Entity n : p.getNearbyEntities(70, 70, 70)) {
-                            if (n instanceof Player) {
-                                Player playerInRadius = (Player) n;
-
-                                n.playSound(Sound.sound(Key.key("event.raid.horn"), Sound.Source.VOICE, 100, r), p);
-                                //playerInRadius.playSound(p.getLocation(), Sound.EVENT_RAID_HORN, SoundCategory.VOICE, 300, r);
-                            }
-                        }
-
-                        Bukkit.getScheduler().runTaskLater(plugin, () -> hornCooldown.remove(p), 20 * 2);
-
-                    }
-
+            if (event.getAction().toString().contains("RIGHT_CLICK")) {
+                if (player.isSneaking()) {
+                    logportManager.reloadLogport(player, item);
+                } else {
+                    logportManager.startTeleportCountdown(player, item);
                 }
-
-            } else if (e.getPlayer().getInventory().getItemInMainHand().getType() == Material.LIGHTNING_ROD) {
-                String sign = ItemReader.getSign(e.getPlayer().getInventory().getItemInMainHand());
-                if (sign != null && sign.equals("MEISSEL")) {
-                    e.getPlayer().openStonecutter(null, true);
-                    return;
+            } else if (event.getAction().toString().contains("LEFT_CLICK")) {
+                if (player.isSneaking()) {
+                    handleSneakLeftClickLogport(player, item);
                 }
             }
 
-        }
-
-        if (e.getAction().equals(Action.RIGHT_CLICK_BLOCK)) {
-            if (e.getClickedBlock().getBlockData() instanceof WallSign || e.getClickedBlock().getBlockData() instanceof Sign) {
-                org.bukkit.block.Sign sign = (org.bukkit.block.Sign) e.getClickedBlock().getState();
-                if (sign.getLine(0).equalsIgnoreCase("§4Schwarzes Brett")) {
-                    if (sign.getLine(1).equalsIgnoreCase("§bGlobal")) {
-                        for (Brett value : plugin.bretter.values()) {
-                            if (value.getName().equalsIgnoreCase("Global")) {
-                                plugin.getPlayer().get(e.getPlayer()).setBrett(value);
-                                value.getGui().open(e.getPlayer(), 1);
-                                value.checkForRunOut();
-                            }
-                        }
-                    }
-                }
-                if (plugin.bretter.containsKey(e.getClickedBlock().getLocation())) {
-                    plugin.bretter.get(e.getClickedBlock().getLocation()).getGui().open(e.getPlayer(), 1);
-                    Brett brett = plugin.bretter.get(e.getClickedBlock().getLocation());
-                    plugin.getPlayer().get(e.getPlayer()).setBrett(brett);
-                    brett.checkForRunOut();
-                }
+            if (event.getHand() == EquipmentSlot.HAND) {
+                event.setCancelled(true);
             }
         }
+    }
 
-        if (e.getAction() == Action.RIGHT_CLICK_BLOCK || e.getAction() == Action.RIGHT_CLICK_AIR) {
-
-            if (e.getPlayer().getInventory().getChestplate() != null && e.getPlayer().getInventory().getChestplate().getType() == Material.LEATHER_CHESTPLATE) {
-                if (e.getPlayer().getInventory().getItemInMainHand().getType() != Material.AIR) {
-                    ItemStack chest = e.getPlayer().getInventory().getChestplate();
-                    String chestplateSign = ItemReader.getSign(chest);
-                    String handSign = ItemReader.getSign(e.getPlayer().getInventory().getItemInMainHand());
-                    if (handSign != null && handSign.equals("BACKPACK_KEY")) {
-                        Player p = e.getPlayer();
-                        BackpackType type = BackpackType.getBackpackByItem(e.getPlayer().getInventory().getChestplate());
-                        if (type != null && type != BackpackType.ENDER) {
-                            int id = Var.getBackpackID(chest);
-
-                            if (id == -1) {
-                                new Backpack(plugin, type, p);
-                            } else {
-                                Backpack bp = plugin.backpacks.get(id);
-
-                                if (bp == null) {
-                                    p.sendMessage(Messages.PREFIX + "Dieser Rucksack ist (warum auch immer) nicht regestriert?");
-                                    return;
-                                }
-
-                                bp.open(p);
-
-                            }
-                        } else if (type == BackpackType.ENDER) {
-                            p.openInventory(p.getEnderChest());
-                        }
-                    }
-                }
-            } else if (e.getPlayer().getInventory().getItemInMainHand().getType() == Material.LANTERN) {
-
-                ItemStack itemInHand = e.getPlayer().getInventory().getItemInMainHand();
-                if (itemInHand.getItemMeta().hasDisplayName()) {
-                    if (itemInHand.getItemMeta().getDisplayName().equalsIgnoreCase("§cWeihrauchlaterne")) {
-
-                        Player p = e.getPlayer();
-                        p.spawnParticle(Particle.CAMPFIRE_COSY_SMOKE, p.getLocation().add(0, 1.5, 0), 8, 0.0D, 0, 0.01D, 0.01D);
-
-                    }
-                }
-
-            }
-        }
-
-        //Logport
-        ItemStack item = e.getItem();
-        Player player = e.getPlayer();
-
-        if (e.getPlayer().getInventory().getItemInMainHand().getType() == Material.RECOVERY_COMPASS) {
-            String sign = ItemReader.getSign(e.getPlayer().getInventory().getItemInMainHand());
-            if (sign != null && sign.equals("LOGPORT")) {
-
-                if (player.getOpenInventory().getType() != org.bukkit.event.inventory.InventoryType.CRAFTING) {
-                    e.setCancelled(true);
-                    return;
-                }
-
-                if (e.getAction().toString().contains("RIGHT_CLICK")) {
-                    if (e.getPlayer().isSneaking()) {
-                        logportManager.reloadLogport(player, item);
-                        return;
-                    } else {
-                        logportManager.startTeleportCountdown(player, item);
-                        return;
-                    }
-
-
-                } else if (e.getAction().toString().contains("LEFT_CLICK")) {
-                    if (e.getPlayer().isSneaking()) {
-                        if (!player.isOnGround()) {
-                            player.sendMessage(Messages.PREFIX + ChatColor.RED + "Du kannst keinen Teleportpunkt in der Luft setzen!");
-                            return;
-                        }
-
-                        if (player.isInsideVehicle()) {
-                            player.sendMessage(Messages.PREFIX + ChatColor.RED + "Du kannst keinen Teleportpunkt setzen, während du auf einem Reittier sitzt!");
-                            return;
-                        }
-
-                        logportManager.saveLocationToItem(player, item);
-                        return;
-                    }
-                }
-
-                if (e.getHand() == EquipmentSlot.HAND) {
-                    e.setCancelled(true);
-                }
-            }
-
-
-        }
-
-        //Dünger
-        if(e.getPlayer().getInventory().getItemInMainHand().isEmpty() || (e.getPlayer().getInventory().getItemInMainHand() == null))
+    private void handleSneakLeftClickLogport(Player player, ItemStack item) {
+        if (!player.isOnGround()) {
+            player.sendMessage(Messages.PREFIX + ChatColor.RED + "Du kannst keinen Teleportpunkt in der Luft setzen!");
             return;
+        }
 
-        String sign = ItemReader.getSign(e.getPlayer().getInventory().getItemInMainHand());
-        if ((e.getItem().getType() == Material.BONE_MEAL) && (e.getAction() == Action.RIGHT_CLICK_BLOCK)) {
-            if (sign.equals("FERTILIZER")) {
-                applyBonemealToArea(e.getClickedBlock());
+        if (player.isInsideVehicle()) {
+            player.sendMessage(Messages.PREFIX + ChatColor.RED + "Du kannst keinen Teleportpunkt setzen, während du auf einem Reittier sitzt!");
+            return;
+        }
+
+        logportManager.saveLocationToItem(player, item);
+    }
+
+    private void handleWeihrauchlaterne(Player player, ItemStack item) {
+        if (item.getType() == Material.LANTERN && "§cWeihrauchlaterne".equals(item.getItemMeta().getDisplayName())) {
+            player.spawnParticle(Particle.CAMPFIRE_COSY_SMOKE, player.getLocation().add(0, 1.5, 0), 8, 0.0D, 0, 0.01D, 0.01D);
+        }
+    }
+
+    private void handleBackpack(Player player, ItemStack item) {
+        if (player.getInventory().getChestplate() != null && item != null && "BACKPACK_KEY".equals(ItemReader.getSign(item))) {
+            BackpackType type = BackpackType.getBackpackByItem(player.getInventory().getChestplate());
+            if (type != null) {
+                openOrRegisterBackpack(player, type);
             }
+        }
+    }
+
+    private void openOrRegisterBackpack(Player player, BackpackType type) {
+        ItemStack chest = player.getInventory().getChestplate();
+        int id = Var.getBackpackID(chest);
+
+        if (id == -1) {
+            new Backpack(plugin, type, player);
+        } else {
+            Backpack bp = plugin.backpacks.get(id);
+
+            if (bp == null) {
+                player.sendMessage(Messages.PREFIX + "Dieser Rucksack ist (warum auch immer) nicht registriert?");
+                return;
+            }
+
+            bp.open(player);
+        }
+    }
+
+    private void handleFertilizer(PlayerInteractEvent event, Block clickedBlock) {
+        ItemStack item = event.getItem();
+        if (item != null && item.getType() == Material.BONE_MEAL && "FERTILIZER".equals(ItemReader.getSign(item))) {
+            applyBonemealToArea(clickedBlock);
         }
     }
 
@@ -255,4 +211,15 @@ public class PlayerInteractListener implements Listener {
         block.applyBoneMeal(BlockFace.UP);
     }
 
+    private void handleSchwarzesBrett(Player player, Block block) {
+        if (block.getBlockData() instanceof WallSign || block.getBlockData() instanceof Sign) {
+            org.bukkit.block.Sign sign = (org.bukkit.block.Sign) block.getState();
+            if ("§4Schwarzes Brett".equalsIgnoreCase(sign.getLine(0))) {
+                Brett brett = plugin.bretter.get(block.getLocation());
+                if (brett != null) {
+                    brett.getGui().open(player, 1);
+                }
+            }
+        }
+    }
 }

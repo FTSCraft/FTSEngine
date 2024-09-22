@@ -1,10 +1,7 @@
 package de.ftscraft.ftsengine.main;
 
-import com.comphenix.protocol.PacketType;
 import com.comphenix.protocol.ProtocolLibrary;
 import com.comphenix.protocol.ProtocolManager;
-import com.comphenix.protocol.events.PacketContainer;
-import com.comphenix.protocol.wrappers.WrappedChatComponent;
 import com.nisovin.shopkeepers.api.ShopkeepersPlugin;
 import de.ftscraft.ftsengine.backpacks.Backpack;
 import de.ftscraft.ftsengine.brett.Brett;
@@ -15,6 +12,7 @@ import de.ftscraft.ftsengine.courier.Brief;
 import de.ftscraft.ftsengine.courier.Briefkasten;
 import de.ftscraft.ftsengine.listener.*;
 import de.ftscraft.ftsengine.logport.LogportManager;
+import de.ftscraft.ftsengine.time.TimeManager;
 import de.ftscraft.ftsengine.utils.*;
 import de.ftscraft.ftsutils.uuidfetcher.UUIDFetcher;
 import net.milkbowl.vault.economy.Economy;
@@ -36,6 +34,10 @@ import java.util.UUID;
 import java.util.logging.Logger;
 
 public class Engine extends JavaPlugin implements Listener {
+
+    private static Engine instance;
+
+    private ConfigManager configManager;
 
     public HashMap<String, Ausweis> ausweis;
     private HashMap<Player, FTSUser> player;
@@ -64,6 +66,8 @@ public class Engine extends JavaPlugin implements Listener {
 
     @Override
     public void onEnable() {
+        instance = this;
+        configManager = new ConfigManager();
         setupEconomy();
         init();
         for (Player a : Bukkit.getOnlinePlayers()) {
@@ -74,7 +78,7 @@ public class Engine extends JavaPlugin implements Listener {
 
     @Override
     public void onDisable() {
-        safeAll();
+        saveAll();
         logportManager.onDisableLogic();
     }
 
@@ -106,6 +110,8 @@ public class Engine extends JavaPlugin implements Listener {
 
         //setupScoreboad();
 
+        TimeManager.init();
+
     }
 
     private void initCommands() {
@@ -133,6 +139,7 @@ public class Engine extends JavaPlugin implements Listener {
         new CMDbrief(this);
         new CMDkussen(this);
         new CMDewürfel(this);
+        new CMDzeit(this);
     }
     private void initListeners() {
         new AnvilEntchamentBlockingListener(this);
@@ -166,7 +173,8 @@ public class Engine extends JavaPlugin implements Listener {
         return econ != null;
     }
 
-    private void safeAll() {
+    private void saveAll() {
+        configManager.save();
         for (Ausweis a : ausweis.values()) {
             a.save();
         }
@@ -231,5 +239,13 @@ public class Engine extends JavaPlugin implements Listener {
     }
 
     public LogportManager getLogportManager() {return logportManager;}
+
+    public static Engine getInstance() {
+        return instance;
+    }
+
+    public static ConfigManager getConfigManager() {
+        return instance.configManager;
+    }
 
 }
