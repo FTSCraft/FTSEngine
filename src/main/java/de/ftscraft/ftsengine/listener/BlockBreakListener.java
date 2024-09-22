@@ -15,6 +15,7 @@ import org.bukkit.block.Sign;
 import org.bukkit.block.data.BlockData;
 import org.bukkit.block.data.Directional;
 import org.bukkit.block.data.type.WallSign;
+import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
@@ -22,10 +23,14 @@ import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.inventory.ItemStack;
 
 import java.io.File;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.Set;
 
 public class BlockBreakListener implements Listener {
 
     public Engine plugin;
+    private final Set<Player> emeraldPickaxeUsers = Collections.synchronizedSet(new HashSet<>());
 
     public BlockBreakListener(Engine plugin) {
         this.plugin = plugin;
@@ -39,16 +44,26 @@ public class BlockBreakListener implements Listener {
             return;
         }
 
+        handleNetherGoldBlock(event);
+        handleSchwarzesBrett(event);
+        handleBriefkasten(event);
+        handleEmeraldPickaxe(event);
+    }
+
+    private void handleNetherGoldBlock(BlockBreakEvent event) {
         if (event.getBlock().getType() == Material.GOLD_BLOCK && event.getBlock().getWorld().getEnvironment() == World.Environment.NETHER) {
             event.setDropItems(false);
             event.getBlock().getWorld().dropItemNaturally(event.getBlock().getLocation(), new ItemStack(Material.GOLD_INGOT));
         }
+    }
 
-        //Schwarzes Brett und Briefkasten
-        if (event.getBlock().getBlockData() instanceof WallSign || event.getBlock().getBlockData() instanceof org.bukkit.block.data.type.Sign) {
-            Sign sign = (Sign) event.getBlock().getState();
+    private void handleSchwarzesBrett(BlockBreakEvent event) {
+        Block block = event.getBlock();
+        if (block.getBlockData() instanceof WallSign || block.getBlockData() instanceof org.bukkit.block.data.type.Sign) {
+            Sign sign = (Sign) block.getState();
             if (sign.getLine(0).equalsIgnoreCase("§4Schwarzes Brett")) {
-                if (!(event.getPlayer().hasPermission("blackboard.remove")) && !plugin.bretter.get(sign.getLocation()).getCreator().toString().equals(event.getPlayer().getUniqueId().toString())) {
+                if (!event.getPlayer().hasPermission("blackboard.remove") &&
+                        !plugin.bretter.get(sign.getLocation()).getCreator().toString().equals(event.getPlayer().getUniqueId().toString())) {
                     event.setCancelled(true);
                     event.getPlayer().sendMessage("§7[§bSchwarzes Brett§7] Du darfst das nicht kaputt machen!");
                 } else {
@@ -57,133 +72,103 @@ public class BlockBreakListener implements Listener {
                     brett.remove();
                 }
             }
+        }
+    }
 
-            //Briefkasten
-
+    private void handleBriefkasten(BlockBreakEvent event) {
+        Block block = event.getBlock();
+        if (block.getBlockData() instanceof WallSign || block.getBlockData() instanceof org.bukkit.block.data.type.Sign) {
+            Sign sign = (Sign) block.getState();
             if (sign.getLine(0).equalsIgnoreCase("§7[§2Briefkasten§7]")) {
-
-                String tName = sign.getLine(1);
-
-                OfflinePlayer op = Bukkit.getOfflinePlayer(tName);
-
-                if (op == null) {
-
-                    event.setCancelled(true);
-
-                    event.getPlayer().sendMessage(Messages.PREFIX + "Bitte kontaktiere einen Admin falls das dein Briefkasten ist. Stichwort: UUID nicht vorhanden");
-                    return;
-                }
-
-                if (op.getName().equals(event.getPlayer().getName())) {
-
-                    if (!plugin.briefkasten.containsKey(op.getUniqueId())) {
-                        event.setCancelled(false);
-                        return;
-                    }
-
-                    plugin.briefkasten.remove(op.getUniqueId());
-
-                    File file = new File(plugin.getDataFolder() + "//briefkasten//" + event.getPlayer().getUniqueId() + ".yml");
-
-                    file.getName();
-
-                    file.delete();
-
-                    event.getPlayer().sendMessage(Messages.PREFIX + "Du hast deinen Briefkasten erfolgreich entfernt!");
-
-                } else {
-                    event.getPlayer().sendMessage(Messages.PREFIX + "Das ist nicht dein Briefkasten!");
-                }
-
-
+                handleBriefkastenSign(event, sign);
             }
-
-        } else if (event.getBlock().getType() == Material.CHEST) {
-
-            Block block = event.getBlock();
-            BlockData blockData = block.getBlockData();
-            Directional directional = (Directional) blockData;
-
-            boolean briefkasten = false;
-
-            for (BlockFace face : directional.getFaces()) {
-                Block a = block.getRelative(face.getOppositeFace());
-
-                if (a.getState() instanceof Sign) {
-
-                    Sign sign = (Sign) a.getState();
-
-                    if (sign.getLine(0).equalsIgnoreCase("§7[§2Briefkasten§7]")) {
-
-                        briefkasten = true;
-                        break;
-                    }
-
-                }
-
-            }
-
-            if (briefkasten) {
-
-                event.getPlayer().sendMessage(Messages.PREFIX + "Falls das dein Briefkasten ist, zerstöre erst das Schild");
-
-                event.setCancelled(true);
-
-            }
-
-        }
-
-        //Emeraldpickaxe
-        if (event.getPlayer().getInventory().getItemInMainHand().isEmpty() || (event.getPlayer().getInventory().getItemInMainHand() == null))
-            return;
-
-        if (event.getPlayer().getInventory().getItemInMainHand().getType() == Material.DIAMOND_PICKAXE) {
-            String sign = ItemReader.getSign(event.getPlayer().getInventory().getItemInMainHand());
-            if (sign != null && sign.equals("EMERALDPICKAXE")) {
-                excavateArea(event.getBlock(), event.getPlayer().getInventory().getItemInMainHand(), event.getPlayer().getTargetBlockFace(10));
-            }
+        } else if (block.getType() == Material.CHEST) {
+            handleBriefkastenChest(event, block);
         }
     }
 
-    public void excavateArea(Block centerBlock, ItemStack tool, BlockFace direction) {
-        if (direction == BlockFace.UP || direction == BlockFace.DOWN) {
-            for (int xOffset = -1; xOffset <= 1; xOffset++) {
-                for (int zOffset = -1; zOffset <= 1; zOffset++) {
-                    Block targetBlock = centerBlock.getRelative(xOffset, 0, zOffset);
-                    breakBlockWithTool(targetBlock, tool);
-                }
+    private void handleBriefkastenSign(BlockBreakEvent event, Sign sign) {
+        String tName = sign.getLine(1);
+        OfflinePlayer op = Bukkit.getOfflinePlayer(tName);
+
+        if (op.getName() != null && op.getName().equals(event.getPlayer().getName())) {
+            if (!plugin.briefkasten.containsKey(op.getUniqueId())) {
+                event.setCancelled(false);
+                return;
             }
+            plugin.briefkasten.remove(op.getUniqueId());
+            File file = new File(plugin.getDataFolder() + "//briefkasten//" + event.getPlayer().getUniqueId() + ".yml");
+            file.delete();
+            event.getPlayer().sendMessage(Messages.PREFIX + "Du hast deinen Briefkasten erfolgreich entfernt!");
         } else {
-            if (direction == BlockFace.EAST || direction == BlockFace.WEST) {
-                for (int yOffset = -1; yOffset <= 1; yOffset++) {
+            event.getPlayer().sendMessage(Messages.PREFIX + "Das ist nicht dein Briefkasten!");
+        }
+    }
+
+    private void handleBriefkastenChest(BlockBreakEvent event, Block block) {
+        Directional directional = (Directional) block.getBlockData();
+        boolean briefkasten = false;
+        for (BlockFace face : directional.getFaces()) {
+            Block adjacentBlock = block.getRelative(face.getOppositeFace());
+            if (adjacentBlock.getState() instanceof Sign) {
+                Sign sign = (Sign) adjacentBlock.getState();
+                if (sign.getLine(0).equalsIgnoreCase("§7[§2Briefkasten§7]")) {
+                    briefkasten = true;
+                    break;
+                }
+            }
+        }
+        if (briefkasten) {
+            event.getPlayer().sendMessage(Messages.PREFIX + "Falls das dein Briefkasten ist, zerstöre erst das Schild");
+            event.setCancelled(true);
+        }
+    }
+
+    private void handleEmeraldPickaxe(BlockBreakEvent event) {
+        if (emeraldPickaxeUsers.contains(event.getPlayer()))
+            return;
+        ItemStack itemInHand = event.getPlayer().getInventory().getItemInMainHand();
+        if (itemInHand.isEmpty() || itemInHand == null) return;
+
+        if (itemInHand.getType() == Material.DIAMOND_PICKAXE) {
+            String sign = ItemReader.getSign(itemInHand);
+            if (sign != null && sign.equals("EMERALDPICKAXE")) {
+                excavateArea(event.getBlock(), event.getPlayer(), event.getPlayer().getTargetBlockFace(10));
+            }
+        }
+    }
+
+    public void excavateArea(Block centerBlock, Player p, BlockFace direction) {
+        emeraldPickaxeUsers.add(p);
+        Bukkit.getScheduler().runTask(plugin, () -> {
+            if (direction == BlockFace.UP || direction == BlockFace.DOWN) {
+                for (int xOffset = -1; xOffset <= 1; xOffset++) {
                     for (int zOffset = -1; zOffset <= 1; zOffset++) {
-                        Block targetBlock = centerBlock.getRelative(0, yOffset, zOffset);
-                        breakBlockWithTool(targetBlock, tool);
+                        Block targetBlock = centerBlock.getRelative(xOffset, 0, zOffset);
+                        p.breakBlock(targetBlock);
                     }
                 }
-            } else if (direction == BlockFace.NORTH || direction == BlockFace.SOUTH) {
-                for (int yOffset = -1; yOffset <= 1; yOffset++) {
-                    for (int xOffset = -1; xOffset <= 1; xOffset++) {
-                        Block targetBlock = centerBlock.getRelative(xOffset, yOffset, 0);
-                        if(targetBlock.getType() != Material.AIR)
-                            breakBlockWithTool(targetBlock, tool);
+            } else {
+                if (direction == BlockFace.EAST || direction == BlockFace.WEST) {
+                    for (int yOffset = -1; yOffset <= 1; yOffset++) {
+                        for (int zOffset = -1; zOffset <= 1; zOffset++) {
+                            Block targetBlock = centerBlock.getRelative(0, yOffset, zOffset);
+                            p.breakBlock(targetBlock);
+                        }
+                    }
+                } else if (direction == BlockFace.NORTH || direction == BlockFace.SOUTH) {
+                    for (int yOffset = -1; yOffset <= 1; yOffset++) {
+                        for (int xOffset = -1; xOffset <= 1; xOffset++) {
+                            Block targetBlock = centerBlock.getRelative(xOffset, yOffset, 0);
+                            if(targetBlock.getType() != Material.AIR)
+                                p.breakBlock(targetBlock);
+                        }
                     }
                 }
             }
-        }
+            emeraldPickaxeUsers.remove(p);
+        });
     }
 
-    private boolean breakBlockWithTool(Block block, ItemStack tool) {
-        block.breakNaturally(tool);
-        if (tool.getType().getMaxDurability() > 0) {
-            tool.setDurability((short) (tool.getDurability() + 1));
-
-            if (tool.getDurability() >= tool.getType().getMaxDurability()) {
-                tool.setAmount(0);
-                return true;
-            }
-        }
-        return false;
-    }
 }
 
