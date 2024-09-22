@@ -112,7 +112,7 @@ public class PlayerInteractListener implements Listener {
     }
 
     private void handleMeissel(Player player, ItemStack item) {
-        if (item.getType() == Material.LIGHTNING_ROD && "MEISSEL".equals(ItemReader.getSign(item))) {
+        if ("MEISSEL".equals(ItemReader.getSign(item))) {
             player.openStonecutter(null, true);
         }
     }
