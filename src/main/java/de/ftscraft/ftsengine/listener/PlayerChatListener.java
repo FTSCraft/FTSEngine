@@ -52,7 +52,7 @@ public class PlayerChatListener implements Listener {
 
                             if (bn.getBrett().isAdmin()) {
                                 Ausweis ausweis = plugin.getAusweis(p);
-                                plugin.getServer().broadcastMessage("§7[§bMarktschreier§7] Es wurde etwas neues am Schwarzen Brett in Lohengrin von §c" + ausweis.getFirstName() + " " + ausweis.getLastName() + " §7mit dem Titel §c" + bn.getTitle() + " §7angeheftet");
+                                plugin.getServer().broadcastMessage("§7[§bMarktschreier§7] Es wurde etwas neues am Schwarzen Brett in Xantia von §c" + ausweis.getFirstName() + " " + ausweis.getLastName() + " §7mit dem Titel §c" + bn.getTitle() + " §7angeheftet");
                             }
 
                         } else p.sendMessage("§7Du hast nicht genug Geld!");
