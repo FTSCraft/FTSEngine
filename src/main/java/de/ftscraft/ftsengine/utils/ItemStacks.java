@@ -127,7 +127,7 @@ public class ItemStacks {
 
         dragonBreath = new ItemStack(Material.DRAGON_BREATH, 1);
 
-        meissel = new ItemBuilder(Material.LIGHTNING_ROD).name("§6Meißel").lore("§7Ein nützliches Werkzeug zum Steine verarbeiten").sign("MEISSEL").build();
+        meissel = new ItemBuilder(Material.ARROW).name("§6Meißel").lore("§7Ein nützliches Werkzeug zum Steine verarbeiten").sign("MEISSEL").build();
 
         fertilizer = new ItemBuilder(Material.BONE_MEAL).name("§6Dünger").lore("§7Lässt Pflanzen wachsen!").sign("FERTILIZER").build();
 

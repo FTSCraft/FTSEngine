@@ -112,7 +112,7 @@ public class PlayerInteractListener implements Listener {
     }
 
     private void handleMeissel(Player player, ItemStack item) {
-        if (item.getType() == Material.LIGHTNING_ROD && "MEISSEL".equals(ItemReader.getSign(item))) {
+        if ("MEISSEL".equals(ItemReader.getSign(item))) {
             player.openStonecutter(null, true);
         }
     }
@@ -166,6 +166,10 @@ public class PlayerInteractListener implements Listener {
         if (player.getInventory().getChestplate() != null && item != null && "BACKPACK_KEY".equals(ItemReader.getSign(item))) {
             BackpackType type = BackpackType.getBackpackByItem(player.getInventory().getChestplate());
             if (type != null) {
+                if (type == BackpackType.ENDER) {
+                    player.openInventory(player.getEnderChest());
+                    return;
+                }
                 openOrRegisterBackpack(player, type);
             }
         }

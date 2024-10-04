@@ -6,6 +6,7 @@ import org.bukkit.configuration.file.FileConfiguration;
 
 import java.util.Calendar;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class ConfigManager {
@@ -56,6 +57,10 @@ public class ConfigManager {
 
     public int getCalendarMinute() {
         return (int) getValue("cal.minute");
+    }
+
+    public List<String> getTimeWorlds() {
+        return (List<String>) getValue("cal.worlds");
     }
 
     public void save() {

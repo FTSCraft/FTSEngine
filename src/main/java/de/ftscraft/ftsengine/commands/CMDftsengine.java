@@ -21,11 +21,6 @@ public class CMDftsengine implements CommandExecutor {
     @Override
     public boolean onCommand(@NotNull CommandSender cs, @NotNull Command cmd, @NotNull String label, String[] args) {
 
-        if (!cs.hasPermission("ftsengine.helfer")) {
-            cs.sendMessage(Messages.NO_PERMISSIONS);
-            return true;
-        }
-
         if (args.length == 5) {
 
             if (args[0].equals("brett")) {
