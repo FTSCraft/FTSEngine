@@ -8,6 +8,7 @@ import org.bukkit.World;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
+import java.util.Objects;
 
 public class TimeManager {
 
@@ -22,10 +23,15 @@ public class TimeManager {
     }
 
     private static void incrementTime() {
+
         calendar.add(Calendar.SECOND, 8);
-        for (World world : Bukkit.getWorlds()) {
-            world.setTime((int) (calendar.get(Calendar.HOUR_OF_DAY) * 1000 - 6000 + calendar.get(Calendar.MINUTE) * 16.6));
-        }
+
+        Engine.getConfigManager().getTimeWorlds()
+                .stream()
+                .map(Bukkit::getWorld)
+                .filter(Objects::nonNull)
+                .forEach(TimeManager::setTimeForWorld);
+
     }
 
     public static GregorianCalendar getCalendar() {
@@ -35,4 +41,13 @@ public class TimeManager {
     public static String getFormattedTime() {
         return format.format(getCalendar().getTime());
     }
+
+    public static void setTimeForWorld(World world) {
+        world.setTime(calcMinecraftTime());
+    }
+
+    public static int calcMinecraftTime() {
+        return (int) (calendar.get(Calendar.HOUR_OF_DAY) * 1000 - 6000 + calendar.get(Calendar.MINUTE) * 16.6);
+    }
+
 }

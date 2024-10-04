@@ -6,7 +6,7 @@
 
     <groupId>de.ftscraft.ftsengine</groupId>
     <artifactId>FTSEngine</artifactId>
-    <version>2.7.3.1</version>
+    <version>2.7.3.5</version>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -53,6 +53,10 @@
             <id>reposilite-repository-releases</id>
             <name>TriumphTeam Repository</name>
             <url>https://repo.triumphteam.dev/releases</url>
+        </repository>
+        <repository>
+            <id>rosewood-repo</id>
+            <url>https://repo.rosewooddev.io/repository/public/</url>
         </repository>
     </repositories>
     <dependencies>
@@ -105,6 +109,12 @@
             <groupId>com.github.halberfan</groupId>
             <artifactId>FTSUtils</artifactId>
             <version>1.4</version>
+        </dependency>
+        <dependency>
+            <groupId>org.black_ixx</groupId>
+            <artifactId>playerpoints</artifactId>
+            <version>3.2.7</version>
+            <scope>provided</scope>
         </dependency>
 
     </dependencies>

@@ -4,6 +4,9 @@ import de.ftscraft.ftsengine.backpacks.BackpackType;
 import de.ftscraft.ftsengine.main.Engine;
 import de.ftscraft.ftsengine.utils.Messages;
 import de.ftscraft.ftsutils.items.ItemBuilder;
+import org.black_ixx.playerpoints.PlayerPoints;
+import org.black_ixx.playerpoints.PlayerPointsAPI;
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.command.Command;
@@ -25,9 +28,15 @@ public class CMDitem implements CommandExecutor {
 
     private final List<String> forbiddenItems;
     private final List<String> forbiddenNames;
+    private PlayerPointsAPI pointsAPI;
+
+    private final int COST_NAME = 15, COST_LORE = 10, COST_GLOW = 20;
 
     public CMDitem(Engine plugin) {
         plugin.getCommand("item").setExecutor(this);
+
+        if (Bukkit.getPluginManager().isPluginEnabled("PlayerPoints")) pointsAPI = PlayerPoints.getInstance().getAPI();
+        else plugin.getLogger().warning("PlayerPoints is not enabled. Thus the functionality of /item is limited.");
 
         forbiddenItems = new ArrayList<>();
         forbiddenNames = new ArrayList<>();
@@ -44,101 +53,125 @@ public class CMDitem implements CommandExecutor {
 
             Player p = (Player) cs;
 
-            if (p.hasPermission("ftsengine.item")) {
+            if (args.length >= 1) {
+                ItemStack is = p.getInventory().getItemInMainHand();
 
-                if (args.length >= 1) {
-                    ItemStack is = p.getInventory().getItemInMainHand();
-                    if (is.hasItemMeta()) {
-                        if (forbiddenItems.contains(is.getItemMeta().getDisplayName())) {
-                            p.sendMessage(Messages.PREFIX + "Du darfst dieses Item nicht bearbeiten!");
-                            return true;
-                        }
+                if (is.hasItemMeta()) {
+                    if (forbiddenItems.contains(is.getItemMeta().getDisplayName())) {
+                        p.sendMessage(Messages.PREFIX + "Du darfst dieses Item nicht bearbeiten!");
+                        return true;
                     }
-                    if (args[0].equalsIgnoreCase("name") && args.length >= 2) {
+                }
 
-                        StringBuilder stringBuilder = new StringBuilder();
+                if (args[0].equalsIgnoreCase("name") && args.length >= 2) {
 
-                        for (int i = 1; i < args.length; i++) {
-                            stringBuilder.append(args[i]).append(" ");
-                        }
+                    if (is.getType() == Material.AIR) {
+                        p.sendMessage(Messages.PREFIX + "Du musst ein Item in der Hand haben!");
+                        return true;
+                    }
 
-                        stringBuilder.deleteCharAt(stringBuilder.toString().length() - 1);
+                    if (!checkIfAbleToPay(p, COST_NAME)) {
+                        p.sendMessage(Messages.PREFIX + "Du kannst dir das nicht leisten. Mit Premium funktioniert der Command aber kostenlos.");
+                        return true;
+                    }
 
-                        String name = ChatColor.translateAlternateColorCodes('&', stringBuilder.toString());
+                    StringBuilder stringBuilder = new StringBuilder();
 
-                        if (is.getType() != Material.AIR) {
+                    for (int i = 1; i < args.length; i++) {
+                        stringBuilder.append(args[i]).append(" ");
+                    }
 
-                            if (forbiddenNames.contains(name)) {
-                                p.sendMessage(Messages.PREFIX + "Das Item so zu nennen ist nicht erlaubt!");
-                                return true;
-                            }
+                    stringBuilder.deleteCharAt(stringBuilder.toString().length() - 1);
 
-                            ItemMeta im = is.getItemMeta();
-                            im.setDisplayName(name);
-                            is.setItemMeta(im);
+                    String name = ChatColor.translateAlternateColorCodes('&', stringBuilder.toString());
 
-                            p.sendMessage(Messages.PREFIX + "Dein Item heißt nun: §e" + name);
+                    if (forbiddenNames.contains(name)) {
+                        p.sendMessage(Messages.PREFIX + "Das Item so zu nennen ist nicht erlaubt!");
+                        return true;
+                    }
 
-                        } else p.sendMessage(Messages.PREFIX + "Du musst ein Item in deiner Hand haben!");
+                    new ItemBuilder(is)
+                            .name(name)
+                            .build();
 
-                    } else if (args[0].equalsIgnoreCase("glow")) {
-                        new ItemBuilder(is).enchant(Enchantment.UNBREAKING, 1).addPDC("glow", true, PersistentDataType.BOOLEAN).build();
-                        is.addItemFlags(ItemFlag.HIDE_ENCHANTS);
-                    } else if (args[0].equalsIgnoreCase("lore") && args.length >= 2) {
+                    pay(p, COST_NAME);
+                    p.sendMessage(Messages.PREFIX + "Dein Item heißt nun: §e" + name);
 
-                        StringBuilder stringBuilderAll = new StringBuilder();
 
-                        for (int i = 1; i < args.length; i++) {
-                            stringBuilderAll.append(args[i]).append(" ");
-                        }
+                } else if (args[0].equalsIgnoreCase("glow")) {
 
-                        stringBuilderAll.deleteCharAt(stringBuilderAll.toString().length() - 1);
+                    if (is.getType() == Material.AIR) {
+                        p.sendMessage(Messages.PREFIX + "Du musst ein Item in der Hand haben!");
+                        return true;
+                    }
 
-                        String all = ChatColor.translateAlternateColorCodes('&', stringBuilderAll.toString());
+                    if (!checkIfAbleToPay(p, COST_GLOW)) {
+                        p.sendMessage(Messages.PREFIX + "Du kannst dir das nicht leisten. Mit Premium funktioniert der Command aber kostenlos.");
+                        return true;
+                    }
 
-                        String[] lines = all.split("\\|");
+                    new ItemBuilder(is).enchant(Enchantment.UNBREAKING, 1).addPDC("glow", true, PersistentDataType.BOOLEAN).build();
+                    is.addItemFlags(ItemFlag.HIDE_ENCHANTS);
 
-                        List<String> lore = new ArrayList<>();
+                    pay(p, COST_GLOW);
+                    p.sendMessage(Messages.PREFIX + "Dein Item leuchtet nun :o");
 
-                        for (String line : lines) {
-                            line.replace("|", "");
-                            lore.add(ChatColor.translateAlternateColorCodes('&', line));
-                        }
+                } else if (args[0].equalsIgnoreCase("lore") && args.length >= 2) {
 
-                        ItemStack item = p.getInventory().getItemInMainHand();
+                    if (is.getType() == Material.AIR) {
+                        p.sendMessage(Messages.PREFIX + "Du musst ein Item in der Hand haben!");
+                        return true;
+                    }
 
-                        if (forbiddenItems.contains(item.getItemMeta().displayName())) {
-                            p.sendMessage(Messages.PREFIX + "Dieses Item darfst du nicht bearbeiten");
-                            return true;
-                        }
+                    if (!checkIfAbleToPay(p, COST_GLOW)) {
+                        p.sendMessage(Messages.PREFIX + "Du kannst dir das nicht leisten. Mit Premium funktioniert der Command aber kostenlos.");
+                        return true;
+                    }
 
-                        if (item.getType() != Material.AIR) {
+                    StringBuilder stringBuilderAll = new StringBuilder();
 
-                            if (forbiddenNames.contains(lore.get(0))) {
-                                p.sendMessage(Messages.PREFIX + "Das Item so zu nennen ist nicht erlaubt!");
-                                return true;
-                            }
+                    for (int i = 1; i < args.length; i++) {
+                        stringBuilderAll.append(args[i]).append(" ");
+                    }
 
-                            ItemMeta itemStackMeta = item.getItemMeta();
-                            itemStackMeta.setLore(lore);
-                            item.setItemMeta(itemStackMeta);
-                            new ItemBuilder(item)
-                                    .addPDC("edited", true, PersistentDataType.BOOLEAN)
-                                    .build();
+                    stringBuilderAll.deleteCharAt(stringBuilderAll.toString().length() - 1);
 
-                            p.sendMessage(Messages.PREFIX + "Du hast die Lore gesetzt!");
+                    String all = ChatColor.translateAlternateColorCodes('&', stringBuilderAll.toString());
 
-                        } else p.sendMessage(Messages.PREFIX + "Bitte nehme das Item in die Hand!");
+                    String[] lines = all.split("\\|");
 
-                    } else p.sendMessage(help());
+                    List<String> lore = new ArrayList<>();
 
+                    for (String line : lines) {
+                        line.replace("|", "");
+                        lore.add(ChatColor.translateAlternateColorCodes('&', line));
+                    }
+
+                    ItemStack item = p.getInventory().getItemInMainHand();
+
+                    if (forbiddenItems.contains(item.getItemMeta().displayName())) {
+                        p.sendMessage(Messages.PREFIX + "Dieses Item darfst du nicht bearbeiten");
+                        return true;
+                    }
+
+                    if (forbiddenNames.contains(lore.get(0))) {
+                        p.sendMessage(Messages.PREFIX + "Das Item so zu nennen ist nicht erlaubt!");
+                        return true;
+                    }
+
+                    ItemMeta itemStackMeta = item.getItemMeta();
+                    itemStackMeta.setLore(lore);
+                    item.setItemMeta(itemStackMeta);
+                    new ItemBuilder(item).addPDC("edited", true, PersistentDataType.BOOLEAN).build();
+
+                    pay(p, COST_LORE);
+                    p.sendMessage(Messages.PREFIX + "Du hast die Lore gesetzt!");
 
                 } else p.sendMessage(help());
-            } else
-                p.sendMessage(Messages.PREFIX + "Dieser Befehl ist nur für Leute die einen Rang gekauft haben. §6Du kannst das auch! http://musc1.buycraft.net/");
 
-        } else
-            cs.sendMessage(Messages.PREFIX + "Dieser Befehl ist nur für Leute die einen Rang gekauft haben. §6Du kannst das auch! http://musc1.buycraft.net/");
+
+            } else p.sendMessage(help());
+        }
 
         return true;
     }
@@ -150,6 +183,21 @@ public class CMDitem implements CommandExecutor {
                 §c/item glow
                 §c/item lore §4LORE §7(ColorCodes mit '&', Leerzeichen ist möglich, neue Zeile mit '|')""";
 
+    }
+
+    private boolean checkIfAbleToPay(Player p, int amount) {
+        if (p.hasPermission("ftsengine.item"))
+            return true;
+        if (pointsAPI == null)
+            return false;
+        return pointsAPI.look(p.getUniqueId()) >= amount;
+    }
+
+    private void pay(Player p, int amount) {
+        if (p.hasPermission("ftsengine.item"))
+            return;
+        pointsAPI.take(p.getUniqueId(), amount);
+        p.sendMessage(Messages.PREFIX + "Dir wurden " + amount + " PlayerPunkte abgezogen.");
     }
 
 }
