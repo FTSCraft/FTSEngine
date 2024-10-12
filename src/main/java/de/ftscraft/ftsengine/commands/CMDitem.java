@@ -30,7 +30,7 @@ public class CMDitem implements CommandExecutor {
     private final List<String> forbiddenNames;
     private PlayerPointsAPI pointsAPI;
 
-    private final int COST_NAME = 15, COST_LORE = 10, COST_GLOW = 20;
+    private final static int COST_NAME = 15, COST_LORE = 10, COST_GLOW = 20;
 
     public CMDitem(Engine plugin) {
         plugin.getCommand("item").setExecutor(this);
@@ -70,7 +70,7 @@ public class CMDitem implements CommandExecutor {
                         return true;
                     }
 
-                    if (!checkIfAbleToPay(p, COST_NAME)) {
+                    if (notAbleToPay(p, COST_NAME)) {
                         p.sendMessage(Messages.PREFIX + "Du kannst dir das nicht leisten. Mit Premium funktioniert der Command aber kostenlos.");
                         return true;
                     }
@@ -90,9 +90,7 @@ public class CMDitem implements CommandExecutor {
                         return true;
                     }
 
-                    new ItemBuilder(is)
-                            .name(name)
-                            .build();
+                    new ItemBuilder(is).name(name).build();
 
                     pay(p, COST_NAME);
                     p.sendMessage(Messages.PREFIX + "Dein Item heißt nun: §e" + name);
@@ -105,7 +103,7 @@ public class CMDitem implements CommandExecutor {
                         return true;
                     }
 
-                    if (!checkIfAbleToPay(p, COST_GLOW)) {
+                    if (notAbleToPay(p, COST_GLOW)) {
                         p.sendMessage(Messages.PREFIX + "Du kannst dir das nicht leisten. Mit Premium funktioniert der Command aber kostenlos.");
                         return true;
                     }
@@ -123,7 +121,7 @@ public class CMDitem implements CommandExecutor {
                         return true;
                     }
 
-                    if (!checkIfAbleToPay(p, COST_GLOW)) {
+                    if (notAbleToPay(p, COST_GLOW)) {
                         p.sendMessage(Messages.PREFIX + "Du kannst dir das nicht leisten. Mit Premium funktioniert der Command aber kostenlos.");
                         return true;
                     }
@@ -167,35 +165,31 @@ public class CMDitem implements CommandExecutor {
                     pay(p, COST_LORE);
                     p.sendMessage(Messages.PREFIX + "Du hast die Lore gesetzt!");
 
-                } else p.sendMessage(help());
+                } else p.sendMessage(HELP);
 
 
-            } else p.sendMessage(help());
+            } else p.sendMessage(HELP);
         }
 
         return true;
     }
 
-    private String help() {
+    private final String HELP = """
+            %s
+            /item name NAME (Kosten: %d PP)
+            /item glow (Kosten: %d PP)
+            /item lore LORE (Kosten: %d PP, neue Zeile mit '|')"""
+            .formatted(Messages.PREFIX, COST_NAME, COST_GLOW, COST_LORE);
 
-        return """
-                §c/item name §4NAME §7(ColorCodes mit '&', Leerzeichen ist möglich)
-                §c/item glow
-                §c/item lore §4LORE §7(ColorCodes mit '&', Leerzeichen ist möglich, neue Zeile mit '|')""";
 
-    }
-
-    private boolean checkIfAbleToPay(Player p, int amount) {
-        if (p.hasPermission("ftsengine.item"))
-            return true;
-        if (pointsAPI == null)
-            return false;
-        return pointsAPI.look(p.getUniqueId()) >= amount;
+    private boolean notAbleToPay(Player p, int amount) {
+        if (p.hasPermission("ftsengine.item")) return false;
+        if (pointsAPI == null) return true;
+        return pointsAPI.look(p.getUniqueId()) < amount;
     }
 
     private void pay(Player p, int amount) {
-        if (p.hasPermission("ftsengine.item"))
-            return;
+        if (p.hasPermission("ftsengine.item")) return;
         pointsAPI.take(p.getUniqueId(), amount);
         p.sendMessage(Messages.PREFIX + "Dir wurden " + amount + " PlayerPunkte abgezogen.");
     }
