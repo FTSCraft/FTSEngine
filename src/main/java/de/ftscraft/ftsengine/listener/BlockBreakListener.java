@@ -12,25 +12,36 @@ import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.block.BlockType;
 import org.bukkit.block.Sign;
+import org.bukkit.block.data.Ageable;
 import org.bukkit.block.data.BlockData;
 import org.bukkit.block.data.Directional;
 import org.bukkit.block.data.type.WallSign;
+import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.block.BlockBreakEvent;
+import org.bukkit.event.block.BlockDropItemEvent;
 import org.bukkit.inventory.ItemStack;
 
 import java.io.File;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 
 public class BlockBreakListener implements Listener {
 
     public Engine plugin;
     private final Set<Player> emeraldPickaxeUsers = Collections.synchronizedSet(new HashSet<>());
+    private final Collection<Material> seeds = new HashSet<>(Arrays.asList(
+            Material.WHEAT_SEEDS,
+            Material.BEETROOT_SEEDS,
+            Material.CARROT,
+            Material.POTATO,
+            Material.MELON_SEEDS,
+            Material.PUMPKIN_SEEDS,
+            Material.TORCHFLOWER_SEEDS,
+            Material.COCOA_BEANS
+    ));
 
     public BlockBreakListener(Engine plugin) {
         this.plugin = plugin;
@@ -50,6 +61,27 @@ public class BlockBreakListener implements Listener {
         handleEmeraldPickaxe(event);
     }
 
+    @EventHandler
+    public void onBlockDropItem(BlockDropItemEvent event) {
+        handleSense(event);
+    }
+
+    private void handleSense(BlockDropItemEvent event) {
+        ItemStack item = event.getPlayer().getInventory().getItemInMainHand();
+        String sign = ItemReader.getSign(item);
+        if (!"SENSE".equals(sign)) {
+            return;
+        }
+        if (!(event.getBlockState().getBlockData() instanceof Ageable)) {
+            return;
+        }
+        event.getBlock().setType(event.getBlockState().getType());
+        event.getItems().stream()
+                .map(Item::getItemStack)
+                .filter(drop -> seeds.contains(drop.getType()))
+                .forEach(drop -> drop.setAmount(drop.getAmount() - 1));
+    }
+
     private void handleNetherGoldBlock(BlockBreakEvent event) {
         if (event.getBlock().getType() == Material.GOLD_BLOCK && event.getBlock().getWorld().getEnvironment() == World.Environment.NETHER) {
             event.setDropItems(false);
@@ -62,8 +94,7 @@ public class BlockBreakListener implements Listener {
         if (block.getBlockData() instanceof WallSign || block.getBlockData() instanceof org.bukkit.block.data.type.Sign) {
             Sign sign = (Sign) block.getState();
             if (sign.getLine(0).equalsIgnoreCase("§4Schwarzes Brett")) {
-                if (!event.getPlayer().hasPermission("blackboard.remove") &&
-                        !plugin.bretter.get(sign.getLocation()).getCreator().toString().equals(event.getPlayer().getUniqueId().toString())) {
+                if (!event.getPlayer().hasPermission("blackboard.remove") && !plugin.bretter.get(sign.getLocation()).getCreator().toString().equals(event.getPlayer().getUniqueId().toString())) {
                     event.setCancelled(true);
                     event.getPlayer().sendMessage("§7[§bSchwarzes Brett§7] Du darfst das nicht kaputt machen!");
                 } else {
@@ -125,8 +156,7 @@ public class BlockBreakListener implements Listener {
     }
 
     private void handleEmeraldPickaxe(BlockBreakEvent event) {
-        if (emeraldPickaxeUsers.contains(event.getPlayer()))
-            return;
+        if (emeraldPickaxeUsers.contains(event.getPlayer())) return;
         ItemStack itemInHand = event.getPlayer().getInventory().getItemInMainHand();
         if (itemInHand.isEmpty() || itemInHand == null) return;
 
@@ -160,8 +190,7 @@ public class BlockBreakListener implements Listener {
                     for (int yOffset = -1; yOffset <= 1; yOffset++) {
                         for (int xOffset = -1; xOffset <= 1; xOffset++) {
                             Block targetBlock = centerBlock.getRelative(xOffset, yOffset, 0);
-                            if(targetBlock.getType() != Material.AIR)
-                                p.breakBlock(targetBlock);
+                            if (targetBlock.getType() != Material.AIR) p.breakBlock(targetBlock);
                         }
                     }
                 }

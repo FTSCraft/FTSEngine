@@ -24,30 +24,18 @@ public class Var
         p.sendMessage("§c------ Ausweis von §e" + UUIDFetcher.getName(UUID.fromString(a.getUUID())) + " §c------");
         p.sendMessage("§cNachname: §e" + a.getLastName());
         p.sendMessage("§cVorname: §e" + a.getFirstName());
-        p.sendMessage("§cGeschlecht: §e" + (a.getGender() == Ausweis.Gender.MALE ? "Mann" : a.getGender() == Ausweis.Gender.FEMALE ? "Frau" : a.getGender() == Ausweis.Gender.DIVERS ? "Divers" : "N/A"));
-        p.sendMessage("§cRasse: §e" + (a.getRace() != null ? a.getRace() : "N/A"));
-        p.sendMessage("§cAussehen: §e" + (a.getDesc() != null ? a.getDesc() : "N/A"));
+        p.sendMessage("§cGeschlecht: §e" + (a.getGender() == Ausweis.Gender.MALE ? "Mann" : a.getGender() == Ausweis.Gender.FEMALE ? "Frau" : a.getGender() == Ausweis.Gender.DIVERS ? "Divers" : "Kein Eintrag"));
+        p.sendMessage("§cRasse: §e" + (a.getRace() != null ? a.getRace() : "Kein Eintrag"));
+        p.sendMessage("§cAussehen: §e" + (a.getDesc() != null ? a.getDesc() : "Kein Eintrag"));
+        p.sendMessage("§cGröße: §e" + (a.getHeight() != -1 ? a.getHeight() : "Kein Eintrag"));
         if(a.getForumLink() != null ){
             ComponentBuilder componentBuilder = new ComponentBuilder("§e[KLICK]");
             componentBuilder.event(new ClickEvent(ClickEvent.Action.OPEN_URL, a.getForumLink()));
             p.sendMessage(new ComponentBuilder("§cVorstellung: ").append(componentBuilder.create()).create());
         } else {
-            ComponentBuilder componentBuilder = new ComponentBuilder("§e[NICHT VORHANDEN]");
+            ComponentBuilder componentBuilder = new ComponentBuilder("§e[Kein Eintrag]");
             p.sendMessage(new ComponentBuilder("§cVorstellung: ").append(componentBuilder.create()).create());
         }
-
-        p.sendMessage("§7ID: #" + a.id);
-    }
-
-    public static void sendHelpMsg(Player p)
-    {
-        p.sendMessage("§c----- §e/ausweis §c-----");
-        p.sendMessage("§e/ausweis name [Vorname] [Nachname] §bÄndert deinen Namen und erstellt beim 1. Mal einen Ausweis");
-        p.sendMessage("§e/ausweis geschlecht [m/f] §bSetzt die Ansprache (m - Männliche | f - Weibliche)");
-        p.sendMessage("§e/ausweis rasse [Rasse] §bSetzt deine Rasse");
-        p.sendMessage("§e/ausweis aussehen [Beschr.] §bSetzt dein Aussehen (Mind. 4 Wörter)");
-        p.sendMessage("§e/ausweis link [Link] §bSetzt den Link zu deiner Charvorstellung im Forum");
-        p.sendMessage("§e/ausweis anschauen [Spieler] §bSchau den Ausweis eines Spielers an");
     }
 
     public static void sendReisepunkHelpMsg(Player p) {

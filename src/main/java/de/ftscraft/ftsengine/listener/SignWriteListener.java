@@ -129,7 +129,7 @@ public class SignWriteListener implements Listener {
                     }
 
                     if(firstGlobal)
-                    plugin.bretter.put(event.getBlock().getLocation(), new Brett(sign, event.getBlock().getLocation(), event.getPlayer().getUniqueId(), name, admin, plugin));
+                        plugin.bretter.put(event.getBlock().getLocation(), new Brett(sign, event.getBlock().getLocation(), event.getPlayer().getUniqueId(), name, admin, plugin));
                     event.getPlayer().sendMessage("§7[§bSchwarzes Brett§7] Du hast das Schwarze Brett erfolgreich erstellt");
 
                 }

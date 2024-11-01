@@ -54,32 +54,34 @@ public class UserIO {
                 FileConfiguration cfg = YamlConfiguration.loadConfiguration(aFile);
 
                 String UUID = aFile.getName().replace(".yml", "");
+
                 String lastName = cfg.getString("lastName");
                 if (lastName != null)
                     lastName.replace('_', ' ');
+
                 String firstName = cfg.getString("firstName");
                 if (firstName != null)
                     firstName.replace('_', ' ');
+
                 Ausweis.Gender gender = null;
                 if (cfg.isSet("gender"))
                     gender = Ausweis.Gender.valueOf(cfg.getString("gender"));
+
                 String race = cfg.getString("race");
-                String religion = cfg.getString("religion");
-                String nation = cfg.getString("nation");
-                if (nation != null)
-                    nation = nation.replace('_', ' ');
+
                 String desc = cfg.getString("desc");
+
                 String spitzname = cfg.getString("spitzname");
                 if (spitzname != null)
                     spitzname.replace('_', ' ');
+
                 String link = cfg.getString("link");
-                int id = cfg.getInt("id");
 
+                int height = -1;
+                if (cfg.isSet("height"))
+                    height = cfg.getInt("height");
 
-                if (id > plugin.highestId)
-                    plugin.highestId = id;
-
-                new Ausweis(plugin, UUID, firstName, lastName, spitzname, gender, race, nation, desc, religion, link, id);
+                new Ausweis(plugin, UUID, firstName, lastName, spitzname, gender, race, desc, height, link);
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -166,6 +168,7 @@ public class UserIO {
                         if (!title.equalsIgnoreCase("null"))
                             brett.addNote(title, content, note_creator, time, Integer.parseInt(keys));
                     }
+                    brett.checkForRunOut();
                 } catch (Exception ignored) {
 
                 }

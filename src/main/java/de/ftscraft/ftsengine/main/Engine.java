@@ -41,12 +41,8 @@ public class Engine extends JavaPlugin implements Listener {
 
     public HashMap<String, Ausweis> ausweis;
     private HashMap<Player, FTSUser> player;
-    private Team team;
-    private Var var;
-    public int highestId;
     public int biggestBpId;
     public int biggestBriefId;
-    public int biggestPferdId;
     private ArrayList<Player> reiter;
     public HashMap<Integer, Backpack> backpacks;
     public HashMap<Integer, Brief> briefe;
@@ -54,11 +50,8 @@ public class Engine extends JavaPlugin implements Listener {
     public HashMap<Player, BrettNote> playerBrettNote;
     public HashMap<UUID, Briefkasten> briefkasten;
     public LogportManager logportManager;
-    private Scoreboard sb;
 
     private static Economy econ = null;
-
-    private static final Logger log = Logger.getLogger("Minecraft");
 
     public List<Material> mats = new ArrayList<>();
     private ProtocolManager protocolManager = null;
@@ -88,18 +81,15 @@ public class Engine extends JavaPlugin implements Listener {
         if (getServer().getPluginManager().isPluginEnabled("Shopkeepers"))
             this.shopkeepersPlugin = ShopkeepersPlugin.getInstance();
         logportManager = new LogportManager(this);
-        highestId = 0;
         biggestBpId = 0;
-        biggestPferdId = 0;
         biggestBriefId = 0;
         playerBrettNote = new HashMap<>();
         bretter = new HashMap<>();
-        //sitting = new HashMap<>();
         backpacks = new HashMap<>();
         briefkasten = new HashMap<>();
         ausweis = new HashMap<>();
         briefe = new HashMap<>();
-        ItemStacks itemStacks = new ItemStacks(this);
+        new ItemStacks(this);
         reiter = new ArrayList<>();
         player = new HashMap<>();
 
@@ -107,8 +97,6 @@ public class Engine extends JavaPlugin implements Listener {
         new UserIO(this);
 
         initListeners();
-
-        //setupScoreboad();
 
         TimeManager.init();
 
@@ -155,11 +143,10 @@ public class Engine extends JavaPlugin implements Listener {
         new PlayerQuitListener(this);
         new PlayerChatListener(this);
         new VillagerTradeListener(this);
-        new ProjectileHitListener(this);
-        new PacketReciveListener(this);
+        new ProjectileHitListener();
+        new BlockExplodeListener();
+        new EntityDeathListener();
     }
-
-    public final HashMap<OfflinePlayer, Long> ausweisCooldown = new HashMap<>();
 
     private boolean setupEconomy() {
         if (getServer().getPluginManager().getPlugin("Vault") == null) {
@@ -187,8 +174,6 @@ public class Engine extends JavaPlugin implements Listener {
 
     }
 
-    public Messages msgs;
-
     public Ausweis getAusweis(Player player) {
         return ausweis.getOrDefault(player.getName(), null);
     }
@@ -212,10 +197,6 @@ public class Engine extends JavaPlugin implements Listener {
 
     public Economy getEcon() {
         return econ;
-    }
-
-    public Team getTeam() {
-        return team;
     }
 
     public ArrayList<Player> getReiter() {

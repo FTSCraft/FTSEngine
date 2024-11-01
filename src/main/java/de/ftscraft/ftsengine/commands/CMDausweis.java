@@ -4,6 +4,7 @@ import de.ftscraft.ftsengine.main.Engine;
 import de.ftscraft.ftsengine.utils.Ausweis;
 import de.ftscraft.ftsengine.utils.Messages;
 import de.ftscraft.ftsengine.utils.Var;
+import org.bukkit.attribute.Attribute;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -15,6 +16,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 
 public class CMDausweis implements CommandExecutor, TabCompleter {
 
@@ -23,8 +25,7 @@ public class CMDausweis implements CommandExecutor, TabCompleter {
 
     public CMDausweis(Engine plugin) {
         this.plugin = plugin;
-        Messages msgs = plugin.msgs;
-        this.arguments = new ArrayList<>(Arrays.asList("name", "geschlecht", "rasse", "aussehen", "link", "anschauen"));
+        this.arguments = new ArrayList<>(Arrays.asList("name", "geschlecht", "rasse", "aussehen", "größe", "link", "anschauen"));
         plugin.getCommand("ausweis").setExecutor(this);
     }
 
@@ -102,13 +103,56 @@ public class CMDausweis implements CommandExecutor, TabCompleter {
                         p.sendPlainMessage(Messages.NEED_AUSWEIS);
                         return true;
                     }
-                    if (args.length == 2) {
+                    if (args.length != 2) {
+                        p.sendPlainMessage(Messages.PREFIX + "Bitte benutze den Befehl so:" + " §c/ausweis rasse [Ork/Zwerg/Mensch/Elf]");
+                        return true;
+                    }
 
-                        String race = args[1];
-                        plugin.getAusweis(p).setRace(race);
-                        p.sendPlainMessage(Messages.SUCC_CMD_AUSWEIS.replace("%s", "Rasse").replace("%v", race));
-                    } else
-                        p.sendPlainMessage(Messages.PREFIX + "Bitte benutze den Befehl so:" + " §c/ausweis rasse [Rasse]");
+                    String race = args[1];
+                    race = race.substring(0, 1).toUpperCase() + race.substring(1).toLowerCase();
+
+                    switch (race) {
+                        case "Ork":
+                        case "Zwerg":
+                        case "Mensch":
+                        case "Elf":
+                            plugin.getAusweis(p).setRace(race);
+                            p.sendPlainMessage(Messages.SUCC_CMD_AUSWEIS.replace("%s", "Rasse").replace("%v", race));
+                            break;
+                        default:
+                            p.sendMessage(Messages.PREFIX + "Bitte benutze den Befehl so:" + " §c/ausweis rasse [Ork/Zwerg/Mensch/Elf].");
+                    }
+
+                    break;
+                case "größe":
+
+                    if (!plugin.hasAusweis(p)) {
+                        p.sendPlainMessage(Messages.NEED_AUSWEIS);
+                        return true;
+                    }
+
+                    if (args.length != 2) {
+                        p.sendPlainMessage(Messages.PREFIX + "Bitte benutze den Befehl so:" + " §c/ausweis größe [Größe]");
+                        return true;
+                    }
+
+                    int height;
+                    try {
+                        height = Integer.parseInt(args[1]);
+                    } catch (NumberFormatException ex) {
+                        p.sendMessage(Messages.PREFIX + "Bitte gebe eine natürliche Zahl für deine Größe (in cm) an.");
+                        return true;
+                    }
+
+                    if (height < 140 || height > 250) {
+                        p.sendMessage(Messages.PREFIX + "Deine Größe müss zwischen 140cm und 250cm liegen.");
+                        return true;
+                    }
+
+                    plugin.getAusweis(p).setHeight(height);
+                    p.sendMessage(Messages.SUCC_CMD_AUSWEIS.replace("%s", "Größe").replace("%v", String.valueOf(height)));
+                    Objects.requireNonNull(p.getAttribute(Attribute.GENERIC_SCALE)).setBaseValue(height / 200d);
+
                     break;
                 case "aussehen":
 
@@ -146,11 +190,11 @@ public class CMDausweis implements CommandExecutor, TabCompleter {
                     } else p.sendPlainMessage("§cDafür hast du keine Rechte");
                     break;
                 default:
-                    Var.sendHelpMsg(p);
+                    sendHelpMsg(p);
                     break;
             }
 
-        } else Var.sendHelpMsg(p);
+        } else sendHelpMsg(p);
         return false;
     }
 
@@ -170,4 +214,17 @@ public class CMDausweis implements CommandExecutor, TabCompleter {
         return result;
 
     }
+
+    public static void sendHelpMsg(Player p)
+    {
+        p.sendMessage("§c----- §e/ausweis §c-----");
+        p.sendMessage("§e/ausweis name [Vorname] [Nachname] §bÄndert deinen Namen und erstellt beim 1. Mal einen Ausweis - §cMit Unterstrichen könnt ihr Leerzeichen im Namen haben");
+        p.sendMessage("§e/ausweis geschlecht [m/f] §bSetzt die Ansprache (m - Männliche | f - Weibliche)");
+        p.sendMessage("§e/ausweis rasse [Ork/Zwerg/Mensch/Elf] §bSetzt deine Rasse");
+        p.sendMessage("§e/ausweis aussehen [Beschr.] §bSetzt dein Aussehen (Mind. 4 Wörter)");
+        p.sendMessage("§e/ausweis größe [Größe in cm] §bSetzt deine Größe");
+        p.sendMessage("§e/ausweis link [Link] §bSetzt den Link zu deiner Charvorstellung im Forum");
+        p.sendMessage("§e/ausweis anschauen [Spieler] §bSchau den Ausweis eines Spielers an");
+    }
+
 }
