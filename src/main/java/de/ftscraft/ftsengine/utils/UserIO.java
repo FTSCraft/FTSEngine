@@ -168,6 +168,7 @@ public class UserIO {
                         if (!title.equalsIgnoreCase("null"))
                             brett.addNote(title, content, note_creator, time, Integer.parseInt(keys));
                     }
+                    brett.checkForRunOut();
                 } catch (Exception ignored) {
 
                 }
