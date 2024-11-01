@@ -10,8 +10,8 @@ import org.bukkit.event.entity.ProjectileHitEvent;
 
 public class ProjectileHitListener implements Listener {
 
-    public ProjectileHitListener(Engine plugin) {
-        plugin.getServer().getPluginManager().registerEvents(this, plugin);
+    public ProjectileHitListener() {
+        Bukkit.getPluginManager().registerEvents(this, Engine.getInstance());
     }
 
     @EventHandler
