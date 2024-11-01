@@ -31,6 +31,7 @@ public class ItemStacks {
     private ItemStack logport;
     private ItemStack fertilizer;
     private ItemStack emeraldPickaxe;
+    private ItemStack sense;
 
     private ItemStack horn;
 
@@ -142,6 +143,9 @@ public class ItemStacks {
 
         logportManager.updateLogportLore(logportMeta);
         logport.setItemMeta(logportMeta);
+
+        sense = new ItemBuilder(Material.IRON_HOE).name("§6Sense").lore("§7Pflanzt sofort nach!").sign("SENSE").build();
+
     }
 
     public List<Material> getDisabledDefaultRecipes() {
@@ -638,5 +642,12 @@ public class ItemStacks {
         emeraldPickAxeRecipe.setIngredient('S', Material.EMERALD);
         emeraldPickAxeRecipe.setIngredient('I', Material.STICK);
         plugin.getServer().addRecipe(emeraldPickAxeRecipe);
+
+        //Sense
+        ShapedRecipe senseRecipe = new ShapedRecipe(new NamespacedKey(plugin, "SENSE"), sense);
+        senseRecipe.shape(" EE", "ES ", " S ");
+        senseRecipe.setIngredient('E', Material.EMERALD);
+        senseRecipe.setIngredient('S', Material.STICK);
+        plugin.getServer().addRecipe(senseRecipe);
     }
 }
