@@ -8,6 +8,7 @@ import de.ftscraft.ftsengine.utils.Messages;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
+import org.bukkit.block.Container;
 import org.bukkit.block.Sign;
 import org.bukkit.block.data.BlockData;
 import org.bukkit.block.data.Directional;
@@ -32,19 +33,15 @@ public class SignWriteListener implements Listener {
         if (event.getLine(0).equalsIgnoreCase("[Briefkasten]")) {
 
             Player p = event.getPlayer();
-            FTSUser user = plugin.getPlayer().get(p);
-
-            Location loc = event.getBlock().getLocation();
 
             Block block = event.getBlock();
 
-            if (block != null && block.getState() instanceof Sign) {
+            if (block.getState() instanceof Sign) {
                 BlockData data = block.getBlockData();
-                if (data instanceof Directional) {
-                    Directional directional = (Directional) data;
+                if (data instanceof Directional directional) {
                     Block blockBehind = block.getRelative(directional.getFacing().getOppositeFace());
 
-                    if (blockBehind.getType() == Material.CHEST) {
+                    if (blockBehind.getState() instanceof Container) {
 
                         if (plugin.briefkasten.containsKey(p.getUniqueId())) {
 
@@ -60,8 +57,7 @@ public class SignWriteListener implements Listener {
 
                         }
 
-                        Briefkasten briefkasten = new Briefkasten(plugin, blockBehind.getLocation(), p.getUniqueId());
-
+                        new Briefkasten(plugin, blockBehind.getLocation(), p.getUniqueId());
 
                         event.setLine(0, "§7[§2Briefkasten§7]");
                         event.setLine(1, p.getName());
