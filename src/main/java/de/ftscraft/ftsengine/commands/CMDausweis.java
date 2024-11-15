@@ -144,8 +144,8 @@ public class CMDausweis implements CommandExecutor, TabCompleter {
                         return true;
                     }
 
-                    if (height < 140 || height > 250) {
-                        p.sendMessage(Messages.PREFIX + "Deine Größe müss zwischen 140cm und 250cm liegen.");
+                    if (height < 140 || height > 300) {
+                        p.sendMessage(Messages.PREFIX + "Deine Größe müss zwischen 140cm und 300cm liegen.");
                         return true;
                     }
 
