@@ -6,6 +6,7 @@ import de.ftscraft.ftsengine.brett.BrettNote;
 import de.ftscraft.ftsengine.main.Engine;
 import de.ftscraft.ftsengine.main.FTSUser;
 import de.ftscraft.ftsengine.utils.Messages;
+import de.ftscraft.ftsutils.items.ItemReader;
 import net.md_5.bungee.api.chat.ClickEvent;
 import net.md_5.bungee.api.chat.ComponentBuilder;
 import org.bukkit.Material;
@@ -226,6 +227,19 @@ public class InventoryClickListener implements Listener {
                 }
             }
 
+            if (event.getInventory().getType() == InventoryType.ANVIL) {
+                ItemStack itemToRepair = event.getInventory().getItem(0);
+                ItemStack repairMaterial = event.getInventory().getItem(1);
+
+                if (itemToRepair != null && repairMaterial != null) {
+                    if ("EMERALDPICKAXE".equals(ItemReader.getSign(itemToRepair))) {
+                        if (!"EMERALDPICKAXE".equals(ItemReader.getSign(repairMaterial))) {
+                            event.setCancelled(true);
+                            event.getWhoClicked().sendMessage(Messages.PREFIX + "Du kannst die Smaragdspitzhacke nur mit einer anderen Smaragdspitzhacke reparieren!");
+                        }
+                    }
+                }
+            }
 
         }
     }
