@@ -175,7 +175,9 @@ public class BlockBreakListener implements Listener {
                 for (int xOffset = -1; xOffset <= 1; xOffset++) {
                     for (int zOffset = -1; zOffset <= 1; zOffset++) {
                         Block targetBlock = centerBlock.getRelative(xOffset, 0, zOffset);
-                        p.breakBlock(targetBlock);
+                        if (targetBlock.getType() != Material.BEDROCK) {
+                            p.breakBlock(targetBlock);
+                        }
                     }
                 }
             } else {
@@ -183,14 +185,18 @@ public class BlockBreakListener implements Listener {
                     for (int yOffset = -1; yOffset <= 1; yOffset++) {
                         for (int zOffset = -1; zOffset <= 1; zOffset++) {
                             Block targetBlock = centerBlock.getRelative(0, yOffset, zOffset);
-                            p.breakBlock(targetBlock);
+                            if (targetBlock.getType() != Material.BEDROCK) {
+                                p.breakBlock(targetBlock);
+                            }
                         }
                     }
                 } else if (direction == BlockFace.NORTH || direction == BlockFace.SOUTH) {
                     for (int yOffset = -1; yOffset <= 1; yOffset++) {
                         for (int xOffset = -1; xOffset <= 1; xOffset++) {
                             Block targetBlock = centerBlock.getRelative(xOffset, yOffset, 0);
-                            if (targetBlock.getType() != Material.AIR) p.breakBlock(targetBlock);
+                            if (targetBlock.getType() != Material.BEDROCK) {
+                                p.breakBlock(targetBlock);
+                            }
                         }
                     }
                 }
@@ -198,6 +204,6 @@ public class BlockBreakListener implements Listener {
             emeraldPickaxeUsers.remove(p);
         });
     }
-
 }
+
 
