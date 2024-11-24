@@ -47,12 +47,6 @@ public class BrettGUI {
         createMeta.setDisplayName("§cErstelle Notiz");
         List<String> createLore = new ArrayList<>();
         createLore.add("§bErstelle eine Notiz! \n §cAchte auf einen RPlichen Schreibstil");
-        createLore.add(" ");
-
-        if (!brett.isAdmin())
-            createLore.add("§8Preis: §c0 Taler");
-        else
-            createLore.add("§8Preis: §c0 Taler");
 
         createMeta.setLore(createLore);
         create.setItemMeta(createMeta);

@@ -53,7 +53,7 @@ public class UserIO {
             for (File aFile : Objects.requireNonNull(aFolder.listFiles())) {
                 FileConfiguration cfg = YamlConfiguration.loadConfiguration(aFile);
 
-                String UUID = aFile.getName().replace(".yml", "");
+                String uuid = aFile.getName().replace(".yml", "");
 
                 String lastName = cfg.getString("lastName");
                 if (lastName != null)
@@ -81,7 +81,7 @@ public class UserIO {
                 if (cfg.isSet("height"))
                     height = cfg.getInt("height");
 
-                new Ausweis(plugin, UUID, firstName, lastName, spitzname, gender, race, desc, height, link);
+                new Ausweis(plugin, UUID.fromString(uuid), firstName, lastName, spitzname, gender, race, desc, height, link);
             }
         } catch (Exception e) {
             e.printStackTrace();
