@@ -4,6 +4,7 @@ import de.ftscraft.ftsengine.main.Engine;
 import de.ftscraft.ftsengine.utils.Ausweis;
 import de.ftscraft.ftsengine.utils.Messages;
 import de.ftscraft.ftsengine.utils.Var;
+import de.ftscraft.ftsutils.uuidfetcher.UUIDFetcher;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -38,7 +39,6 @@ public class CMDausweis implements CommandExecutor, TabCompleter {
         Player p = (Player) cs;
         if (args.length > 0) {
             String sub = args[0];
-
             switch (sub) {
                 case "name":
                     if (args.length == 3) {
@@ -181,8 +181,9 @@ public class CMDausweis implements CommandExecutor, TabCompleter {
                 case "anschauen":
                     if (p.hasPermission("ftsengine.ausweis.anschauen")) {
                         if (args.length == 2) {
-                            if (plugin.hasAusweis(args[1])) {
-                                Var.sendAusweisMsg(p, plugin.getAusweis(args[1]));
+                            Ausweis a;
+                            if ((a = plugin.getAusweis(UUIDFetcher.getUUID(args[1]))) != null) {
+                                Var.sendAusweisMsg(p, a);
                             } else p.sendPlainMessage(Messages.TARGET_NO_AUSWEIS);
                         } else {
                             Var.sendAusweisMsg(p, plugin.getAusweis(p));
@@ -215,8 +216,7 @@ public class CMDausweis implements CommandExecutor, TabCompleter {
 
     }
 
-    public static void sendHelpMsg(Player p)
-    {
+    public static void sendHelpMsg(Player p) {
         p.sendMessage("§c----- §e/ausweis §c-----");
         p.sendMessage("§e/ausweis name [Vorname] [Nachname] §bÄndert deinen Namen und erstellt beim 1. Mal einen Ausweis - §cMit Unterstrichen könnt ihr Leerzeichen im Namen haben");
         p.sendMessage("§e/ausweis geschlecht [m/f] §bSetzt die Ansprache (m - Männliche | f - Weibliche)");
