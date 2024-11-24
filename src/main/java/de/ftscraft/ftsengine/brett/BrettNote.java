@@ -49,6 +49,7 @@ public class BrettNote {
             this.create = true;
 
             YamlConfiguration cfg = brett.getCfg();
+            getRPName();
 
             for (String keys : cfg.getConfigurationSection("brett.note").getKeys(false))
                 if (cfg.getString("brett.note." + keys + ".title").equalsIgnoreCase("null")) {
