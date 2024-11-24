@@ -19,19 +19,15 @@ import net.milkbowl.vault.economy.Economy;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
-import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
-import org.bukkit.scoreboard.Scoreboard;
-import org.bukkit.scoreboard.Team;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
-import java.util.logging.Logger;
 
 public class Engine extends JavaPlugin implements Listener {
 
@@ -39,7 +35,7 @@ public class Engine extends JavaPlugin implements Listener {
 
     private ConfigManager configManager;
 
-    public HashMap<String, Ausweis> ausweis;
+    public HashMap<UUID, Ausweis> ausweis;
     private HashMap<Player, FTSUser> player;
     public int biggestBpId;
     public int biggestBriefId;
@@ -175,24 +171,23 @@ public class Engine extends JavaPlugin implements Listener {
     }
 
     public Ausweis getAusweis(Player player) {
-        return ausweis.getOrDefault(player.getName(), null);
+        return ausweis.getOrDefault(player.getUniqueId(), null);
     }
 
-    public Ausweis getAusweis(String player) {
+    public Ausweis getAusweis(UUID player) {
         return ausweis.getOrDefault(player, null);
     }
 
     public boolean hasAusweis(Player player) {
-        return ausweis.containsKey(player.getName());
+        return ausweis.containsKey(player.getUniqueId());
     }
 
-    public boolean hasAusweis(String player) {
+    public boolean hasAusweis(UUID player) {
         return ausweis.containsKey(player);
     }
 
     public void addAusweis(Ausweis a) {
-        String name = UUIDFetcher.getName(UUID.fromString(a.getUUID()));
-        ausweis.put(name, a);
+        ausweis.put(a.getUuid(), a);
     }
 
     public Economy getEcon() {

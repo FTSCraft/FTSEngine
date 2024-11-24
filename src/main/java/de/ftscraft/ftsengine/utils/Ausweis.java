@@ -7,10 +7,11 @@ import org.bukkit.entity.Player;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.UUID;
 
 public class Ausweis {
 
-    private final String UUID;
+    private final UUID uuid;
     private String firstName,
             lastName,
             spitzname;
@@ -24,9 +25,9 @@ public class Ausweis {
 
     private final Engine plugin;
 
-    public Ausweis(Engine plugin, String UUID, String firstName, String lastName, String spitzname, Gender gender, String race, String desc, int height, String link) {
+    public Ausweis(Engine plugin, UUID uuid, String firstName, String lastName, String spitzname, Gender gender, String race, String desc, int height, String link) {
         this.plugin = plugin;
-        this.UUID = UUID;
+        this.uuid = uuid;
         this.firstName = firstName;
         this.spitzname = spitzname;
         this.lastName = lastName;
@@ -39,14 +40,14 @@ public class Ausweis {
     }
 
     public Ausweis(Engine plugin, Player player) {
-        this.UUID = player.getUniqueId().toString();
+        this.uuid = player.getUniqueId();
         this.plugin = plugin;
         plugin.addAusweis(this);
     }
 
     public void save() {
 
-        File file = new File(plugin.getDataFolder() + "//ausweise//" + getUUID() + ".yml");
+        File file = new File(plugin.getDataFolder() + "//ausweise//" + getUuid() + ".yml");
         FileConfiguration cfg = YamlConfiguration.loadConfiguration(file);
 
         cfg.set("firstName", firstName);
@@ -67,8 +68,8 @@ public class Ausweis {
 
     }
 
-    public String getUUID() {
-        return UUID;
+    public UUID getUuid() {
+        return uuid;
     }
 
     public String getFirstName() {

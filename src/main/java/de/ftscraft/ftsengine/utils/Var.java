@@ -21,7 +21,7 @@ public class Var
     public static void sendAusweisMsg(Player p, Ausweis a)
     {
         p.sendMessage(" ");
-        p.sendMessage("§c------ Ausweis von §e" + UUIDFetcher.getName(UUID.fromString(a.getUUID())) + " §c------");
+        p.sendMessage("§c------ Ausweis von §e" + UUIDFetcher.getName(a.getUuid()) + " §c------");
         p.sendMessage("§cNachname: §e" + a.getLastName());
         p.sendMessage("§cVorname: §e" + a.getFirstName());
         p.sendMessage("§cGeschlecht: §e" + (a.getGender() == Ausweis.Gender.MALE ? "Mann" : a.getGender() == Ausweis.Gender.FEMALE ? "Frau" : a.getGender() == Ausweis.Gender.DIVERS ? "Divers" : "Kein Eintrag"));
