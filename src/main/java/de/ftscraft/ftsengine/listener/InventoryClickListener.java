@@ -3,6 +3,7 @@ package de.ftscraft.ftsengine.listener;
 import de.ftscraft.ftsengine.backpacks.BackpackType;
 import de.ftscraft.ftsengine.brett.Brett;
 import de.ftscraft.ftsengine.brett.BrettNote;
+import de.ftscraft.ftsengine.feature.instruments.Instrument;
 import de.ftscraft.ftsengine.main.Engine;
 import de.ftscraft.ftsengine.main.FTSUser;
 import de.ftscraft.ftsengine.utils.Messages;
@@ -18,6 +19,7 @@ import org.bukkit.event.inventory.ClickType;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.persistence.PersistentDataType;
 
 import java.util.ArrayList;
 import java.util.Objects;
@@ -48,6 +50,8 @@ public class InventoryClickListener implements Listener {
 
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onInventoryClick(InventoryClickEvent event) {
+
+        handleInstrument(event);
 
         //SCHWAZES BRETT
 
@@ -188,7 +192,7 @@ public class InventoryClickListener implements Listener {
             //Check if inv is enderchest or shulkerbox
             if (event.getInventory().getType() == InventoryType.ENDER_CHEST || event.getInventory().getType() == InventoryType.SHULKER_BOX) {
                 //if player uses number keys, cancel
-                if(event.getClick() == ClickType.NUMBER_KEY) {
+                if (event.getClick() == ClickType.NUMBER_KEY) {
                     event.setCancelled(true);
                     event.getWhoClicked().sendMessage(Messages.PREFIX + "Leider kannst du hier nicht deine Nummern benutzen.");
                     return;
@@ -213,8 +217,8 @@ public class InventoryClickListener implements Listener {
                 }
             }
 
-            if(BackpackType.getBackpackByName(event.getWhoClicked().getOpenInventory().getTitle()) != null) {
-                if(event.getClick() == ClickType.NUMBER_KEY) {
+            if (BackpackType.getBackpackByName(event.getWhoClicked().getOpenInventory().getTitle()) != null) {
+                if (event.getClick() == ClickType.NUMBER_KEY) {
                     event.setCancelled(true);
                     event.getWhoClicked().sendMessage(Messages.PREFIX + "Leider kannst du hier nicht deine Nummern benutzen.");
                     return;
@@ -242,6 +246,24 @@ public class InventoryClickListener implements Listener {
             }
 
         }
+    }
+
+    private void handleInstrument(InventoryClickEvent event) {
+
+        if (!(event.getInventory().getHolder() instanceof Instrument instrument))
+            return;
+
+        event.setCancelled(true);
+
+        if (event.getCurrentItem() == null)
+            return;
+
+        Integer a = ItemReader.getPDC(event.getCurrentItem(), "noteindex", PersistentDataType.INTEGER);
+        if (a == null)
+            return;
+
+        event.getWhoClicked().getWorld().playSound(event.getWhoClicked(), instrument.sound, 10, Instrument.notes[a]);
+
     }
 
 }

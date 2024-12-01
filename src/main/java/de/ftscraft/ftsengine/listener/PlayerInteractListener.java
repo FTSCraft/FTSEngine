@@ -6,6 +6,7 @@ import com.comphenix.protocol.events.PacketContainer;
 import de.ftscraft.ftsengine.backpacks.Backpack;
 import de.ftscraft.ftsengine.backpacks.BackpackType;
 import de.ftscraft.ftsengine.brett.Brett;
+import de.ftscraft.ftsengine.feature.instruments.InstrumentManager;
 import de.ftscraft.ftsengine.logport.LogportManager;
 import de.ftscraft.ftsengine.main.Engine;
 import de.ftscraft.ftsengine.utils.Ausweis;
@@ -34,6 +35,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
+import org.jetbrains.annotations.NotNull;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
@@ -68,6 +70,7 @@ public class PlayerInteractListener implements Listener {
             handleWeihrauchlaterne(player, itemInHand);
             handleBackpack(player, itemInHand);
             handleFertilizer(e, clickedBlock);
+            handleInstrument(e, itemInHand);
         }
 
         if (clickedBlock != null) {
@@ -226,4 +229,16 @@ public class PlayerInteractListener implements Listener {
             }
         }
     }
+
+    private void handleInstrument(@NotNull PlayerInteractEvent event, @NotNull ItemStack item) {
+        if (event.getAction() != Action.RIGHT_CLICK_AIR)
+            return;
+        if (!"INSTRUMENT".equals(ItemReader.getSign(item)))
+            return;
+        Integer type = ItemReader.getPDC(item, "type", PersistentDataType.INTEGER);
+        if (type == null)
+            return;
+        event.getPlayer().openInventory(InstrumentManager.instruments[type].getInventory());
+    }
+
 }
