@@ -55,8 +55,7 @@ public class InventoryClickListener implements Listener {
 
         //SCHWAZES BRETT
 
-        if (event.getWhoClicked() instanceof Player) {
-            Player p = (Player) event.getWhoClicked();
+        if (event.getWhoClicked() instanceof Player p) {
 
 
             if (event.getView().getTitle().startsWith("§4Schwarzes-Brett")) {

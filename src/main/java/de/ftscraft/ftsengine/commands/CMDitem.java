@@ -50,9 +50,7 @@ public class CMDitem implements CommandExecutor {
     public boolean onCommand(@NotNull CommandSender cs, @NotNull Command cmd, @NotNull String label, String[] args) {
 
 
-        if (cs instanceof Player) {
-
-            Player p = (Player) cs;
+        if (cs instanceof Player p) {
 
             if (args.length >= 1) {
                 ItemStack is = p.getInventory().getItemInMainHand();
