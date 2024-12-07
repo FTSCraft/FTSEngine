@@ -5,10 +5,7 @@ import de.ftscraft.ftsengine.logport.LogportManager;
 import de.ftscraft.ftsengine.main.Engine;
 import de.ftscraft.ftsutils.items.ItemBuilder;
 import net.kyori.adventure.text.Component;
-import org.bukkit.ChatColor;
-import org.bukkit.Color;
-import org.bukkit.Material;
-import org.bukkit.NamespacedKey;
+import org.bukkit.*;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.*;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -32,8 +29,8 @@ public class ItemStacks {
     private ItemStack fertilizer;
     private ItemStack emeraldPickaxe;
     private ItemStack sense;
-
     private ItemStack horn;
+    private ItemStack harp, chime, flute, guitar, bell, cowBell, xylophone, ironXylophone, bassGuitar;
 
     private List<Material> disabledDefaultRecipes;
 
@@ -146,6 +143,17 @@ public class ItemStacks {
 
         sense = new ItemBuilder(Material.IRON_HOE).name("§6Sense").lore("§7Pflanzt sofort nach!").sign("SENSE").build();
 
+        final String instrumentSign = "INSTRUMENT";
+        harp = new ItemBuilder(Material.STICK).name("§6Harfe").sign(instrumentSign).addPDC("type", 0, PersistentDataType.INTEGER).build();
+        chime = new ItemBuilder(Material.STICK).name("§6Glockenspiel").sign(instrumentSign).addPDC("type", 1, PersistentDataType.INTEGER).build();
+        flute = new ItemBuilder(Material.STICK).name("§6Flöte").sign(instrumentSign).addPDC("type", 2, PersistentDataType.INTEGER).build();
+        bell = new ItemBuilder(Material.STICK).name("§6Glocke").sign(instrumentSign).addPDC("type", 3, PersistentDataType.INTEGER).build();
+        guitar = new ItemBuilder(Material.STICK).name("§6Gitarre").sign(instrumentSign).addPDC("type", 4, PersistentDataType.INTEGER).build();
+        cowBell = new ItemBuilder(Material.STICK).name("§6Kuhglocke").sign(instrumentSign).addPDC("type", 5, PersistentDataType.INTEGER).build();
+        xylophone = new ItemBuilder(Material.STICK).name("§6Xylophon").sign(instrumentSign).addPDC("type", 6, PersistentDataType.INTEGER).build();
+        ironXylophone = new ItemBuilder(Material.STICK).name("§6Eisen-Xylophon").sign(instrumentSign).addPDC("type", 7, PersistentDataType.INTEGER).build();
+        bassGuitar = new ItemBuilder(Material.STICK).name("§6Bassgitarre").sign(instrumentSign).addPDC("type", 8, PersistentDataType.INTEGER).build();
+
     }
 
     public List<Material> getDisabledDefaultRecipes() {
@@ -157,6 +165,99 @@ public class ItemStacks {
     }
 
     private void initRecipes() {
+
+        {
+            NamespacedKey key = new NamespacedKey(plugin, "FTSharp");
+            ShapedRecipe recipe = new ShapedRecipe(key, harp);
+            recipe.shape(" Q ", " J ", " W ");
+            recipe.setIngredient('W', Material.OAK_PLANKS);
+            recipe.setIngredient('Q', Material.QUARTZ);
+            recipe.setIngredient('J', Material.JUKEBOX);
+            Bukkit.addRecipe(recipe);
+        }
+
+        {
+            NamespacedKey key = new NamespacedKey(plugin, "FTSbell");
+            ShapedRecipe recipe = new ShapedRecipe(key, bell);
+            recipe.shape("   ", "OSO", "GGG");
+            recipe.setIngredient('O', Material.OAK_PLANKS);
+            recipe.setIngredient('S', Material.JUKEBOX);
+            recipe.setIngredient('G', Material.GOLD_NUGGET);
+            Bukkit.addRecipe(recipe);
+        }
+
+        {
+            NamespacedKey key = new NamespacedKey(plugin, "FTSflute");
+            ShapedRecipe recipe = new ShapedRecipe(key, flute);
+            recipe.shape(" C ", " J ", " S ");
+            recipe.setIngredient('C', Material.CLAY_BALL);
+            recipe.setIngredient('J', Material.JUKEBOX);
+            recipe.setIngredient('S', Material.STICK);
+            Bukkit.addRecipe(recipe);
+        }
+
+        {
+            NamespacedKey key = new NamespacedKey(plugin, "FTSchime");
+            ShapedRecipe recipe = new ShapedRecipe(key, chime);
+            recipe.shape("   ", "IJI", "GGG");
+            recipe.setIngredient('I', Material.IRON_NUGGET);
+            recipe.setIngredient('J', Material.JUKEBOX);
+            recipe.setIngredient('G', Material.GLASS);
+            Bukkit.addRecipe(recipe);
+        }
+
+        {
+            NamespacedKey key = new NamespacedKey(plugin, "FTScowbell");
+            ShapedRecipe recipe = new ShapedRecipe(key, cowBell);
+            recipe.shape("ASA", "AJA", "AGA");
+            recipe.setIngredient('J', Material.JUKEBOX);
+            recipe.setIngredient('S', Material.STICK);
+            recipe.setIngredient('G', Material.GOLD_INGOT);
+            Bukkit.addRecipe(recipe);
+        }
+
+        {
+            NamespacedKey key = new NamespacedKey(plugin, "FTSxylophon");
+            ShapedRecipe recipe = new ShapedRecipe(key, xylophone);
+            recipe.shape("ABA", "AJA", "AOA");
+            recipe.setIngredient('B', Material.BONE);
+            recipe.setIngredient('O', Material.OAK_PLANKS);
+            recipe.setIngredient('J', Material.JUKEBOX);
+            Bukkit.addRecipe(recipe);
+        }
+
+        {
+            NamespacedKey key = new NamespacedKey(plugin, "FTSironxylophon");
+            ShapedRecipe recipe = new ShapedRecipe(key, ironXylophone);
+            recipe.shape("AIA", "AJA", "AOA");
+            recipe.setIngredient('I', Material.IRON_NUGGET);
+            recipe.setIngredient('O', Material.OAK_PLANKS);
+            recipe.setIngredient('J', Material.JUKEBOX);
+            Bukkit.addRecipe(recipe);
+        }
+
+        {
+            NamespacedKey key = new NamespacedKey(plugin, "FTSguitar");
+            ShapedRecipe recipe = new ShapedRecipe(key, guitar);
+            recipe.shape("ASA", "TJT", "AOA");
+            recipe.setIngredient('S', Material.STICK);
+            recipe.setIngredient('O', Material.OAK_PLANKS);
+            recipe.setIngredient('T', Material.STRING);
+            recipe.setIngredient('J', Material.JUKEBOX);
+            Bukkit.addRecipe(recipe);
+        }
+
+        {
+            NamespacedKey key = new NamespacedKey(plugin, "FTSbassguitar");
+            ShapedRecipe recipe = new ShapedRecipe(key, bassGuitar);
+            recipe.shape("ATA", "SJS", "AIA");
+            recipe.setIngredient('I', Material.IRON_INGOT);
+            recipe.setIngredient('J', Material.JUKEBOX);
+            recipe.setIngredient('S', Material.STRING);
+            recipe.setIngredient('T', Material.STICK);
+            Bukkit.addRecipe(recipe);
+        }
+
         NamespacedKey lanzeKey = new NamespacedKey(plugin, "FTSlanze");
         ItemStack lanzeItemStack = new ItemBuilder(Material.STICK)
                 .name("§6Lanze")

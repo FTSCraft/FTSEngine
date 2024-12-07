@@ -1,14 +1,11 @@
 package de.ftscraft.ftsengine.listener;
 
-import com.comphenix.protocol.PacketType;
-import com.comphenix.protocol.ProtocolManager;
-import com.comphenix.protocol.events.PacketContainer;
 import de.ftscraft.ftsengine.backpacks.Backpack;
 import de.ftscraft.ftsengine.backpacks.BackpackType;
 import de.ftscraft.ftsengine.brett.Brett;
+import de.ftscraft.ftsengine.feature.instruments.InstrumentManager;
 import de.ftscraft.ftsengine.logport.LogportManager;
 import de.ftscraft.ftsengine.main.Engine;
-import de.ftscraft.ftsengine.utils.Ausweis;
 import de.ftscraft.ftsengine.utils.Messages;
 import de.ftscraft.ftsengine.utils.Var;
 import de.ftscraft.ftsutils.items.ItemReader;
@@ -18,8 +15,6 @@ import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.block.data.type.Sign;
-import org.bukkit.block.data.type.Slab;
-import org.bukkit.block.data.type.Stairs;
 import org.bukkit.block.data.type.WallSign;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
@@ -29,13 +24,10 @@ import org.bukkit.event.block.Action;
 import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.EquipmentSlot;
-import org.bukkit.inventory.InventoryView;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.ItemMeta;
-import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
+import org.jetbrains.annotations.NotNull;
 
-import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.Random;
 
@@ -68,6 +60,7 @@ public class PlayerInteractListener implements Listener {
             handleWeihrauchlaterne(player, itemInHand);
             handleBackpack(player, itemInHand);
             handleFertilizer(e, clickedBlock);
+            handleInstrument(e, itemInHand);
         }
 
         if (clickedBlock != null) {
@@ -226,4 +219,16 @@ public class PlayerInteractListener implements Listener {
             }
         }
     }
+
+    private void handleInstrument(@NotNull PlayerInteractEvent event, @NotNull ItemStack item) {
+        if (event.getAction() != Action.RIGHT_CLICK_AIR)
+            return;
+        if (!"INSTRUMENT".equals(ItemReader.getSign(item)))
+            return;
+        Integer type = ItemReader.getPDC(item, "type", PersistentDataType.INTEGER);
+        if (type == null)
+            return;
+        event.getPlayer().openInventory(InstrumentManager.instruments[type].getInventory());
+    }
+
 }

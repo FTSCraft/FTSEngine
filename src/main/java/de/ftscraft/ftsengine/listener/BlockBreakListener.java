@@ -10,20 +10,18 @@ import org.bukkit.OfflinePlayer;
 import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
-import org.bukkit.block.BlockType;
 import org.bukkit.block.Sign;
 import org.bukkit.block.data.Ageable;
-import org.bukkit.block.data.BlockData;
 import org.bukkit.block.data.Directional;
 import org.bukkit.block.data.type.WallSign;
 import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.event.block.Action;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockDropItemEvent;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.Damageable;
 
 import java.io.File;
 import java.util.*;
@@ -80,6 +78,9 @@ public class BlockBreakListener implements Listener {
                 .map(Item::getItemStack)
                 .filter(drop -> seeds.contains(drop.getType()))
                 .forEach(drop -> drop.setAmount(drop.getAmount() - 1));
+        Damageable damageable = (Damageable) item.getItemMeta();
+        damageable.setDamage(damageable.getDamage() + 1);
+        item.setItemMeta(damageable);
     }
 
     private void handleNetherGoldBlock(BlockBreakEvent event) {

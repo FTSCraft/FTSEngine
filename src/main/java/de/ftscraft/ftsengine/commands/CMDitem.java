@@ -4,6 +4,7 @@ import de.ftscraft.ftsengine.backpacks.BackpackType;
 import de.ftscraft.ftsengine.main.Engine;
 import de.ftscraft.ftsengine.utils.Messages;
 import de.ftscraft.ftsutils.items.ItemBuilder;
+import de.ftscraft.ftsutils.items.ItemReader;
 import org.black_ixx.playerpoints.PlayerPoints;
 import org.black_ixx.playerpoints.PlayerPointsAPI;
 import org.bukkit.Bukkit;
@@ -49,9 +50,7 @@ public class CMDitem implements CommandExecutor {
     public boolean onCommand(@NotNull CommandSender cs, @NotNull Command cmd, @NotNull String label, String[] args) {
 
 
-        if (cs instanceof Player) {
-
-            Player p = (Player) cs;
+        if (cs instanceof Player p) {
 
             if (args.length >= 1) {
                 ItemStack is = p.getInventory().getItemInMainHand();
@@ -63,7 +62,22 @@ public class CMDitem implements CommandExecutor {
                     }
                 }
 
-                if (args[0].equalsIgnoreCase("name") && args.length >= 2) {
+                if (args[0].equalsIgnoreCase("verify")) {
+                    String sign = ItemReader.getSign(is);
+                    if (sign == null) {
+                        p.sendMessage(Messages.PREFIX + "Dieses Item ist §cnicht §7verifiziert wurden.");
+                        return true;
+                    }
+                    p.sendMessage(Messages.PREFIX + "Dieses Item wurde mit der Signatur §c" + sign + " §7verifiziert.");
+                } else if (args[0].equalsIgnoreCase("sign") && args.length == 2) {
+                    if (!p.hasPermission("ftsengine.item.sign")) {
+                        p.sendMessage(Messages.NO_PERMISSIONS);
+                        return true;
+                    }
+                    String sign = args[1].toUpperCase();
+                    new ItemBuilder(is).sign(sign).build();
+                    p.sendMessage(Messages.PREFIX + "Du hast das Item in deiner Hand mit §c" + sign + " §7verifiziert");
+                } else if (args[0].equalsIgnoreCase("name") && args.length >= 2) {
 
                     if (is.getType() == Material.AIR) {
                         p.sendMessage(Messages.PREFIX + "Du musst ein Item in der Hand haben!");
@@ -176,6 +190,7 @@ public class CMDitem implements CommandExecutor {
 
     private final String HELP = """
             %s
+            /item verify
             /item name NAME (Kosten: %d PP)
             /item glow (Kosten: %d PP)
             /item lore LORE (Kosten: %d PP, neue Zeile mit '|')"""
