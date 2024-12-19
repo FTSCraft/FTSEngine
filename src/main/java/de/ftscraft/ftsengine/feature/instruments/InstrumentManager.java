@@ -4,7 +4,7 @@ import org.bukkit.Sound;
 
 public class InstrumentManager {
 
-    public static Instrument[] instruments = {
+    public static final Instrument[] instruments = {
             new SimpleInstrument(Sound.BLOCK_NOTE_BLOCK_HARP, "Harfe"),                   //0
             new SimpleInstrument(Sound.BLOCK_NOTE_BLOCK_CHIME, "Glockenspiel"),           //1
             new SimpleInstrument(Sound.BLOCK_NOTE_BLOCK_FLUTE, "Flöte"),                  //2

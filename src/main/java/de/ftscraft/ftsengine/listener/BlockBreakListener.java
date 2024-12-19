@@ -28,7 +28,7 @@ import java.util.*;
 
 public class BlockBreakListener implements Listener {
 
-    public Engine plugin;
+    public final Engine plugin;
     private final Set<Player> emeraldPickaxeUsers = Collections.synchronizedSet(new HashSet<>());
     private final Collection<Material> seeds = new HashSet<>(Arrays.asList(
             Material.WHEAT_SEEDS,
@@ -142,8 +142,7 @@ public class BlockBreakListener implements Listener {
         boolean briefkasten = false;
         for (BlockFace face : directional.getFaces()) {
             Block adjacentBlock = block.getRelative(face.getOppositeFace());
-            if (adjacentBlock.getState() instanceof Sign) {
-                Sign sign = (Sign) adjacentBlock.getState();
+            if (adjacentBlock.getState() instanceof Sign sign) {
                 if (sign.getLine(0).equalsIgnoreCase("§7[§2Briefkasten§7]")) {
                     briefkasten = true;
                     break;

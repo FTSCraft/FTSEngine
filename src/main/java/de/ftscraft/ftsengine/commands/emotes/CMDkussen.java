@@ -23,11 +23,9 @@ public class CMDkussen implements CommandExecutor {
     @Override
     public boolean onCommand(@NotNull CommandSender cs, @NotNull Command cmd, @NotNull String label, String[] args) {
 
-        if (!(cs instanceof Player)) {
+        if (!(cs instanceof Player p)) {
             return true;
         }
-
-        Player p = (Player) cs;
 
         if (plugin.getAusweis(p) == null) {
             p.sendMessage(Messages.PREFIX + "Du hast noch kein Ausweis. Mach dir einen mit /ausweis!");

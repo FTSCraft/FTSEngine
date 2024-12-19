@@ -14,8 +14,7 @@ public class CMDzauber implements CommandExecutor {
     }
 
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, String[] args) {
-        if (sender instanceof Player) {
-            Player player = (Player) sender;
+        if (sender instanceof Player player) {
             if (player.hasPermission("zauber.zauber")) {
                 if (command.getName().equalsIgnoreCase("zauber")) {
                     if (args.length == 0) {

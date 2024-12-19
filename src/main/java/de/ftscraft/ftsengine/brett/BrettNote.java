@@ -97,10 +97,6 @@ public class BrettNote {
         return content;
     }
 
-    public int getId() {
-        return id;
-    }
-
     public long getTime() {
         return time;
     }

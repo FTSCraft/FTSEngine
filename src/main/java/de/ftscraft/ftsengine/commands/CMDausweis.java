@@ -31,12 +31,11 @@ public class CMDausweis implements CommandExecutor, TabCompleter {
     }
 
     public boolean onCommand(@NotNull CommandSender cs, @NotNull Command cmd, @NotNull String label, String[] args) {
-        if (!(cs instanceof Player)) {
+        if (!(cs instanceof Player p)) {
             cs.sendPlainMessage(Messages.ONLY_PLAYER);
             return true;
         }
 
-        Player p = (Player) cs;
         if (args.length > 0) {
             String sub = args[0];
             switch (sub) {

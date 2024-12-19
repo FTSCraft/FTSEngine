@@ -11,12 +11,12 @@ import org.bukkit.map.MapView;
 
 public class Brief {
 
-    public String msg;
-    public String creator;
+    public final String msg;
+    public final String creator;
     private final MapView mv;
-    public long creation;
+    public final long creation;
     private final FTSMapRenderer renderer;
-    public int id;
+    public final int id;
 
     private final Engine plugin;
 

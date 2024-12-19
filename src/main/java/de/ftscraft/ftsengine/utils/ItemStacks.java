@@ -271,10 +271,6 @@ public class ItemStacks {
         lanzeRecipe.setIngredient('E', Material.IRON_INGOT);
         plugin.getServer().addRecipe(lanzeRecipe);
 
-        plugin.mats.add(Material.DIRT_PATH);
-
-        plugin.mats.addAll(Var.getCarpets());
-
         //TINY BACKPACK
 
         NamespacedKey tbpkey = new NamespacedKey(plugin, "FTStinybackpack");

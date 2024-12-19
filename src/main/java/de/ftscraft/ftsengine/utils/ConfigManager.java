@@ -11,7 +11,7 @@ import java.util.Map;
 
 public class ConfigManager {
 
-    FileConfiguration config;
+    final FileConfiguration config;
     private final Map<String, Object> cache = new HashMap<>();
 
     public ConfigManager() {

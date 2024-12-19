@@ -20,8 +20,7 @@ public class CMDgehen implements CommandExecutor {
 
     @Override
     public boolean onCommand(@NotNull CommandSender cs, @NotNull Command cmd, @NotNull String label, String[] args) {
-        if(cs instanceof Player) {
-            Player p = (Player)cs;
+        if(cs instanceof Player p) {
 
             int armorNulls = 0;
 

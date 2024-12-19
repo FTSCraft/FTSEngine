@@ -20,8 +20,7 @@ public class CMDplaytime implements CommandExecutor {
     @Override
     public boolean onCommand(@NotNull CommandSender cs, @NotNull Command cmd, @NotNull String label, String[] args) {
 
-        if (cs instanceof Player) {
-            Player p = (Player) cs;
+        if (cs instanceof Player p) {
 
             int second = p.getStatistic(Statistic.PLAY_ONE_MINUTE) / 20;
             int minute = second / 60;

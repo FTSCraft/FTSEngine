@@ -166,7 +166,7 @@ public class CMDitem implements CommandExecutor {
                         return true;
                     }
 
-                    if (forbiddenNames.contains(lore.get(0))) {
+                    if (forbiddenNames.contains(lore.getFirst())) {
                         p.sendMessage(Messages.PREFIX + "Das Item so zu nennen ist nicht erlaubt!");
                         return true;
                     }

@@ -20,8 +20,7 @@ public class CMDklopfen implements CommandExecutor {
 
     @Override
     public boolean onCommand(@NotNull CommandSender cs, @NotNull Command cmd, @NotNull String label, String[] args) {
-        if (cs instanceof Player) {
-            Player p = (Player) cs;
+        if (cs instanceof Player p) {
             if (plugin.getAusweis(p) == null) {
                 p.sendMessage(Messages.PREFIX + "Du hast noch kein Ausweis. Mach dir einen mit /ausweis!");
                 return true;

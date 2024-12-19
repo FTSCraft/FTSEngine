@@ -21,9 +21,7 @@ public class VillagerTradeListener implements Listener {
 
         if(event.getInventory().getType() == InventoryType.MERCHANT) {
 
-            if(event.getInventory().getHolder() instanceof Entity) {
-
-                Entity e = (Entity) event.getInventory().getHolder();
+            if(event.getInventory().getHolder() instanceof Entity e) {
 
                 if(!plugin.getShopkeepersPlugin().getShopkeeperRegistry().isShopkeeper(e)) {
 

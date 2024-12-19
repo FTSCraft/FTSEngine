@@ -23,11 +23,9 @@ public class CMDewürfel implements CommandExecutor {
     @Override
     public boolean onCommand(@NotNull CommandSender cs, @NotNull Command cmd, @NotNull String label, @NotNull String[] args) {
 
-        if (!(cs instanceof Player)) {
+        if (!(cs instanceof Player p)) {
             return true;
         }
-
-        Player p = (Player) cs;
 
         if (args.length == 1) {
             String arg = args[0];

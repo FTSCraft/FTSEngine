@@ -17,6 +17,7 @@ public class TimeManager {
 
     public static void init() {
         ConfigManager configManager = Engine.getConfigManager();
+        //noinspection MagicConstant
         calendar = new GregorianCalendar(configManager.getCalendarYear(), configManager.getCalendarMonth(), configManager.getCalendarDay(), configManager.getCalendarHour(), configManager.getCalendarMinute());
 
         Bukkit.getScheduler().runTaskTimer(Engine.getInstance(), TimeManager::incrementTime, 0, 40);

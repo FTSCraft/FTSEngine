@@ -5,7 +5,6 @@ import de.ftscraft.ftsengine.utils.Ausweis;
 import de.ftscraft.ftsengine.utils.Messages;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
-import net.kyori.adventure.text.format.TextColor;
 import org.bukkit.Material;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -31,15 +30,9 @@ public class CMDbuch implements CommandExecutor {
     @Override
     public boolean onCommand(@NotNull CommandSender cs, @NotNull Command cmd, @NotNull String label, @NotNull String[] args) {
 
-        if (!(cs instanceof Player)) {
+        if (!(cs instanceof Player p)) {
             cs.sendMessage(Messages.ONLY_PLAYER);
             return true;
-        }
-
-        Player p = (Player) cs;
-
-        if (args.length == 0) {
-
         }
 
         StringBuilder message = new StringBuilder();
@@ -96,10 +89,10 @@ public class CMDbuch implements CommandExecutor {
             return false;
 
         BookMeta meta = (BookMeta) is.getItemMeta();
-        if (meta.getLore() != null) {
-            List<String> lore = meta.getLore();
-            if (lore.size() > 0) {
-                return lore.get(0).equals(IDENTIFIER);
+        List<String> lore;
+        if ((lore = meta.getLore()) != null) {
+            if (!lore.isEmpty()) {
+                return lore.getFirst().equals(IDENTIFIER);
             }
         }
 

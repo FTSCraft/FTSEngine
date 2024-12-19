@@ -27,12 +27,10 @@ public class CMDwürfel implements CommandExecutor {
 
     @Override
     public boolean onCommand(@NotNull CommandSender cs, @NotNull Command cmd, @NotNull String label, String[] args) {
-        if (!(cs instanceof Player)) {
+        if (!(cs instanceof Player p)) {
             cs.sendMessage(Messages.ONLY_PLAYER);
             return true;
         }
-
-        Player p = (Player) cs;
 
         Ausweis ausweis = plugin.getAusweis(p);
 
@@ -66,17 +64,9 @@ public class CMDwürfel implements CommandExecutor {
 
         if (dice != null) {
 
-            int total = 0;
+            int total;
 
-            StringBuilder sb;
-
-            if (gender == Ausweis.Gender.FEMALE) {
-                if (dice.getMName().equalsIgnoreCase(dice.getFName())) {
-                    sb = new StringBuilder("§6Der §o" + dice.getMName() + " §r§e" + name + " §6würfelt: §e");
-                } else
-                    sb = new StringBuilder("§6Die §o" + dice.getFName() + " §r§e" + name + " §6würfelt: §e");
-            } else
-                sb = new StringBuilder("§6Der §o" + dice.getMName() + " §r§e" + name + " §6würfelt: §e");
+            StringBuilder sb = getStringBuilder(gender, dice, name);
 
             if (magic) {
 
@@ -118,6 +108,19 @@ public class CMDwürfel implements CommandExecutor {
         }
 
         return false;
+    }
+
+    private static @NotNull StringBuilder getStringBuilder(Ausweis.Gender gender, DiceType dice, String name) {
+        StringBuilder sb;
+
+        if (gender == Ausweis.Gender.FEMALE) {
+            if (dice.getMName().equalsIgnoreCase(dice.getFName())) {
+                sb = new StringBuilder("§6Der §o" + dice.getMName() + " §r§e" + name + " §6würfelt: §e");
+            } else
+                sb = new StringBuilder("§6Die §o" + dice.getFName() + " §r§e" + name + " §6würfelt: §e");
+        } else
+            sb = new StringBuilder("§6Der §o" + dice.getMName() + " §r§e" + name + " §6würfelt: §e");
+        return sb;
     }
 
     public enum DiceType {

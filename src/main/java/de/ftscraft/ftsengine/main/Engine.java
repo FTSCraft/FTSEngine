@@ -14,7 +14,6 @@ import de.ftscraft.ftsengine.listener.*;
 import de.ftscraft.ftsengine.logport.LogportManager;
 import de.ftscraft.ftsengine.time.TimeManager;
 import de.ftscraft.ftsengine.utils.*;
-import de.ftscraft.ftsutils.uuidfetcher.UUIDFetcher;
 import net.milkbowl.vault.economy.Economy;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -144,16 +143,15 @@ public class Engine extends JavaPlugin implements Listener {
         new EntityDeathListener();
     }
 
-    private boolean setupEconomy() {
+    private void setupEconomy() {
         if (getServer().getPluginManager().getPlugin("Vault") == null) {
-            return false;
+            return;
         }
         RegisteredServiceProvider<Economy> rsp = getServer().getServicesManager().getRegistration(Economy.class);
         if (rsp == null) {
-            return false;
+            return;
         }
         econ = rsp.getProvider();
-        return econ != null;
     }
 
     private void saveAll() {

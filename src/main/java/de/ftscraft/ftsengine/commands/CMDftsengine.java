@@ -15,7 +15,7 @@ import org.jetbrains.annotations.NotNull;
 
 public class CMDftsengine implements CommandExecutor {
 
-    Engine plugin;
+    final Engine plugin;
 
     public CMDftsengine(Engine plugin) {
         this.plugin = plugin;

@@ -22,10 +22,9 @@ public class CMDumarmen implements CommandExecutor {
     @Override
     public boolean onCommand(@NotNull CommandSender cs, @NotNull Command command, @NotNull String s, @NotNull String[] args) {
 
-        if (!(cs instanceof Player)) {
+        if (!(cs instanceof Player p)) {
             return true;
         }
-        Player p = (Player) cs;
 
         if (plugin.getAusweis(p) == null) {
             p.sendMessage(Messages.PREFIX + "Du hast noch kein Ausweis. Mach dir einen mit /ausweis!");
