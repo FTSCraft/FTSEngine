@@ -4,6 +4,8 @@ import de.ftscraft.ftsengine.main.Engine;
 import de.ftscraft.ftsengine.utils.Ausweis;
 import de.ftscraft.ftsengine.utils.Messages;
 import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.NamedTextColor;
+import net.kyori.adventure.text.format.TextColor;
 import org.bukkit.Material;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -77,7 +79,7 @@ public class CMDbuch implements CommandExecutor {
 
         ItemStack bookItemStack = new ItemStack(Material.WRITTEN_BOOK);
         BookMeta bookMeta = (BookMeta) bookItemStack.getItemMeta();
-        bookMeta.setTitle("§eBrief von " + p.getName());
+        bookMeta.displayName(Component.text("Brief von " + p.getName()).color(NamedTextColor.YELLOW));
         Ausweis ausweis = plugin.getAusweis(p);
         bookMeta.lore(List.of(Component.text(IDENTIFIER)));
         bookMeta.addPages(Component.text(message.toString()));
