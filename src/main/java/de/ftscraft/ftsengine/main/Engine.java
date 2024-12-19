@@ -121,7 +121,7 @@ public class Engine extends JavaPlugin implements Listener {
         new CMDklopfen(this);
         new CMDbrief(this);
         new CMDkussen(this);
-        new CMDewürfel(this);
+        new CMDewuerfel(this);
         new CMDzeit(this);
     }
     private void initListeners() {

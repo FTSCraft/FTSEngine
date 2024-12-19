@@ -15,7 +15,7 @@ public class Brett
 
     private final String name;
     private final UUID creator;
-    private final BrettSign sign;
+    private final Location signLocation;
     private final BrettGUI gui;
     private final ArrayList<BrettNote> notes;
     private final File file;
@@ -30,7 +30,7 @@ public class Brett
         this.notes = new ArrayList<>();
         this.plugin = plugin;
         this.gui = new BrettGUI(this, plugin);
-        this.sign = new BrettSign(sign, location, creator);
+        this.signLocation = location;
         this.file = new File(plugin.getDataFolder() + "//bretter//" + name + ".yml");
         this.cfg = YamlConfiguration.loadConfiguration(this.file);
         if (!this.file.exists()) {
@@ -64,7 +64,7 @@ public class Brett
         this.gui = new BrettGUI(this, plugin);
         this.notes = new ArrayList<>();
         this.plugin = plugin;
-        this.sign = new BrettSign(sign, location, creator);
+        this.signLocation = location;
         this.file = new File(plugin.getDataFolder() + "//bretter//" + name + ".yml");
         this.cfg = YamlConfiguration.loadConfiguration(this.file);
         if (!this.file.exists()) {
@@ -100,10 +100,6 @@ public class Brett
 
     public UUID getCreator() {
         return this.creator;
-    }
-
-    public BrettSign getSign() {
-        return this.sign;
     }
 
     public BrettGUI getGui() {

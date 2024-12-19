@@ -13,9 +13,9 @@ import org.jetbrains.annotations.NotNull;
 import java.util.Arrays;
 import java.util.Random;
 
-public class CMDewürfel implements CommandExecutor {
+public class CMDewuerfel implements CommandExecutor {
 
-    public CMDewürfel(Engine plugin) {
+    public CMDewuerfel(Engine plugin) {
 
         plugin.getCommand("ewürfel").setExecutor(this);
     }
