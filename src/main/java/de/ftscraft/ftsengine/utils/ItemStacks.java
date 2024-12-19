@@ -148,7 +148,7 @@ public class ItemStacks {
         chime = new ItemBuilder(Material.STICK).name("§6Glockenspiel").sign(instrumentSign).addPDC("type", 1, PersistentDataType.INTEGER).build();
         flute = new ItemBuilder(Material.STICK).name("§6Flöte").sign(instrumentSign).addPDC("type", 2, PersistentDataType.INTEGER).build();
         bell = new ItemBuilder(Material.STICK).name("§6Glocke").sign(instrumentSign).addPDC("type", 3, PersistentDataType.INTEGER).build();
-        guitar = new ItemBuilder(Material.STICK).name("§6Gitarre").sign(instrumentSign).addPDC("type", 4, PersistentDataType.INTEGER).build();
+        guitar = new ItemBuilder(Material.STICK).name("§6Laute").sign(instrumentSign).addPDC("type", 4, PersistentDataType.INTEGER).build();
         cowBell = new ItemBuilder(Material.STICK).name("§6Kuhglocke").sign(instrumentSign).addPDC("type", 5, PersistentDataType.INTEGER).build();
         xylophone = new ItemBuilder(Material.STICK).name("§6Xylophon").sign(instrumentSign).addPDC("type", 6, PersistentDataType.INTEGER).build();
         ironXylophone = new ItemBuilder(Material.STICK).name("§6Eisen-Xylophon").sign(instrumentSign).addPDC("type", 7, PersistentDataType.INTEGER).build();
