@@ -49,7 +49,7 @@ public class EntityClickListener implements Listener
             if(event.getMount().getType() == EntityType.PIG) {
 
                 Pig pig = (Pig) event.getMount();
-                AttributeInstance ms = pig.getAttribute(Attribute.MOVEMENT_SPEED);
+                AttributeInstance ms = pig.getAttribute(Attribute.GENERIC_MOVEMENT_SPEED);
 
                 ms.setBaseValue(ms.getBaseValue() + SPEED_MODIFIER);
 
@@ -81,7 +81,7 @@ public class EntityClickListener implements Listener
 
                 Pig pig = (Pig) event.getDismounted();
 
-                AttributeInstance ms = pig.getAttribute(Attribute.MOVEMENT_SPEED);
+                AttributeInstance ms = pig.getAttribute(Attribute.GENERIC_MOVEMENT_SPEED);
 
                 ms.setBaseValue(ms.getBaseValue() - SPEED_MODIFIER);
 
