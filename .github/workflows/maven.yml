@@ -1,6 +1,6 @@
 name: Build check and publish
 
-on: 
+on:
   push:
     branches:
       - '**'
@@ -11,42 +11,42 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v4
-      with:
-        fetch-depth: 0  # Fetch the entire history
-    - uses: actions/setup-java@v4
-      with:
-        distribution: 'temurin'
-        java-version: 21
-    - uses: actions/cache@v4
-      with:
-        path: ~/.m2/repository
-        key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
-        restore-keys: |
-          ${{ runner.os }}-maven-
-    - run: mvn clean package
-    
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0  # Fetch the entire history
+      - uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: 21
+      - uses: actions/cache@v4
+        with:
+          path: ~/.m2/repository
+          key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
+          restore-keys: |
+            ${{ runner.os }}-maven-
+      - run: mvn clean package
+
   archive:
     if: github.ref == 'refs/heads/master'
     runs-on: ubuntu-latest
     
     steps:
-    - uses: actions/checkout@v4
-      with:
-        fetch-depth: 0  # Fetch the entire history
-    - uses: actions/setup-java@v4
-      with:
-        distribution: 'temurin'
-        java-version: 21
-    - uses: actions/cache@v4
-      with:
-        path: ~/.m2/repository
-        key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
-        restore-keys: |
-          ${{ runner.os }}-maven-
-    - run: mvn clean package
-    - run: find . -name "FTSEngine*.jar"
-    - uses: actions/upload-artifact@v4
-      with:
-        name: 'FTSEngine (Master Build)'
-        path: ./target/FTSEngine*.jar
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0  # Fetch the entire history
+      - uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: 21
+      - uses: actions/cache@v4
+        with:
+          path: ~/.m2/repository
+          key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
+          restore-keys: |
+            ${{ runner.os }}-maven-
+      - run: mvn clean package
+      - run: find . -name "FTSEngine*.jar"
+      - uses: actions/upload-artifact@v4
+        with:
+          name: 'FTSEngine (Master Build)'
+          path: ./target/FTSEngine*.jar

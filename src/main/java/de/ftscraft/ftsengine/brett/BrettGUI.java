@@ -186,15 +186,15 @@ public class BrettGUI {
         emptyNoteMeta.setDisplayName("§8Leere Notiz");
         emptyNote.setItemMeta(emptyNoteMeta);
 
-        if(page == 1)
+        if (page == 1)
             inv_page1.setItem(itemSlot, emptyNote);
-        if(page == 2)
+        if (page == 2)
             inv_page2.setItem(itemSlot, emptyNote);
-        if(page == 3)
+        if (page == 3)
             inv_page3.setItem(itemSlot, emptyNote);
-        if(page == 4)
+        if (page == 4)
             inv_page4.setItem(itemSlot, emptyNote);
-        if(page == 5)
+        if (page == 5)
             inv_page5.setItem(itemSlot, emptyNote);
     }
 

@@ -19,11 +19,11 @@ public class VillagerTradeListener implements Listener {
     @EventHandler
     public void onTrade(InventoryOpenEvent event) {
 
-        if(event.getInventory().getType() == InventoryType.MERCHANT) {
+        if (event.getInventory().getType() == InventoryType.MERCHANT) {
 
-            if(event.getInventory().getHolder() instanceof Entity e) {
+            if (event.getInventory().getHolder() instanceof Entity e) {
 
-                if(!plugin.getShopkeepersPlugin().getShopkeeperRegistry().isShopkeeper(e)) {
+                if (!plugin.getShopkeepersPlugin().getShopkeeperRegistry().isShopkeeper(e)) {
 
                     event.getPlayer().sendMessage("§7[§cFTS-System§7] §7Du darfst mit diesen Typen nicht handeln!");
                     event.setCancelled(true);

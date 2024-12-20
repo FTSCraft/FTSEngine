@@ -14,15 +14,13 @@ public class ItemSwitchListener implements Listener {
 
     private final Engine plugin;
 
-    public ItemSwitchListener(Engine plugin)
-    {
+    public ItemSwitchListener(Engine plugin) {
         this.plugin = plugin;
         plugin.getServer().getPluginManager().registerEvents(this, plugin);
     }
 
     @EventHandler
-    public void onItemSwitch(PlayerItemHeldEvent e)
-    {
+    public void onItemSwitch(PlayerItemHeldEvent e) {
 
         Inventory inv = e.getPlayer().getInventory();
         if (inv.getItem(e.getNewSlot()) == null || inv.getItem(e.getPreviousSlot()) == null)
@@ -33,7 +31,7 @@ public class ItemSwitchListener implements Listener {
             if (brief != null) {
                 brief.loadMap(itemMap);
             }
-        } else if(inv.getItem(e.getPreviousSlot()).getType() == Material.FILLED_MAP) {
+        } else if (inv.getItem(e.getPreviousSlot()).getType() == Material.FILLED_MAP) {
             ItemStack itemMap = inv.getItem(e.getPreviousSlot());
             Brief brief = plugin.briefe.get(((MapMeta) itemMap.getItemMeta()).getMapId());
             if (brief != null) {

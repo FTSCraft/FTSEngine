@@ -54,11 +54,11 @@ public class CMDbuch implements CommandExecutor {
             if (title.length() > 12)
                 title = title.substring(12);
             else title = "";
-            if(!title.equals(p.getName())) {
+            if (!title.equals(p.getName())) {
                 p.sendMessage(Messages.PREFIX + "Das ist nicht dein Brief!");
                 return true;
             }
-            if(bookMeta.getPageCount() == 50) {
+            if (bookMeta.getPageCount() == 50) {
                 p.sendMessage(Messages.PREFIX + "Das Buch hat bereits 50 Seiten. Mehr geht net!");
                 return true;
             }
@@ -111,7 +111,7 @@ public class CMDbuch implements CommandExecutor {
 
                     removedPaper = true;
 
-                    if(removedInk)
+                    if (removedInk)
                         break;
 
                 } else if (!removedInk && item.getType() == Material.INK_SAC) {
@@ -121,7 +121,7 @@ public class CMDbuch implements CommandExecutor {
                         item.setAmount(item.getAmount() - 1);
                     }
 
-                    if(removedPaper)
+                    if (removedPaper)
                         break;
                 }
             }

@@ -20,7 +20,7 @@ public class Briefkasten {
         this.location = location;
         this.player = player;
 
-        if(location.getBlock().getState() instanceof Container state) {
+        if (location.getBlock().getState() instanceof Container state) {
             this.container = state;
             plugin.briefkasten.put(player, this);
         } else {
@@ -33,10 +33,10 @@ public class Briefkasten {
 
         this.container = (Container) location.getBlock().getState();
 
-        if(!container.getChunk().isLoaded()) {
+        if (!container.getChunk().isLoaded()) {
             container.getChunk().load();
         }
-        if(container.getInventory().firstEmpty() == -1) {
+        if (container.getInventory().firstEmpty() == -1) {
             return false;
         }
 

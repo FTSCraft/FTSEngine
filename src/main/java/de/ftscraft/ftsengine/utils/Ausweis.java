@@ -73,31 +73,31 @@ public class Ausweis {
     }
 
     public String getFirstName() {
-        if(firstName == null)
+        if (firstName == null)
             return null;
         return firstName.replace('_', ' ');
     }
 
     public String getLastName() {
-        if(lastName == null)
+        if (lastName == null)
             return null;
         return lastName.replace('_', ' ');
     }
 
     public Gender getGender() {
-        if(gender == null)
+        if (gender == null)
             return null;
         return gender;
     }
 
     public String getRace() {
-        if(race == null)
+        if (race == null)
             return null;
         return race.replace('_', ' ');
     }
 
     public String getDesc() {
-        if(desc == null)
+        if (desc == null)
             return null;
         return desc;
     }
@@ -127,7 +127,7 @@ public class Ausweis {
     }
 
     public String getSpitzname() {
-        if(spitzname == null)
+        if (spitzname == null)
             return null;
         return spitzname;
     }

@@ -3,34 +3,34 @@ author: halberfan
 main: de.ftscraft.ftsengine.main.Engine
 version: ${project.version}
 api-version: 1.20
-depend: [Vault, FTSUtils]
-softdepend: [ProtocolLib, Shopkeepers, Dynmap]
+depend: [ Vault, FTSUtils ]
+softdepend: [ ProtocolLib, Shopkeepers, Dynmap ]
 
 commands:
-    ausweis:
-    countdown:
-    spielzeit:
-    zauber:
-    #roleplay:
-    reiten:
-    taube:
-    schlagen:
-    buch:
-    removearmorstand:
-        premission: ftsengine.armorstand
-    #pferd:
-    reisepunkt:
-    brief:
-    gehen:
-    klopfen:
-    winken:
-    umarmen:
-    ohrfeige:
-    kurier:
-    fasten:
-    item:
-    spucken:
-    ftsengine:
-    küssen:
-    ewürfel:
-    zeit:
+  ausweis:
+  countdown:
+  spielzeit:
+  zauber:
+  #roleplay:
+  reiten:
+  taube:
+  schlagen:
+  buch:
+  removearmorstand:
+    premission: ftsengine.armorstand
+  #pferd:
+  reisepunkt:
+  brief:
+  gehen:
+  klopfen:
+  winken:
+  umarmen:
+  ohrfeige:
+  kurier:
+  fasten:
+  item:
+  spucken:
+  ftsengine:
+  küssen:
+  ewürfel:
+  zeit:

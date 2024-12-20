@@ -111,7 +111,7 @@ public class SignWriteListener implements Listener {
 
                     for (Brett all : plugin.bretter.values()) {
                         if (all.getName().equals(name)) {
-                            if(global) {
+                            if (global) {
                                 firstGlobal = false;
                                 break;
                             }
@@ -121,7 +121,7 @@ public class SignWriteListener implements Listener {
                         }
                     }
 
-                    if(firstGlobal)
+                    if (firstGlobal)
                         plugin.bretter.put(event.getBlock().getLocation(), new Brett(sign, event.getBlock().getLocation(), event.getPlayer().getUniqueId(), name, admin, plugin));
                     event.getPlayer().sendMessage("§7[§bSchwarzes Brett§7] Du hast das Schwarze Brett erfolgreich erstellt");
 

@@ -10,8 +10,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.UUID;
 
-public class Brett
-{
+public class Brett {
 
     private final String name;
     private final UUID creator;
@@ -41,7 +40,7 @@ public class Brett
             this.cfg.set("brett.location.Z", location.getZ());
             this.cfg.set("brett.location.world", location.getWorld().getName());
 
-            for(int i = 0; i < 27*5; ++i) {
+            for (int i = 0; i < 27 * 5; ++i) {
                 this.cfg.set("brett.note." + i + ".title", "null");
                 this.cfg.set("brett.note." + i + ".content", "null");
                 this.cfg.set("brett.note." + i + ".creator", "null");
@@ -74,7 +73,7 @@ public class Brett
             this.cfg.set("brett.location.Z", location.getZ());
             this.cfg.set("brett.location.world", location.getWorld().getName());
 
-            for(int i = 0; i < 27*5; ++i) {
+            for (int i = 0; i < 27 * 5; ++i) {
                 this.cfg.set("brett.note." + i + ".title", "null");
                 this.cfg.set("brett.note." + i + ".content", "null");
                 this.cfg.set("brett.note." + i + ".creator", "null");

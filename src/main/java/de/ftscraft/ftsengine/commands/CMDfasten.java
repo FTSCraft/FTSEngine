@@ -17,12 +17,12 @@ public class CMDfasten implements CommandExecutor {
     @Override
     public boolean onCommand(@NotNull CommandSender cs, @NotNull Command cmd, @NotNull String label, String[] args) {
 
-        if(!(cs instanceof Player p)) {
+        if (!(cs instanceof Player p)) {
             cs.sendMessage(Messages.PREFIX);
             return true;
         }
 
-        if(p.getFoodLevel() < 20) {
+        if (p.getFoodLevel() < 20) {
             p.sendMessage(Messages.PREFIX + "Du hast schon Hunger");
             return true;
         }

@@ -17,14 +17,14 @@ public class ProjectileHitListener implements Listener {
     @EventHandler
     public void onProjectileHit(ProjectileHitEvent event) {
 
-        if(event.getHitEntity() == null)
+        if (event.getHitEntity() == null)
             return;
 
-        if(event.getHitEntity() instanceof Player) {
+        if (event.getHitEntity() instanceof Player) {
 
-            if(event.getEntity() instanceof Snowball) {
+            if (event.getEntity() instanceof Snowball) {
 
-                if(!Bukkit.getOnlinePlayers().contains(event.getHitEntity()))
+                if (!Bukkit.getOnlinePlayers().contains(event.getHitEntity()))
                     return;
 
                 event.getHitEntity().setVelocity(event.getEntity().getVelocity().multiply(0.75).setY(0.5));

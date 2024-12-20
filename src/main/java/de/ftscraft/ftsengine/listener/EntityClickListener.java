@@ -13,23 +13,19 @@ import org.bukkit.event.entity.EntityDismountEvent;
 import org.bukkit.event.entity.EntityMountEvent;
 import org.bukkit.event.player.PlayerInteractEntityEvent;
 
-public class EntityClickListener implements Listener
-{
+public class EntityClickListener implements Listener {
 
     private final Engine plugin;
 
-    public EntityClickListener(Engine plugin)
-    {
+    public EntityClickListener(Engine plugin) {
         this.plugin = plugin;
         plugin.getServer().getPluginManager().registerEvents(this, plugin);
     }
 
     @EventHandler
-    public void onEntityClick(PlayerInteractEntityEvent e)
-    {
-        if (plugin.getReiter().contains(e.getPlayer()))
-        {
-            if(e.getRightClicked().getType() == EntityType.PHANTOM || e.getRightClicked().getType() == EntityType.WOLF) {
+    public void onEntityClick(PlayerInteractEntityEvent e) {
+        if (plugin.getReiter().contains(e.getPlayer())) {
+            if (e.getRightClicked().getType() == EntityType.PHANTOM || e.getRightClicked().getType() == EntityType.WOLF) {
                 e.getPlayer().sendMessage("§cne ne ne.");
                 return;
             }
@@ -44,9 +40,9 @@ public class EntityClickListener implements Listener
     @EventHandler
     public void onMount(EntityMountEvent event) {
 
-        if(event.getEntity() instanceof Player) {
+        if (event.getEntity() instanceof Player) {
 
-            if(event.getMount().getType() == EntityType.PIG) {
+            if (event.getMount().getType() == EntityType.PIG) {
 
                 Pig pig = (Pig) event.getMount();
                 AttributeInstance ms = pig.getAttribute(Attribute.GENERIC_MOVEMENT_SPEED);
@@ -74,9 +70,9 @@ public class EntityClickListener implements Listener
     @EventHandler
     public void onDismount(EntityDismountEvent event) {
 
-        if(event.getEntity() instanceof Player) {
+        if (event.getEntity() instanceof Player) {
 
-            if(event.getDismounted().getType() == EntityType.PIG) {
+            if (event.getDismounted().getType() == EntityType.PIG) {
 
 
                 Pig pig = (Pig) event.getDismounted();

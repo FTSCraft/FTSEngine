@@ -20,20 +20,20 @@ public class CMDgehen implements CommandExecutor {
 
     @Override
     public boolean onCommand(@NotNull CommandSender cs, @NotNull Command cmd, @NotNull String label, String[] args) {
-        if(cs instanceof Player p) {
+        if (cs instanceof Player p) {
 
             int armorNulls = 0;
 
             for (ItemStack armorContent : p.getInventory().getArmorContents()) {
-                if(armorContent == null)
+                if (armorContent == null)
                     armorNulls++;
-                else if(armorContent.getType() == Material.CARVED_PUMPKIN)
+                else if (armorContent.getType() == Material.CARVED_PUMPKIN)
                     armorNulls++;
             }
 
-            if(armorNulls == 4) {
+            if (armorNulls == 4) {
 
-                if(p.getWalkSpeed() == SLOW_SPEED) {
+                if (p.getWalkSpeed() == SLOW_SPEED) {
                     p.setWalkSpeed(0.2f);
                     p.sendMessage(Messages.PREFIX + "Du gehst jetzt wieder normal");
                 } else {
@@ -41,7 +41,8 @@ public class CMDgehen implements CommandExecutor {
                     p.sendMessage(Messages.PREFIX + "Du gehst jetzt langsam");
                 }
 
-            } else p.sendMessage(Messages.PREFIX + "Du kannst diesen Befehl nicht benutzen wenn du eine Rüstung trägst!");
+            } else
+                p.sendMessage(Messages.PREFIX + "Du kannst diesen Befehl nicht benutzen wenn du eine Rüstung trägst!");
 
 
         }

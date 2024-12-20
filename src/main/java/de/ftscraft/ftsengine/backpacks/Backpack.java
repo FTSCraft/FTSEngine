@@ -13,8 +13,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Arrays;
 
-public class Backpack
-{
+public class Backpack {
 
     private final int id;
     private final BackpackType type;
@@ -26,7 +25,7 @@ public class Backpack
         this.plugin = plugin;
         this.type = type;
         this.id = id;
-        if(plugin.biggestBpId < id) {
+        if (plugin.biggestBpId < id) {
             plugin.biggestBpId = id;
         }
         this.inventory = inv;
@@ -43,7 +42,7 @@ public class Backpack
 
         ItemStack is = p.getInventory().getChestplate().clone();
         ItemMeta im = is.getItemMeta();
-        im.setLore(Arrays.asList(type.getLore(), "ID: #"+this.id));
+        im.setLore(Arrays.asList(type.getLore(), "ID: #" + this.id));
         is.setItemMeta(im);
         p.getInventory().setChestplate(is);
 
@@ -57,7 +56,7 @@ public class Backpack
     }
 
     public void safe() {
-        File file = new File(plugin.getDataFolder() + "//backpacks//"+this.id+".yml");
+        File file = new File(plugin.getDataFolder() + "//backpacks//" + this.id + ".yml");
         YamlConfiguration cfg = YamlConfiguration.loadConfiguration(file);
 
         cfg.set("id", this.id);
@@ -65,11 +64,9 @@ public class Backpack
         cfg.set("inventory", content);
         cfg.set("type", this.type.name());
 
-        try
-        {
+        try {
             cfg.save(file);
-        } catch (IOException e)
-        {
+        } catch (IOException e) {
             e.printStackTrace();
         }
     }

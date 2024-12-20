@@ -134,6 +134,7 @@ public class LogportManager {
             player.sendMessage(message);
         }
     }
+
     public void decrementUses(ItemStack item, Player player) {
         ItemMeta meta = item.getItemMeta();
         PersistentDataContainer data = meta.getPersistentDataContainer();
@@ -222,6 +223,7 @@ public class LogportManager {
             }
         }
     }
+
     public void updateLogportLore(ItemMeta meta) {
         PersistentDataContainer data = meta.getPersistentDataContainer();
 
