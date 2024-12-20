@@ -47,13 +47,11 @@ public class CMDbuch implements CommandExecutor {
             return true;
         }
 
-        removeItemsFromInventory(inv);
-
         if (isBookByPlugin(p.getInventory().getItemInMainHand())) {
             ItemStack book = p.getInventory().getItemInMainHand();
             BookMeta bookMeta = (BookMeta) book.getItemMeta();
-            String title = bookMeta.getTitle();
-            if (title != null && title.length() > 12)
+            String title = bookMeta.getDisplayName();
+            if (title.length() > 12)
                 title = title.substring(12);
             else title = "";
             if(!title.equals(p.getName())) {
@@ -67,6 +65,7 @@ public class CMDbuch implements CommandExecutor {
             bookMeta.addPages(Component.text(message.toString()));
             book.setItemMeta(bookMeta);
             p.sendMessage(Messages.PREFIX + "Die Seite wurde hinzugefügt");
+            removeItemsFromInventory(inv);
             return true;
         }
 
@@ -80,6 +79,7 @@ public class CMDbuch implements CommandExecutor {
         bookItemStack.setItemMeta(bookMeta);
         inv.addItem(bookItemStack);
         p.sendMessage(Messages.PREFIX + "Das Buch sollte nun in deinem Inventar sein. Um weitere Seiten dort zu schreiben halte es in deiner (Haupt-)Hand");
+        removeItemsFromInventory(inv);
         return false;
     }
 
