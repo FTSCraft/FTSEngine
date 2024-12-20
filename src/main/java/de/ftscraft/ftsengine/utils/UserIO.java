@@ -160,7 +160,7 @@ public class UserIO {
                         continue;
                     }
 
-                    Brett brett = new Brett(sign, locaton, creator, name, plugin, admin, true);
+                    Brett brett = new Brett(locaton, creator, name, plugin, admin, true);
 
                     for (String keys : cfg.getConfigurationSection("brett.note").getKeys(false)) {
                         String title = cfg.getString("brett.note." + keys + ".title");

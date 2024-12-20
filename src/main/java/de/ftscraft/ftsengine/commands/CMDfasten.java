@@ -27,7 +27,7 @@ public class CMDfasten implements CommandExecutor {
             return true;
         }
 
-        ((Player) cs).setFoodLevel(10);
+        p.setFoodLevel(10);
         cs.sendMessage(Messages.PREFIX + "Du hast erfolgreich gefastet!");
 
         return false;

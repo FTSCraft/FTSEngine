@@ -1,6 +1,5 @@
 package de.ftscraft.ftsengine.brett;
 
-import de.ftscraft.ftsengine.main.Engine;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -21,7 +20,7 @@ public class BrettGUI {
 
     private final Brett brett;
 
-    public BrettGUI(Brett brett, Engine plugin) {
+    public BrettGUI(Brett brett) {
         this.brett = brett;
         inv_page1 = Bukkit.createInventory(null, 9 * 5, "§4Schwarzes-Brett " + brett.getName());
         inv_page2 = Bukkit.createInventory(null, 9 * 5, "§4Schwarzes-Brett " + brett.getName());

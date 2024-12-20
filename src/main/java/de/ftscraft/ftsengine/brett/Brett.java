@@ -2,7 +2,6 @@ package de.ftscraft.ftsengine.brett;
 
 import de.ftscraft.ftsengine.main.Engine;
 import org.bukkit.Location;
-import org.bukkit.block.Sign;
 import org.bukkit.configuration.file.YamlConfiguration;
 
 import java.io.File;
@@ -22,13 +21,13 @@ public class Brett {
     private final Engine plugin;
     private final boolean admin;
 
-    public Brett(Sign sign, Location location, UUID creator, String name, boolean admin, Engine plugin) {
+    public Brett(Location location, UUID creator, String name, boolean admin, Engine plugin) {
         this.name = name;
         this.creator = creator;
         this.admin = admin;
         this.notes = new ArrayList<>();
         this.plugin = plugin;
-        this.gui = new BrettGUI(this, plugin);
+        this.gui = new BrettGUI(this);
         this.signLocation = location;
         this.file = new File(plugin.getDataFolder() + "//bretter//" + name + ".yml");
         this.cfg = YamlConfiguration.loadConfiguration(this.file);
@@ -56,11 +55,11 @@ public class Brett {
 
     }
 
-    public Brett(Sign sign, Location location, UUID creator, String name, Engine plugin, boolean admin, boolean onSetup) {
+    public Brett(Location location, UUID creator, String name, Engine plugin, boolean admin, boolean onSetup) {
         this.name = name;
         this.creator = creator;
         this.admin = admin;
-        this.gui = new BrettGUI(this, plugin);
+        this.gui = new BrettGUI(this);
         this.notes = new ArrayList<>();
         this.plugin = plugin;
         this.signLocation = location;
@@ -114,7 +113,7 @@ public class Brett {
     }
 
     public void addNote(String title, String content, String creator, long time, int id) {
-        new BrettNote(this, title, content, creator, id, time, this.plugin);
+        new BrettNote(this, title, content, creator, id, time);
     }
 
     public void saveCfg() {
