@@ -138,7 +138,7 @@ public class Brett
     }
 
     public void remove() {
-        this.plugin.bretter.remove(this.sign.getLocation());
+        this.plugin.bretter.remove(signLocation);
         this.file.delete();
     }
 
