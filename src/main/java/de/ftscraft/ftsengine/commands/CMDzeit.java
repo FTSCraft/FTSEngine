@@ -1,7 +1,7 @@
 package de.ftscraft.ftsengine.commands;
 
 import de.ftscraft.ftsengine.main.Engine;
-import de.ftscraft.ftsengine.time.TimeManager;
+import de.ftscraft.ftsengine.feature.time.TimeManager;
 import de.ftscraft.ftsengine.utils.Messages;
 import de.ftscraft.ftsutils.misc.MiniMsg;
 import org.bukkit.command.Command;

@@ -1,4 +1,4 @@
-package de.ftscraft.ftsengine.time;
+package de.ftscraft.ftsengine.feature.time;
 
 import de.ftscraft.ftsengine.main.Engine;
 import de.ftscraft.ftsengine.utils.ConfigManager;

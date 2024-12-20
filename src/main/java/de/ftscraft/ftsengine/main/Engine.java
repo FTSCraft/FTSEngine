@@ -12,7 +12,7 @@ import de.ftscraft.ftsengine.courier.Brief;
 import de.ftscraft.ftsengine.courier.Briefkasten;
 import de.ftscraft.ftsengine.listener.*;
 import de.ftscraft.ftsengine.logport.LogportManager;
-import de.ftscraft.ftsengine.time.TimeManager;
+import de.ftscraft.ftsengine.feature.time.TimeManager;
 import de.ftscraft.ftsengine.utils.*;
 import net.milkbowl.vault.economy.Economy;
 import org.bukkit.Bukkit;
