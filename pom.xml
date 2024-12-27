@@ -6,7 +6,7 @@
 
     <groupId>de.ftscraft.ftsengine</groupId>
     <artifactId>FTSEngine</artifactId>
-    <version>2.9.2</version>
+    <version>2.9.5.2</version>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -64,6 +64,7 @@
             <groupId>io.papermc.paper</groupId>
             <artifactId>paper-api</artifactId>
             <version>1.20.6-R0.1-SNAPSHOT</version>
+            <scope>provided</scope>
         </dependency>
         <!--Protocol Lib-->
         <dependency>
@@ -115,6 +116,12 @@
             <artifactId>playerpoints</artifactId>
             <version>3.2.7</version>
             <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.jetbrains</groupId>
+            <artifactId>annotations</artifactId>
+            <version>24.1.0</version>
+            <scope>compile</scope>
         </dependency>
 
     </dependencies>

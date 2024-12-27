@@ -1,6 +1,5 @@
 package de.ftscraft.ftsengine.backpacks;
 
-import de.ftscraft.ftsengine.utils.ItemStacks;
 import de.ftscraft.ftsutils.items.ItemReader;
 import org.bukkit.inventory.ItemStack;
 

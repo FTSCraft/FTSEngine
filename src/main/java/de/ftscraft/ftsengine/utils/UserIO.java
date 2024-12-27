@@ -6,6 +6,7 @@ import de.ftscraft.ftsengine.brett.Brett;
 import de.ftscraft.ftsengine.courier.Brief;
 import de.ftscraft.ftsengine.courier.Briefkasten;
 import de.ftscraft.ftsengine.main.Engine;
+import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.block.BlockState;
@@ -17,7 +18,6 @@ import org.bukkit.inventory.ItemStack;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
 
@@ -104,15 +104,18 @@ public class UserIO {
                     type = BackpackType.valueOf(c.getString("type"));
                 else type = BackpackType.LARGE;
 
-                if(c.getList("inventory") == null) {
+                if (c.getList("inventory") == null) {
                     continue;
                 }
-                List itemsList = c.getList("inventory");
-                ItemStack[] items = (ItemStack[]) itemsList.toArray(new ItemStack[itemsList.size()]);
-                inv = Bukkit.createInventory(null, type.getSize(), type.getName());
-                inv.setContents(items);
+                ItemStack[] itemsList = c.getList("inventory").stream()
+                        .map(item -> (ItemStack) item)
+                        .toArray(ItemStack[]::new);
+                inv = Bukkit.createInventory(null,
+                        type.getSize(),
+                        LegacyComponentSerializer.legacyAmpersand().deserialize(type.getName()));
+                inv.setContents(itemsList);
 
-                if(!c.contains("id")) {
+                if (!c.contains("id")) {
                     continue;
                 }
                 id = c.getInt("id");
@@ -153,12 +156,11 @@ public class UserIO {
                     Location locaton = new Location(Bukkit.getWorld(world), loc_X, loc_Y, loc_Z);
 
                     BlockState bs = Bukkit.getWorld(world).getBlockAt(locaton).getState();
-                    if (!(bs instanceof Sign)) {
+                    if (!(bs instanceof Sign sign)) {
                         continue;
                     }
-                    Sign sign = (Sign) bs;
 
-                    Brett brett = new Brett(sign, locaton, creator, name, plugin, admin, true);
+                    Brett brett = new Brett(locaton, creator, name, plugin, admin, true);
 
                     for (String keys : cfg.getConfigurationSection("brett.note").getKeys(false)) {
                         String title = cfg.getString("brett.note." + keys + ".title");
@@ -229,7 +231,7 @@ public class UserIO {
             String world = cfg.getString("loc.world");
             UUID player = UUID.fromString(cfg.getString("player"));
 
-            Briefkasten briefkasten = new Briefkasten(plugin, new Location(Bukkit.getWorld(world), x, y, z), player);
+            new Briefkasten(plugin, new Location(Bukkit.getWorld(world), x, y, z), player);
 
         }
 

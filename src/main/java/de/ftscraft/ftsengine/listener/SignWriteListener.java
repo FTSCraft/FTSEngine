@@ -3,10 +3,7 @@ package de.ftscraft.ftsengine.listener;
 import de.ftscraft.ftsengine.brett.Brett;
 import de.ftscraft.ftsengine.courier.Briefkasten;
 import de.ftscraft.ftsengine.main.Engine;
-import de.ftscraft.ftsengine.main.FTSUser;
 import de.ftscraft.ftsengine.utils.Messages;
-import org.bukkit.Location;
-import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.Container;
 import org.bukkit.block.Sign;
@@ -114,7 +111,7 @@ public class SignWriteListener implements Listener {
 
                     for (Brett all : plugin.bretter.values()) {
                         if (all.getName().equals(name)) {
-                            if(global) {
+                            if (global) {
                                 firstGlobal = false;
                                 break;
                             }
@@ -124,8 +121,8 @@ public class SignWriteListener implements Listener {
                         }
                     }
 
-                    if(firstGlobal)
-                        plugin.bretter.put(event.getBlock().getLocation(), new Brett(sign, event.getBlock().getLocation(), event.getPlayer().getUniqueId(), name, admin, plugin));
+                    if (firstGlobal)
+                        plugin.bretter.put(event.getBlock().getLocation(), new Brett(event.getBlock().getLocation(), event.getPlayer().getUniqueId(), name, admin, plugin));
                     event.getPlayer().sendMessage("§7[§bSchwarzes Brett§7] Du hast das Schwarze Brett erfolgreich erstellt");
 
                 }

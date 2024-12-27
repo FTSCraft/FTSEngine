@@ -3,7 +3,9 @@ package de.ftscraft.ftsengine.listener;
 import de.ftscraft.ftsengine.backpacks.BackpackType;
 import de.ftscraft.ftsengine.brett.Brett;
 import de.ftscraft.ftsengine.brett.BrettNote;
+import de.ftscraft.ftsengine.feature.instruments.CustomInstrument;
 import de.ftscraft.ftsengine.feature.instruments.Instrument;
+import de.ftscraft.ftsengine.feature.instruments.SimpleInstrument;
 import de.ftscraft.ftsengine.main.Engine;
 import de.ftscraft.ftsengine.main.FTSUser;
 import de.ftscraft.ftsengine.utils.Messages;
@@ -261,7 +263,14 @@ public class InventoryClickListener implements Listener {
         if (a == null)
             return;
 
-        event.getWhoClicked().getWorld().playSound(event.getWhoClicked(), instrument.sound, 10, Instrument.notes[a]);
+        if (instrument instanceof SimpleInstrument simpleInstrument) {
+            event.getWhoClicked().getWorld().playSound(event.getWhoClicked(), simpleInstrument.sound, 10, SimpleInstrument.notes[a]);
+            return;
+        }
+
+        if (instrument instanceof CustomInstrument customInstrument) {
+
+        }
 
     }
 

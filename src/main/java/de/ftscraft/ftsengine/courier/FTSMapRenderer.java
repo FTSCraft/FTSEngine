@@ -17,7 +17,7 @@ public class FTSMapRenderer extends org.bukkit.map.MapRenderer {
     private final String date;
     private final boolean debug = true;
 
-    Brief brief;
+    final Brief brief;
 
     public FTSMapRenderer(int id, Engine plugin) {
         brief = plugin.briefe.get(id);

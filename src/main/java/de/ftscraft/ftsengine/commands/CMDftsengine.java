@@ -3,6 +3,7 @@ package de.ftscraft.ftsengine.commands;
 import de.ftscraft.ftsengine.brett.Brett;
 import de.ftscraft.ftsengine.brett.BrettNote;
 import de.ftscraft.ftsengine.feature.instruments.Instrument;
+import de.ftscraft.ftsengine.feature.instruments.SimpleInstrument;
 import de.ftscraft.ftsengine.main.Engine;
 import de.ftscraft.ftsengine.utils.Messages;
 import org.bukkit.Sound;
@@ -14,7 +15,7 @@ import org.jetbrains.annotations.NotNull;
 
 public class CMDftsengine implements CommandExecutor {
 
-    Engine plugin;
+    final Engine plugin;
 
     public CMDftsengine(Engine plugin) {
         this.plugin = plugin;
@@ -27,7 +28,7 @@ public class CMDftsengine implements CommandExecutor {
         if (args.length > 0 && args[0].equals("debug")) {
             if (args[1].equals("instrument")) {
                 Player p = (Player) cs;
-                Instrument instrument = new Instrument(Sound.BLOCK_NOTE_BLOCK_GUITAR, "Gitarre");
+                Instrument instrument = new SimpleInstrument(Sound.BLOCK_NOTE_BLOCK_GUITAR, "Gitarre");
                 p.openInventory(instrument.getInventory());
             }
         }

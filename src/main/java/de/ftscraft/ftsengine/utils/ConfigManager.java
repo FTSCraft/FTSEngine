@@ -1,7 +1,7 @@
 package de.ftscraft.ftsengine.utils;
 
+import de.ftscraft.ftsengine.feature.time.TimeManager;
 import de.ftscraft.ftsengine.main.Engine;
-import de.ftscraft.ftsengine.time.TimeManager;
 import org.bukkit.configuration.file.FileConfiguration;
 
 import java.util.Calendar;
@@ -11,7 +11,7 @@ import java.util.Map;
 
 public class ConfigManager {
 
-    FileConfiguration config;
+    final FileConfiguration config;
     private final Map<String, Object> cache = new HashMap<>();
 
     public ConfigManager() {

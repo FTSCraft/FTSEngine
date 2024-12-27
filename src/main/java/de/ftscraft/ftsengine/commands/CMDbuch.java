@@ -4,6 +4,7 @@ import de.ftscraft.ftsengine.main.Engine;
 import de.ftscraft.ftsengine.utils.Ausweis;
 import de.ftscraft.ftsengine.utils.Messages;
 import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.NamedTextColor;
 import org.bukkit.Material;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -29,15 +30,9 @@ public class CMDbuch implements CommandExecutor {
     @Override
     public boolean onCommand(@NotNull CommandSender cs, @NotNull Command cmd, @NotNull String label, @NotNull String[] args) {
 
-        if (!(cs instanceof Player)) {
+        if (!(cs instanceof Player p)) {
             cs.sendMessage(Messages.ONLY_PLAYER);
             return true;
-        }
-
-        Player p = (Player) cs;
-
-        if (args.length == 0) {
-
         }
 
         StringBuilder message = new StringBuilder();
@@ -52,32 +47,31 @@ public class CMDbuch implements CommandExecutor {
             return true;
         }
 
-        removeItemsFromInventory(inv);
-
         if (isBookByPlugin(p.getInventory().getItemInMainHand())) {
             ItemStack book = p.getInventory().getItemInMainHand();
             BookMeta bookMeta = (BookMeta) book.getItemMeta();
-            String title = bookMeta.getTitle();
-            if (title != null && title.length() > 12)
+            String title = bookMeta.getDisplayName();
+            if (title.length() > 12)
                 title = title.substring(12);
             else title = "";
-            if(!title.equals(p.getName())) {
+            if (!title.equals(p.getName())) {
                 p.sendMessage(Messages.PREFIX + "Das ist nicht dein Brief!");
                 return true;
             }
-            if(bookMeta.getPageCount() == 50) {
+            if (bookMeta.getPageCount() == 50) {
                 p.sendMessage(Messages.PREFIX + "Das Buch hat bereits 50 Seiten. Mehr geht net!");
                 return true;
             }
             bookMeta.addPages(Component.text(message.toString()));
             book.setItemMeta(bookMeta);
             p.sendMessage(Messages.PREFIX + "Die Seite wurde hinzugefügt");
+            removeItemsFromInventory(inv);
             return true;
         }
 
         ItemStack bookItemStack = new ItemStack(Material.WRITTEN_BOOK);
         BookMeta bookMeta = (BookMeta) bookItemStack.getItemMeta();
-        bookMeta.setTitle("§eBrief von " + p.getName());
+        bookMeta.displayName(Component.text("Brief von " + p.getName()).color(NamedTextColor.YELLOW));
         Ausweis ausweis = plugin.getAusweis(p);
         bookMeta.lore(List.of(Component.text(IDENTIFIER)));
         bookMeta.addPages(Component.text(message.toString()));
@@ -85,6 +79,7 @@ public class CMDbuch implements CommandExecutor {
         bookItemStack.setItemMeta(bookMeta);
         inv.addItem(bookItemStack);
         p.sendMessage(Messages.PREFIX + "Das Buch sollte nun in deinem Inventar sein. Um weitere Seiten dort zu schreiben halte es in deiner (Haupt-)Hand");
+        removeItemsFromInventory(inv);
         return false;
     }
 
@@ -94,10 +89,10 @@ public class CMDbuch implements CommandExecutor {
             return false;
 
         BookMeta meta = (BookMeta) is.getItemMeta();
-        if (meta.getLore() != null) {
-            List<String> lore = meta.getLore();
-            if (lore.size() > 0) {
-                return lore.get(0).equals(IDENTIFIER);
+        List<String> lore;
+        if ((lore = meta.getLore()) != null) {
+            if (!lore.isEmpty()) {
+                return lore.getFirst().equals(IDENTIFIER);
             }
         }
 
@@ -116,7 +111,7 @@ public class CMDbuch implements CommandExecutor {
 
                     removedPaper = true;
 
-                    if(removedInk)
+                    if (removedInk)
                         break;
 
                 } else if (!removedInk && item.getType() == Material.INK_SAC) {
@@ -126,7 +121,7 @@ public class CMDbuch implements CommandExecutor {
                         item.setAmount(item.getAmount() - 1);
                     }
 
-                    if(removedPaper)
+                    if (removedPaper)
                         break;
                 }
             }

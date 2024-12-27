@@ -12,7 +12,10 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Iterator;
+import java.util.List;
 
 public class ItemStacks {
 
@@ -148,7 +151,7 @@ public class ItemStacks {
         chime = new ItemBuilder(Material.STICK).name("§6Glockenspiel").sign(instrumentSign).addPDC("type", 1, PersistentDataType.INTEGER).build();
         flute = new ItemBuilder(Material.STICK).name("§6Flöte").sign(instrumentSign).addPDC("type", 2, PersistentDataType.INTEGER).build();
         bell = new ItemBuilder(Material.STICK).name("§6Glocke").sign(instrumentSign).addPDC("type", 3, PersistentDataType.INTEGER).build();
-        guitar = new ItemBuilder(Material.STICK).name("§6Gitarre").sign(instrumentSign).addPDC("type", 4, PersistentDataType.INTEGER).build();
+        guitar = new ItemBuilder(Material.STICK).name("§6Laute").sign(instrumentSign).addPDC("type", 4, PersistentDataType.INTEGER).build();
         cowBell = new ItemBuilder(Material.STICK).name("§6Kuhglocke").sign(instrumentSign).addPDC("type", 5, PersistentDataType.INTEGER).build();
         xylophone = new ItemBuilder(Material.STICK).name("§6Xylophon").sign(instrumentSign).addPDC("type", 6, PersistentDataType.INTEGER).build();
         ironXylophone = new ItemBuilder(Material.STICK).name("§6Eisen-Xylophon").sign(instrumentSign).addPDC("type", 7, PersistentDataType.INTEGER).build();
@@ -270,10 +273,6 @@ public class ItemStacks {
         lanzeRecipe.setIngredient('S', Material.STICK);
         lanzeRecipe.setIngredient('E', Material.IRON_INGOT);
         plugin.getServer().addRecipe(lanzeRecipe);
-
-        plugin.mats.add(Material.DIRT_PATH);
-
-        plugin.mats.addAll(Var.getCarpets());
 
         //TINY BACKPACK
 

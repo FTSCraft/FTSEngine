@@ -13,9 +13,9 @@ import org.jetbrains.annotations.NotNull;
 import java.util.Arrays;
 import java.util.Random;
 
-public class CMDewürfel implements CommandExecutor {
+public class CMDewuerfel implements CommandExecutor {
 
-    public CMDewürfel(Engine plugin) {
+    public CMDewuerfel(Engine plugin) {
 
         plugin.getCommand("ewürfel").setExecutor(this);
     }
@@ -23,11 +23,9 @@ public class CMDewürfel implements CommandExecutor {
     @Override
     public boolean onCommand(@NotNull CommandSender cs, @NotNull Command cmd, @NotNull String label, @NotNull String[] args) {
 
-        if (!(cs instanceof Player)) {
+        if (!(cs instanceof Player p)) {
             return true;
         }
-
-        Player p = (Player) cs;
 
         if (args.length == 1) {
             String arg = args[0];

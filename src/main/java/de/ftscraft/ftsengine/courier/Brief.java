@@ -11,19 +11,18 @@ import org.bukkit.map.MapView;
 
 public class Brief {
 
-    public String msg;
-    public String creator;
+    public final String msg;
+    public final String creator;
     private final MapView mv;
-    public long creation;
+    public final long creation;
     private final FTSMapRenderer renderer;
-    public int id;
+    public final int id;
 
     private final Engine plugin;
 
     private boolean error = false;
 
-    public Brief(Engine plugin, String creator, String msg, String world)
-    {
+    public Brief(Engine plugin, String creator, String msg, String world) {
         this.msg = msg;
         this.plugin = plugin;
         this.creator = creator;
@@ -34,8 +33,7 @@ public class Brief {
         this.renderer = new FTSMapRenderer(id, plugin);
     }
 
-    public Brief(Engine plugin, String creator, String msg, long creation, int id)
-    {
+    public Brief(Engine plugin, String creator, String msg, long creation, int id) {
         this.plugin = plugin;
         this.creator = creator;
         this.msg = msg;
@@ -48,8 +46,7 @@ public class Brief {
         this.renderer = new FTSMapRenderer(id, plugin);
     }
 
-    public ItemStack getMap(World w)
-    {
+    public ItemStack getMap(World w) {
 
         ItemStack map = new ItemStack(Material.FILLED_MAP, 1);
         MapMeta mapMeta = (MapMeta) map.getItemMeta();
@@ -67,14 +64,7 @@ public class Brief {
         return map;
     }
 
-
-    public String getMessage()
-    {
-        return msg;
-    }
-
-    public void loadMap(ItemStack itemMap)
-    {
+    public void loadMap(ItemStack itemMap) {
         MapView mv = plugin.getServer().getMap((short) id);
         if (mv.getRenderers().contains(renderer))
             return;

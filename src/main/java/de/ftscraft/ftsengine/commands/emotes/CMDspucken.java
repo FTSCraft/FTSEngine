@@ -21,12 +21,10 @@ public class CMDspucken implements CommandExecutor {
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, String[] args) {
 
-        if (!(sender instanceof Player)) {
+        if (!(sender instanceof Player p)) {
             sender.sendMessage(Messages.ONLY_PLAYER);
             return true;
         }
-
-        Player p = (Player) sender;
 
         if (args.length == 1) {
 

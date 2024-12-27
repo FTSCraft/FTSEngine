@@ -14,8 +14,7 @@ public class CMDzauber implements CommandExecutor {
     }
 
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, String[] args) {
-        if (sender instanceof Player) {
-            Player player = (Player) sender;
+        if (sender instanceof Player player) {
             if (player.hasPermission("zauber.zauber")) {
                 if (command.getName().equalsIgnoreCase("zauber")) {
                     if (args.length == 0) {
@@ -384,10 +383,10 @@ public class CMDzauber implements CommandExecutor {
 
                         } else if (args[0].equalsIgnoreCase("ZeitlicherSegen")) {
                             player.sendMessage("§7[§5FTS-Engine§7] §bDie Lichtelfe beginnt sich selbst in einer gigantischen Runenblase, welche golden Leuchtet einzuhüllen. In jenem Moment geht sie einen Tausch mit Anwa ein. Ihr Lebensgeist wird dem ihren Körper entzogen und ein verstorbener ihrer Wahl, darf zurückkehren.\n" +
-                                               "\n" +
-                                               "Der Zauber ist fähig das Leben einer Elfe gegen das eines bis zu zwei Tage verstorbenen einzutauschen. Jedoch ist es nicht sicher das der Anwender den Lebenden zurückholt. Bei einem nicht erfolgreichen Magie Wurf, wird ein normaler Würfel geworfen. Wenn dieser Rot ausfällt, wird dem Anwender jede Magie entzogen. Er wird zu einer Versuchten Lichtelfe, magieunfähig. Sollte der Würfel grün fallen, so scheitert der Zauber und der Elf wird für einen Monat unfähig sein Magie zu wirken.\n" +
-                                               "\n" +
-                                               "Sollte der Zauber gelingen und die Person wiederbelebt werden so kann man bemerken das die Person sehr schwach ist. Sie wird in der ersten Zeit nichtmal fähig sein sich eigenständig zu bewegen oder gar wirklich zu agieren.");
+                                    "\n" +
+                                    "Der Zauber ist fähig das Leben einer Elfe gegen das eines bis zu zwei Tage verstorbenen einzutauschen. Jedoch ist es nicht sicher das der Anwender den Lebenden zurückholt. Bei einem nicht erfolgreichen Magie Wurf, wird ein normaler Würfel geworfen. Wenn dieser Rot ausfällt, wird dem Anwender jede Magie entzogen. Er wird zu einer Versuchten Lichtelfe, magieunfähig. Sollte der Würfel grün fallen, so scheitert der Zauber und der Elf wird für einen Monat unfähig sein Magie zu wirken.\n" +
+                                    "\n" +
+                                    "Sollte der Zauber gelingen und die Person wiederbelebt werden so kann man bemerken das die Person sehr schwach ist. Sie wird in der ersten Zeit nichtmal fähig sein sich eigenständig zu bewegen oder gar wirklich zu agieren.");
 
                         } else if (args[0].equalsIgnoreCase("PranamayasHilfe")) {
                             player.sendMessage("§7[§5FTS-Engine§7] §bDer Anwender kann eine Fenstergroße Rune beschwören, die Steinschläge oder Angriffe abwehren kann. Man ist fähig mehrere zu schützen. Durch die Größe wird dem Anwender viel Kraft entzogen.");

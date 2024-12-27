@@ -10,11 +10,13 @@ import de.ftscraft.ftsengine.commands.*;
 import de.ftscraft.ftsengine.commands.emotes.*;
 import de.ftscraft.ftsengine.courier.Brief;
 import de.ftscraft.ftsengine.courier.Briefkasten;
+import de.ftscraft.ftsengine.feature.time.TimeManager;
 import de.ftscraft.ftsengine.listener.*;
 import de.ftscraft.ftsengine.logport.LogportManager;
-import de.ftscraft.ftsengine.time.TimeManager;
-import de.ftscraft.ftsengine.utils.*;
-import de.ftscraft.ftsutils.uuidfetcher.UUIDFetcher;
+import de.ftscraft.ftsengine.utils.Ausweis;
+import de.ftscraft.ftsengine.utils.ConfigManager;
+import de.ftscraft.ftsengine.utils.ItemStacks;
+import de.ftscraft.ftsengine.utils.UserIO;
 import net.milkbowl.vault.economy.Economy;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -122,9 +124,10 @@ public class Engine extends JavaPlugin implements Listener {
         new CMDklopfen(this);
         new CMDbrief(this);
         new CMDkussen(this);
-        new CMDewürfel(this);
+        new CMDewuerfel(this);
         new CMDzeit(this);
     }
+
     private void initListeners() {
         new AnvilEntchamentBlockingListener(this);
         new EntityClickListener(this);
@@ -144,16 +147,15 @@ public class Engine extends JavaPlugin implements Listener {
         new EntityDeathListener();
     }
 
-    private boolean setupEconomy() {
+    private void setupEconomy() {
         if (getServer().getPluginManager().getPlugin("Vault") == null) {
-            return false;
+            return;
         }
         RegisteredServiceProvider<Economy> rsp = getServer().getServicesManager().getRegistration(Economy.class);
         if (rsp == null) {
-            return false;
+            return;
         }
         econ = rsp.getProvider();
-        return econ != null;
     }
 
     private void saveAll() {
@@ -214,7 +216,9 @@ public class Engine extends JavaPlugin implements Listener {
         return shopkeepersPlugin;
     }
 
-    public LogportManager getLogportManager() {return logportManager;}
+    public LogportManager getLogportManager() {
+        return logportManager;
+    }
 
     public static Engine getInstance() {
         return instance;

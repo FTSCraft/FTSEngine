@@ -26,9 +26,9 @@ public class DamageListener implements Listener {
 
     @EventHandler
     public void onDamageDo(EntityDamageByEntityEvent e) {
-        if (e.getDamager() instanceof Player) {
-            if (((Player) e.getDamager()).getInventory().getItemInMainHand().getType() == Material.STICK) {
-                if (((Player) e.getDamager()).getInventory().getItemInMainHand().getItemMeta().getDisplayName().equalsIgnoreCase("§6Lanze")) {
+        if (e.getDamager() instanceof Player p) {
+            if (p.getInventory().getItemInMainHand().getType() == Material.STICK) {
+                if (p.getInventory().getItemInMainHand().getItemMeta().getDisplayName().equalsIgnoreCase("§6Lanze")) {
 
                     if (plugin.getPlayer().get(e.getDamager()).getLanzenschlaege() > 2) {
 
@@ -37,21 +37,20 @@ public class DamageListener implements Listener {
 
                         if (r == 2) {
 
-                            if (e.getEntity() instanceof Player) {
-                                Player t = (Player) e.getEntity();
+                            if (e.getEntity() instanceof Player t) {
                                 if (t.getVehicle() != null) {
                                     if (t.getVehicle().getPassengers().contains(t))
                                         t.getVehicle().removePassenger(t);
                                 }
 
-                                plugin.getPlayer().get(e.getDamager()).setLanzenschlaege(0);
+                                plugin.getPlayer().get(p).setLanzenschlaege(0);
 
                             }
 
                         } else
-                            plugin.getPlayer().get(e.getDamager()).setLanzenschlaege(plugin.getPlayer().get(e.getDamager()).getLanzenschlaege() + 1);
+                            plugin.getPlayer().get(p).setLanzenschlaege(plugin.getPlayer().get(p).getLanzenschlaege() + 1);
                     } else
-                        plugin.getPlayer().get(e.getDamager()).setLanzenschlaege(plugin.getPlayer().get(e.getDamager()).getLanzenschlaege() + 1);
+                        plugin.getPlayer().get(p).setLanzenschlaege(plugin.getPlayer().get(p).getLanzenschlaege() + 1);
                 }
             }
 

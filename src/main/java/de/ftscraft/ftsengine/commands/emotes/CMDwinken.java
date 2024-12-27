@@ -21,11 +21,9 @@ public class CMDwinken implements CommandExecutor {
     @Override
     public boolean onCommand(@NotNull CommandSender commandSender, @NotNull Command command, @NotNull String s, @NotNull String[] args) {
 
-        if (!(commandSender instanceof Player)) {
+        if (!(commandSender instanceof Player p)) {
             return true;
         }
-
-        Player p = (Player) commandSender;
 
         if (plugin.getAusweis(p) == null) {
             p.sendMessage(Messages.PREFIX + "Du hast noch kein Ausweis. Mach dir einen mit /ausweis!");

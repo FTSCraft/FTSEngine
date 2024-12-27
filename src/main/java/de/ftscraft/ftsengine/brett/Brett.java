@@ -2,7 +2,6 @@ package de.ftscraft.ftsengine.brett;
 
 import de.ftscraft.ftsengine.main.Engine;
 import org.bukkit.Location;
-import org.bukkit.block.Sign;
 import org.bukkit.configuration.file.YamlConfiguration;
 
 import java.io.File;
@@ -10,12 +9,11 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.UUID;
 
-public class Brett
-{
+public class Brett {
 
     private final String name;
     private final UUID creator;
-    private final BrettSign sign;
+    private final Location signLocation;
     private final BrettGUI gui;
     private final ArrayList<BrettNote> notes;
     private final File file;
@@ -23,14 +21,14 @@ public class Brett
     private final Engine plugin;
     private final boolean admin;
 
-    public Brett(Sign sign, Location location, UUID creator, String name, boolean admin, Engine plugin) {
+    public Brett(Location location, UUID creator, String name, boolean admin, Engine plugin) {
         this.name = name;
         this.creator = creator;
         this.admin = admin;
         this.notes = new ArrayList<>();
         this.plugin = plugin;
-        this.gui = new BrettGUI(this, plugin);
-        this.sign = new BrettSign(sign, location, creator);
+        this.gui = new BrettGUI(this);
+        this.signLocation = location;
         this.file = new File(plugin.getDataFolder() + "//bretter//" + name + ".yml");
         this.cfg = YamlConfiguration.loadConfiguration(this.file);
         if (!this.file.exists()) {
@@ -41,7 +39,7 @@ public class Brett
             this.cfg.set("brett.location.Z", location.getZ());
             this.cfg.set("brett.location.world", location.getWorld().getName());
 
-            for(int i = 0; i < 27*5; ++i) {
+            for (int i = 0; i < 27 * 5; ++i) {
                 this.cfg.set("brett.note." + i + ".title", "null");
                 this.cfg.set("brett.note." + i + ".content", "null");
                 this.cfg.set("brett.note." + i + ".creator", "null");
@@ -57,14 +55,14 @@ public class Brett
 
     }
 
-    public Brett(Sign sign, Location location, UUID creator, String name, Engine plugin, boolean admin, boolean onSetup) {
+    public Brett(Location location, UUID creator, String name, Engine plugin, boolean admin, boolean onSetup) {
         this.name = name;
         this.creator = creator;
         this.admin = admin;
-        this.gui = new BrettGUI(this, plugin);
+        this.gui = new BrettGUI(this);
         this.notes = new ArrayList<>();
         this.plugin = plugin;
-        this.sign = new BrettSign(sign, location, creator);
+        this.signLocation = location;
         this.file = new File(plugin.getDataFolder() + "//bretter//" + name + ".yml");
         this.cfg = YamlConfiguration.loadConfiguration(this.file);
         if (!this.file.exists()) {
@@ -74,7 +72,7 @@ public class Brett
             this.cfg.set("brett.location.Z", location.getZ());
             this.cfg.set("brett.location.world", location.getWorld().getName());
 
-            for(int i = 0; i < 27*5; ++i) {
+            for (int i = 0; i < 27 * 5; ++i) {
                 this.cfg.set("brett.note." + i + ".title", "null");
                 this.cfg.set("brett.note." + i + ".content", "null");
                 this.cfg.set("brett.note." + i + ".creator", "null");
@@ -102,10 +100,6 @@ public class Brett
         return this.creator;
     }
 
-    public BrettSign getSign() {
-        return this.sign;
-    }
-
     public BrettGUI getGui() {
         return this.gui;
     }
@@ -119,7 +113,7 @@ public class Brett
     }
 
     public void addNote(String title, String content, String creator, long time, int id) {
-        new BrettNote(this, title, content, creator, id, time, this.plugin);
+        new BrettNote(this, title, content, creator, id, time);
     }
 
     public void saveCfg() {
@@ -142,7 +136,7 @@ public class Brett
     }
 
     public void remove() {
-        this.plugin.bretter.remove(this.sign.getLocation());
+        this.plugin.bretter.remove(signLocation);
         this.file.delete();
     }
 

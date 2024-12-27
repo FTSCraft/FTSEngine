@@ -1,6 +1,5 @@
 package de.ftscraft.ftsengine.brett;
 
-import de.ftscraft.ftsengine.main.Engine;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -21,7 +20,7 @@ public class BrettGUI {
 
     private final Brett brett;
 
-    public BrettGUI(Brett brett, Engine plugin) {
+    public BrettGUI(Brett brett) {
         this.brett = brett;
         inv_page1 = Bukkit.createInventory(null, 9 * 5, "§4Schwarzes-Brett " + brett.getName());
         inv_page2 = Bukkit.createInventory(null, 9 * 5, "§4Schwarzes-Brett " + brett.getName());
@@ -186,15 +185,15 @@ public class BrettGUI {
         emptyNoteMeta.setDisplayName("§8Leere Notiz");
         emptyNote.setItemMeta(emptyNoteMeta);
 
-        if(page == 1)
+        if (page == 1)
             inv_page1.setItem(itemSlot, emptyNote);
-        if(page == 2)
+        if (page == 2)
             inv_page2.setItem(itemSlot, emptyNote);
-        if(page == 3)
+        if (page == 3)
             inv_page3.setItem(itemSlot, emptyNote);
-        if(page == 4)
+        if (page == 4)
             inv_page4.setItem(itemSlot, emptyNote);
-        if(page == 5)
+        if (page == 5)
             inv_page5.setItem(itemSlot, emptyNote);
     }
 

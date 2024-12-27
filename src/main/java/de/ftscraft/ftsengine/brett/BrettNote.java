@@ -26,7 +26,7 @@ public class BrettNote {
     private long time;
     private Brett brett;
 
-    public BrettNote(Brett brett, String title, String content, String creator, int id, long time, Engine plugin) {
+    public BrettNote(Brett brett, String title, String content, String creator, int id, long time) {
         this.title = title;
         this.brett = brett;
         this.content = content;
@@ -97,10 +97,6 @@ public class BrettNote {
         return content;
     }
 
-    public int getId() {
-        return id;
-    }
-
     public long getTime() {
         return time;
     }
@@ -111,10 +107,6 @@ public class BrettNote {
 
     public void setContent(String content) {
         this.content = content;
-    }
-
-    public void setItem(ItemStack item) {
-        this.item = item;
     }
 
     public void setTitle(String title) {

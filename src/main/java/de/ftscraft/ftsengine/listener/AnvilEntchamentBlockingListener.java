@@ -37,6 +37,7 @@ public class AnvilEntchamentBlockingListener implements Listener {
 
     /**
      * Checks if an item has an CustomModelData value that is known to the system
+     *
      * @param item item to check
      * @return false if no key was found
      */
