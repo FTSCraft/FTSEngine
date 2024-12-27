@@ -26,7 +26,8 @@ public class CMDausweis implements CommandExecutor, TabCompleter {
 
     public CMDausweis(Engine plugin) {
         this.plugin = plugin;
-        this.arguments = new ArrayList<>(Arrays.asList("name", "geschlecht", "rasse", "aussehen", "größe", "link", "anschauen"));
+        this.arguments = new ArrayList<>(Arrays.asList("name", "geschlecht", "rasse", "aussehen", "größe",
+                "link", "anschauen", "deckname"));
         plugin.getCommand("ausweis").setExecutor(this);
     }
 
@@ -53,9 +54,11 @@ public class CMDausweis implements CommandExecutor, TabCompleter {
                             a.setLastName(lName);
                             plugin.addAusweis(a);
                         }
-                        p.sendPlainMessage(Messages.SUCC_CMD_AUSWEIS.replace("%s", "Name").replace("%v", fName + " " + lName));
+                        p.sendPlainMessage(Messages.SUCC_CMD_AUSWEIS.replace("%s", "Name")
+                                .replace("%v", fName + " " + lName));
                     } else
-                        p.sendPlainMessage(Messages.PREFIX + "Bitte benutze den Befehl so:" + " §c/ausweis name [Vorname] [Nachname]");
+                        p.sendPlainMessage(Messages.PREFIX + "Bitte benutze den Befehl so:" +
+                                " §c/ausweis name [Vorname] [Nachname]");
                     break;
                 case "link":
                     if (!plugin.hasAusweis(p)) {
@@ -65,13 +68,16 @@ public class CMDausweis implements CommandExecutor, TabCompleter {
                     if (args.length == 2) {
                         String link = args[1];
                         if (!link.startsWith("https://forum.ftscraft.de/")) {
-                            p.sendPlainMessage("§cDer Link muss mit unserer URL des Forums anfangen! (https://forum.ftscraft.de/)");
+                            p.sendPlainMessage("§cDer Link muss mit unserer URL des Forums anfangen! " +
+                                    "(https://forum.ftscraft.de/)");
                             return true;
                         }
                         plugin.getAusweis(p).setForumLink(link);
-                        p.sendPlainMessage(Messages.SUCC_CMD_AUSWEIS.replace("%s", "Charaktervorstellung").replace("%v", link));
+                        p.sendPlainMessage(Messages.SUCC_CMD_AUSWEIS
+                                .replace("%s", "Charaktervorstellung").replace("%v", link));
                     } else
-                        p.sendPlainMessage(Messages.PREFIX + "Bitte benutze den Befehl so: §c/ausweis link [Forumlink deiner Charvorstellung]");
+                        p.sendPlainMessage(Messages.PREFIX +
+                                "Bitte benutze den Befehl so: §c/ausweis link [Forumlink deiner Charvorstellung]");
                     break;
                 case "geschlecht":
                     if (!plugin.hasAusweis(p)) {
@@ -80,7 +86,9 @@ public class CMDausweis implements CommandExecutor, TabCompleter {
                     }
                     if (args.length == 2) {
                         Ausweis.Gender g = null;
-                        if (args[1].equalsIgnoreCase("m") || args[1].equalsIgnoreCase("f") || args[1].equalsIgnoreCase("d")) {
+                        if (args[1].equalsIgnoreCase("m") ||
+                                args[1].equalsIgnoreCase("f") ||
+                                args[1].equalsIgnoreCase("d")) {
                             if (args[1].equalsIgnoreCase("m"))
                                 g = Ausweis.Gender.MALE;
                             else if (args[1].equalsIgnoreCase("f"))
@@ -90,11 +98,15 @@ public class CMDausweis implements CommandExecutor, TabCompleter {
                                 p.sendPlainMessage(Messages.PREFIX + "Fehler!");
                             }
                             plugin.getAusweis(p).setGender(g);
-                            p.sendPlainMessage(Messages.SUCC_CMD_AUSWEIS.replace("%s", "Geschlecht").replace("%v", (g == Ausweis.Gender.MALE ? "Mann" : g == Ausweis.Gender.FEMALE ? "Frau" : "Divers")));
+                            p.sendPlainMessage(Messages.SUCC_CMD_AUSWEIS.replace("%s", "Geschlecht")
+                                    .replace("%v", (g == Ausweis.Gender.MALE ? "Mann" :
+                                            g == Ausweis.Gender.FEMALE ? "Frau" : "Divers")));
                         } else
-                            p.sendPlainMessage(Messages.PREFIX + "Bitte benutze den Befehl so:" + " §c/ausweis geschlecht [\"m\"/\"f\"]");
+                            p.sendPlainMessage(Messages.PREFIX + "Bitte benutze den Befehl so:" +
+                                    " §c/ausweis geschlecht [\"m\"/\"f\"]");
                     } else
-                        p.sendPlainMessage(Messages.PREFIX + "Bitte benutze den Befehl so:" + " §c/ausweis geschlecht [\"m\"/\"f\"]");
+                        p.sendPlainMessage(Messages.PREFIX + "Bitte benutze den Befehl so:" +
+                                " §c/ausweis geschlecht [\"m\"/\"f\"]");
                     break;
                 case "rasse":
 
@@ -103,7 +115,8 @@ public class CMDausweis implements CommandExecutor, TabCompleter {
                         return true;
                     }
                     if (args.length != 2) {
-                        p.sendPlainMessage(Messages.PREFIX + "Bitte benutze den Befehl so:" + " §c/ausweis rasse [Ork/Zwerg/Mensch/Elf]");
+                        p.sendPlainMessage(Messages.PREFIX + "Bitte benutze den Befehl so:" +
+                                " §c/ausweis rasse [Ork/Zwerg/Mensch/Elf]");
                         return true;
                     }
 
@@ -199,8 +212,8 @@ public class CMDausweis implements CommandExecutor, TabCompleter {
                         String deckname = args[1].replace("_", " ");
                         plugin.getAusweis(p).setSpitzname(deckname);
                         p.sendMessage(Messages.PREFIX + "Du hast deinen Decknamen als " + deckname + " gesetzt!");
-                    }
-
+                    } p.sendPlainMessage(Messages.PREFIX + "Bitte benutze den Befehl so:" + " §c/ausweis deckname [Deckname]");
+                    break;
                 default:
                     sendHelpMsg(p);
                     break;
@@ -228,14 +241,15 @@ public class CMDausweis implements CommandExecutor, TabCompleter {
     }
 
     public static void sendHelpMsg(Player p) {
-        p.sendMessage("§c----- §e/ausweis §c-----");
-        p.sendMessage("§e/ausweis name [Vorname] [Nachname] §bÄndert deinen Namen und erstellt beim 1. Mal einen Ausweis - §cMit Unterstrichen könnt ihr Leerzeichen im Namen haben");
-        p.sendMessage("§e/ausweis geschlecht [m/f] §bSetzt die Ansprache (m - Männliche | f - Weibliche)");
-        p.sendMessage("§e/ausweis rasse [Ork/Zwerg/Mensch/Elf] §bSetzt deine Rasse");
-        p.sendMessage("§e/ausweis aussehen [Beschr.] §bSetzt dein Aussehen (Mind. 4 Wörter)");
-        p.sendMessage("§e/ausweis größe [Größe in cm] §bSetzt deine Größe");
-        p.sendMessage("§e/ausweis link [Link] §bSetzt den Link zu deiner Charvorstellung im Forum");
-        p.sendMessage("§e/ausweis anschauen [Spieler] §bSchau den Ausweis eines Spielers an");
+        p.sendMessage(Messages.PREFIX+"----- §c/ausweis §7-----");
+        p.sendMessage("§7/ausweis name [Vorname] [Nachname] §cÄndert deinen Namen und erstellt beim 1. Mal einen Ausweis - Mit Unterstrichen könnt ihr Leerzeichen im Namen haben");
+        p.sendMessage("§7/ausweis geschlecht [m/f] §cSetzt die Ansprache (m - Männliche | f - Weibliche)");
+        p.sendMessage("§7/ausweis rasse [Ork/Zwerg/Mensch/Elf] §cSetzt deine Rasse");
+        p.sendMessage("§7/ausweis aussehen [Beschr.] §cSetzt dein Aussehen (Mind. 4 Wörter)");
+        p.sendMessage("§7/ausweis größe [Größe in cm] §cSetzt deine Größe");
+        p.sendMessage("§7/ausweis deckname [Deckname] §cSetzt deinen Decknamen");
+        p.sendMessage("§7/ausweis link [Link] §cSetzt den Link zu deiner Charvorstellung im Forum");
+        p.sendMessage("§7/ausweis anschauen [Spieler] §cSchau den Ausweis eines Spielers an");
     }
 
 }
