@@ -127,8 +127,6 @@ public class Ausweis {
     }
 
     public String getSpitzname() {
-        if (spitzname == null)
-            return null;
         return spitzname;
     }
 

@@ -19,6 +19,7 @@ public class Var {
         p.sendMessage("§cGeschlecht: §e" + (a.getGender() == Ausweis.Gender.MALE ? "Mann" : a.getGender() == Ausweis.Gender.FEMALE ? "Frau" : "Kein Eintrag"));
         p.sendMessage("§cRasse: §e" + (a.getRace() != null ? a.getRace() : "Kein Eintrag"));
         p.sendMessage("§cAussehen: §e" + (a.getDesc() != null ? a.getDesc() : "Kein Eintrag"));
+        p.sendMessage("§cDeckname: §e" + (a.getSpitzname() != null ? a.getSpitzname() : "Kein Eintrag"));
         p.sendMessage("§cGröße: §e" + (a.getHeight() != -1 ? a.getHeight() : "Kein Eintrag"));
         if (a.getForumLink() != null) {
             Component click = Component.text("[CLICK]")

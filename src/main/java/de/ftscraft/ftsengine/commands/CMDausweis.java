@@ -189,6 +189,18 @@ public class CMDausweis implements CommandExecutor, TabCompleter {
                         }
                     } else p.sendPlainMessage("§cDafür hast du keine Rechte");
                     break;
+                case "deckname":
+
+                    if (!plugin.hasAusweis(p)) {
+                        p.sendPlainMessage(Messages.NEED_AUSWEIS);
+                        return true;
+                    }
+                    if (args.length > 1) {
+                        String deckname = args[1].replace("_", " ");
+                        plugin.getAusweis(p).setSpitzname(deckname);
+                        p.sendMessage(Messages.PREFIX + "Du hast deinen Decknamen als " + deckname + " gesetzt!");
+                    }
+
                 default:
                     sendHelpMsg(p);
                     break;
