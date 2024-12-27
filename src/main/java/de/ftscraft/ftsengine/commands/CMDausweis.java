@@ -212,7 +212,10 @@ public class CMDausweis implements CommandExecutor, TabCompleter {
                         String deckname = args[1].replace("_", " ");
                         plugin.getAusweis(p).setSpitzname(deckname);
                         p.sendMessage(Messages.PREFIX + "Du hast deinen Decknamen als " + deckname + " gesetzt!");
-                    } p.sendPlainMessage(Messages.PREFIX + "Bitte benutze den Befehl so:" + " §c/ausweis deckname [Deckname]");
+                    } else {
+                        p.sendPlainMessage(Messages.PREFIX +
+                                "Bitte benutze den Befehl so:" + " §c/ausweis deckname [Deckname]");
+                    }
                     break;
                 default:
                     sendHelpMsg(p);
