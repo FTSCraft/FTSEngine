@@ -242,11 +242,10 @@ public class ItemStacks {
         {
             NamespacedKey key = new NamespacedKey(plugin, "FTSguitar");
             ShapedRecipe recipe = new ShapedRecipe(key, guitar);
-            recipe.shape("ASA", "TJT", "AOA");
-            recipe.setIngredient('S', Material.STICK);
-            recipe.setIngredient('O', Material.OAK_PLANKS);
-            recipe.setIngredient('T', Material.STRING);
-            recipe.setIngredient('J', Material.JUKEBOX);
+            recipe.shape("AB ", "ACB", "AB ");
+            recipe.setIngredient('A', Material.STRING);
+            recipe.setIngredient('B', Material.STRIPPED_JUNGLE_LOG);
+            recipe.setIngredient('C', Material.JUKEBOX);
             Bukkit.addRecipe(recipe);
         }
 
