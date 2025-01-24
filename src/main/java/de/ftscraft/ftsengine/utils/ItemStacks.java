@@ -317,10 +317,14 @@ public class ItemStacks {
 
         NamespacedKey hornkey = new NamespacedKey(plugin, "FTSHorn");
 
-        ShapelessRecipe horn = new ShapelessRecipe(hornkey, this.getHorn());
-        horn.addIngredient(Material.NAUTILUS_SHELL);
-        horn.addIngredient(Material.NOTE_BLOCK);
+        ShapedRecipe horn = new ShapedRecipe(hornkey, this.getHorn());
+        horn.shape(" A ", " B ", " C ");
+        horn.setIngredient('A', Material.NAUTILUS_SHELL);
+        horn.setIngredient('B', Material.STRING);
+        horn.setIngredient('C', Material.JUKEBOX);
         plugin.getServer().addRecipe(horn);
+
+
         Iterator<Recipe> a = plugin.getServer().recipeIterator();
 
         while (a.hasNext()) {
