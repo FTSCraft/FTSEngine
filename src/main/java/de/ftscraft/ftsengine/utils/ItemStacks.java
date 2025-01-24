@@ -222,10 +222,10 @@ public class ItemStacks {
         {
             NamespacedKey key = new NamespacedKey(plugin, "FTSxylophon");
             ShapedRecipe recipe = new ShapedRecipe(key, xylophone);
-            recipe.shape("ABA", "AJA", "AOA");
-            recipe.setIngredient('B', Material.BONE);
-            recipe.setIngredient('O', Material.OAK_PLANKS);
-            recipe.setIngredient('J', Material.JUKEBOX);
+            recipe.shape("   ", "ABA", "CCC");
+            recipe.setIngredient('A', Material.BONE);
+            recipe.setIngredient('B', Material.JUKEBOX);
+            recipe.setIngredient('C', Material.BAMBOO_BLOCK);
             Bukkit.addRecipe(recipe);
         }
 
