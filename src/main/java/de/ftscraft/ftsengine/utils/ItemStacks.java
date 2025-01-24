@@ -172,10 +172,10 @@ public class ItemStacks {
         {
             NamespacedKey key = new NamespacedKey(plugin, "FTSharp");
             ShapedRecipe recipe = new ShapedRecipe(key, harp);
-            recipe.shape(" Q ", " J ", " W ");
-            recipe.setIngredient('W', Material.OAK_PLANKS);
-            recipe.setIngredient('Q', Material.QUARTZ);
-            recipe.setIngredient('J', Material.JUKEBOX);
+            recipe.shape(" AB", "ACB", "AB ");
+            recipe.setIngredient('A', Material.STRIPPED_MANGROVE_LOG);
+            recipe.setIngredient('B', Material.STRING);
+            recipe.setIngredient('C', Material.JUKEBOX);
             Bukkit.addRecipe(recipe);
         }
 
