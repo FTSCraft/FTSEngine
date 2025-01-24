@@ -192,10 +192,10 @@ public class ItemStacks {
         {
             NamespacedKey key = new NamespacedKey(plugin, "FTSflute");
             ShapedRecipe recipe = new ShapedRecipe(key, flute);
-            recipe.shape(" C ", " J ", " S ");
-            recipe.setIngredient('C', Material.CLAY_BALL);
-            recipe.setIngredient('J', Material.JUKEBOX);
-            recipe.setIngredient('S', Material.STICK);
+            recipe.shape("   ", "ABA", "CCC");
+            recipe.setIngredient('A', Material.QUARTZ);
+            recipe.setIngredient('B', Material.JUKEBOX);
+            recipe.setIngredient('C', Material.STRIPPED_OAK_LOG);
             Bukkit.addRecipe(recipe);
         }
 
