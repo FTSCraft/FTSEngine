@@ -67,7 +67,7 @@ public class PlayerInteractListener implements Listener {
         }
 
         if (clickedBlock != null) {
-            handleSchwarzesBrett(player, clickedBlock);
+            handleSchwarzesBrett(player, clickedBlock, e.getAction());
         }
     }
 
@@ -211,12 +211,17 @@ public class PlayerInteractListener implements Listener {
         block.applyBoneMeal(BlockFace.UP);
     }
 
-    private void handleSchwarzesBrett(Player player, Block block) {
+    private void handleSchwarzesBrett(Player player, Block block, Action action) {
+        // If trying to break block, skip
+        if (action == Action.LEFT_CLICK_BLOCK)
+            return;
+
         if (block.getBlockData() instanceof WallSign || block.getBlockData() instanceof Sign) {
             org.bukkit.block.Sign sign = (org.bukkit.block.Sign) block.getState();
             if ("§4Schwarzes Brett".equalsIgnoreCase(sign.getLine(0))) {
                 Brett brett = plugin.bretter.get(block.getLocation());
                 if (brett != null) {
+                    Engine.getInstance().getPlayer().get(player).setBrett(brett);
                     brett.getGui().open(player, 1);
                 }
             }
