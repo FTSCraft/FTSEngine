@@ -58,7 +58,8 @@ public class CMDbrief implements CommandExecutor {
                     if (success) {
 
                         p.sendMessage(Messages.PREFIX + "Dein Brief wurde erfolgreich versendet!");
-
+                        Bukkit.dispatchCommand(Bukkit.getConsoleSender(),
+                                "mail send " + args[1] + " Du hast einen Brief in deinem Briefkasten erhalten.");
                         item.setAmount(0);
 
                     } else
