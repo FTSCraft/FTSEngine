@@ -33,10 +33,7 @@ public class CMDreiten implements CommandExecutor {
             return true;
         }
 
-        if (plugin.getReiter().contains(p)) {
-            p.sendMessage(Messages.NEED_TO_CLICK_ENTITY);
-            return true;
-        } else plugin.getReiter().add(p);
+        plugin.getReiter().add(p);
         p.sendMessage(Messages.NEED_TO_CLICK_ENTITY);
 
         return false;
