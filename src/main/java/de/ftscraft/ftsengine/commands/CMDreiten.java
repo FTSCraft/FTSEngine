@@ -22,6 +22,7 @@ public class CMDreiten implements CommandExecutor {
 
     public CMDreiten(Engine plugin) {
         this.plugin = plugin;
+        //noinspection DataFlowIssue
         plugin.getCommand("reiten").setExecutor(this);
         addPacketListener();
     }
