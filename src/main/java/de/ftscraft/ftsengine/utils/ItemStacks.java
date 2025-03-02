@@ -244,7 +244,7 @@ public class ItemStacks {
             ShapedRecipe recipe = new ShapedRecipe(key, guitar);
             recipe.shape("AB ", "ACB", "AB ");
             recipe.setIngredient('A', Material.STRING);
-            recipe.setIngredient('B', Material.STRIPPED_JUNGLE_LOG);
+            recipe.setIngredient('B', Material.STRIPPED_ACACIA_LOG);
             recipe.setIngredient('C', Material.JUKEBOX);
             Bukkit.addRecipe(recipe);
         }
