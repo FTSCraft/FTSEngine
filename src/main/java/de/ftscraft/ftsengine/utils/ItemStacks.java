@@ -225,7 +225,7 @@ public class ItemStacks {
             recipe.shape("   ", "ABA", "CCC");
             recipe.setIngredient('A', Material.BONE);
             recipe.setIngredient('B', Material.JUKEBOX);
-            recipe.setIngredient('C', Material.BAMBOO_BLOCK);
+            recipe.setIngredient('C', Material.STRIPPED_BAMBOO_BLOCK);
             Bukkit.addRecipe(recipe);
         }
 
