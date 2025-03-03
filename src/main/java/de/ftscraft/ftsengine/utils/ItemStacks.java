@@ -25,7 +25,6 @@ public class ItemStacks {
             diamondHelmet, diamondChestplate, diamondLeggings, diamondBoots;
     private ItemStack diamondHelmetReplacement, diamondChestplateReplacement, diamondLeggingsReplacement, diamondBootsReplacement;
     private ItemStack leatherHorse, ironHorse, diamondHorse;
-    private ItemStack gold;
     private ItemStack dragonBreath;
     private ItemStack meissel;
     private ItemStack logport;
@@ -123,8 +122,6 @@ public class ItemStacks {
         diamondChestplateReplacement = new ItemStack(Material.DIAMOND, 8);
         diamondLeggingsReplacement = new ItemStack(Material.DIAMOND, 7);
         diamondBootsReplacement = new ItemStack(Material.DIAMOND, 4);
-
-        gold = new ItemStack(Material.GOLD_INGOT, 1);
 
         dragonBreath = new ItemStack(Material.DRAGON_BREATH, 1);
 
