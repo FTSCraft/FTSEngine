@@ -5,6 +5,7 @@ import de.ftscraft.ftsengine.logport.LogportManager;
 import de.ftscraft.ftsengine.main.Engine;
 import de.ftscraft.ftsutils.items.ItemBuilder;
 import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.NamedTextColor;
 import org.bukkit.*;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.*;
@@ -25,7 +26,6 @@ public class ItemStacks {
             diamondHelmet, diamondChestplate, diamondLeggings, diamondBoots;
     private ItemStack diamondHelmetReplacement, diamondChestplateReplacement, diamondLeggingsReplacement, diamondBootsReplacement;
     private ItemStack leatherHorse, ironHorse, diamondHorse;
-    private ItemStack gold;
     private ItemStack dragonBreath;
     private ItemStack meissel;
     private ItemStack logport;
@@ -124,8 +124,6 @@ public class ItemStacks {
         diamondLeggingsReplacement = new ItemStack(Material.DIAMOND, 7);
         diamondBootsReplacement = new ItemStack(Material.DIAMOND, 4);
 
-        gold = new ItemStack(Material.GOLD_INGOT, 1);
-
         dragonBreath = new ItemStack(Material.DRAGON_BREATH, 1);
 
         meissel = new ItemBuilder(Material.ARROW).name("§6Meißel").lore("§7Ein nützliches Werkzeug zum Steine verarbeiten").sign("MEISSEL").build();
@@ -202,10 +200,10 @@ public class ItemStacks {
         {
             NamespacedKey key = new NamespacedKey(plugin, "FTSchime");
             ShapedRecipe recipe = new ShapedRecipe(key, chime);
-            recipe.shape("   ", "ABA", "CCC");
-            recipe.setIngredient('A', Material.IRON_NUGGET);
-            recipe.setIngredient('B', Material.JUKEBOX);
-            recipe.setIngredient('C', Material.STRIPPED_CHERRY_LOG);
+            recipe.shape("AAA", "BCB", " B ");
+            recipe.setIngredient('A', Material.DARK_OAK_LOG);
+            recipe.setIngredient('B', Material.GOLD_INGOT);
+            recipe.setIngredient('C', Material.JUKEBOX);
             Bukkit.addRecipe(recipe);
         }
 
@@ -225,7 +223,7 @@ public class ItemStacks {
             recipe.shape("   ", "ABA", "CCC");
             recipe.setIngredient('A', Material.BONE);
             recipe.setIngredient('B', Material.JUKEBOX);
-            recipe.setIngredient('C', Material.BAMBOO_BLOCK);
+            recipe.setIngredient('C', Material.STRIPPED_BAMBOO_BLOCK);
             Bukkit.addRecipe(recipe);
         }
 
@@ -244,7 +242,7 @@ public class ItemStacks {
             ShapedRecipe recipe = new ShapedRecipe(key, guitar);
             recipe.shape("AB ", "ACB", "AB ");
             recipe.setIngredient('A', Material.STRING);
-            recipe.setIngredient('B', Material.STRIPPED_JUNGLE_LOG);
+            recipe.setIngredient('B', Material.STRIPPED_ACACIA_LOG);
             recipe.setIngredient('C', Material.JUKEBOX);
             Bukkit.addRecipe(recipe);
         }
@@ -684,7 +682,7 @@ public class ItemStacks {
         // FallAxt
         ItemStack lumberAxeStack = new ItemStack(Material.DIAMOND_AXE, 1);
         ItemMeta lumberAxeMeta = lumberAxeStack.getItemMeta();
-        lumberAxeMeta.displayName(Component.text(ChatColor.DARK_PURPLE + "FallAxt"));
+        lumberAxeMeta.displayName(Component.text("FallAxt").color(NamedTextColor.DARK_PURPLE));
         lumberAxeMeta.setCustomModelData(1001);
         lumberAxeStack.setItemMeta(lumberAxeMeta);
         lumberAxeStack.addEnchantment(Enchantment.UNBREAKING, 2);
