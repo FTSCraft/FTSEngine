@@ -5,6 +5,7 @@ import de.ftscraft.ftsengine.logport.LogportManager;
 import de.ftscraft.ftsengine.main.Engine;
 import de.ftscraft.ftsutils.items.ItemBuilder;
 import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.NamedTextColor;
 import org.bukkit.*;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.*;
@@ -681,7 +682,7 @@ public class ItemStacks {
         // FallAxt
         ItemStack lumberAxeStack = new ItemStack(Material.DIAMOND_AXE, 1);
         ItemMeta lumberAxeMeta = lumberAxeStack.getItemMeta();
-        lumberAxeMeta.displayName(Component.text(ChatColor.DARK_PURPLE + "FallAxt"));
+        lumberAxeMeta.displayName(Component.text("FallAxt").color(NamedTextColor.DARK_PURPLE));
         lumberAxeMeta.setCustomModelData(1001);
         lumberAxeStack.setItemMeta(lumberAxeMeta);
         lumberAxeStack.addEnchantment(Enchantment.UNBREAKING, 2);
