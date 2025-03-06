@@ -4,22 +4,17 @@ import de.ftscraft.ftsengine.brett.Brett;
 import de.ftscraft.ftsengine.main.Engine;
 import de.ftscraft.ftsengine.utils.Messages;
 import de.ftscraft.ftsutils.items.ItemReader;
-import org.bukkit.Bukkit;
-import org.bukkit.Material;
-import org.bukkit.OfflinePlayer;
-import org.bukkit.World;
+import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.block.Sign;
 import org.bukkit.block.data.Ageable;
 import org.bukkit.block.data.Directional;
 import org.bukkit.block.data.type.WallSign;
-import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
-import org.bukkit.event.block.BlockDropItemEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.Damageable;
 
@@ -57,30 +52,79 @@ public class BlockBreakListener implements Listener {
         handleSchwarzesBrett(event);
         handleBriefkasten(event);
         handleEmeraldPickaxe(event);
-    }
-
-    @EventHandler
-    public void onBlockDropItem(BlockDropItemEvent event) {
         handleSense(event);
     }
 
-    private void handleSense(BlockDropItemEvent event) {
-        ItemStack item = event.getPlayer().getInventory().getItemInMainHand();
+    private void handleSense(BlockBreakEvent event) {
+        Player player = event.getPlayer();
+        ItemStack item = player.getInventory().getItemInMainHand();
+
         String sign = ItemReader.getSign(item);
         if (!"SENSE".equals(sign)) {
             return;
         }
-        if (!(event.getBlockState().getBlockData() instanceof Ageable)) {
-            return;
-        }
-        event.getBlock().setType(event.getBlockState().getType());
-        event.getItems().stream()
-                .map(Item::getItemStack)
-                .filter(drop -> seeds.contains(drop.getType()))
-                .forEach(drop -> drop.setAmount(drop.getAmount() - 1));
-        Damageable damageable = (Damageable) item.getItemMeta();
-        damageable.setDamage(damageable.getDamage() + 1);
-        item.setItemMeta(damageable);
+
+        Block block = event.getBlock();
+        if (!(block.getBlockData() instanceof Ageable crop)) return;
+        if (crop.getAge() != crop.getMaximumAge()) return;
+
+        event.setCancelled(true);
+        harvestArea(block, player, item);
+    }
+
+    public void harvestArea(Block centerBlock, Player player, ItemStack sense) {
+        Bukkit.getScheduler().runTask(plugin, () -> {
+            Map<Block, Material> cropMap = new HashMap<>();
+            List<Block> harvestedBlocks = new ArrayList<>();
+
+            if (centerBlock.getBlockData() instanceof Ageable centerCrop) {
+                if (centerCrop.getAge() == centerCrop.getMaximumAge()) {
+                    cropMap.put(centerBlock, centerBlock.getType());
+                    harvestedBlocks.add(centerBlock);
+                }
+            }
+
+            for (int xOffset = -1; xOffset <= 1; xOffset++) {
+                for (int zOffset = -1; zOffset <= 1; zOffset++) {
+                    Block targetBlock = centerBlock.getRelative(xOffset, 0, zOffset);
+
+                    if (targetBlock.getBlockData() instanceof Ageable targetCrop) {
+                        if (targetCrop.getAge() == targetCrop.getMaximumAge()) {
+                            cropMap.put(targetBlock, targetBlock.getType());
+                            harvestedBlocks.add(targetBlock);
+                        }
+                    }
+                }
+            }
+
+            // Harvest crops and drop the items
+            for (Block harvestedBlock : harvestedBlocks) {
+                Collection<ItemStack> drops = harvestedBlock.getDrops();
+                harvestedBlock.setType(Material.AIR);
+                drops.stream()
+                        .filter(drop -> seeds.contains(drop.getType()))
+                        .findFirst()
+                        .ifPresent(seed -> seed.setAmount(seed.getAmount() - 1));
+                drops.forEach(drop -> harvestedBlock.getWorld().dropItemNaturally(harvestedBlock.getLocation(), drop));
+            }
+
+            Bukkit.getScheduler().runTaskLater(plugin, () -> {
+                for (Block harvestedBlock : harvestedBlocks) {
+                    Material originalType = cropMap.get(harvestedBlock);
+                    if (originalType != null) {
+                        harvestedBlock.setType(originalType);
+                        Ageable newCrop = (Ageable) harvestedBlock.getBlockData();
+                        newCrop.setAge(0);
+                        harvestedBlock.setBlockData(newCrop);
+                    }
+                }
+            }, 1L);
+
+            // Handle tool durability
+            Damageable damageable = (Damageable) sense.getItemMeta();
+            damageable.setDamage(damageable.getDamage() + 1);
+            sense.setItemMeta(damageable);
+        });
     }
 
     private void handleNetherGoldBlock(BlockBreakEvent event) {
