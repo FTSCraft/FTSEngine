@@ -69,39 +69,15 @@ public class BlockBreakListener implements Listener {
         if (crop.getAge() != crop.getMaximumAge()) return;
 
         event.setCancelled(true);
-        harvestArea(block, player, item);
+        harvestArea(block, item);
     }
 
-    public void harvestArea(Block centerBlock, Player player, ItemStack sense) {
+    public void harvestArea(Block centerBlock, ItemStack sense) {
         Bukkit.getScheduler().runTask(plugin, () -> {
-            List<Block> harvestedBlocks = new ArrayList<>();
 
             for (int xOffset = -1; xOffset <= 1; xOffset++) {
                 for (int zOffset = -1; zOffset <= 1; zOffset++) {
-                    Block targetBlock = centerBlock.getRelative(xOffset, 0, zOffset);
-
-                    if (targetBlock.getBlockData() instanceof Ageable targetCrop) {
-                        if (targetCrop.getAge() == targetCrop.getMaximumAge()) {
-                            harvestedBlocks.add(targetBlock);
-                        }
-                    }
-                }
-            }
-
-            // Harvest crops and drop the items
-            for (Block harvestedBlock : harvestedBlocks) {
-                Collection<ItemStack> drops = harvestedBlock.getDrops();
-
-                drops.stream()
-                        .filter(drop -> seeds.contains(drop.getType()))
-                        .forEach(seed -> seed.setAmount(seed.getAmount() - 1));
-
-                drops.forEach(drop -> harvestedBlock.getWorld().dropItemNaturally(harvestedBlock.getLocation(), drop));
-
-                // Crops age sets to 0
-                if (harvestedBlock.getBlockData() instanceof Ageable ageable) {
-                    ageable.setAge(0);
-                    harvestedBlock.setBlockData(ageable);
+                    harvestCrop(centerBlock.getRelative(xOffset, 0, zOffset));
                 }
             }
 
@@ -110,6 +86,27 @@ public class BlockBreakListener implements Listener {
             damageable.setDamage(damageable.getDamage() + 1);
             sense.setItemMeta(damageable);
         });
+    }
+
+    private void harvestCrop(Block targetBlock) {
+        if (!(targetBlock.getBlockData() instanceof Ageable targetCrop)) {
+            return;
+        }
+        if (targetCrop.getAge() != targetCrop.getMaximumAge()) {
+            return;
+        }
+
+        Collection<ItemStack> drops = targetBlock.getDrops();
+
+        drops.stream()
+                .filter(drop -> seeds.contains(drop.getType()))
+                .forEach(seed -> seed.setAmount(seed.getAmount() - 1));
+
+        drops.forEach(drop -> targetBlock.getWorld().dropItemNaturally(targetBlock.getLocation(), drop));
+
+        targetCrop.setAge(0);
+        targetBlock.setBlockData(targetCrop);
+
     }
 
 
