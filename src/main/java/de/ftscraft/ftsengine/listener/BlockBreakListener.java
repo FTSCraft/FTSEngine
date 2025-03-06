@@ -74,15 +74,7 @@ public class BlockBreakListener implements Listener {
 
     public void harvestArea(Block centerBlock, Player player, ItemStack sense) {
         Bukkit.getScheduler().runTask(plugin, () -> {
-            Map<Block, Material> cropMap = new HashMap<>();
             List<Block> harvestedBlocks = new ArrayList<>();
-
-            if (centerBlock.getBlockData() instanceof Ageable centerCrop) {
-                if (centerCrop.getAge() == centerCrop.getMaximumAge()) {
-                    cropMap.put(centerBlock, centerBlock.getType());
-                    harvestedBlocks.add(centerBlock);
-                }
-            }
 
             for (int xOffset = -1; xOffset <= 1; xOffset++) {
                 for (int zOffset = -1; zOffset <= 1; zOffset++) {
@@ -90,7 +82,6 @@ public class BlockBreakListener implements Listener {
 
                     if (targetBlock.getBlockData() instanceof Ageable targetCrop) {
                         if (targetCrop.getAge() == targetCrop.getMaximumAge()) {
-                            cropMap.put(targetBlock, targetBlock.getType());
                             harvestedBlocks.add(targetBlock);
                         }
                     }
@@ -100,25 +91,19 @@ public class BlockBreakListener implements Listener {
             // Harvest crops and drop the items
             for (Block harvestedBlock : harvestedBlocks) {
                 Collection<ItemStack> drops = harvestedBlock.getDrops();
-                harvestedBlock.setType(Material.AIR);
+
                 drops.stream()
                         .filter(drop -> seeds.contains(drop.getType()))
-                        .findFirst()
-                        .ifPresent(seed -> seed.setAmount(seed.getAmount() - 1));
-                drops.forEach(drop -> harvestedBlock.getWorld().dropItemNaturally(harvestedBlock.getLocation(), drop));
-            }
+                        .forEach(seed -> seed.setAmount(seed.getAmount() - 1));
 
-            Bukkit.getScheduler().runTaskLater(plugin, () -> {
-                for (Block harvestedBlock : harvestedBlocks) {
-                    Material originalType = cropMap.get(harvestedBlock);
-                    if (originalType != null) {
-                        harvestedBlock.setType(originalType);
-                        Ageable newCrop = (Ageable) harvestedBlock.getBlockData();
-                        newCrop.setAge(0);
-                        harvestedBlock.setBlockData(newCrop);
-                    }
+                drops.forEach(drop -> harvestedBlock.getWorld().dropItemNaturally(harvestedBlock.getLocation(), drop));
+
+                // Crops age sets to 0
+                if (harvestedBlock.getBlockData() instanceof Ageable ageable) {
+                    ageable.setAge(0);
+                    harvestedBlock.setBlockData(ageable);
                 }
-            }, 1L);
+            }
 
             // Handle tool durability
             Damageable damageable = (Damageable) sense.getItemMeta();
@@ -126,6 +111,7 @@ public class BlockBreakListener implements Listener {
             sense.setItemMeta(damageable);
         });
     }
+
 
     private void handleNetherGoldBlock(BlockBreakEvent event) {
         if (event.getBlock().getType() == Material.GOLD_BLOCK && event.getBlock().getWorld().getEnvironment() == World.Environment.NETHER) {
