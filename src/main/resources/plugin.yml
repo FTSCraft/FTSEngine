@@ -18,6 +18,7 @@ commands:
   buch:
   removearmorstand:
     premission: ftsengine.armorstand
+  durchsuchen:
   #pferd:
   reisepunkt:
   brief:
@@ -34,3 +35,5 @@ commands:
   küssen:
   ewürfel:
   zeit:
+  #system
+  searchreact:

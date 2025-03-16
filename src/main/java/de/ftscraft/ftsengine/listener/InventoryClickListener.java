@@ -3,6 +3,7 @@ package de.ftscraft.ftsengine.listener;
 import de.ftscraft.ftsengine.backpacks.BackpackType;
 import de.ftscraft.ftsengine.brett.Brett;
 import de.ftscraft.ftsengine.brett.BrettNote;
+import de.ftscraft.ftsengine.feature.durchsuchen.DurchsuchenManager;
 import de.ftscraft.ftsengine.feature.instruments.CustomInstrument;
 import de.ftscraft.ftsengine.feature.instruments.Instrument;
 import de.ftscraft.ftsengine.feature.instruments.SimpleInstrument;
@@ -17,9 +18,8 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
-import org.bukkit.event.inventory.ClickType;
-import org.bukkit.event.inventory.InventoryClickEvent;
-import org.bukkit.event.inventory.InventoryType;
+import org.bukkit.event.inventory.*;
+import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.persistence.PersistentDataType;
 
@@ -247,6 +247,11 @@ public class InventoryClickListener implements Listener {
             }
 
         }
+
+        Inventory inventory = event.getInventory();
+        if(DurchsuchenManager.isSearchInventory(inventory)) {
+            event.setCancelled(true);
+        }
     }
 
     private void handleInstrument(InventoryClickEvent event) {
@@ -272,6 +277,20 @@ public class InventoryClickListener implements Listener {
 
         }
 
+    }
+
+    @EventHandler
+    public void onInventoryDrag(InventoryDragEvent event) {
+        Inventory inventory = event.getInventory();
+        if(DurchsuchenManager.isSearchInventory(inventory)) {
+            event.setCancelled(true);
+        }
+    }
+
+    @EventHandler
+    public void onInventoryClose(InventoryCloseEvent event) {
+        Inventory inventory = event.getInventory();
+        DurchsuchenManager.removeSearchInventory(inventory);
     }
 
 }
