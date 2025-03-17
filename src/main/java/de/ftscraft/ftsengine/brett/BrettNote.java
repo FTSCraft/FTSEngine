@@ -113,11 +113,11 @@ public class BrettNote {
         this.title = title;
     }
 
-    public boolean isTitle() {
+    public boolean hasTitle() {
         return title != null;
     }
 
-    public boolean isContent() {
+    public boolean hasContent() {
         return content != null;
     }
 

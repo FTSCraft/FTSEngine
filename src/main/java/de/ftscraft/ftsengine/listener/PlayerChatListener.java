@@ -3,8 +3,6 @@ package de.ftscraft.ftsengine.listener;
 import de.ftscraft.ftsengine.brett.BrettNote;
 import de.ftscraft.ftsengine.main.Engine;
 import de.ftscraft.ftsengine.utils.Ausweis;
-import org.bukkit.Bukkit;
-import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -14,6 +12,8 @@ public class PlayerChatListener implements Listener {
 
     private final Engine plugin;
 
+    final String BRETT_PREFIX = "§7[§bSchwarzes Brett§7] ";
+
     public PlayerChatListener(Engine plugin) {
         this.plugin = plugin;
         plugin.getServer().getPluginManager().registerEvents(this, plugin);
@@ -21,56 +21,59 @@ public class PlayerChatListener implements Listener {
 
     @EventHandler
     public void onChat(AsyncPlayerChatEvent e) {
-
-        if (plugin.playerBrettNote.containsKey(e.getPlayer())) {
-            Player p = e.getPlayer();
-
-            if (plugin.playerBrettNote.get(p) != null) {
-                if (!(plugin.playerBrettNote.get(p).isTitle())) {
-                    e.setCancelled(true);
-                    if (e.getMessage().length() > 4) {
-                        BrettNote bn = plugin.playerBrettNote.get(p);
-                        bn.setTitle(e.getMessage());
-                        p.sendMessage("§7[§bSchwarzes Brett§7] Perfekt! Jetzt bitte die Beschreibung (mind. 10 Zeichen)");
-                    } else
-                        p.sendMessage("§7[§bSchwarzes Brett§7] Der Titel muss mind. 5 Zeichen haben.");
-                } else if (!(plugin.playerBrettNote.get(p).isContent())) {
-                    e.setCancelled(true);
-                    if (e.getMessage().length() > 9) {
-                        BrettNote bn = plugin.playerBrettNote.get(p);
-                        bn.setContent(e.getMessage());
-                        bn.addToBrett();
-                        //Geld
-                        OfflinePlayer op = Bukkit.getOfflinePlayer(p.getUniqueId());
-                        int price;
-                        price = 0;
-                        if (plugin.getEcon().has(op, price)) {
-                            plugin.getEcon().withdrawPlayer(op, price);
-                            OfflinePlayer c = Bukkit.getOfflinePlayer(bn.getBrett().getCreator());
-                            plugin.getEcon().depositPlayer(c, price);
-                            p.sendMessage("§7[§bSchwarzes Brett§7] Ok! Die Notiz wurde erstellt");
-
-                            if (bn.getBrett().isAdmin()) {
-                                Ausweis ausweis = plugin.getAusweis(p);
-                                plugin.getServer().broadcastMessage("§7[§bMarktschreier§7] Es wurde etwas neues am Schwarzen Brett in Xantia von §c" + ausweis.getFirstName() + " " + ausweis.getLastName() + " §7mit dem Titel §c" + bn.getTitle() + " §7angeheftet");
-                            }
-
-                        } else p.sendMessage("§7Du hast nicht genug Geld!");
-                    } else
-                        p.sendMessage("§7Bitte mind. 10 Zeichen in der Beschreibung!");
-                }
-            }
-        }
-
+        handleSchwarzesBrett(e);
     }
-        /*
+
+    private void handleSchwarzesBrett(AsyncPlayerChatEvent e) {
         Player p = e.getPlayer();
 
-        FTSUser user = plugin.getPlayer().get(p);
-        user.getChatChannel().sendMessage(p, e.getMessage());
+        if (!plugin.playerBrettNote.containsKey(p)) {
+            return;
+        }
+
+        BrettNote brettNote = plugin.playerBrettNote.get(p);
+        if (brettNote == null) {
+            return;
+        }
+
+        if (e.getMessage().equalsIgnoreCase("exit")) {
+            p.sendMessage(BRETT_PREFIX + "Du hast erfolgreich abgebrochen!");
+            plugin.playerBrettNote.remove(p);
+            return;
+        }
 
         e.setCancelled(true);
-        */
+
+        if (!(brettNote.hasTitle())) {
+
+            if (e.getMessage().length() > 4) {
+                brettNote.setTitle(e.getMessage());
+                p.sendMessage(BRETT_PREFIX + "Perfekt! Jetzt bitte die Beschreibung (mind. 10 Zeichen)");
+            } else {
+                p.sendMessage(BRETT_PREFIX + "Der Titel muss mind. 5 Zeichen haben.");
+            }
+
+        } else if (!(brettNote.hasContent())) {
+
+            if (e.getMessage().length() > 9) {
+                brettNote.setContent(e.getMessage());
+                brettNote.addToBrett();
+
+                p.sendMessage(BRETT_PREFIX + "Ok! Die Notiz wurde erstellt");
+
+                if (brettNote.getBrett().isAdmin()) {
+                    Ausweis ausweis = plugin.getAusweis(p);
+                    plugin.getServer().broadcastMessage("§7[§bMarktschreier§7] Es wurde etwas neues am Schwarzen Brett in Xantia von §c" + ausweis.getFirstName() + " " + ausweis.getLastName() + " §7mit dem Titel §c" + brettNote.getTitle() + " §7angeheftet");
+                }
+
+                plugin.playerBrettNote.remove(p);
+
+            } else {
+                p.sendMessage("§7Bitte mind. 10 Zeichen in der Beschreibung!");
+            }
+
+        }
+    }
 
 
 }
