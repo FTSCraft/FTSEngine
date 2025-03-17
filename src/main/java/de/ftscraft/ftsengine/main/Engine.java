@@ -126,6 +126,8 @@ public class Engine extends JavaPlugin implements Listener {
         new CMDkussen(this);
         new CMDewuerfel(this);
         new CMDzeit(this);
+        new CMDdurchsuchen(this);
+        new CMDsearchreact(this);
     }
 
     private void initListeners() {
