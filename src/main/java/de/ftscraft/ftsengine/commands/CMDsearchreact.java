@@ -44,6 +44,9 @@ public class CMDsearchreact implements CommandExecutor {
             case "deny":
                 DurchsuchenManager.deny(player);
                 break;
+            case "hide":
+                DurchsuchenManager.hide(player);
+                break;
             default:
                 return true;
         }

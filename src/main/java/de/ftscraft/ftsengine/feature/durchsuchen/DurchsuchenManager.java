@@ -1,18 +1,23 @@
 package de.ftscraft.ftsengine.feature.durchsuchen;
 
 import de.ftscraft.ftsengine.main.Engine;
+import de.ftscraft.ftsengine.utils.ItemStacks;
 import de.ftscraft.ftsengine.utils.Messages;
+import de.ftscraft.ftsutils.items.ItemReader;
 import net.md_5.bungee.api.chat.ClickEvent;
 import net.md_5.bungee.api.chat.ComponentBuilder;
 import net.md_5.bungee.api.chat.HoverEvent;
 import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.Bukkit;
+import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
+import org.bukkit.inventory.ItemStack;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.concurrent.ThreadLocalRandom;
 
 public class DurchsuchenManager {
     private static HashMap <Player, Player> searchRequests = new HashMap<>(); //Player target, Player requester
@@ -73,6 +78,17 @@ public class DurchsuchenManager {
                 "Inventar von " + target.getName());
         targetInventoryCopy.setContents(target.getInventory().getContents());
 
+        List<Integer> bundles = new ArrayList<>(targetInventoryCopy.all(Material.BUNDLE).keySet());
+        for(int slot : bundles) {
+            ItemStack stack = targetInventoryCopy.getItem(slot);
+            if(ItemReader.getSign(stack).equals("HIDDEN_BUNDLE")) {
+                int randValue = ThreadLocalRandom.current().nextInt(0, 100);
+                if(randValue < 90) {
+                    targetInventoryCopy.clear(slot);
+                }
+            }
+        }
+
         searchRequests.remove(target);
         Bukkit.getScheduler().cancelTask(searchTasks.get(target));
         searchInventorys.add(targetInventoryCopy);
@@ -117,5 +133,6 @@ public class DurchsuchenManager {
         int range = SEARCH_DISTANCE;
         return requester.getLocation().getWorld().getNearbyEntities(requester.getLocation(), range, range, range).contains(target);
     }
+
 }
 
