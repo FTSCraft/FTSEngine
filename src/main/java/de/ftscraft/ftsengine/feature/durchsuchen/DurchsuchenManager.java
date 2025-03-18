@@ -88,6 +88,11 @@ public class DurchsuchenManager {
         Bukkit.getScheduler().cancelTask(searchTasks.get(target));
     }
 
+    public static void hide(Player target) {
+        //TODO
+        Player requester = searchRequests.get(target);
+    }
+
     public static boolean isSearched(Player target) {
         return searchRequests.containsKey(target);
     }
