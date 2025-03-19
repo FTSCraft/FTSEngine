@@ -249,7 +249,7 @@ public class InventoryClickListener implements Listener {
         }
 
         Inventory inventory = event.getInventory();
-        if(DurchsuchenManager.isSearchInventory(inventory)) {
+        if (DurchsuchenManager.isSearchInventory(inventory)) {
             event.setCancelled(true);
         }
     }
@@ -282,15 +282,17 @@ public class InventoryClickListener implements Listener {
     @EventHandler
     public void onInventoryDrag(InventoryDragEvent event) {
         Inventory inventory = event.getInventory();
-        if(DurchsuchenManager.isSearchInventory(inventory)) {
+        if (DurchsuchenManager.isSearchInventory(inventory)) {
             event.setCancelled(true);
         }
     }
 
     @EventHandler
     public void onInventoryClose(InventoryCloseEvent event) {
+
         Inventory inventory = event.getInventory();
         DurchsuchenManager.removeSearchInventory(inventory);
+        DurchsuchenManager.handleHideInventory((Player) event.getPlayer(), event.getInventory());
     }
 
 }
