@@ -34,6 +34,7 @@ public class ItemStacks {
     private ItemStack sense;
     private ItemStack horn;
     private ItemStack harp, chime, flute, guitar, bell, cowBell, xylophone, ironXylophone, bassGuitar;
+    private ItemStack hiddenBundle;
 
     private List<Material> disabledDefaultRecipes;
 
@@ -154,6 +155,8 @@ public class ItemStacks {
         xylophone = new ItemBuilder(Material.STICK).name("§6Knochenxylophon").sign(instrumentSign).addPDC("type", 6, PersistentDataType.INTEGER).build();
         ironXylophone = new ItemBuilder(Material.STICK).name("§6Eisen-Xylophon").sign(instrumentSign).addPDC("type", 7, PersistentDataType.INTEGER).build();
         bassGuitar = new ItemBuilder(Material.STICK).name("§6Bassgitarre").sign(instrumentSign).addPDC("type", 8, PersistentDataType.INTEGER).build();
+
+        hiddenBundle = new ItemBuilder(Material.BUNDLE).name("§6Verstecktes Bündel").lore("§7Dieses Bündel wird beim Durchsuchen nur mit").lore("§7einer Wahrscheinlichkeit von 10% gefunden.").sign("HIDDEN_BUNDLE").build();
 
     }
 
@@ -749,5 +752,28 @@ public class ItemStacks {
         senseRecipe.setIngredient('E', Material.EMERALD);
         senseRecipe.setIngredient('S', Material.STICK);
         plugin.getServer().addRecipe(senseRecipe);
+
+        //Hidden Bundle
+
+        ShapedRecipe hiddenBundleRecipe1 = new ShapedRecipe(new NamespacedKey(plugin, "HIDDEN_BUNDLE1"), hiddenBundle);
+        hiddenBundleRecipe1.shape("***", "BLH", "***");
+        hiddenBundleRecipe1.setIngredient('B', Material.BUNDLE);
+        hiddenBundleRecipe1.setIngredient('L', Material.LEAD);
+        hiddenBundleRecipe1.setIngredient('H', Material.TRIPWIRE_HOOK);
+        plugin.getServer().addRecipe(hiddenBundleRecipe1);
+
+        ShapedRecipe hiddenBundleRecipe2 = new ShapedRecipe(new NamespacedKey(plugin, "HIDDEN_BUNDLE2"), hiddenBundle);
+        hiddenBundleRecipe2.shape("BLH", "***", "***");
+        hiddenBundleRecipe2.setIngredient('B', Material.BUNDLE);
+        hiddenBundleRecipe2.setIngredient('L', Material.LEAD);
+        hiddenBundleRecipe2.setIngredient('H', Material.TRIPWIRE_HOOK);
+        plugin.getServer().addRecipe(hiddenBundleRecipe2);
+
+        ShapedRecipe hiddenBundleRecipe3 = new ShapedRecipe(new NamespacedKey(plugin, "HIDDEN_BUNDLE3"), hiddenBundle);
+        hiddenBundleRecipe3.shape("***", "***", "BLH");
+        hiddenBundleRecipe3.setIngredient('B', Material.BUNDLE);
+        hiddenBundleRecipe3.setIngredient('L', Material.LEAD);
+        hiddenBundleRecipe3.setIngredient('H', Material.TRIPWIRE_HOOK);
+        plugin.getServer().addRecipe(hiddenBundleRecipe3);
     }
 }

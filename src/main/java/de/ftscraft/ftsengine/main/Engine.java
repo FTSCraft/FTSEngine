@@ -144,6 +144,7 @@ public class Engine extends JavaPlugin implements Listener {
         new PlayerQuitListener(this);
         new PlayerChatListener(this);
         new VillagerTradeListener(this);
+        new PlayerDropListener(this);
         new ProjectileHitListener();
         new BlockExplodeListener();
         new EntityDeathListener();

@@ -246,10 +246,17 @@ public class InventoryClickListener implements Listener {
                 }
             }
 
+            ItemStack stack = event.getCurrentItem();
+            if (ItemReader.getSign(stack).equals("HIDDEN_BUNDLE")) {
+                if(DurchsuchenManager.isHideInventory(event.getInventory())) {
+                    event.setCancelled(true);
+                    event.getWhoClicked().sendMessage(Messages.PREFIX + "Du brauchst das versteckte Bündel nicht verstecken, es ist schon versteckt!");
+                }
+            }
         }
 
         Inventory inventory = event.getInventory();
-        if(DurchsuchenManager.isSearchInventory(inventory)) {
+        if (DurchsuchenManager.isSearchInventory(inventory)) {
             event.setCancelled(true);
         }
     }
@@ -282,7 +289,7 @@ public class InventoryClickListener implements Listener {
     @EventHandler
     public void onInventoryDrag(InventoryDragEvent event) {
         Inventory inventory = event.getInventory();
-        if(DurchsuchenManager.isSearchInventory(inventory)) {
+        if (DurchsuchenManager.isSearchInventory(inventory)) {
             event.setCancelled(true);
         }
     }
@@ -291,6 +298,7 @@ public class InventoryClickListener implements Listener {
     public void onInventoryClose(InventoryCloseEvent event) {
         Inventory inventory = event.getInventory();
         DurchsuchenManager.removeSearchInventory(inventory);
+        DurchsuchenManager.handleHideInventory((Player) event.getPlayer(), event.getInventory());
     }
 
 }
