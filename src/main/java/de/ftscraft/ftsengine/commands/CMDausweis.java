@@ -31,6 +31,8 @@ public class CMDausweis implements CommandExecutor, TabCompleter {
         plugin.getCommand("ausweis").setExecutor(this);
     }
 
+    private static final int MAX_HEIGHT = 300, MIN_HEIGHT = 90;
+
     public boolean onCommand(@NotNull CommandSender cs, @NotNull Command cmd, @NotNull String label, String[] args) {
         if (!(cs instanceof Player p)) {
             cs.sendPlainMessage(Messages.ONLY_PLAYER);
@@ -233,8 +235,10 @@ public class CMDausweis implements CommandExecutor, TabCompleter {
             return true;
         }
 
-        if (height < 140 || height > 300) {
-            p.sendMessage(Messages.PREFIX + "Deine Größe müss zwischen 140cm und 300cm liegen.");
+        if (height < MIN_HEIGHT || height > MAX_HEIGHT) {
+            p.sendMessage(Messages.PREFIX +
+                    "Deine Größe müss zwischen %d cm und %d cm liegen."
+                    .formatted(MIN_HEIGHT, MAX_HEIGHT));
             return true;
         }
 
