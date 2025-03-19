@@ -11,15 +11,15 @@ import java.util.Map;
 
 public class ConfigManager {
 
-    final FileConfiguration config;
-    private final Map<String, Object> cache = new HashMap<>();
+    private static FileConfiguration config;
+    private static final Map<String, Object> cache = new HashMap<>();
 
     public ConfigManager() {
         Engine.getInstance().saveResource("config.yml", false);
         config = Engine.getInstance().getConfig();
     }
 
-    private Object getValue(String path) {
+    private static Object getObjectValue(String path) {
         if (cache.containsKey(path))
             return cache.get(path);
         if (!config.contains(path))
@@ -39,28 +39,32 @@ public class ConfigManager {
         cache.put(path, obj);
     }
 
+    public static <T> T getValue(String path) {
+        return (T) getObjectValue(path);
+    }
+
     public int getCalendarYear() {
-        return (int) getValue("cal.year");
+        return (int) getObjectValue("cal.year");
     }
 
     public int getCalendarMonth() {
-        return (int) getValue("cal.month");
+        return (int) getObjectValue("cal.month");
     }
 
     public int getCalendarDay() {
-        return (int) getValue("cal.day");
+        return (int) getObjectValue("cal.day");
     }
 
     public int getCalendarHour() {
-        return (int) getValue("cal.hour");
+        return (int) getObjectValue("cal.hour");
     }
 
     public int getCalendarMinute() {
-        return (int) getValue("cal.minute");
+        return (int) getObjectValue("cal.minute");
     }
 
     public List<String> getTimeWorlds() {
-        return (List<String>) getValue("cal.worlds");
+        return (List<String>) getObjectValue("cal.worlds");
     }
 
     public void save() {

@@ -138,69 +138,16 @@ public class CMDausweis implements CommandExecutor, TabCompleter {
                     break;
                 case "größe":
 
-                    if (!plugin.hasAusweis(p)) {
-                        p.sendPlainMessage(Messages.NEED_AUSWEIS);
-                        return true;
-                    }
-
-                    if (args.length != 2) {
-                        p.sendPlainMessage(Messages.PREFIX + "Bitte benutze den Befehl so:" + " §c/ausweis größe [Größe]");
-                        return true;
-                    }
-
-                    int height;
-                    try {
-                        height = Integer.parseInt(args[1]);
-                    } catch (NumberFormatException ex) {
-                        p.sendMessage(Messages.PREFIX + "Bitte gebe eine natürliche Zahl für deine Größe (in cm) an.");
-                        return true;
-                    }
-
-                    if (height < 140 || height > 300) {
-                        p.sendMessage(Messages.PREFIX + "Deine Größe müss zwischen 140cm und 300cm liegen.");
-                        return true;
-                    }
-
-                    plugin.getAusweis(p).setHeight(height);
-                    p.sendMessage(Messages.SUCC_CMD_AUSWEIS.replace("%s", "Größe").replace("%v", String.valueOf(height)));
-                    Objects.requireNonNull(p.getAttribute(Attribute.GENERIC_SCALE)).setBaseValue(height / 200d);
+                    if (handleSize(args, p)) return true;
 
                     break;
                 case "aussehen":
 
-                    if (!plugin.hasAusweis(p)) {
-                        p.sendPlainMessage(Messages.NEED_AUSWEIS);
-                        return true;
-                    }
-
-                    if (args.length > 4) {
-
-                        StringBuilder desc = new StringBuilder();
-                        for (int i = 1; i < args.length; i++) {
-                            desc.append(" ").append(args[i]);
-                        }
-
-                        desc = new StringBuilder(desc.toString().replaceFirst(" ", ""));
-
-                        plugin.getAusweis(p).setDesc(desc.toString());
-
-                        p.sendPlainMessage(Messages.SUCC_CMD_AUSWEIS.replace("%s", "Aussehen").replace("%v", desc.toString()));
-
-                    } else
-                        p.sendPlainMessage(Messages.PREFIX + "Bitte benutze den Befehl so:" + " §c/ausweis aussehen [Aussehen (mind. 4 Wörter)]");
+                    if (handleLooks(args, p)) return true;
 
                     break;
                 case "anschauen":
-                    if (p.hasPermission("ftsengine.ausweis.anschauen")) {
-                        if (args.length == 2) {
-                            Ausweis a;
-                            if ((a = plugin.getAusweis(UUIDFetcher.getUUID(args[1]))) != null) {
-                                Var.sendAusweisMsg(p, a);
-                            } else p.sendPlainMessage(Messages.TARGET_NO_AUSWEIS);
-                        } else {
-                            Var.sendAusweisMsg(p, plugin.getAusweis(p));
-                        }
-                    } else p.sendPlainMessage("§cDafür hast du keine Rechte");
+                    handleInspect(args, p);
                     break;
                 case "deckname":
 
@@ -226,6 +173,77 @@ public class CMDausweis implements CommandExecutor, TabCompleter {
         return false;
     }
 
+    private void handleInspect(String[] args, Player p) {
+        if (!p.hasPermission("ftsengine.ausweis.anschauen")) {
+            p.sendPlainMessage("§cDafür hast du keine Rechte");
+            return;
+        }
+
+        if (args.length == 2) {
+            Ausweis a;
+            if ((a = plugin.getAusweis(UUIDFetcher.getUUID(args[1]))) != null) {
+                Var.sendAusweisMsg(p, a);
+            } else p.sendPlainMessage(Messages.TARGET_NO_AUSWEIS);
+        } else {
+            Var.sendAusweisMsg(p, plugin.getAusweis(p));
+        }
+
+    }
+
+    private boolean handleLooks(String[] args, Player p) {
+        if (!plugin.hasAusweis(p)) {
+            p.sendPlainMessage(Messages.NEED_AUSWEIS);
+            return true;
+        }
+
+        if (args.length > 4) {
+
+            StringBuilder desc = new StringBuilder();
+            for (int i = 1; i < args.length; i++) {
+                desc.append(" ").append(args[i]);
+            }
+
+            desc = new StringBuilder(desc.toString().replaceFirst(" ", ""));
+
+            plugin.getAusweis(p).setDesc(desc.toString());
+
+            p.sendPlainMessage(Messages.SUCC_CMD_AUSWEIS.replace("%s", "Aussehen").replace("%v", desc.toString()));
+
+        } else
+            p.sendPlainMessage(Messages.PREFIX + "Bitte benutze den Befehl so:" + " §c/ausweis aussehen [Aussehen (mind. 4 Wörter)]");
+        return false;
+    }
+
+    private boolean handleSize(String[] args, Player p) {
+        if (!plugin.hasAusweis(p)) {
+            p.sendPlainMessage(Messages.NEED_AUSWEIS);
+            return true;
+        }
+
+        if (args.length != 2) {
+            p.sendPlainMessage(Messages.PREFIX + "Bitte benutze den Befehl so:" + " §c/ausweis größe [Größe]");
+            return true;
+        }
+
+        int height;
+        try {
+            height = Integer.parseInt(args[1]);
+        } catch (NumberFormatException ex) {
+            p.sendMessage(Messages.PREFIX + "Bitte gebe eine natürliche Zahl für deine Größe (in cm) an.");
+            return true;
+        }
+
+        if (height < 140 || height > 300) {
+            p.sendMessage(Messages.PREFIX + "Deine Größe müss zwischen 140cm und 300cm liegen.");
+            return true;
+        }
+
+        plugin.getAusweis(p).setHeight(height);
+        p.sendMessage(Messages.SUCC_CMD_AUSWEIS.replace("%s", "Größe").replace("%v", String.valueOf(height)));
+        Objects.requireNonNull(p.getAttribute(Attribute.GENERIC_SCALE)).setBaseValue(height / 200d);
+        return false;
+    }
+
     @Override
     public @Nullable List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command command, @NotNull String alias, @NotNull String[] args) {
 
@@ -244,7 +262,7 @@ public class CMDausweis implements CommandExecutor, TabCompleter {
     }
 
     public static void sendHelpMsg(Player p) {
-        p.sendMessage(Messages.PREFIX+"----- §c/ausweis §7-----");
+        p.sendMessage(Messages.PREFIX + "----- §c/ausweis §7-----");
         p.sendMessage("§7/ausweis name [Vorname] [Nachname] §cÄndert deinen Namen und erstellt beim 1. Mal einen Ausweis - Mit Unterstrichen könnt ihr Leerzeichen im Namen haben");
         p.sendMessage("§7/ausweis geschlecht [m/f] §cSetzt die Ansprache (m - Männliche | f - Weibliche)");
         p.sendMessage("§7/ausweis rasse [Ork/Zwerg/Mensch/Elf] §cSetzt deine Rasse");
