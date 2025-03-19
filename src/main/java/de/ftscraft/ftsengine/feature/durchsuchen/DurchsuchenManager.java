@@ -1,12 +1,9 @@
 package de.ftscraft.ftsengine.feature.durchsuchen;
 
 import de.ftscraft.ftsengine.main.Engine;
-import de.ftscraft.ftsengine.utils.ItemStacks;
 import de.ftscraft.ftsengine.utils.Messages;
 import de.ftscraft.ftsutils.items.ItemReader;
 import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.format.TextDecoration;
-import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 import net.md_5.bungee.api.chat.ClickEvent;
 import net.md_5.bungee.api.chat.ComponentBuilder;
 import net.md_5.bungee.api.chat.HoverEvent;
@@ -14,10 +11,8 @@ import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
-import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.inventory.meta.ItemMeta;
 
 import java.util.ArrayList;
@@ -121,15 +116,20 @@ public class DurchsuchenManager {
 
         List<Integer> bundles = new ArrayList<>(targetInventoryCopy.all(Material.BUNDLE).keySet());
         for (int slot : bundles) {
+
             ItemStack stack = targetInventoryCopy.getItem(slot);
-            if (ItemReader.getSign(stack).equals("HIDDEN_BUNDLE")) {
-                hideTried = true;
-                int randValue = ThreadLocalRandom.current().nextInt(0, 100);
-                if (randValue < HIDE_CHANCE_BUNDLE) {
-                    targetInventoryCopy.clear(slot);
-                } else {
-                    hideFailed = true;
-                }
+
+            //noinspection DataFlowIssue
+            if (!"HIDDEN_BUNDLE".equals(ItemReader.getSign(stack))) {
+                continue;
+            }
+
+            hideTried = true;
+            int randValue = ThreadLocalRandom.current().nextInt(0, 100);
+            if (randValue < HIDE_CHANCE_BUNDLE) {
+                targetInventoryCopy.clear(slot);
+            } else {
+                hideFailed = true;
             }
         }
 
