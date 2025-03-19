@@ -153,7 +153,7 @@ public class ItemStacks {
         cowBell = new ItemBuilder(Material.STICK).name("§6Kuhglocke").sign(instrumentSign).addPDC("type", 5, PersistentDataType.INTEGER).build();
         xylophone = new ItemBuilder(Material.STICK).name("§6Knochenxylophon").sign(instrumentSign).addPDC("type", 6, PersistentDataType.INTEGER).build();
         ironXylophone = new ItemBuilder(Material.STICK).name("§6Eisen-Xylophon").sign(instrumentSign).addPDC("type", 7, PersistentDataType.INTEGER).build();
-        bassGuitar = new ItemBuilder(Material.STICK).name("§6Bassgitarre").sign(instrumentSign).addPDC("type", 8, PersistentDataType.INTEGER).build();
+        bassGuitar = new ItemBuilder(Material.STICK).name("§6Kontrabass").sign(instrumentSign).addPDC("type", 8, PersistentDataType.INTEGER).build();
 
     }
 
