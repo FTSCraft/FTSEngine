@@ -104,7 +104,7 @@ public class InventoryClickListener implements Listener {
             }
 
             ItemStack stack = event.getCurrentItem();
-            if (ItemReader.getSign(stack).equals("HIDDEN_BUNDLE")) {
+            if ("HIDDEN_BUNDLE".equals(ItemReader.getSign(stack))) {
                 if(DurchsuchenManager.isHideInventory(event.getInventory())) {
                     event.setCancelled(true);
                     event.getWhoClicked().sendMessage(Messages.PREFIX + "Du brauchst das versteckte Bündel nicht verstecken, es ist schon versteckt!");
