@@ -154,7 +154,7 @@ public class ItemStacks {
         cowBell = new ItemBuilder(Material.STICK).name("§6Kuhglocke").sign(instrumentSign).addPDC("type", 5, PersistentDataType.INTEGER).build();
         xylophone = new ItemBuilder(Material.STICK).name("§6Knochenxylophon").sign(instrumentSign).addPDC("type", 6, PersistentDataType.INTEGER).build();
         ironXylophone = new ItemBuilder(Material.STICK).name("§6Eisen-Xylophon").sign(instrumentSign).addPDC("type", 7, PersistentDataType.INTEGER).build();
-        bassGuitar = new ItemBuilder(Material.STICK).name("§6Bassgitarre").sign(instrumentSign).addPDC("type", 8, PersistentDataType.INTEGER).build();
+        bassGuitar = new ItemBuilder(Material.STICK).name("§6Kontrabass").sign(instrumentSign).addPDC("type", 8, PersistentDataType.INTEGER).build();
 
         hiddenBundle = new ItemBuilder(Material.BUNDLE).name("§6Verstecktes Bündel").lore("§7Dieses Bündel wird beim Durchsuchen nur mit").lore("§7einer Wahrscheinlichkeit von 10% gefunden.").sign("HIDDEN_BUNDLE").build();
 
@@ -204,7 +204,7 @@ public class ItemStacks {
             NamespacedKey key = new NamespacedKey(plugin, "FTSchime");
             ShapedRecipe recipe = new ShapedRecipe(key, chime);
             recipe.shape("AAA", "BCB", " B ");
-            recipe.setIngredient('A', Material.DARK_OAK_LOG);
+            recipe.setIngredient('A', Material.STRIPPED_DARK_OAK_LOG);
             recipe.setIngredient('B', Material.GOLD_INGOT);
             recipe.setIngredient('C', Material.JUKEBOX);
             Bukkit.addRecipe(recipe);
