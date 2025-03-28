@@ -58,7 +58,7 @@ public class InventoryClickListener implements Listener {
                 //check by raw slot if player is navigating in his inv or in chests
                 if (event.getRawSlot() >= 27) {
 
-                    //check if he clicked on backpack
+                    //check if he clicked on backpack or bundle
                     if (event.getCurrentItem().getItemMeta() != null) {
 
                         if (BackpackType.getBackpackByName(event.getCurrentItem().getItemMeta().getDisplayName()) != null) {
@@ -68,6 +68,12 @@ public class InventoryClickListener implements Listener {
                             event.setCancelled(true);
                             return;
 
+                        }
+
+                        if(event.getCurrentItem().getType().equals(Material.BUNDLE)) {
+                            event.getWhoClicked().sendMessage(Messages.PREFIX + "Du kannst kein Bündel in deiner Enderchest verstauen!");
+                            event.setCancelled(true);
+                            return;
                         }
 
                     }
@@ -86,6 +92,11 @@ public class InventoryClickListener implements Listener {
                         event.setCancelled(true);
                         event.getWhoClicked().sendMessage(Messages.PREFIX + "Du kannst kein Rucksack in ein Rucksack packen!");
                     }
+                }
+                if(event.getCurrentItem().getType().equals(Material.BUNDLE)) {
+                    event.getWhoClicked().sendMessage(Messages.PREFIX + "Du kannst kein Bündel in deinem Rucksack verstauen!");
+                    event.setCancelled(true);
+                    return;
                 }
             }
 
