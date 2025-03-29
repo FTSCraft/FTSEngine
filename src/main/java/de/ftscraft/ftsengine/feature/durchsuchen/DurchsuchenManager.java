@@ -64,7 +64,7 @@ public class DurchsuchenManager {
         TextComponent reaction2 = new TextComponent("§c[Ablehnen]§7.");
         reaction2.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/searchreact deny"));
         reaction2.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ComponentBuilder("§cAblehnen").create()));
-        TextComponent message3 = new TextComponent(" Du kannst aber auch versuchen etwas zu ");
+        TextComponent message3 = new TextComponent(" §7Du kannst aber auch versuchen etwas zu ");
         TextComponent reaction3 = new TextComponent("§6[Verstecken]§7.");
         reaction3.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/searchreact hide"));
         reaction3.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ComponentBuilder("§6Verstecken - Jedes Item hat eine 50% Chance entdeckt zu werden.").create()));
