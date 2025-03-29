@@ -47,7 +47,7 @@ public class PlayerInteractListener implements Listener {
 
     public PlayerInteractListener(Engine plugin) {
         this.plugin = plugin;
-        this.logportManager = plugin.getLogportManager();
+        logportManager = plugin.getLogportManager();
         plugin.getServer().getPluginManager().registerEvents(this, plugin);
     }
 
@@ -56,6 +56,10 @@ public class PlayerInteractListener implements Listener {
         Player player = e.getPlayer();
         ItemStack itemInHand = e.getItem();
         Block clickedBlock = e.getClickedBlock();
+
+        if (e.getAction() == Action.LEFT_CLICK_AIR) {
+            removePassengers(player);
+        }
 
         if (itemInHand != null) {
             if (itemInHand.getType() == Material.BOW || itemInHand.getType() == Material.CROSSBOW) {
@@ -122,6 +126,7 @@ public class PlayerInteractListener implements Listener {
         return crossbowMeta.hasChargedProjectiles();
     }
 
+    // Entfernt Passagiere bei Links-Klick in die Luft
     private void removePassengers(Player player) {
         Object[] passengers = player.getPassengers().toArray();
         for (Object passenger : passengers) {
@@ -129,6 +134,7 @@ public class PlayerInteractListener implements Listener {
         }
     }
 
+    // Horn Handlers
     private void handleHorn(Player player, ItemStack item) {
         if (item.getType() == Material.NAUTILUS_SHELL) {
             String sign = ItemReader.getSign(item);
@@ -290,6 +296,7 @@ public class PlayerInteractListener implements Listener {
     }
 
     private void handleSchwarzesBrett(Player player, Block block, Action action) {
+        // If trying to break block, skip
         if (action == Action.LEFT_CLICK_BLOCK)
             return;
 
