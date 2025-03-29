@@ -9,6 +9,7 @@ import de.ftscraft.ftsengine.feature.instruments.Instrument;
 import de.ftscraft.ftsengine.feature.instruments.SimpleInstrument;
 import de.ftscraft.ftsengine.main.Engine;
 import de.ftscraft.ftsengine.main.FTSUser;
+import de.ftscraft.ftsengine.quivers.QuiverType;
 import de.ftscraft.ftsengine.utils.Messages;
 import de.ftscraft.ftsutils.items.ItemReader;
 import net.md_5.bungee.api.chat.ClickEvent;
@@ -39,6 +40,38 @@ public class InventoryClickListener implements Listener {
     public void onInventoryClick(InventoryClickEvent event) {
 
         handleInstrument(event);
+
+        //QUIVER
+
+        if (event.getCurrentItem() != null) {
+            if (QuiverType.getQuiverByName(event.getWhoClicked().getOpenInventory().getTitle()) != null) {
+                if (event.getClick() == ClickType.NUMBER_KEY) {
+                    event.setCancelled(true);
+                    event.getWhoClicked().sendMessage(Messages.PREFIX + "Leider kannst du hier nicht deine Nummern benutzen.");
+                    return;
+                }
+
+                ItemStack clickedItem = event.getCurrentItem();
+                if (clickedItem.getType() != Material.ARROW &&
+                        clickedItem.getType() != Material.TIPPED_ARROW &&
+                        clickedItem.getType() != Material.SPECTRAL_ARROW) {
+                    event.setCancelled(true);
+                    event.getWhoClicked().sendMessage(Messages.PREFIX + "Du kannst nur Pfeile in den Köcher legen!");
+                    return;
+                }
+            }
+
+            if (event.getInventory().getType() == InventoryType.ENDER_CHEST ||
+                    event.getInventory().getType() == InventoryType.SHULKER_BOX) {
+                if (event.getRawSlot() >= 27 && event.getCurrentItem().getItemMeta() != null) {
+                    if (QuiverType.getQuiverByName(event.getCurrentItem().getItemMeta().getDisplayName()) != null) {
+                        event.getWhoClicked().sendMessage(Messages.PREFIX + "Du kannst keine Köcher in Enderchests oder Shulkerchests packen.");
+                        event.setCancelled(true);
+                        return;
+                    }
+                }
+            }
+        }
 
         //SCHWAZES BRETT
 

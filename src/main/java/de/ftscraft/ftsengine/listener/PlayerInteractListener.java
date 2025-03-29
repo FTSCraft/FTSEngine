@@ -6,6 +6,8 @@ import de.ftscraft.ftsengine.brett.Brett;
 import de.ftscraft.ftsengine.feature.instruments.InstrumentManager;
 import de.ftscraft.ftsengine.logport.LogportManager;
 import de.ftscraft.ftsengine.main.Engine;
+import de.ftscraft.ftsengine.quivers.Quiver;
+import de.ftscraft.ftsengine.quivers.QuiverType;
 import de.ftscraft.ftsengine.utils.Messages;
 import de.ftscraft.ftsengine.utils.Var;
 import de.ftscraft.ftsutils.items.ItemReader;
@@ -24,10 +26,13 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
+import org.bukkit.event.entity.EntityShootBowEvent;
 import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.PlayerInventory;
+import org.bukkit.inventory.meta.CrossbowMeta;
 import org.bukkit.persistence.PersistentDataType;
 import org.jetbrains.annotations.NotNull;
 
@@ -42,7 +47,7 @@ public class PlayerInteractListener implements Listener {
 
     public PlayerInteractListener(Engine plugin) {
         this.plugin = plugin;
-        logportManager = plugin.getLogportManager();
+        this.logportManager = plugin.getLogportManager();
         plugin.getServer().getPluginManager().registerEvents(this, plugin);
     }
 
@@ -52,16 +57,19 @@ public class PlayerInteractListener implements Listener {
         ItemStack itemInHand = e.getItem();
         Block clickedBlock = e.getClickedBlock();
 
-        if (e.getAction() == Action.LEFT_CLICK_AIR) {
-            removePassengers(player);
-        }
-
         if (itemInHand != null) {
+            if (itemInHand.getType() == Material.BOW || itemInHand.getType() == Material.CROSSBOW) {
+                if (e.getAction() == Action.RIGHT_CLICK_AIR || e.getAction() == Action.RIGHT_CLICK_BLOCK) {
+                    handleBowOrCrossbowDraw(player);
+                }
+            }
+
             handleHorn(player, itemInHand);
             handleMeissel(player, itemInHand);
             handleLogport(e, player, itemInHand);
             handleWeihrauchlaterne(player, itemInHand);
             handleBackpack(player, itemInHand);
+            handleQuiver(e, player, itemInHand);
             handleFertilizer(e, clickedBlock);
             handleInstrument(e, itemInHand);
         }
@@ -71,7 +79,49 @@ public class PlayerInteractListener implements Listener {
         }
     }
 
-    // Entfernt Passagiere bei Links-Klick in die Luft
+    private void handleBowOrCrossbowDraw(Player player) {
+        PlayerInventory inventory = player.getInventory();
+
+        if (inventory.getItemInOffHand().getType() != Material.AIR) return;
+
+        ItemStack itemInHand = inventory.getItemInMainHand();
+        if (itemInHand.getType() == Material.CROSSBOW && isCrossbowLoaded(itemInHand)) return;
+
+        for (ItemStack item : inventory.getContents()) {
+            if (item != null && Quiver.isValidArrow(item)) return;
+        }
+
+        Quiver quiver = Quiver.getQuiverFromItem(plugin, Quiver.findQuiverInInventory(player));
+        if (quiver == null) return;
+
+        ItemStack arrow = quiver.getArrowFromQuiver();
+        if (arrow != null) {
+            inventory.setItemInOffHand(arrow);
+        } else {
+            player.sendMessage(Messages.PREFIX + "Dein Köcher ist leer!");
+        }
+    }
+
+    @EventHandler
+    public void onBowOrCrossbowShoot(EntityShootBowEvent event) {
+        if (!(event.getEntity() instanceof Player player)) return;
+
+        ItemStack itemInHand = player.getInventory().getItemInMainHand();
+        if (itemInHand != null && itemInHand.getType() == Material.CROSSBOW) return;
+
+        Quiver quiver = Quiver.getQuiverFromItem(plugin, Quiver.findQuiverInInventory(player));
+        if (quiver != null) {
+            quiver.consumeArrow(player);
+        }
+    }
+
+    private boolean isCrossbowLoaded(ItemStack itemInHand) {
+        if (itemInHand == null || !(itemInHand.getItemMeta() instanceof CrossbowMeta crossbowMeta)) {
+            return false;
+        }
+        return crossbowMeta.hasChargedProjectiles();
+    }
+
     private void removePassengers(Player player) {
         Object[] passengers = player.getPassengers().toArray();
         for (Object passenger : passengers) {
@@ -79,7 +129,6 @@ public class PlayerInteractListener implements Listener {
         }
     }
 
-    // Horn Handlers
     private void handleHorn(Player player, ItemStack item) {
         if (item.getType() == Material.NAUTILUS_SHELL) {
             String sign = ItemReader.getSign(item);
@@ -158,6 +207,35 @@ public class PlayerInteractListener implements Listener {
         }
     }
 
+    private void handleQuiver(PlayerInteractEvent event, Player player, ItemStack item) {
+        if (event.getAction() != Action.RIGHT_CLICK_AIR && event.getAction() != Action.RIGHT_CLICK_BLOCK) {
+            return;
+        }
+
+        QuiverType type = QuiverType.getQuiverByItem(item);
+        if (type != null) {
+            event.setCancelled(true);
+            openOrRegisterQuiver(player, item, type);
+        }
+    }
+
+    private void openOrRegisterQuiver(Player player, ItemStack quiver, QuiverType type) {
+        int id = Var.getQuiverID(quiver);
+
+        if (id == -1) {
+            new Quiver(plugin, type, player, quiver);
+        } else {
+            Quiver quiverInst = plugin.quivers.get(id);
+
+            if (quiverInst == null) {
+                player.sendMessage(Messages.PREFIX + "Dieser Köcher ist nicht registriert?");
+                return;
+            }
+
+            quiverInst.open(player);
+        }
+    }
+
     private void handleBackpack(Player player, ItemStack item) {
         if (player.getInventory().getChestplate() != null && item != null && "BACKPACK_KEY".equals(ItemReader.getSign(item))) {
             BackpackType type = BackpackType.getBackpackByItem(player.getInventory().getChestplate());
@@ -212,7 +290,6 @@ public class PlayerInteractListener implements Listener {
     }
 
     private void handleSchwarzesBrett(Player player, Block block, Action action) {
-        // If trying to break block, skip
         if (action == Action.LEFT_CLICK_BLOCK)
             return;
 
@@ -238,5 +315,4 @@ public class PlayerInteractListener implements Listener {
             return;
         event.getPlayer().openInventory(InstrumentManager.instruments[type].getInventory());
     }
-
 }

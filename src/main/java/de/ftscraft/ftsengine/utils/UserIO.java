@@ -6,6 +6,8 @@ import de.ftscraft.ftsengine.brett.Brett;
 import de.ftscraft.ftsengine.courier.Brief;
 import de.ftscraft.ftsengine.courier.Briefkasten;
 import de.ftscraft.ftsengine.main.Engine;
+import de.ftscraft.ftsengine.quivers.Quiver;
+import de.ftscraft.ftsengine.quivers.QuiverType;
 import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -24,7 +26,6 @@ import java.util.UUID;
 public class UserIO {
 
     private final Engine plugin;
-
     private File folder;
 
     public UserIO(Engine plugin) {
@@ -35,12 +36,14 @@ public class UserIO {
         getBretter();
         loadBriefe();
         loadBriefkasten();
+        loadQuivers();
     }
 
     public UserIO(Engine plugin, boolean save) {
         this.plugin = plugin;
         saveBriefe();
         saveBriefkasten();
+        saveQuivers();
     }
 
     public void getAusweise() {
@@ -86,9 +89,7 @@ public class UserIO {
         } catch (Exception e) {
             e.printStackTrace();
         }
-
     }
-
 
     private void getBackpacks() {
         File aFolder = new File(folder + "//backpacks//");
@@ -121,10 +122,8 @@ public class UserIO {
                 id = c.getInt("id");
 
                 new Backpack(plugin, type, id, inv);
-
             }
         } catch (NullPointerException ignored) {
-
         }
     }
 
@@ -135,7 +134,6 @@ public class UserIO {
             aFolder.mkdirs();
 
         try {
-
             for (File files : Objects.requireNonNull(aFolder.listFiles())) {
                 try {
                     YamlConfiguration cfg = YamlConfiguration.loadConfiguration(files);
@@ -172,14 +170,11 @@ public class UserIO {
                     }
                     brett.checkForRunOut();
                 } catch (Exception ignored) {
-
                 }
             }
         } catch (Exception ignored) {
-
         }
     }
-
 
     private void loadBriefe() {
         File file = new File(plugin.getDataFolder() + "//briefe.yml");
@@ -215,14 +210,12 @@ public class UserIO {
     }
 
     private void loadBriefkasten() {
-
         File aFolder = new File(folder + "//briefkasten//");
         if (!aFolder.exists()) {
             aFolder.mkdirs();
         }
 
         for (File file : aFolder.listFiles()) {
-
             FileConfiguration cfg = YamlConfiguration.loadConfiguration(file);
 
             double x = cfg.getDouble("loc.x");
@@ -232,13 +225,10 @@ public class UserIO {
             UUID player = UUID.fromString(cfg.getString("player"));
 
             new Briefkasten(plugin, new Location(Bukkit.getWorld(world), x, y, z), player);
-
         }
-
     }
 
     public void saveBriefkasten() {
-
         for (Briefkasten briefkasten : plugin.briefkasten.values()) {
             File file = new File(plugin.getDataFolder() + "//briefkasten//" + briefkasten.getPlayer().toString() + ".yml");
 
@@ -258,7 +248,61 @@ public class UserIO {
                 e.printStackTrace();
             }
         }
-
     }
 
+    private void loadQuivers() {
+        File quiverFolder = new File(folder + "//quivers//");
+        if (!quiverFolder.exists()) {
+            quiverFolder.mkdirs();
+            return;
+        }
+
+        try {
+            for (File file : Objects.requireNonNull(quiverFolder.listFiles())) {
+                FileConfiguration cfg = YamlConfiguration.loadConfiguration(file);
+
+                int id = cfg.getInt("id");
+                QuiverType type = QuiverType.valueOf(cfg.getString("type", "QUIVER"));
+
+                if (cfg.getList("inventory") == null) {
+                    continue;
+                }
+
+                ItemStack[] items = cfg.getList("inventory").stream()
+                        .map(item -> (ItemStack) item)
+                        .toArray(ItemStack[]::new);
+
+                Inventory inv = Bukkit.createInventory(null,
+                        type.getSize(),
+                        LegacyComponentSerializer.legacyAmpersand().deserialize(type.getName()));
+                inv.setContents(items);
+
+                new Quiver(plugin, type, id, inv);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void saveQuivers() {
+        File quiverFolder = new File(folder + "//quivers//");
+        if (!quiverFolder.exists()) {
+            quiverFolder.mkdirs();
+        }
+
+        for (Quiver quiver : plugin.quivers.values()) {
+            File file = new File(quiverFolder + "//" + quiver.getId() + ".yml");
+            FileConfiguration cfg = YamlConfiguration.loadConfiguration(file);
+
+            cfg.set("id", quiver.getId());
+            cfg.set("type", QuiverType.QUIVER.name());
+            cfg.set("inventory", quiver.getInventory().getContents());
+
+            try {
+                cfg.save(file);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
 }
