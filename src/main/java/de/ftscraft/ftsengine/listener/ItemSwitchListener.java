@@ -23,22 +23,27 @@ public class ItemSwitchListener implements Listener {
     @EventHandler
     public void onItemSwitch(PlayerItemHeldEvent e) {
         Inventory inv = e.getPlayer().getInventory();
-        ItemStack newItem = inv.getItem(e.getNewSlot());
-        ItemStack previousItem = inv.getItem(e.getPreviousSlot());
 
-        if (newItem != null && newItem.getType() == Material.FILLED_MAP) {
-            Brief brief = plugin.briefe.get(((MapMeta) newItem.getItemMeta()).getMapId());
+        if (inv.getItem(e.getNewSlot()) == null || inv.getItem(e.getPreviousSlot()) == null)
+            return;
+
+        if (inv.getItem(e.getNewSlot()).getType() == Material.FILLED_MAP) {
+            ItemStack itemMap = inv.getItem(e.getNewSlot());
+            Brief brief = plugin.briefe.get(((MapMeta) itemMap.getItemMeta()).getMapId());
             if (brief != null) {
-                brief.loadMap(newItem);
-            }
-        } else if (previousItem != null && previousItem.getType() == Material.FILLED_MAP) {
-            Brief brief = plugin.briefe.get(((MapMeta) previousItem.getItemMeta()).getMapId());
-            if (brief != null) {
-                brief.unloadMap(previousItem);
+                brief.loadMap(itemMap);
             }
         }
 
-        if (previousItem != null && (previousItem.getType() == Material.BOW || previousItem.getType() == Material.CROSSBOW)) {
+        else if (inv.getItem(e.getPreviousSlot()).getType() == Material.FILLED_MAP) {
+            ItemStack itemMap = inv.getItem(e.getPreviousSlot());
+            Brief brief = plugin.briefe.get(((MapMeta) itemMap.getItemMeta()).getMapId());
+            if (brief != null) {
+                brief.unloadMap(itemMap);
+            }
+        }
+
+        if (inv.getItem(e.getPreviousSlot()).getType() == Material.BOW || inv.getItem(e.getPreviousSlot()).getType() == Material.CROSSBOW) {
             Quiver.storeArrowInQuiver(e.getPlayer(), plugin);
         }
     }
