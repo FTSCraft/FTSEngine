@@ -13,6 +13,7 @@ import de.ftscraft.ftsengine.courier.Briefkasten;
 import de.ftscraft.ftsengine.feature.time.TimeManager;
 import de.ftscraft.ftsengine.listener.*;
 import de.ftscraft.ftsengine.logport.LogportManager;
+import de.ftscraft.ftsengine.quivers.Quiver;
 import de.ftscraft.ftsengine.utils.Ausweis;
 import de.ftscraft.ftsengine.utils.ConfigManager;
 import de.ftscraft.ftsengine.utils.ItemStacks;
@@ -41,8 +42,10 @@ public class Engine extends JavaPlugin implements Listener {
     private HashMap<Player, FTSUser> player;
     public int biggestBpId;
     public int biggestBriefId;
+    public int biggestQuiverId;
     private ArrayList<Player> reiter;
     public HashMap<Integer, Backpack> backpacks;
+    public HashMap<Integer, Quiver> quivers;
     public HashMap<Integer, Brief> briefe;
     public HashMap<Location, Brett> bretter;
     public HashMap<Player, BrettNote> playerBrettNote;
@@ -81,9 +84,11 @@ public class Engine extends JavaPlugin implements Listener {
         logportManager = new LogportManager(this);
         biggestBpId = 0;
         biggestBriefId = 0;
+        biggestQuiverId = 0;
         playerBrettNote = new HashMap<>();
         bretter = new HashMap<>();
         backpacks = new HashMap<>();
+        quivers = new HashMap<>();
         briefkasten = new HashMap<>();
         ausweis = new HashMap<>();
         briefe = new HashMap<>();
@@ -168,6 +173,10 @@ public class Engine extends JavaPlugin implements Listener {
 
         for (Backpack a : backpacks.values()) {
             a.safe();
+        }
+
+        for (Quiver q : quivers.values()) {
+            q.save();
         }
 
         new UserIO(this, true);
