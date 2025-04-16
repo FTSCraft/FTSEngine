@@ -93,19 +93,11 @@ public class CountdownScheduler implements Runnable {
                 t.sendMessage("§c---------------");
 
                 // clickable message for Brief
-                Component clickableMessage;
-                if (hasClaimedMessage(t, msg)) {
-                    clickableMessage = Component.text()
-                            .append(Component.text(Messages.PREFIX + "§7[§8Brief bereits genommen§7]", NamedTextColor.GRAY))
-                            .hoverEvent(HoverEvent.showText(Component.text("§7Du hast diesen Brief bereits erhalten.", NamedTextColor.GRAY)))
-                            .build();
-                } else {
-                    clickableMessage = Component.text()
+                Component clickableMessage = Component.text()
                             .append(Component.text(Messages.PREFIX + "§7[§aBrief!§7]", NamedTextColor.YELLOW))
                             .clickEvent(ClickEvent.runCommand("/taube brief " + p.getName() + " " + msg))
                             .hoverEvent(HoverEvent.showText(Component.text("§7Klicke um den Brief von der Taube zu nehmen.", NamedTextColor.GRAY)))
                             .build();
-                }
 
                 t.sendMessage(clickableMessage);
 
