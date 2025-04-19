@@ -3,7 +3,6 @@ package de.ftscraft.ftsengine.utils;
 import de.ftscraft.ftsengine.backpacks.BackpackType;
 import de.ftscraft.ftsengine.logport.LogportManager;
 import de.ftscraft.ftsengine.main.Engine;
-import de.ftscraft.ftsengine.quivers.QuiverType;
 import de.ftscraft.ftsutils.items.ItemBuilder;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
@@ -36,7 +35,6 @@ public class ItemStacks {
     private ItemStack horn;
     private ItemStack harp, chime, flute, guitar, bell, cowBell, xylophone, ironXylophone, bassGuitar;
     private ItemStack hiddenBundle;
-    private ItemStack quiver, sewingNeedle;
 
     private List<Material> disabledDefaultRecipes;
 
@@ -63,6 +61,7 @@ public class ItemStacks {
                 Material.IRON_CHESTPLATE,
                 Material.IRON_LEGGINGS,
                 Material.IRON_BOOTS));
+
         //BIG BP
         largeBackpack = new ItemBuilder(Material.LEATHER_CHESTPLATE)
                 .color(Color.RED)
@@ -159,8 +158,6 @@ public class ItemStacks {
 
         hiddenBundle = new ItemBuilder(Material.BUNDLE).name("§6Verstecktes Bündel").lore("§7Dieses Bündel wird beim Durchsuchen nur mit").lore("§7einer Wahrscheinlichkeit von 10% gefunden.").sign("HIDDEN_BUNDLE").build();
 
-        quiver = new ItemBuilder(Material.LEATHER).name(QuiverType.QUIVER.getName()).lore(QuiverType.QUIVER.getLore(), "ID: #-1").sign(QuiverType.QUIVER.getSign()).build();
-        sewingNeedle = new ItemBuilder(Material.IRON_NUGGET).name("§6Nähnadel").lore("§7Piekse dich nicht.").sign("SEWING_NEEDLE").build();
     }
 
     public List<Material> getDisabledDefaultRecipes() {
@@ -778,23 +775,5 @@ public class ItemStacks {
         hiddenBundleRecipe3.setIngredient('L', Material.LEAD);
         hiddenBundleRecipe3.setIngredient('H', Material.TRIPWIRE_HOOK);
         plugin.getServer().addRecipe(hiddenBundleRecipe3);
-
-        //Quiver
-
-        ShapedRecipe quiverRecipe = new ShapedRecipe(new NamespacedKey(plugin, "QUIVER"), quiver);
-        quiverRecipe.shape("*S*", "SNS", "*B*");
-        quiverRecipe.setIngredient('S', Material.STRING);
-        quiverRecipe.setIngredient('N', new RecipeChoice.ExactChoice(sewingNeedle));
-        quiverRecipe.setIngredient('B', Material.BUNDLE);
-        plugin.getServer().addRecipe(quiverRecipe);
-
-        //Sewing Needle
-
-        ShapedRecipe sewingNeedleRecipe = new ShapedRecipe(new NamespacedKey(plugin, "SEWING_NEEDLE"), sewingNeedle);
-        sewingNeedleRecipe.shape("*S*", "*I*", "*C*");
-        sewingNeedleRecipe.setIngredient('S', Material.STRING);
-        sewingNeedleRecipe.setIngredient('I', Material.IRON_NUGGET);
-        sewingNeedleRecipe.setIngredient('C', Material.COPPER_INGOT);
-        plugin.getServer().addRecipe(sewingNeedleRecipe);
     }
 }
