@@ -8,9 +8,6 @@ import org.bukkit.Location;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.ItemMeta;
-
-import java.util.List;
 
 public class Var {
 
@@ -52,32 +49,6 @@ public class Var {
         }
     }
 
-    public static int getQuiverID(ItemStack quiver) {
-        if (quiver == null || !quiver.hasItemMeta()) {
-            return -1;
-        }
-
-        ItemMeta meta = quiver.getItemMeta();
-        if (!meta.hasLore()) {
-            return -1;
-        }
-
-        List<String> lore = meta.getLore();
-        if (lore == null || lore.size() < 2) {
-            return -1;
-        }
-
-        String idLine = lore.get(1);
-        if (!idLine.contains("#")) {
-            return -1;
-        }
-
-        try {
-            return Integer.parseInt(idLine.substring(idLine.indexOf("#") + 1));
-        } catch (NumberFormatException | IndexOutOfBoundsException e) {
-            return -1;
-        }
-    }
 
     public static int getBackpackID(ItemStack backpack) {
 
