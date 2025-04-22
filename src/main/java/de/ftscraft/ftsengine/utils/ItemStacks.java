@@ -205,7 +205,7 @@ public class ItemStacks {
             ShapedRecipe recipe = new ShapedRecipe(key, chime);
             recipe.shape("AAA", "BCB", " B ");
             recipe.setIngredient('A', Material.STRIPPED_DARK_OAK_LOG);
-            recipe.setIngredient('B', Material.GOLD_INGOT);
+            recipe.setIngredient('B', Material.GOLD_NUGGET);
             recipe.setIngredient('C', Material.JUKEBOX);
             Bukkit.addRecipe(recipe);
         }
@@ -216,7 +216,7 @@ public class ItemStacks {
             recipe.shape("ASA", "AJA", "AGA");
             recipe.setIngredient('J', Material.JUKEBOX);
             recipe.setIngredient('S', Material.STICK);
-            recipe.setIngredient('G', Material.GOLD_INGOT);
+            recipe.setIngredient('G', Material.GOLD_NUGGET);
             Bukkit.addRecipe(recipe);
         }
 
