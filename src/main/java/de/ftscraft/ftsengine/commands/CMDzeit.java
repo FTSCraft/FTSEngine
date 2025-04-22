@@ -15,6 +15,7 @@ import java.util.Calendar;
 public class CMDzeit implements CommandExecutor {
 
     public CMDzeit(Engine plugin) {
+        //noinspection DataFlowIssue
         plugin.getCommand("zeit").setExecutor(this);
     }
 
@@ -24,10 +25,20 @@ public class CMDzeit implements CommandExecutor {
             sender.sendMessage(TimeManager.getFormattedTime());
             return true;
         }
+        int year = TimeManager.getCalendar().get(Calendar.YEAR);
         MiniMsg.msg(p, Messages.MINI_PREFIX + "Datum und Uhrzeit: <red>" + TimeManager.getFormattedTime() + "</red> Uhr \n" +
-                "Menschenjahr: <red>" + (TimeManager.getCalendar().get(Calendar.YEAR) - 22900) + "</red>\n" +
-                "Eldoriajahr: <red>" + TimeManager.getCalendar().get(Calendar.YEAR) + "</red>");
+                "Menschenjahr: <red>" + getHumanYear(year) + "</red>\n" +
+                "Eldoriajahr: <red>" + year + "</red>");
 
         return false;
     }
+
+    private int getHumanYear(int eldoriaYear) {
+
+        int elapsedEldoriaYears = eldoriaYear - 24_000;
+        int elapsedHumanYears = elapsedEldoriaYears / 4;
+        return elapsedHumanYears + 1100;
+
+    }
+
 }
