@@ -15,6 +15,8 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.BookMeta;
+import org.bukkit.plugin.Plugin;
+import org.bukkit.scheduler.BukkitScheduler;
 import org.jetbrains.annotations.NotNull;
 
 public class CMDtaube implements CommandExecutor {
@@ -48,10 +50,10 @@ public class CMDtaube implements CommandExecutor {
                 for (int i = 2; i < args.length; i++) {
                     message.append(" ").append(args[i]);
                 }
-                message = new StringBuilder(message.toString().trim());
+                final String trimmedMessage = message.toString().trim();
 
                 // Check if player has already claimed this message
-                if (CountdownScheduler.hasClaimedMessage(p, message.toString())) {
+                if (CountdownScheduler.hasClaimedMessage(p, trimmedMessage)) {
                     p.sendMessage(Messages.PREFIX + "§cDu hast diesen Brief bereits erhalten!");
                     return true;
                 }
@@ -65,13 +67,15 @@ public class CMDtaube implements CommandExecutor {
                 ItemStack bookItemStack = new ItemStack(Material.WRITTEN_BOOK);
                 BookMeta bookMeta = (BookMeta) bookItemStack.getItemMeta();
                 bookMeta.displayName(Component.text("Brief von " + senderName).color(NamedTextColor.YELLOW));
-                bookMeta.addPages(Component.text(message.toString()));
+                bookMeta.addPages(Component.text(trimmedMessage));
                 bookItemStack.setItemMeta(bookMeta);
 
-                p.getInventory().addItem(bookItemStack);
-                p.sendMessage(Messages.PREFIX + "§7Du hast den Brief von der Taube genommen!");
+                Bukkit.getScheduler().runTaskLater(plugin, () -> {
+                    p.getInventory().addItem(bookItemStack);
+                    p.sendMessage(Messages.PREFIX + "§7Du hast den Brief von der Taube genommen!");
+                    CountdownScheduler.markMessageAsClaimed(p, trimmedMessage);
+                }, 5L);
 
-                CountdownScheduler.markMessageAsClaimed(p, message.toString());
                 return true;
             }
 
