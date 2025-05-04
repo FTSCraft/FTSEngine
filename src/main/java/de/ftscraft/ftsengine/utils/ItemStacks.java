@@ -1,13 +1,9 @@
 package de.ftscraft.ftsengine.utils;
 
-import de.ftscraft.ftsengine.backpacks.BackpackType;
 import de.ftscraft.ftsengine.logport.LogportManager;
 import de.ftscraft.ftsengine.main.Engine;
 import de.ftscraft.ftsutils.items.ItemBuilder;
-import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.format.NamedTextColor;
 import org.bukkit.*;
-import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.*;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataContainer;
@@ -20,7 +16,7 @@ import java.util.List;
 
 public class ItemStacks {
 
-    private ItemStack largeBackpack, tinyBackpack, backpackKey, enderBackpack;
+    private ItemStack backpackKey;
     private ItemStack ironHelmet, ironChestplate, ironLeggings, ironBoots,
             chainmailHelmet, chainmailChestplate, chainmailLeggings, chainmailBoots,
             diamondHelmet, diamondChestplate, diamondLeggings, diamondBoots;
@@ -30,8 +26,6 @@ public class ItemStacks {
     private ItemStack meissel;
     private ItemStack logport;
     private ItemStack fertilizer;
-    private ItemStack emeraldPickaxe;
-    private ItemStack sense;
     private ItemStack horn;
     private ItemStack harp, chime, flute, guitar, bell, cowBell, xylophone, ironXylophone, bassGuitar;
     private ItemStack hiddenBundle;
@@ -61,33 +55,6 @@ public class ItemStacks {
                 Material.IRON_CHESTPLATE,
                 Material.IRON_LEGGINGS,
                 Material.IRON_BOOTS));
-
-        //BIG BP
-        largeBackpack = new ItemBuilder(Material.LEATHER_CHESTPLATE)
-                .color(Color.RED)
-                .addFlags(ItemFlag.HIDE_ATTRIBUTES)
-                .name(BackpackType.LARGE.getName())
-                .lore("§7In diesen Rucksack passen viele, weitere Dinge rein", "ID: #-1")
-                .sign(BackpackType.LARGE.getSign())
-                .build();
-
-        //TINY BP
-        tinyBackpack = new ItemBuilder(Material.LEATHER_CHESTPLATE)
-                .color(Color.GREEN)
-                .addFlags(ItemFlag.HIDE_ATTRIBUTES)
-                .name(BackpackType.TINY.getName())
-                .lore("§7Dieser nützliche Rucksack hat Platz für viele Sachen", "ID: #-1")
-                .sign(BackpackType.TINY.getSign())
-                .build();
-
-        //ENDER BP
-        enderBackpack = new ItemBuilder(Material.LEATHER_CHESTPLATE)
-                .color(Color.PURPLE)
-                .addFlags(ItemFlag.HIDE_ATTRIBUTES)
-                .name(BackpackType.ENDER.getName())
-                .lore(BackpackType.ENDER.getLore())
-                .sign(BackpackType.ENDER.getSign())
-                .build();
 
         //BP KEY
         backpackKey = new ItemBuilder(Material.FEATHER)
@@ -131,9 +98,6 @@ public class ItemStacks {
 
         fertilizer = new ItemBuilder(Material.BONE_MEAL).name("§6Dünger").lore("§7Lässt Pflanzen wachsen!").sign("FERTILIZER").build();
 
-        emeraldPickaxe = new ItemBuilder(Material.DIAMOND_PICKAXE).name("§6Smaragdspitzhacke").lore("§7Baut mehr auf einmal ab!").sign("EMERALDPICKAXE").enchant(Enchantment.UNBREAKING, 2).build();
-        emeraldPickaxe.addItemFlags(ItemFlag.HIDE_ENCHANTS);
-
         logport = new ItemBuilder(Material.RECOVERY_COMPASS).name("§6Logport").lore("§7Teleportiert dich zu einem vorher festgelegten Punkt").sign("LOGPORT").build();
         ItemMeta logportMeta = logport.getItemMeta();
         PersistentDataContainer data = logportMeta.getPersistentDataContainer();
@@ -142,8 +106,6 @@ public class ItemStacks {
 
         logportManager.updateLogportLore(logportMeta);
         logport.setItemMeta(logportMeta);
-
-        sense = new ItemBuilder(Material.IRON_HOE).name("§6Sense").lore("§7Pflanzt sofort nach!").sign("SENSE").build();
 
         final String instrumentSign = "INSTRUMENT";
         harp = new ItemBuilder(Material.STICK).name("§6Harfe").sign(instrumentSign).addPDC("type", 0, PersistentDataType.INTEGER).build();
@@ -272,35 +234,6 @@ public class ItemStacks {
         lanzeRecipe.setIngredient('S', Material.STICK);
         lanzeRecipe.setIngredient('E', Material.IRON_INGOT);
         plugin.getServer().addRecipe(lanzeRecipe);
-
-        //TINY BACKPACK
-
-        NamespacedKey tbpkey = new NamespacedKey(plugin, "FTStinybackpack");
-
-        ShapedRecipe tiny_backpack = new ShapedRecipe(tbpkey, tinyBackpack);
-        tiny_backpack.shape("HHH", "HCH", "HHH");
-        tiny_backpack.setIngredient('H', Material.RABBIT_HIDE);
-        tiny_backpack.setIngredient('C', Material.CHEST);
-        plugin.getServer().addRecipe(tiny_backpack);
-
-        //LARGE BACKPACK
-
-        NamespacedKey lbpkey = new NamespacedKey(plugin, "FTSlargebackpack");
-        ShapedRecipe large_backpack = new ShapedRecipe(lbpkey, largeBackpack);
-        large_backpack.shape("LLL", "LRL", "LLL");
-        large_backpack.setIngredient('L', Material.LEATHER);
-        large_backpack.setIngredient('R', tinyBackpack);
-        plugin.getServer().addRecipe(large_backpack);
-
-
-        //ENDER BACKPACK
-
-        NamespacedKey ebpkey = new NamespacedKey(plugin, "FTSenderbackpack");
-        ShapedRecipe ender_backpack = new ShapedRecipe(ebpkey, enderBackpack);
-        ender_backpack.shape("LLL", "LEL", "LLL");
-        ender_backpack.setIngredient('L', Material.LEATHER);
-        ender_backpack.setIngredient('E', Material.ENDER_CHEST);
-        plugin.getServer().addRecipe(ender_backpack);
 
         //BACKPACK KEY
 
@@ -550,160 +483,6 @@ public class ItemStacks {
         diamond_boots_air2.setIngredient('D', Material.DIAMOND);
         plugin.getServer().addRecipe(diamond_boots_air2);
 
-        //Copperpickaxe
-        NamespacedKey cpickkey = new NamespacedKey(plugin, "FTSkupferpicke");
-        ItemStack cpick = new ItemBuilder(Material.STONE_PICKAXE)
-                .name("§fKupferspitzhacke")
-                .enchant(Enchantment.UNBREAKING, 2)
-                .enchant(Enchantment.EFFICIENCY, 2)
-                .sign("COPPER_PICKAXE")
-                .build();
-        cpick.addItemFlags(ItemFlag.HIDE_ENCHANTS);
-
-        ShapedRecipe cpickr = new ShapedRecipe(cpickkey, cpick);
-        cpickr.shape("CCC", "*S*", "*S*");
-        cpickr.setIngredient('C', Material.COPPER_INGOT);
-        cpickr.setIngredient('S', Material.STICK);
-        plugin.getServer().addRecipe(cpickr);
-
-        //Copperaxe
-        NamespacedKey caxekey = new NamespacedKey(plugin, "FTSkupferaxt");
-        ItemStack caxe = new ItemBuilder(Material.STONE_AXE, 1)
-                .name("§fKupferaxt")
-                .enchant(Enchantment.UNBREAKING, 2)
-                .enchant(Enchantment.EFFICIENCY, 2)
-                .sign("COPPER_AXE")
-                .build();
-        caxe.addItemFlags(ItemFlag.HIDE_ENCHANTS);
-
-        ShapedRecipe caxer = new ShapedRecipe(caxekey, caxe);
-        caxer.shape("*CC", "*SC", "*S*");
-        caxer.setIngredient('C', Material.COPPER_INGOT);
-        caxer.setIngredient('S', Material.STICK);
-        plugin.getServer().addRecipe(caxer);
-
-        ShapedRecipe caxel = new ShapedRecipe(new NamespacedKey(plugin, "FTSkupferaxt2"), caxe);
-        caxel.shape("CC*", "CS*", "*S*");
-        caxel.setIngredient('C', Material.COPPER_INGOT);
-        caxel.setIngredient('S', Material.STICK);
-        plugin.getServer().addRecipe(caxel);
-
-        ShapedRecipe caxell = new ShapedRecipe(new NamespacedKey(plugin, "FTSkupferaxt3"), caxe);
-        caxell.shape("CC*", "SC*", "S**");
-        caxell.setIngredient('C', Material.COPPER_INGOT);
-        caxell.setIngredient('S', Material.STICK);
-        plugin.getServer().addRecipe(caxell);
-
-        ShapedRecipe caxerr = new ShapedRecipe(new NamespacedKey(plugin, "FTSkupferaxt4"), caxe);
-        caxerr.shape("*CC", "*CS", "**S");
-        caxerr.setIngredient('C', Material.COPPER_INGOT);
-        caxerr.setIngredient('S', Material.STICK);
-        plugin.getServer().addRecipe(caxerr);
-
-        //Coppersword
-        NamespacedKey cswordkey = new NamespacedKey(plugin, "FTSkupferschwert");
-        ItemStack csword = new ItemBuilder(Material.STONE_SWORD)
-                .name("§fKupferschwert")
-                .enchant(Enchantment.UNBREAKING, 2)
-                .sign("COPPER_SWORD")
-                .build();
-        csword.addItemFlags(ItemFlag.HIDE_ENCHANTS);
-
-        ShapedRecipe cswordl = new ShapedRecipe(cswordkey, csword);
-        cswordl.shape("C**", "C**", "S**");
-        cswordl.setIngredient('C', Material.COPPER_INGOT);
-        cswordl.setIngredient('S', Material.STICK);
-        plugin.getServer().addRecipe(cswordl);
-
-        ShapedRecipe cswordr = new ShapedRecipe(new NamespacedKey(plugin, "FTSkupferschwert2"), csword);
-        cswordr.shape("**C", "**C", "**S");
-        cswordr.setIngredient('C', Material.COPPER_INGOT);
-        cswordr.setIngredient('S', Material.STICK);
-        plugin.getServer().addRecipe(cswordr);
-
-        ShapedRecipe cswordm = new ShapedRecipe(new NamespacedKey(plugin, "FTSkupferschwert3"), csword);
-        cswordm.shape("*C*", "*C*", "*S*");
-        cswordm.setIngredient('C', Material.COPPER_INGOT);
-        cswordm.setIngredient('S', Material.STICK);
-        plugin.getServer().addRecipe(cswordm);
-
-        //Copperhoe
-        NamespacedKey choekey = new NamespacedKey(plugin, "FTSkupferhacke");
-        ItemStack choe = new ItemBuilder(Material.STONE_HOE)
-                .name("§fKupferhacke")
-                .enchant(Enchantment.EFFICIENCY, 2)
-                .enchant(Enchantment.UNBREAKING, 2)
-                .sign("COPPER_HOE")
-                .build();
-        choe.addItemFlags(ItemFlag.HIDE_ENCHANTS);
-
-        ShapedRecipe choel = new ShapedRecipe(choekey, choe);
-        choel.shape("CC*", "*S*", "*S*");
-        choel.setIngredient('C', Material.COPPER_INGOT);
-        choel.setIngredient('S', Material.STICK);
-        plugin.getServer().addRecipe(choel);
-
-        ShapedRecipe choer = new ShapedRecipe(new NamespacedKey(plugin, "FTSkupferhacke2"), choe);
-        choer.shape("*CC", "*S*", "*s*");
-        choer.setIngredient('C', Material.COPPER_INGOT);
-        choer.setIngredient('S', Material.STICK);
-        plugin.getServer().addRecipe(choer);
-
-        ShapedRecipe choerr = new ShapedRecipe(new NamespacedKey(plugin, "FTSkupferhacke3"), choe);
-        choerr.shape("*CC", "**S", "**S");
-        choerr.setIngredient('C', Material.COPPER_INGOT);
-        choerr.setIngredient('S', Material.STICK);
-        plugin.getServer().addRecipe(choerr);
-
-        ShapedRecipe choell = new ShapedRecipe(new NamespacedKey(plugin, "FTSkupferhacke4"), choe);
-        choell.shape("CC*", "S**", "S**");
-        choell.setIngredient('C', Material.COPPER_INGOT);
-        choell.setIngredient('S', Material.STICK);
-        plugin.getServer().addRecipe(choell);
-
-        //Coppershovel
-        ItemStack cshovel = new ItemBuilder(Material.STONE_SHOVEL)
-                .name("§fKupferschaufel")
-                .enchant(Enchantment.EFFICIENCY, 2)
-                .enchant(Enchantment.UNBREAKING, 2)
-                .sign("COPPER_SHOVEL")
-                .build();
-        cshovel.addItemFlags(ItemFlag.HIDE_ENCHANTS);
-
-        ShapedRecipe cshovelr = new ShapedRecipe(new NamespacedKey(plugin, "FTSkupferschaufel2"), cshovel);
-        cshovelr.shape("**C", "**S", "**S");
-        cshovelr.setIngredient('C', Material.COPPER_INGOT);
-        cshovelr.setIngredient('S', Material.STICK);
-        plugin.getServer().addRecipe(cshovelr);
-
-        ShapedRecipe cshovelm = new ShapedRecipe(new NamespacedKey(plugin, "FTSkupferschaufel3"), cshovel);
-        cshovelm.shape("*C*", "*S*", "*S*");
-        cshovelm.setIngredient('C', Material.COPPER_INGOT);
-        cshovelm.setIngredient('S', Material.STICK);
-        plugin.getServer().addRecipe(cshovelm);
-
-        // FallAxt
-        ItemStack lumberAxeStack = new ItemStack(Material.DIAMOND_AXE, 1);
-        ItemMeta lumberAxeMeta = lumberAxeStack.getItemMeta();
-        lumberAxeMeta.displayName(Component.text("FallAxt").color(NamedTextColor.DARK_PURPLE));
-        lumberAxeMeta.setCustomModelData(1001);
-        lumberAxeStack.setItemMeta(lumberAxeMeta);
-        lumberAxeStack.addEnchantment(Enchantment.UNBREAKING, 2);
-        lumberAxeStack.addItemFlags(ItemFlag.HIDE_ENCHANTS);
-        lumberAxeStack = new ItemBuilder(lumberAxeStack).sign("FALLAXT").build();
-
-        ShapedRecipe lumberAxeRecipe = new ShapedRecipe(new NamespacedKey(plugin, "FTSfallaxt"), lumberAxeStack);
-        lumberAxeRecipe.shape("*EE", "*SE", "*S*");
-        lumberAxeRecipe.setIngredient('E', Material.EMERALD);
-        lumberAxeRecipe.setIngredient('S', Material.STICK);
-        plugin.getServer().addRecipe(lumberAxeRecipe);
-
-        ShapedRecipe lumberAxeRecipe2 = new ShapedRecipe(new NamespacedKey(plugin, "FTSfallaxt2"), lumberAxeStack);
-        lumberAxeRecipe2.shape("EE*", "ES*", "*S*");
-        lumberAxeRecipe2.setIngredient('E', Material.EMERALD);
-        lumberAxeRecipe2.setIngredient('S', Material.STICK);
-        plugin.getServer().addRecipe(lumberAxeRecipe2);
-
         // Dragon Breath
 
         ShapedRecipe dragonBreathRecipe = new ShapedRecipe(new NamespacedKey(plugin, "FTS_DRAGONBREATH"), dragonBreath);
@@ -737,21 +516,6 @@ public class ItemStacks {
         fertilizerRecipe.setIngredient('L', Material.LAPIS_LAZULI);
         fertilizerRecipe.setIngredient('R', Material.REDSTONE);
         plugin.getServer().addRecipe(fertilizerRecipe);
-
-        //Smaragdspitzhacke
-
-        ShapedRecipe emeraldPickAxeRecipe = new ShapedRecipe(new NamespacedKey(plugin, "EMERALDPICKAXE"), emeraldPickaxe);
-        emeraldPickAxeRecipe.shape("SSS", "*I*", "*I*");
-        emeraldPickAxeRecipe.setIngredient('S', Material.EMERALD);
-        emeraldPickAxeRecipe.setIngredient('I', Material.STICK);
-        plugin.getServer().addRecipe(emeraldPickAxeRecipe);
-
-        //Sense
-        ShapedRecipe senseRecipe = new ShapedRecipe(new NamespacedKey(plugin, "SENSE"), sense);
-        senseRecipe.shape(" EE", "ES ", " S ");
-        senseRecipe.setIngredient('E', Material.EMERALD);
-        senseRecipe.setIngredient('S', Material.STICK);
-        plugin.getServer().addRecipe(senseRecipe);
 
         //Hidden Bundle
 
