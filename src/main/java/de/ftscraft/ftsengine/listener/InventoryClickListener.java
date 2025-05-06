@@ -20,6 +20,7 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.*;
 import org.bukkit.inventory.Inventory;
+import org.bukkit.inventory.InventoryView;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.persistence.PersistentDataType;
 
@@ -45,33 +46,27 @@ public class InventoryClickListener implements Listener {
         if (handleSchwarzesBrett(event)) return;
 
         //Anti Backpack
-        if (event.getCurrentItem() != null) {
+       if (event.getCurrentItem() != null) {
 
-            //Check if inv is enderchest or shulkerbox
             if (event.getInventory().getType() == InventoryType.ENDER_CHEST || event.getInventory().getType() == InventoryType.SHULKER_BOX) {
-                //if player uses number keys, cancel
                 if (event.getClick() == ClickType.NUMBER_KEY) {
                     event.setCancelled(true);
                     event.getWhoClicked().sendMessage(Messages.PREFIX + "Leider kannst du hier nicht deine Nummern benutzen.");
                     return;
                 }
-                //check by raw slot if player is navigating in his inv or in chests
                 if (event.getRawSlot() >= 27) {
 
-                    //check if he clicked on backpack or bundle
                     if (event.getCurrentItem().getItemMeta() != null) {
 
                         if (BackpackType.getBackpackByName(event.getCurrentItem().getItemMeta().getDisplayName()) != null) {
 
-                            //cancel
                             event.getWhoClicked().sendMessage(Messages.PREFIX + "Leider kannst du keine Rucksäcke in Enderchests oder Shulkerchests packen.");
                             event.setCancelled(true);
                             return;
-
                         }
 
                         if(event.getCurrentItem().getType().equals(Material.BUNDLE)) {
-                            event.getWhoClicked().sendMessage(Messages.PREFIX + "Du kannst kein Bündel in deiner Enderchest verstauen!");
+                            event.getWhoClicked().sendMessage(Messages.PREFIX + "Du kannst kein Bündel in deiner Enderchest oder Shulkerchests verstauen!");
                             event.setCancelled(true);
                             return;
                         }
@@ -81,24 +76,32 @@ public class InventoryClickListener implements Listener {
                 }
             }
 
-            if (BackpackType.getBackpackByName(event.getWhoClicked().getOpenInventory().getTitle()) != null) {
-                if (event.getClick() == ClickType.NUMBER_KEY) {
+            InventoryView view = event.getView();
+            String title = view.getTitle();
+            if (BackpackType.getBackpackByName(title) != null) {
+
+                Inventory topInv = view.getTopInventory();
+                int rawSlot = event.getRawSlot();
+
+                if (event.getClick() == ClickType.NUMBER_KEY && rawSlot < topInv.getSize()) {
                     event.setCancelled(true);
                     event.getWhoClicked().sendMessage(Messages.PREFIX + "Leider kannst du hier nicht deine Nummern benutzen.");
                     return;
                 }
-                if (BackpackType.getBackpackByName(event.getCurrentItem().getItemMeta().getDisplayName()) != null) {
-                    if (!event.getWhoClicked().hasPermission("ftsengine.backpack.move")) {
+
+                if (rawSlot >= topInv.getSize()) {
+                    ItemStack current = event.getCurrentItem();
+                    if (isProhibitedItem(current)) {
+                        String msg = current.getType().equals(Material.BUNDLE)
+                                ? "Du kannst hier kein Bündel hineinpacken!"
+                                : "Du kannst keinen Rucksack in deinem Rucksack verstauen!";
                         event.setCancelled(true);
-                        event.getWhoClicked().sendMessage(Messages.PREFIX + "Du kannst kein Rucksack in ein Rucksack packen!");
+                        event.getWhoClicked().sendMessage(Messages.PREFIX + msg);
+                        return;
                     }
                 }
-                if(event.getCurrentItem().getType().equals(Material.BUNDLE)) {
-                    event.getWhoClicked().sendMessage(Messages.PREFIX + "Du kannst kein Bündel in deinem Rucksack verstauen!");
-                    event.setCancelled(true);
-                    return;
-                }
             }
+
 
             if (event.getInventory().getType() == InventoryType.ANVIL) {
                 ItemStack itemToRepair = event.getInventory().getItem(0);
@@ -301,15 +304,42 @@ public class InventoryClickListener implements Listener {
 
     }
 
-    @EventHandler
+    private boolean isProhibitedItem(ItemStack item) {
+        if (item == null) return false;
+        if (item.hasItemMeta()
+                && BackpackType.getBackpackByName(item.getItemMeta().getDisplayName()) != null) {
+            return true;
+        }
+        return item.getType() == Material.BUNDLE;
+    }
+
+    @EventHandler(priority = EventPriority.HIGHEST)
     public void onInventoryDrag(InventoryDragEvent event) {
         Inventory inventory = event.getInventory();
         if (DurchsuchenManager.isSearchInventory(inventory)) {
             event.setCancelled(true);
         }
+
+        //Für Rucksäcke
+        InventoryView view = event.getView();
+        String title = view.getTitle();
+        if (BackpackType.getBackpackByName(title) != null) {
+
+            ItemStack cursor = event.getCursor();
+            if (!isProhibitedItem(cursor)) return;
+
+            Inventory topInv = view.getTopInventory();
+            for (int slot : event.getRawSlots()) {
+                if (slot < topInv.getSize()) {
+                    event.setCancelled(true);
+                    event.getWhoClicked().sendMessage(Messages.PREFIX + "Du kannst hier nichts hineinziehen!");
+                    return;
+                }
+            }
+        }
     }
 
-    @EventHandler
+    @EventHandler(priority = EventPriority.HIGHEST)
     public void onInventoryClose(InventoryCloseEvent event) {
         Inventory inventory = event.getInventory();
         DurchsuchenManager.removeSearchInventory(inventory);
