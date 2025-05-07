@@ -65,7 +65,7 @@ public class InventoryClickListener implements Listener {
                             return;
                         }
 
-                        if(event.getCurrentItem().getType().equals(Material.BUNDLE)) {
+                        if(isBundle(event.getCurrentItem())) {
                             event.getWhoClicked().sendMessage(Messages.PREFIX + "Du kannst kein Bündel in deiner Enderchest oder Shulkerchests verstauen!");
                             event.setCancelled(true);
                             return;
@@ -92,7 +92,7 @@ public class InventoryClickListener implements Listener {
                 if (rawSlot >= topInv.getSize()) {
                     ItemStack current = event.getCurrentItem();
                     if (isProhibitedItem(current)) {
-                        String msg = current.getType().equals(Material.BUNDLE)
+                        String msg = isBundle(current)
                                 ? "Du kannst hier kein Bündel hineinpacken!"
                                 : "Du kannst keinen Rucksack in deinem Rucksack verstauen!";
                         event.setCancelled(true);
@@ -310,7 +310,12 @@ public class InventoryClickListener implements Listener {
                 && BackpackType.getBackpackByName(item.getItemMeta().getDisplayName()) != null) {
             return true;
         }
-        return item.getType() == Material.BUNDLE;
+        return isBundle(item);
+    }
+
+    private boolean isBundle(ItemStack item) {
+        Material material = item.getType();
+        return (material.name().endsWith("BUNDLE"));
     }
 
     @EventHandler(priority = EventPriority.HIGHEST)
