@@ -2,7 +2,7 @@ name: FTSEngine
 author: halberfan
 main: de.ftscraft.ftsengine.main.Engine
 version: ${project.version}
-api-version: 1.20
+api-version: 1.21
 depend: [ Vault, FTSUtils ]
 softdepend: [ ProtocolLib, Shopkeepers, Dynmap ]
 
