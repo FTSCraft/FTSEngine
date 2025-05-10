@@ -244,7 +244,7 @@ public class CMDausweis implements CommandExecutor, TabCompleter {
 
         plugin.getAusweis(p).setHeight(height);
         p.sendMessage(Messages.SUCC_CMD_AUSWEIS.replace("%s", "Größe").replace("%v", String.valueOf(height)));
-        Objects.requireNonNull(p.getAttribute(Attribute.GENERIC_SCALE)).setBaseValue(height / 200d);
+        Objects.requireNonNull(p.getAttribute(Attribute.SCALE)).setBaseValue(height / 200d);
         return false;
     }
 
