@@ -127,6 +127,7 @@ public class Engine extends JavaPlugin implements Listener {
         new CMDzeit(this);
         new CMDdurchsuchen(this);
         new CMDsearchreact(this);
+        new CMDstreicheln(this);
     }
 
     private void initListeners() {
