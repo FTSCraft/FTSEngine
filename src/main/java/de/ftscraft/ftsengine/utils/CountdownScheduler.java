@@ -1,5 +1,6 @@
 package de.ftscraft.ftsengine.utils;
 
+import de.ftscraft.ftsengine.commands.CMDtaube;
 import de.ftscraft.ftsengine.courier.Brief;
 import de.ftscraft.ftsengine.main.Engine;
 import net.kyori.adventure.text.Component;
@@ -21,11 +22,10 @@ public class CountdownScheduler implements Runnable {
     private final Engine plugin;
     private final Player p;
     private Player t;
-    private String msg;
+    private CMDtaube.TaubeMessage msg;
     private int seconds;
     private final int taskid;
     private SchedulerType type;
-    private static final List<String> claimedMessages = new ArrayList<>();
 
     public CountdownScheduler(Engine plugin, int seconds, Player p) {
         this.plugin = plugin;
@@ -34,24 +34,14 @@ public class CountdownScheduler implements Runnable {
         this.taskid = plugin.getServer().getScheduler().scheduleSyncRepeatingTask(plugin, this, 20, 20);
     }
 
-    public CountdownScheduler(Engine plugin, int seconds, Player p, Player t, String msg) {
+    public CountdownScheduler(Engine plugin, int seconds, Player p, Player t, CMDtaube.TaubeMessage taubeMessage) {
         this.plugin = plugin;
         this.seconds = seconds;
         this.p = p;
         this.type = SchedulerType.Taube;
         this.t = t;
-        this.msg = msg;
+        this.msg = taubeMessage;
         this.taskid = plugin.getServer().getScheduler().scheduleSyncRepeatingTask(plugin, this, 20, 20);
-    }
-
-    public static boolean hasClaimedMessage(Player player, String message) {
-        String key = player.getUniqueId() + ":" + message;
-        return claimedMessages.contains(key);
-    }
-
-    public static void markMessageAsClaimed(Player player, String message) {
-        String key = player.getUniqueId() + ":" + message;
-        claimedMessages.add(key);
     }
 
     @Override
@@ -89,13 +79,13 @@ public class CountdownScheduler implements Runnable {
                 t.sendMessage("§c---------------");
                 t.sendMessage("§eEine Brieftaube von §c" + p.getName() + "§e hat dich erreicht!");
                 t.sendMessage(" ");
-                t.sendMessage(ChatColor.YELLOW + msg);
+                t.sendMessage(ChatColor.YELLOW + msg.getMessage());
                 t.sendMessage("§c---------------");
 
                 // clickable message for Brief
                 Component clickableMessage = Component.text()
                             .append(Component.text(Messages.PREFIX + "§7[§aBrief!§7]", NamedTextColor.YELLOW))
-                            .clickEvent(ClickEvent.runCommand("/taube brief " + p.getName() + " " + msg))
+                            .clickEvent(ClickEvent.runCommand("/taube get " + msg.getUuid()))
                             .hoverEvent(HoverEvent.showText(Component.text("§7Klicke um den Brief von der Taube zu nehmen.", NamedTextColor.GRAY)))
                             .build();
 
