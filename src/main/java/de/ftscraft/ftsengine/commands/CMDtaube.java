@@ -19,13 +19,15 @@ import org.bukkit.inventory.meta.BookMeta;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.UUID;
 
 public class CMDtaube implements CommandExecutor {
 
     private final Engine plugin;
-
     private final HashMap<UUID, TaubeMessage> messages = new HashMap<>();
+    private final HashMap<UUID, Set<UUID>> receivedMessages = new HashMap<>();
 
     public CMDtaube(Engine plugin) {
         this.plugin = plugin;
@@ -39,17 +41,21 @@ public class CMDtaube implements CommandExecutor {
             return true;
         }
 
+        if (args.length >= 1 && args[0].equalsIgnoreCase("get")) {
+            if (args.length < 2) {
+                MiniMsg.msg(p, Messages.MINI_PREFIX + "Ein Fehler ist aufgetreten.");
+                return true;
+            }
+            handleGettingBook(args, p);
+            return true;
+        }
+
         if (args.length < 2) {
             MiniMsg.msg(p, Messages.MINI_PREFIX + "Bitte gebe einen Spieler und eine Nachricht an.");
             return false;
         }
 
-        if (args[0].equalsIgnoreCase("brief")) {
-            handleGettingBrief(args, p);
-            return true;
-        }
-
-        //If you want to send a taube to only one or more specific player*s, split with: ','
+        // If you want to send a taube to only one or more specific player*s, split with: ','
         String[] targetPlayerNames = args[0].split(",");
 
         for (String targetName : targetPlayerNames) {
@@ -57,7 +63,6 @@ public class CMDtaube implements CommandExecutor {
         }
 
         return true;
-
     }
 
     private void sendTaubeToTarget(String[] args, Player p, String targetName) {
@@ -75,11 +80,11 @@ public class CMDtaube implements CommandExecutor {
                 msg.append(" ").append(args[i]);
             }
 
-            TaubeMessage taubeMessage = new TaubeMessage(p.getName(), msg.toString(), UUID.randomUUID());
-            messages.put(taubeMessage.uuid, taubeMessage);
+            UUID messageUuid = UUID.randomUUID();
+            TaubeMessage taubeMessage = new TaubeMessage(p.getName(), msg.toString(), messageUuid);
+            messages.put(messageUuid, taubeMessage);
 
             p.sendMessage(Messages.PREFIX + "Eine Taube fliegt zu §c" + target.getName() + "§7.");
-
             p.playSound(p.getLocation(), Sound.ENTITY_BAT_LOOP, 3, -20);
 
             new CountdownScheduler(plugin, seconds, p, target, taubeMessage);
@@ -103,21 +108,28 @@ public class CMDtaube implements CommandExecutor {
         return seconds;
     }
 
-    private void handleGettingBrief(String[] args, Player p) {
-
-        UUID uuid;
+    private void handleGettingBook(String[] args, Player p) {
+        UUID messageUuid;
 
         try {
-            uuid = UUID.fromString(args[1]);
+            messageUuid = UUID.fromString(args[1]);
         } catch (IllegalArgumentException e) {
             MiniMsg.msg(p, Messages.MINI_PREFIX + "Irgendwas ist schiefgelaufen.");
             return;
         }
 
-        TaubeMessage taubeMessage = messages.get(uuid);
+        Set<UUID> playerReceivedMessages = receivedMessages.computeIfAbsent(p.getUniqueId(), k -> new HashSet<>());
+
+        // Check if player has already received this message
+        if (playerReceivedMessages.contains(messageUuid)) {
+            MiniMsg.msg(p, Messages.MINI_PREFIX + "Du hast diesen Brief bereits erhalten.");
+            return;
+        }
+
+        TaubeMessage taubeMessage = messages.get(messageUuid);
 
         if (taubeMessage == null) {
-            MiniMsg.msg(p, Messages.MINI_PREFIX + "Du hast diesen Brief bereits erhalten.");
+            MiniMsg.msg(p, Messages.MINI_PREFIX + "Diese Nachricht existiert nicht mehr.");
             return;
         }
 
@@ -130,18 +142,18 @@ public class CMDtaube implements CommandExecutor {
         String message = taubeMessage.message;
         String senderName = taubeMessage.sender;
 
-        ItemStack bookItemStack = generateBook(senderName, message);
+        ItemStack bookItemStack = generateBook(senderName, message, messageUuid);
 
-        messages.remove(uuid);
+        // Mark this message as received by this player
+        playerReceivedMessages.add(messageUuid);
 
         Bukkit.getScheduler().runTaskLater(plugin, () -> {
             p.getInventory().addItem(bookItemStack);
             p.sendMessage(Messages.PREFIX + "§7Du hast den Brief von der Taube genommen!");
         }, 5L);
-
     }
 
-    private static @NotNull ItemStack generateBook(String senderName, String message) {
+    private static @NotNull ItemStack generateBook(String senderName, String message, UUID messageUuid) {
         ItemStack bookItemStack = new ItemStack(Material.WRITTEN_BOOK);
         BookMeta bookMeta = (BookMeta) bookItemStack.getItemMeta();
         bookMeta.displayName(Component.text("Brief von " + senderName).color(NamedTextColor.YELLOW));
@@ -168,5 +180,4 @@ public class CMDtaube implements CommandExecutor {
             return uuid;
         }
     }
-
 }

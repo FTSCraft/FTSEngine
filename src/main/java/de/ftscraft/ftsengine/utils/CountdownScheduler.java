@@ -85,7 +85,7 @@ public class CountdownScheduler implements Runnable {
                 // clickable message for Brief
                 Component clickableMessage = Component.text()
                             .append(Component.text(Messages.PREFIX + "§7[§aBrief!§7]", NamedTextColor.YELLOW))
-                            .clickEvent(ClickEvent.runCommand("/taube brief " + msg.getUuid()))
+                            .clickEvent(ClickEvent.runCommand("/taube get " + msg.getUuid()))
                             .hoverEvent(HoverEvent.showText(Component.text("§7Klicke um den Brief von der Taube zu nehmen.", NamedTextColor.GRAY)))
                             .build();
 
