@@ -48,6 +48,8 @@ public class Engine extends JavaPlugin implements Listener {
     public HashMap<Player, BrettNote> playerBrettNote;
     public HashMap<UUID, Briefkasten> briefkasten;
     public LogportManager logportManager;
+    private EntityClickListener entityClickListener;
+    private CMDstreicheln streicheln;
 
     private static Economy econ = null;
 
@@ -127,12 +129,12 @@ public class Engine extends JavaPlugin implements Listener {
         new CMDzeit(this);
         new CMDdurchsuchen(this);
         new CMDsearchreact(this);
-        new CMDstreicheln(this);
+        streicheln = new CMDstreicheln(this);
     }
 
     private void initListeners() {
         new AnvilEntchamentBlockingListener(this);
-        new EntityClickListener(this);
+        entityClickListener = new EntityClickListener(this);
         new DamageListener(this);
         //new HorseListener(this);
         new PlayerJoinListener(this);
@@ -221,6 +223,14 @@ public class Engine extends JavaPlugin implements Listener {
 
     public LogportManager getLogportManager() {
         return logportManager;
+    }
+
+    public EntityClickListener getEntityClickListener() {
+        return entityClickListener;
+    }
+
+    public CMDstreicheln getStreicheln() {
+        return streicheln;
     }
 
     public static Engine getInstance() {
