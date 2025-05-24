@@ -14,7 +14,6 @@ import org.bukkit.entity.Animals;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerInteractEntityEvent;
-import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.BoundingBox;
 import org.jetbrains.annotations.NotNull;
 
@@ -51,16 +50,6 @@ public class CMDstreicheln implements CommandExecutor {
 
     public void addActivePetter(UUID playerUUID) {
         activePetters.put(playerUUID, System.currentTimeMillis() + PET_MODE_DURATION);
-
-        new BukkitRunnable() {
-            @Override
-            public void run() {
-                if (activePetters.containsKey(playerUUID) &&
-                    System.currentTimeMillis() >= activePetters.get(playerUUID)) {
-                    activePetters.remove(playerUUID);
-                }
-            }
-        }.runTaskLater(plugin, 200L);
     }
 
     public boolean isActivePetter(UUID playerUUID) {
