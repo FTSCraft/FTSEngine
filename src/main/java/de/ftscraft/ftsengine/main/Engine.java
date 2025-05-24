@@ -147,6 +147,7 @@ public class Engine extends JavaPlugin implements Listener {
         new ProjectileHitListener();
         new BlockExplodeListener();
         new EntityDeathListener();
+        new ItemBreakListener(this);
     }
 
     private void setupEconomy() {

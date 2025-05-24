@@ -70,5 +70,16 @@ public class Backpack {
             e.printStackTrace();
         }
     }
-
+    
+    public Inventory getInventory() {
+        return inventory;
+    }
+    
+    public int getId() {
+        return id;
+    }
+    
+    public BackpackType getType() {
+        return type;
+    }
 }
