@@ -131,15 +131,15 @@ public class CMDtaube implements CommandExecutor {
         String message = taubeMessage.message;
         String senderName = taubeMessage.sender;
 
-        ItemStack bookItemStack = generateBook(senderName, message, messageUuid);
+        ItemStack bookItemStack = generateBook(senderName, message);
 
-        Bukkit.getScheduler().runTaskLater(plugin, () -> {
-            p.getInventory().addItem(bookItemStack);
-            p.sendMessage(Messages.PREFIX + "§7Du hast den Brief von der Taube genommen!");
-        }, 5L);
+        messages.remove(messageUuid);
+
+        p.getInventory().addItem(bookItemStack);
+        p.sendMessage(Messages.PREFIX + "§7Du hast den Brief von der Taube genommen!");
     }
 
-    private static @NotNull ItemStack generateBook(String senderName, String message, UUID messageUuid) {
+    private static @NotNull ItemStack generateBook(String senderName, String message) {
         ItemStack bookItemStack = new ItemStack(Material.WRITTEN_BOOK);
         BookMeta bookMeta = (BookMeta) bookItemStack.getItemMeta();
         bookMeta.displayName(Component.text("Brief von " + senderName).color(NamedTextColor.YELLOW));
