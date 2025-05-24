@@ -19,15 +19,12 @@ import org.bukkit.inventory.meta.BookMeta;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Set;
 import java.util.UUID;
 
 public class CMDtaube implements CommandExecutor {
 
     private final Engine plugin;
     private final HashMap<UUID, TaubeMessage> messages = new HashMap<>();
-    private final HashMap<UUID, Set<UUID>> receivedMessages = new HashMap<>();
 
     public CMDtaube(Engine plugin) {
         this.plugin = plugin;
@@ -118,18 +115,10 @@ public class CMDtaube implements CommandExecutor {
             return;
         }
 
-        Set<UUID> playerReceivedMessages = receivedMessages.computeIfAbsent(p.getUniqueId(), k -> new HashSet<>());
-
-        // Check if player has already received this message
-        if (playerReceivedMessages.contains(messageUuid)) {
-            MiniMsg.msg(p, Messages.MINI_PREFIX + "Du hast diesen Brief bereits erhalten.");
-            return;
-        }
-
         TaubeMessage taubeMessage = messages.get(messageUuid);
 
         if (taubeMessage == null) {
-            MiniMsg.msg(p, Messages.MINI_PREFIX + "Diese Nachricht existiert nicht mehr.");
+            MiniMsg.msg(p, Messages.MINI_PREFIX + "Du hast diesen Brief bereits erhalten.");
             return;
         }
 
@@ -143,9 +132,6 @@ public class CMDtaube implements CommandExecutor {
         String senderName = taubeMessage.sender;
 
         ItemStack bookItemStack = generateBook(senderName, message, messageUuid);
-
-        // Mark this message as received by this player
-        playerReceivedMessages.add(messageUuid);
 
         Bukkit.getScheduler().runTaskLater(plugin, () -> {
             p.getInventory().addItem(bookItemStack);
