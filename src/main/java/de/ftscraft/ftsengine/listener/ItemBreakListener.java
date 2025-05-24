@@ -15,11 +15,11 @@ import org.bukkit.inventory.ItemStack;
 
 
 // Drops all contents of a backpack when it breaks
-public class BackpackBreakListener implements Listener {
+public class ItemBreakListener implements Listener {
 
     private final Engine plugin;
 
-    public BackpackBreakListener(Engine plugin) {
+    public ItemBreakListener(Engine plugin) {
         this.plugin = plugin;
         plugin.getServer().getPluginManager().registerEvents(this, plugin);
     }
@@ -28,16 +28,20 @@ public class BackpackBreakListener implements Listener {
     public void onItemBreak(PlayerItemBreakEvent event) {
         Player player = event.getPlayer();
         ItemStack brokenItem = event.getBrokenItem();
-        
+
+        handleBackpackBreak(brokenItem, player);
+    }
+
+    private void handleBackpackBreak(ItemStack brokenItem, Player player) {
         BackpackType backpackType = BackpackType.getBackpackByItem(brokenItem);
         if (backpackType == null) {
             return;
         }
-        
+
         if (!brokenItem.hasItemMeta() || !brokenItem.getItemMeta().hasLore()) {
             return;
         }
-        
+
         int backpackId = Var.getBackpackID(brokenItem);
         if (backpackId == -1) {
             return;
@@ -51,7 +55,7 @@ public class BackpackBreakListener implements Listener {
 
         Location dropLocation = player.getLocation();
         ItemStack[] contents = backpack.getInventory().getContents();
-        
+
         for (ItemStack item : contents) {
             if (item != null) {
                 dropLocation.getWorld().dropItemNaturally(dropLocation, item);
@@ -60,7 +64,9 @@ public class BackpackBreakListener implements Listener {
 
         backpack.getInventory().clear();
         plugin.backpacks.remove(backpackId);
-        
+
         player.sendMessage(Messages.PREFIX + "Dein Rucksack ist kaputt gegangen! Der gesamte Inhalt wurde fallen gelassen.");
     }
+
+
 } 
