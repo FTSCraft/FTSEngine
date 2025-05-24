@@ -1,11 +1,10 @@
 package de.ftscraft.ftsengine.listener;
 
 import com.destroystokyo.paper.event.entity.EntityPathfindEvent;
+import de.ftscraft.ftsengine.commands.emotes.CMDstreicheln;
 import de.ftscraft.ftsengine.main.Engine;
-import org.bukkit.Location;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.attribute.AttributeInstance;
-import org.bukkit.entity.Animals;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Pig;
@@ -40,23 +39,8 @@ public class EntityClickListener implements Listener {
     @EventHandler
     public void onEntityInteract(PlayerInteractEntityEvent event) {
         Player p = event.getPlayer();
-
-        if (!plugin.getStreicheln().isActivePetter(p.getUniqueId())) return;
-
         Entity target = event.getRightClicked();
-
-        if (!plugin.getStreicheln().validateTarget(p, target)) return;
-
-        Location interactLocation = plugin.getStreicheln().extractInteractLocation(event, target);
-        
-        if (target instanceof Player) {
-            plugin.getStreicheln().handlePlayerPet(p, (Player) target, interactLocation);
-        } else if (target instanceof Animals) {
-            plugin.getStreicheln().handleAnimalPet(p, (Animals) target, interactLocation);
-        }
-
-        event.setCancelled(true);
-        plugin.getStreicheln().removeActivePetter(p.getUniqueId());
+        CMDstreicheln.petEntity(p, target);
     }
 
     private final double SPEED_MODIFIER = 0.5;
