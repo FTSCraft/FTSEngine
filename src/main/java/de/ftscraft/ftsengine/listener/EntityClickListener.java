@@ -1,9 +1,11 @@
 package de.ftscraft.ftsengine.listener;
 
 import com.destroystokyo.paper.event.entity.EntityPathfindEvent;
+import de.ftscraft.ftsengine.commands.emotes.CMDstreicheln;
 import de.ftscraft.ftsengine.main.Engine;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.attribute.AttributeInstance;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Pig;
 import org.bukkit.entity.Player;
@@ -32,7 +34,13 @@ public class EntityClickListener implements Listener {
             e.getRightClicked().addPassenger(e.getPlayer());
             plugin.getReiter().remove(e.getPlayer());
         }
+    }
 
+    @EventHandler
+    public void onEntityInteract(PlayerInteractEntityEvent event) {
+        Player p = event.getPlayer();
+        Entity target = event.getRightClicked();
+        CMDstreicheln.petEntity(p, target);
     }
 
     private final double SPEED_MODIFIER = 0.5;
