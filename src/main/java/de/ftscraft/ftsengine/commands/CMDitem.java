@@ -135,7 +135,7 @@ public class CMDitem implements CommandExecutor {
                         return true;
                     }
 
-                    if (notAbleToPay(p, COST_GLOW)) {
+                    if (notAbleToPay(p, COST_LORE)) {
                         p.sendMessage(Messages.PREFIX + "Du kannst dir das nicht leisten. Mit Premium funktioniert der Command aber kostenlos.");
                         return true;
                     }
