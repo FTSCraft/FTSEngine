@@ -1,34 +1,39 @@
 package de.ftscraft.ftsengine.commands;
 
 import com.comphenix.protocol.PacketType;
-import com.comphenix.protocol.events.ListenerPriority;
-import com.comphenix.protocol.events.PacketAdapter;
-import com.comphenix.protocol.events.PacketContainer;
-import com.comphenix.protocol.events.PacketEvent;
+import com.comphenix.protocol.events.*;
 import de.ftscraft.ftsengine.main.Engine;
 import de.ftscraft.ftsengine.utils.Messages;
+import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Entity;
+import org.bukkit.entity.Mob;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Vehicle;
 import org.bukkit.util.Vector;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+
 public class CMDreiten implements CommandExecutor {
 
     private final Engine plugin;
+    private final Map<Player, Vector> playerVectorMap = new ConcurrentHashMap<>();
 
     public CMDreiten(Engine plugin) {
         this.plugin = plugin;
         //noinspection DataFlowIssue
         plugin.getCommand("reiten").setExecutor(this);
         addPacketListener();
+        startLoop();
     }
 
+
     @Override
-    public boolean onCommand(@NotNull CommandSender cs, @NotNull Command cmd, @NotNull String label, String[] args) {
+    public boolean onCommand(@NotNull CommandSender cs, @NotNull Command cmd, @NotNull String label, String @NotNull [] args) {
         if (!(cs instanceof Player p)) {
             cs.sendMessage(Messages.ONLY_PLAYER);
             return true;
@@ -40,6 +45,29 @@ public class CMDreiten implements CommandExecutor {
         return false;
     }
 
+    private void startLoop() {
+
+        Bukkit.getScheduler().runTaskTimerAsynchronously(plugin, () -> playerVectorMap.forEach((player, vector) -> {
+            Entity vehicle = player.getVehicle();
+            if (vehicle == null) {
+                playerVectorMap.remove(player);
+                return;
+            }
+
+            Vector vel = getVelocityVector(vehicle.getVelocity(), player, (float) vector.getZ(), (float) vector.getX());
+
+            vehicle.setVelocity(vel);
+            vehicle.setRotation(player.getEyeLocation().getYaw(), player.getEyeLocation().getPitch());
+            vehicle.getLocation().setYaw(player.getEyeLocation().getYaw());
+            vehicle.getLocation().setPitch(player.getEyeLocation().getPitch());
+
+            if (vehicle instanceof Mob mob)
+                mob.getPathfinder().stopPathfinding();
+
+        }), 0, 1);
+
+    }
+
     private void addPacketListener() {
         plugin.getProtocolManager().addPacketListener(new PacketAdapter(plugin, ListenerPriority.NORMAL, PacketType.Play.Client.STEER_VEHICLE) {
             @Override
@@ -49,23 +77,24 @@ public class CMDreiten implements CommandExecutor {
                     PacketContainer pc = event.getPacket();
                     Player player = event.getPlayer();
                     Entity vehicle = player.getVehicle();
-                    if (vehicle == null || vehicle instanceof Vehicle || vehicle instanceof Player)
-                        return;
+                    if (vehicle == null || vehicle instanceof Vehicle || vehicle instanceof Player) return;
 
-                    float side = pc.getFloat().read(0);
+                    InternalStructure input = pc.getStructures().read(0);
 
-                    float forw = pc.getFloat().read(1);
+                    int forward = input.getBooleans().read(0) ? 1 : 0;
+                    int backward = input.getBooleans().read(1) ? -1 : 0;
+                    int left = input.getBooleans().read(2) ? 1 : 0;
+                    int right = input.getBooleans().read(3) ? -1 : 0;
+                    boolean jump = input.getBooleans().read(4);
 
-                    boolean jump = pc.getBooleans().read(0);
+                    float side = left + right;
+                    float forw = forward + backward;
+
                     if (jump && vehicle.isOnGround()) {
                         vehicle.setVelocity(vehicle.getVelocity().add(new Vector(0.0, 0.55, 0.0)));
                     }
 
-                    Vector vel = getVelocityVector(vehicle.getVelocity(), player, side, forw);
-                    vehicle.setVelocity(vel);
-                    vehicle.setRotation(player.getEyeLocation().getYaw(), player.getEyeLocation().getPitch());
-                    vehicle.getLocation().setYaw(player.getEyeLocation().getYaw());
-                    vehicle.getLocation().setPitch(player.getEyeLocation().getPitch());
+                    playerVectorMap.put(player, new Vector(forw, 0, side));
                 }
             }
         });
