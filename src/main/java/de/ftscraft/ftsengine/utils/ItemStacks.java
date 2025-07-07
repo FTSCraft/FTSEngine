@@ -16,7 +16,6 @@ import java.util.List;
 
 public class ItemStacks {
 
-    private ItemStack backpackKey;
     private ItemStack ironHelmet, ironChestplate, ironLeggings, ironBoots,
             chainmailHelmet, chainmailChestplate, chainmailLeggings, chainmailBoots,
             diamondHelmet, diamondChestplate, diamondLeggings, diamondBoots;
@@ -55,12 +54,6 @@ public class ItemStacks {
                 Material.IRON_CHESTPLATE,
                 Material.IRON_LEGGINGS,
                 Material.IRON_BOOTS));
-
-        //BP KEY
-        backpackKey = new ItemBuilder(Material.FEATHER)
-                .name("§5Rucksack Schlüssel")
-                .sign("BACKPACK_KEY")
-                .build();
 
         //Horn
         horn = new ItemBuilder(Material.NAUTILUS_SHELL)
@@ -234,16 +227,6 @@ public class ItemStacks {
         lanzeRecipe.setIngredient('S', Material.STICK);
         lanzeRecipe.setIngredient('E', Material.IRON_INGOT);
         plugin.getServer().addRecipe(lanzeRecipe);
-
-        //BACKPACK KEY
-
-        NamespacedKey bpkkey = new NamespacedKey(plugin, "FTSbackpackkey");
-
-        ShapedRecipe backpack_key = new ShapedRecipe(bpkkey, backpackKey);
-        backpack_key.shape("I*I", "*F*", "I*I");
-        backpack_key.setIngredient('I', Material.IRON_INGOT);
-        backpack_key.setIngredient('F', Material.FEATHER);
-        plugin.getServer().addRecipe(backpack_key);
 
         //Horn
 
