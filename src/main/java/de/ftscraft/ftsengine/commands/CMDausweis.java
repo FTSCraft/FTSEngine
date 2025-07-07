@@ -89,8 +89,7 @@ public class CMDausweis implements CommandExecutor, TabCompleter {
                     if (args.length == 2) {
                         Ausweis.Gender g = null;
                         if (args[1].equalsIgnoreCase("m") ||
-                                args[1].equalsIgnoreCase("f") ||
-                                args[1].equalsIgnoreCase("d")) {
+                                args[1].equalsIgnoreCase("f")) {
                             if (args[1].equalsIgnoreCase("m"))
                                 g = Ausweis.Gender.MALE;
                             else if (args[1].equalsIgnoreCase("f"))
@@ -101,8 +100,7 @@ public class CMDausweis implements CommandExecutor, TabCompleter {
                             }
                             plugin.getAusweis(p).setGender(g);
                             p.sendPlainMessage(Messages.SUCC_CMD_AUSWEIS.replace("%s", "Geschlecht")
-                                    .replace("%v", (g == Ausweis.Gender.MALE ? "Mann" :
-                                            g == Ausweis.Gender.FEMALE ? "Frau" : "Divers")));
+                                    .replace("%v", (g == Ausweis.Gender.MALE ? "Mann" : "Frau")));
                         } else
                             p.sendPlainMessage(Messages.PREFIX + "Bitte benutze den Befehl so:" +
                                     " §c/ausweis geschlecht [\"m\"/\"f\"]");
@@ -238,7 +236,7 @@ public class CMDausweis implements CommandExecutor, TabCompleter {
         if (height < MIN_HEIGHT || height > MAX_HEIGHT) {
             p.sendMessage(Messages.PREFIX +
                     "Deine Größe müss zwischen %d cm und %d cm liegen."
-                    .formatted(MIN_HEIGHT, MAX_HEIGHT));
+                            .formatted(MIN_HEIGHT, MAX_HEIGHT));
             return true;
         }
 
@@ -259,6 +257,28 @@ public class CMDausweis implements CommandExecutor, TabCompleter {
                     result.add(argument);
             }
             return result;
+        }
+
+        if (args.length == 2) {
+            String subCommand = args[0].toLowerCase();
+            String currentInput = args[1].toLowerCase();
+
+            switch (subCommand) {
+                case "geschlecht":
+                    ArrayList<String> genderOptions = new ArrayList<>(Arrays.asList("m", "f"));
+                    for (String option : genderOptions) {
+                        if (option.startsWith(currentInput))
+                            result.add(option);
+                    }
+                    break;
+                case "rasse":
+                    ArrayList<String> raceOptions = new ArrayList<>(Arrays.asList("Ork", "Zwerg", "Mensch", "Elf"));
+                    for (String option : raceOptions) {
+                        if (option.toLowerCase().startsWith(currentInput))
+                            result.add(option);
+                    }
+                    break;
+            }
         }
 
         return result;
