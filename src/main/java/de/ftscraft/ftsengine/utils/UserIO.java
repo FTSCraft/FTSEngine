@@ -56,32 +56,24 @@ public class UserIO {
                 String uuid = aFile.getName().replace(".yml", "");
 
                 String lastName = cfg.getString("lastName");
-                if (lastName != null)
-                    lastName.replace('_', ' ');
-
                 String firstName = cfg.getString("firstName");
-                if (firstName != null)
-                    firstName.replace('_', ' ');
 
                 Ausweis.Gender gender = null;
                 if (cfg.isSet("gender"))
                     gender = Ausweis.Gender.valueOf(cfg.getString("gender"));
 
                 String race = cfg.getString("race");
-
                 String desc = cfg.getString("desc");
-
                 String spitzname = cfg.getString("spitzname");
-                if (spitzname != null)
-                    spitzname.replace('_', ' ');
-
                 String link = cfg.getString("link");
 
                 int height = -1;
                 if (cfg.isSet("height"))
                     height = cfg.getInt("height");
 
-                new Ausweis(plugin, UUID.fromString(uuid), firstName, lastName, spitzname, gender, race, desc, height, link);
+                double lastHeightChange = cfg.getDouble("lastHeightChange", -1);
+
+                new Ausweis(plugin, UUID.fromString(uuid), firstName, lastName, spitzname, gender, race, desc, height, link, lastHeightChange);
             }
         } catch (Exception e) {
             e.printStackTrace();
