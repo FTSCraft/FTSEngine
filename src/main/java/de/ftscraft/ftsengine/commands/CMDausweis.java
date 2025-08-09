@@ -6,6 +6,7 @@ import de.ftscraft.ftsengine.utils.Messages;
 import de.ftscraft.ftsengine.utils.Var;
 import de.ftscraft.ftsutils.misc.MiniMsg;
 import de.ftscraft.ftsutils.uuidfetcher.UUIDFetcher;
+import org.bukkit.Bukkit;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.attribute.AttributeInstance;
 import org.bukkit.command.Command;
@@ -19,19 +20,18 @@ import org.jetbrains.annotations.Nullable;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Objects;
 
 public class CMDausweis implements CommandExecutor, TabCompleter {
 
     private final Engine plugin;
     private final ArrayList<String> arguments;
 
-    private static final double HEIGHT_COOLDOWN = 1000 * 60 * 60 * 24 * 7;
+    private static final double HEIGHT_COOLDOWN = 1000 * 60 * 60;
 
     public CMDausweis(Engine plugin) {
         this.plugin = plugin;
         this.arguments = new ArrayList<>(Arrays.asList("name", "geschlecht", "rasse", "aussehen", "größe",
-                "link", "anschauen", "deckname"));
+                "link", "anschauen", "deckname", "resetcooldown"));
         plugin.getCommand("ausweis").setExecutor(this);
     }
 
@@ -69,6 +69,9 @@ public class CMDausweis implements CommandExecutor, TabCompleter {
                     break;
                 case "deckname":
                     if (handleUndercoverName(args, p)) return true;
+                    break;
+                case "resetcooldown":
+                    if (handleResetCooldown(args, p)) return true;
                     break;
                 default:
                     sendHelpMsg(p);
@@ -265,7 +268,7 @@ public class CMDausweis implements CommandExecutor, TabCompleter {
 
         if (ausweis.getLastHeightChange() + HEIGHT_COOLDOWN >= System.currentTimeMillis()) {
             if (!p.hasPermission("ftssurvival.bypass") && !p.hasPermission("ftsengine.mod")) {
-                MiniMsg.msg(p, Messages.MINI_PREFIX + "Du darfst deine Größe alle 7 Tage ändern");
+                MiniMsg.msg(p, Messages.MINI_PREFIX + "Du darfst deine Größe jede stunde ändern");
                 return true;
             }
         }
@@ -280,6 +283,56 @@ public class CMDausweis implements CommandExecutor, TabCompleter {
         }
 
         scaleAttr.setBaseValue(height / 200d);
+        return false;
+    }
+
+    private boolean handleResetCooldown(String[] args, Player p) {
+        if (!p.hasPermission("ftsengine.resetcooldown")) {
+            p.sendMessage(Messages.PREFIX + "§cDafür hast du keine Rechte!");
+            return true;
+        }
+        
+        if (args.length < 2) {
+            p.sendMessage(Messages.PREFIX + "Bitte benutze den Befehl so: §c/ausweis resetcooldown [Spielername]");
+            return true;
+        }
+        
+        String targetName = args[1];
+        
+        if (targetName.equalsIgnoreCase("all")) {
+            int resetCount = 0;
+            for (Ausweis ausweis : plugin.ausweis.values()) {
+                ausweis.setLastHeightChange(0);
+                resetCount++;
+            }
+            p.sendMessage(Messages.PREFIX + "§7Größen-Cooldown für §e" + resetCount + " §7Spieler wurde erfolgreich zurückgesetzt!");
+            
+            for (Player onlinePlayer : Bukkit.getOnlinePlayers()) {
+                if (plugin.hasAusweis(onlinePlayer)) {
+                    onlinePlayer.sendMessage(Messages.PREFIX + "§7Dein Größen-Cooldown wurde von einem Admin zurückgesetzt. Du kannst deine Größe jetzt wieder ändern!");
+                }
+            }
+            return false;
+        }
+        
+        Player target = Bukkit.getPlayer(targetName);
+        
+        if (target == null) {
+            p.sendMessage(Messages.PREFIX + "Spieler §c" + targetName + " §7ist nicht online oder existiert nicht!");
+            return true;
+        }
+
+        if (!plugin.hasAusweis(target)) {
+            p.sendMessage(Messages.TARGET_NO_AUSWEIS);
+            return true;
+        }
+
+        Ausweis targetAusweis = plugin.getAusweis(target);
+        targetAusweis.setLastHeightChange(0);
+        
+        p.sendMessage(Messages.PREFIX + "§7Größen-Cooldown für §e" + targetName + " §7wurde erfolgreich zurückgesetzt!");
+        target.sendMessage(Messages.PREFIX + "§7Dein Größen-Cooldown wurde von einem Admin zurückgesetzt. Du kannst deine Größe jetzt wieder ändern!");
+        
         return false;
     }
 
@@ -313,6 +366,19 @@ public class CMDausweis implements CommandExecutor, TabCompleter {
                     for (String option : raceOptions) {
                         if (option.toLowerCase().startsWith(currentInput))
                             result.add(option);
+                    }
+                    break;
+                case "resetcooldown":
+                    if (sender.hasPermission("ftsengine.resetcooldown")) {
+                        if ("all".toLowerCase().startsWith(currentInput)) {
+                            result.add("all");
+                        }
+                        for (Player onlinePlayer : Bukkit.getOnlinePlayers()) {
+                            String playerName = onlinePlayer.getName();
+                            if (playerName.toLowerCase().startsWith(currentInput)) {
+                                result.add(playerName);
+                            }
+                        }
                     }
                     break;
             }
