@@ -54,6 +54,10 @@ public class CMDitem implements CommandExecutor {
 
             if (args.length >= 1) {
                 ItemStack is = p.getInventory().getItemInMainHand();
+                if (is.getType() == Material.LEATHER_CHESTPLATE) {
+                    p.sendMessage(Messages.PREFIX + "Du darfst dieses Item nicht bearbeiten!");
+                    return true;
+                }
 
                 if (is.hasItemMeta()) {
                     if (forbiddenItems.contains(is.getItemMeta().getDisplayName())) {
@@ -161,15 +165,13 @@ public class CMDitem implements CommandExecutor {
 
                     ItemStack item = p.getInventory().getItemInMainHand();
 
-                    for (String forbidden : forbiddenItems) {
-                        if (all.contains(forbidden)) {
-                            p.sendMessage(Messages.PREFIX + "Dieses Item darfst du nicht so bearbeiten");
-                            return true;
-                        }
-                    }
-
                     if (forbiddenItems.contains(item.getItemMeta().displayName())) {
                         p.sendMessage(Messages.PREFIX + "Dieses Item darfst du nicht bearbeiten");
+                        return true;
+                    }
+
+                    if (forbiddenNames.contains(lore.getFirst())) {
+                        p.sendMessage(Messages.PREFIX + "Das Item so zu nennen ist nicht erlaubt!");
                         return true;
                     }
 
