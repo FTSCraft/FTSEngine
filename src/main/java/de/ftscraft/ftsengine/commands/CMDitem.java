@@ -161,13 +161,15 @@ public class CMDitem implements CommandExecutor {
 
                     ItemStack item = p.getInventory().getItemInMainHand();
 
-                    if (forbiddenItems.contains(item.getItemMeta().displayName())) {
-                        p.sendMessage(Messages.PREFIX + "Dieses Item darfst du nicht bearbeiten");
-                        return true;
+                    for (String forbidden : forbiddenItems) {
+                        if (all.contains(forbidden)) {
+                            p.sendMessage(Messages.PREFIX + "Dieses Item darfst du nicht so bearbeiten");
+                            return true;
+                        }
                     }
 
-                    if (forbiddenNames.contains(lore.getFirst())) {
-                        p.sendMessage(Messages.PREFIX + "Das Item so zu nennen ist nicht erlaubt!");
+                    if (forbiddenItems.contains(item.getItemMeta().displayName())) {
+                        p.sendMessage(Messages.PREFIX + "Dieses Item darfst du nicht bearbeiten");
                         return true;
                     }
 
