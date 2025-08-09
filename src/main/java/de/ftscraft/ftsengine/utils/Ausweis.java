@@ -145,6 +145,10 @@ public class Ausweis {
         return lastHeightChange;
     }
 
+    public void setLastHeightChange(double lastHeightChange) {
+        this.lastHeightChange = lastHeightChange;
+    }
+
     public void setHeight(int height) {
         this.height = height;
         this.lastHeightChange = System.currentTimeMillis();
