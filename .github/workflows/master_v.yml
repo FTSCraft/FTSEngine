@@ -43,13 +43,25 @@ jobs:
         run: |
           git remote set-url origin https://x-access-token:${{ secrets.ACTIONS_TOKEN }}@github.com/${{ github.repository }}.git
 
-      - name: Create release branch
+      - name: Create or update release branch
         run: |
-          git checkout -b release/v${{ steps.version.outputs.new_version }}
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git commit -am "Release v${{ steps.version.outputs.new_version }}"
-          git push origin release/v${{ steps.version.outputs.new_version }}
+
+          # Erstelle neuen Branch oder checke ihn aus (falls schon vorhanden)
+          git checkout -B release/v${{ steps.version.outputs.new_version }}
+
+          # Commit der Änderungen (falls vorhanden)
+          git commit -am "Release v${{ steps.version.outputs.new_version }}" || echo "No changes to commit"
+
+          # Versuche den Remote-Branch zu holen (falls er existiert)
+          git fetch origin release/v${{ steps.version.outputs.new_version }} || echo "Remote branch does not exist"
+
+          # Rebase auf Remote-Branch, falls vorhanden
+          git rebase origin/release/v${{ steps.version.outputs.new_version }} || echo "Rebase failed or no remote branch"
+
+          # Push mit force-with-lease, um non-fast-forward Fehler zu vermeiden
+          git push origin release/v${{ steps.version.outputs.new_version }} --force-with-lease
 
       - name: Create Pull Request
         id: create_pr
