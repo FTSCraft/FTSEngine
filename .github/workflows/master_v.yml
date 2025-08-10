@@ -10,7 +10,7 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       contents: write
-      packages: write
+      pull-requests: write
 
     steps:
       - uses: actions/checkout@v4
@@ -23,28 +23,43 @@ jobs:
           distribution: temurin
           java-version: 21
 
-      - name: Get next version
+      - name: Get current version
         id: version
         run: |
-          # Beispiel: Patch-Version erhöhen
           current=$(mvn help:evaluate -Dexpression=project.version -q -DforceStdout)
           base=${current%-SNAPSHOT}
           IFS='.' read -r major minor patch <<< "$base"
           patch=$((patch + 1))
-          echo "new_version=${major}.${minor}.${patch}" >> $GITHUB_OUTPUT
+          new_version="${major}.${minor}.${patch}-SNAPSHOT"
+          echo "new_version=$new_version" >> $GITHUB_OUTPUT
 
       - name: Update pom.xml
         run: |
           mvn versions:set -DnewVersion=${{ steps.version.outputs.new_version }}
           mvn versions:commit
 
-      - name: Commit and tag
+      - name: Create release branch
         run: |
+          git checkout -b release/v${{ steps.version.outputs.new_version }}
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git commit -am "Release v${{ steps.version.outputs.new_version }}"
-          git tag v${{ steps.version.outputs.new_version }}
-          git push origin master --tags
+          git push origin release/v${{ steps.version.outputs.new_version }}
 
-      - name: Build and deploy
-        run: mvn clean deploy --batch-mode
+      - name: Create Pull Request
+        id: create_pr
+        uses: peter-evans/create-pull-request@v6
+        with:
+          token: ${{ secrets.ACTIONS_TOKEN }}
+          branch: release/v${{ steps.version.outputs.new_version }}
+          title: "Release v${{ steps.version.outputs.new_version }}"
+          body: "Automated release of version ${{ steps.version.outputs.new_version }}"
+          base: master
+          draft: false
+
+      - name: Enable auto-merge
+        run: |
+          pr_number=$(echo "${{ steps.create_pr.outputs.pull-request-url }}" | grep -oE '[0-9]+$')
+          gh pr merge $pr_number --merge --auto
+        env:
+          GITHUB_TOKEN: ${{ secrets.ACTIONS_TOKEN }}
