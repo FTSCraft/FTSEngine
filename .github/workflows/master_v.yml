@@ -1,0 +1,50 @@
+name: Release
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      packages: write
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 21
+
+      - name: Get next version
+        id: version
+        run: |
+          # Beispiel: Patch-Version erhöhen
+          current=$(mvn help:evaluate -Dexpression=project.version -q -DforceStdout)
+          base=${current%-SNAPSHOT}
+          IFS='.' read -r major minor patch <<< "$base"
+          patch=$((patch + 1))
+          echo "new_version=${major}.${minor}.${patch}" >> $GITHUB_OUTPUT
+
+      - name: Update pom.xml
+        run: |
+          mvn versions:set -DnewVersion=${{ steps.version.outputs.new_version }}
+          mvn versions:commit
+
+      - name: Commit and tag
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git commit -am "Release v${{ steps.version.outputs.new_version }}"
+          git tag v${{ steps.version.outputs.new_version }}
+          git push origin main --tags
+
+      - name: Build and deploy
+        run: mvn clean deploy --batch-mode
