@@ -76,7 +76,7 @@ jobs:
 
       - name: Enable auto-merge
         run: |
-          pr_number=$(echo "${{ steps.create_pr.outputs.pull-request-url }}" | grep -oE '[0-9]+$')
+          pr_number=${{ steps.create_pr.outputs.pull-request-number }}
           gh pr merge $pr_number --merge --auto
         env:
           GITHUB_TOKEN: ${{ secrets.ACTIONS_TOKEN }}
