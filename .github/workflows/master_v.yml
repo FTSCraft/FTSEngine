@@ -44,7 +44,7 @@ jobs:
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git commit -am "Release v${{ steps.version.outputs.new_version }}"
           git tag v${{ steps.version.outputs.new_version }}
-          git push origin main --tags
+          git push origin master --tags
 
       - name: Build and deploy
         run: mvn clean deploy --batch-mode
