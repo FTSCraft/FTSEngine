@@ -55,8 +55,8 @@ public class PlayerMountListener implements Listener {
         }
 
         AbstractHorse horse = (AbstractHorse) event.getDismounted();
-        if(CMDgehen.speed.containsKey(horse)){
-            CMDgehen.setHorseSpeed(horse, CMDgehen.speed.get(horse));
+        if(CMDgehen.speed.contains(horse)){
+            CMDgehen.setHorseSpeed(horse, CMDgehen.getHorseDefaultSpeed(horse));
             CMDgehen.speed.remove(horse);
             event.getEntity().sendMessage(Messages.PREFIX + " Dein Pferd geht jetzt wieder normal");
         }

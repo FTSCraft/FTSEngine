@@ -3,6 +3,7 @@ package de.ftscraft.ftsengine.commands;
 import de.ftscraft.ftsengine.main.Engine;
 import de.ftscraft.ftsengine.utils.Messages;
 import org.bukkit.Material;
+import org.bukkit.NamespacedKey;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.attribute.AttributeInstance;
 import org.bukkit.command.Command;
@@ -13,9 +14,12 @@ import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Horse;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.persistence.PersistentDataType;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 public class CMDgehen implements CommandExecutor {
 
@@ -24,7 +28,7 @@ public class CMDgehen implements CommandExecutor {
     }
 
     final float SLOW_SPEED = 0.1f;
-    public static HashMap<AbstractHorse, Double> speed = new HashMap<>();
+    public static List<AbstractHorse> speed = new ArrayList<>();
 
     @Override
     public boolean onCommand(@NotNull CommandSender cs, @NotNull Command cmd, @NotNull String label, String[] args) {
@@ -38,11 +42,11 @@ public class CMDgehen implements CommandExecutor {
                 }
                 AbstractHorse horse = (AbstractHorse) p.getVehicle();
                 if (getHorseSpeed(horse) > 0.1) {
-                    speed.put(horse, getHorseSpeed(horse));
+                    speed.add(horse);
                     setHorseSpeed(horse, 0.08);
                     p.sendMessage(Messages.PREFIX + " Dein Pferd geht jetzt langsam");
                 } else {
-                    setHorseSpeed(horse, speed.get(horse));
+                    setHorseSpeed(horse, getHorseDefaultSpeed(horse));
                     speed.remove(horse);
                     p.sendMessage(Messages.PREFIX + " Dein Pferd geht jetzt wieder normal");
                 }
@@ -79,9 +83,8 @@ public class CMDgehen implements CommandExecutor {
     public static void setHorseSpeed(AbstractHorse horse, double speed) {
         AttributeInstance attribute = horse.getAttribute(Attribute.MOVEMENT_SPEED);
         if (attribute != null) {
-            System.out.println("old value: " + attribute.getBaseValue());
+            horse.getPersistentDataContainer().set(new NamespacedKey(Engine.getInstance(), "horse_speed"), PersistentDataType.DOUBLE, attribute.getBaseValue());
             attribute.setBaseValue(speed);
-            System.out.println("new value: " + attribute.getBaseValue());
         }
     }
 
@@ -89,6 +92,14 @@ public class CMDgehen implements CommandExecutor {
         AttributeInstance attribute = horse.getAttribute(Attribute.MOVEMENT_SPEED);
         if (attribute != null) {
             return attribute.getBaseValue();
+        }
+        return -1;
+    }
+
+    public static double getHorseDefaultSpeed(AbstractHorse horse) {
+        NamespacedKey namespacedKey = new NamespacedKey(Engine.getInstance(), "horse_speed");
+        if(horse.getPersistentDataContainer().has(namespacedKey, PersistentDataType.DOUBLE)){
+            return horse.getPersistentDataContainer().get(namespacedKey, PersistentDataType.DOUBLE);
         }
         return -1;
     }
