@@ -1,21 +1,16 @@
 package de.ftscraft.ftsengine.utils;
 
 import de.ftscraft.ftsengine.commands.CMDtaube;
-import de.ftscraft.ftsengine.courier.Brief;
 import de.ftscraft.ftsengine.main.Engine;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.event.ClickEvent;
 import net.kyori.adventure.text.event.HoverEvent;
 import net.kyori.adventure.text.format.NamedTextColor;
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
+import org.bukkit.GameMode;
 import org.bukkit.Sound;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
-import org.bukkit.scheduler.BukkitRunnable;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class CountdownScheduler implements Runnable {
 
@@ -42,6 +37,19 @@ public class CountdownScheduler implements Runnable {
         this.t = t;
         this.msg = taubeMessage;
         this.taskid = plugin.getServer().getScheduler().scheduleSyncRepeatingTask(plugin, this, 20, 20);
+    }
+
+    private boolean shouldReceiveTaubeNotification(Player player) {
+        return player.getGameMode() != GameMode.SPECTATOR && !isPlayerVanished(player);
+    }
+    
+    private boolean isPlayerVanished(Player player) {
+        for (Player onlinePlayer : Bukkit.getOnlinePlayers()) {
+            if (!onlinePlayer.equals(player) && !onlinePlayer.canSee(player)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     @Override
@@ -76,11 +84,11 @@ public class CountdownScheduler implements Runnable {
             if (seconds == 0) {
                 t.playSound(t.getLocation(), Sound.ENTITY_BAT_LOOP, 3, -20);
                 p.sendMessage(Messages.PREFIX + "Deine Taube ist angekommen!");
-                t.sendMessage("§c---------------");
-                t.sendMessage("§eEine Brieftaube von §c" + p.getName() + "§e hat dich erreicht!");
-                t.sendMessage(" ");
-                t.sendMessage(ChatColor.YELLOW + msg.getMessage());
-                t.sendMessage("§c---------------");
+                t.sendMessage(Component.text("§c---------------"));
+                t.sendMessage(Component.text("§eEine Brieftaube von §c" + p.getName() + "§e hat dich erreicht!"));
+                t.sendMessage(Component.text(" "));
+                t.sendMessage(Component.text(msg.getMessage(), NamedTextColor.YELLOW));
+                t.sendMessage(Component.text("§c---------------"));
 
                 // clickable message for Brief
                 Component clickableMessage = Component.text()
@@ -91,9 +99,12 @@ public class CountdownScheduler implements Runnable {
 
                 t.sendMessage(clickableMessage);
 
-                for (Player playerInRadius : t.getLocation().getNearbyEntitiesByType(Player.class, 10)) {
-                    if (!playerInRadius.equals(t))
-                        playerInRadius.sendMessage(Component.text(ChatColor.RED + t.getName() + " erhielt eine Brieftaube!"));
+                if (shouldReceiveTaubeNotification(t)) {
+                    for (Player playerInRadius : t.getLocation().getNearbyEntitiesByType(Player.class, 10)) {
+                        if (!playerInRadius.equals(t)) {
+                            playerInRadius.sendMessage(Component.text(t.getName() + " erhielt eine Brieftaube!", NamedTextColor.RED));
+                        }
+                    }
                 }
 
                 Bukkit.getScheduler().cancelTask(taskid);

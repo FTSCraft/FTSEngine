@@ -54,6 +54,10 @@ public class CMDitem implements CommandExecutor {
 
             if (args.length >= 1) {
                 ItemStack is = p.getInventory().getItemInMainHand();
+                if (is.getType() == Material.LEATHER_CHESTPLATE) {
+                    p.sendMessage(Messages.PREFIX + "Du darfst dieses Item nicht bearbeiten!");
+                    return true;
+                }
 
                 if (is.hasItemMeta()) {
                     if (forbiddenItems.contains(is.getItemMeta().getDisplayName())) {

@@ -22,10 +22,11 @@ public class Ausweis {
     private String desc;
     private String forumLink;
     private int height;
+    private double lastHeightChange;
 
     private final Engine plugin;
 
-    public Ausweis(Engine plugin, UUID uuid, String firstName, String lastName, String spitzname, Gender gender, String race, String desc, int height, String link) {
+    public Ausweis(Engine plugin, UUID uuid, String firstName, String lastName, String spitzname, Gender gender, String race, String desc, int height, String link, double lastHeightChange) {
         this.plugin = plugin;
         this.uuid = uuid;
         this.firstName = firstName;
@@ -36,6 +37,7 @@ public class Ausweis {
         this.forumLink = link;
         this.desc = desc;
         this.height = height;
+        this.lastHeightChange = lastHeightChange;
         plugin.addAusweis(this);
     }
 
@@ -59,6 +61,7 @@ public class Ausweis {
         cfg.set("desc", desc);
         cfg.set("height", height);
         cfg.set("link", forumLink);
+        cfg.set("lastHeightChange", lastHeightChange);
 
         try {
             cfg.save(file);
@@ -138,8 +141,17 @@ public class Ausweis {
         return forumLink;
     }
 
+    public double getLastHeightChange() {
+        return lastHeightChange;
+    }
+
+    public void setLastHeightChange(double lastHeightChange) {
+        this.lastHeightChange = lastHeightChange;
+    }
+
     public void setHeight(int height) {
         this.height = height;
+        this.lastHeightChange = System.currentTimeMillis();
     }
 
     public int getHeight() {
