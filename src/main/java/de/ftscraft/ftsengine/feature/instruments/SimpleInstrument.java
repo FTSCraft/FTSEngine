@@ -48,7 +48,7 @@ public class SimpleInstrument implements Instrument {
 
             // Item mit PDC-Wert erstellen
             ItemStack item = new ItemBuilder(material)
-                    .name("&fNote " + noteNames[i])
+                    .name("§fNote " + noteNames[i])
                     .addPDC("noteindex", i, PersistentDataType.INTEGER)
                     .build();
 
