@@ -159,34 +159,38 @@ public class PlayerInteractListener implements Listener {
     }
 
     private void handleBackpack(Player player, ItemStack item) {
-        if (player.getInventory().getChestplate() != null && item != null && "BACKPACK_KEY".equals(ItemReader.getSign(item))) {
-            BackpackType type = BackpackType.getBackpackByItem(player.getInventory().getChestplate());
-            if (type != null) {
-                if (type == BackpackType.ENDER) {
-                    player.openInventory(player.getEnderChest());
-                    return;
-                }
-                openOrRegisterBackpack(player, type);
-            }
+        if (player.getInventory().getChestplate() == null || item == null || !"BACKPACK_KEY".equals(ItemReader.getSign(item))) {
+            return;
         }
+        BackpackType type = BackpackType.getBackpackByItem(player.getInventory().getChestplate());
+        if (type == null) {
+            return;
+        }
+        if (type == BackpackType.ENDER) {
+            player.openInventory(player.getEnderChest());
+            return;
+        }
+        openOrRegisterBackpack(player, type, player.getInventory().getChestplate());
     }
 
-    private void openOrRegisterBackpack(Player player, BackpackType type) {
-        ItemStack chest = player.getInventory().getChestplate();
-        int id = Var.getBackpackID(chest);
-
-        if (id == -1) {
-            new Backpack(plugin, type, player);
-        } else {
-            Backpack bp = plugin.backpacks.get(id);
-
-            if (bp == null) {
-                player.sendMessage(Messages.PREFIX + "Dieser Rucksack ist (warum auch immer) nicht registriert?");
+    private void openOrRegisterBackpack(@NotNull Player player, @NotNull BackpackType type, @NotNull ItemStack chestplate) {
+        Integer id = Var.getBackpackID(chestplate);
+        if (id == null) {
+            id = Var.getLegacyBackpackID(chestplate);
+            if (id == -1) {
+                new Backpack(plugin, type, player, chestplate);
                 return;
             }
-
-            bp.open(player);
+            Var.setBackpackId(chestplate, id);
         }
+        Backpack bp = plugin.backpacks.get(id);
+
+        if (bp == null) {
+            player.sendMessage(Messages.PREFIX + "Dieser Rucksack ist (warum auch immer) nicht registriert?");
+            return;
+        }
+
+        bp.open(player);
     }
 
     private void handleFertilizer(PlayerInteractEvent event, Block clickedBlock) {
