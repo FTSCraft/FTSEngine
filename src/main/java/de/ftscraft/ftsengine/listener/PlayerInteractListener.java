@@ -11,6 +11,7 @@ import de.ftscraft.ftsengine.signs.TeachingBoardManager;
 import de.ftscraft.ftsengine.utils.Messages;
 import de.ftscraft.ftsengine.utils.Var;
 import de.ftscraft.ftsutils.items.ItemReader;
+import de.ftscraft.ftsutils.misc.MiniMsg;
 import net.kyori.adventure.key.Key;
 import net.kyori.adventure.sound.Sound;
 import org.bukkit.*;
@@ -27,6 +28,7 @@ import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.Damageable;
 import org.bukkit.persistence.PersistentDataType;
 import org.jetbrains.annotations.NotNull;
 
@@ -188,7 +190,31 @@ public class PlayerInteractListener implements Listener {
             }
 
             bp.open(player);
+
+            giveBackpackDamageByChance(chest, player);
         }
+    }
+
+    static final int[] WARNING_THRESHOLDS = {30, 20, 10, 5, 3};
+
+    private void giveBackpackDamageByChance(ItemStack backpackItem, Player player) {
+        if (!(Math.random() < 0.01)) {
+            return;
+        }
+        Damageable itemMeta = (Damageable) backpackItem.getItemMeta();
+        itemMeta.setDamage(itemMeta.getDamage() + 1);
+
+        int remainingDurability = itemMeta.getMaxDamage() - itemMeta.getDamage();
+
+        for (int threshold : WARNING_THRESHOLDS) {
+            if (remainingDurability != threshold) {
+                continue;
+            }
+            MiniMsg.msg(player, Messages.MINI_PREFIX + "Dein Rucksack hat nur noch <red>" + threshold + "</red> Haltbarkeit.");
+            break;
+        }
+
+        backpackItem.setItemMeta(itemMeta);
     }
 
     private void handleFertilizer(PlayerInteractEvent event, Block clickedBlock) {
