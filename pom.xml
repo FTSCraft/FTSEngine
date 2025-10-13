@@ -108,9 +108,9 @@
             <scope>provided</scope>
         </dependency>
         <dependency>
-            <groupId>com.github.FTSCraft</groupId>
+            <groupId>de.FTSCraft</groupId>
             <artifactId>FTSUtils</artifactId>
-            <version>v1.5</version>
+            <version>1.7</version>
         </dependency>
         <dependency>
             <groupId>org.black_ixx</groupId>
