@@ -17,6 +17,8 @@ import de.ftscraft.ftsengine.utils.Ausweis;
 import de.ftscraft.ftsengine.utils.ConfigManager;
 import de.ftscraft.ftsengine.utils.ItemStacks;
 import de.ftscraft.ftsengine.utils.UserIO;
+import de.ftscraft.ftsutils.services.IChatInputService;
+import de.ftscraft.ftsutils.storage.DataHandler;
 import net.milkbowl.vault.economy.Economy;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -56,10 +58,14 @@ public class Engine extends JavaPlugin implements Listener {
     public List<Material> mats = new ArrayList<>();
     private ProtocolManager protocolManager = null;
     private ShopkeepersPlugin shopkeepersPlugin = null;
+    private DataHandler storage;
+    private IChatInputService chatInputService;
 
     @Override
     public void onEnable() {
         instance = this;
+        chatInputService = Bukkit.getServicesManager().load(IChatInputService.class);
+        storage = DataHandler.forPlugin(this);
         configManager = new ConfigManager();
         setupEconomy();
         init();
@@ -73,6 +79,7 @@ public class Engine extends JavaPlugin implements Listener {
     public void onDisable() {
         saveAll();
         logportManager.onDisableLogic();
+        storage.saveStorages();
     }
 
     private void init() {
@@ -129,6 +136,7 @@ public class Engine extends JavaPlugin implements Listener {
         new CMDzeit(this);
         new CMDdurchsuchen(this);
         new CMDsearchreact(this);
+        new CMDlehrtafel(this);
         streicheln = new CMDstreicheln(this);
     }
 
@@ -140,6 +148,7 @@ public class Engine extends JavaPlugin implements Listener {
         new PlayerJoinListener(this);
         new SignWriteListener(this);
         new BlockBreakListener(this);
+        new BlockPlaceListener(this);
         new ItemSwitchListener(this);
         new PlayerInteractListener(this);
         new InventoryClickListener(this);
@@ -177,6 +186,14 @@ public class Engine extends JavaPlugin implements Listener {
 
         new UserIO(this, true);
 
+    }
+
+    public DataHandler getStorage() {
+        return storage;
+    }
+
+    public IChatInputService getChatInputService() {
+        return chatInputService;
     }
 
     public Ausweis getAusweis(Player player) {
