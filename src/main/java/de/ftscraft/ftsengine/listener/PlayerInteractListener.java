@@ -6,14 +6,15 @@ import de.ftscraft.ftsengine.brett.Brett;
 import de.ftscraft.ftsengine.feature.instruments.InstrumentManager;
 import de.ftscraft.ftsengine.logport.LogportManager;
 import de.ftscraft.ftsengine.main.Engine;
-import de.ftscraft.ftsengine.signs.TeachingBoard;
-import de.ftscraft.ftsengine.signs.TeachingBoardManager;
 import de.ftscraft.ftsengine.utils.Messages;
 import de.ftscraft.ftsengine.utils.Var;
 import de.ftscraft.ftsutils.items.ItemReader;
 import net.kyori.adventure.key.Key;
 import net.kyori.adventure.sound.Sound;
-import org.bukkit.*;
+import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
+import org.bukkit.Material;
+import org.bukkit.Particle;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.block.data.type.Sign;
@@ -67,9 +68,6 @@ public class PlayerInteractListener implements Listener {
 
         if (clickedBlock != null) {
             handleSchwarzesBrett(player, clickedBlock, e.getAction());
-            if(handleTeachingBoards(player, clickedBlock, e.getAction())) {
-                e.setCancelled(true);
-            }
         }
     }
 
@@ -228,37 +226,6 @@ public class PlayerInteractListener implements Listener {
                 }
             }
         }
-    }
-
-    private boolean handleTeachingBoards(Player player, Block block, Action action) {
-        if(action != Action.RIGHT_CLICK_BLOCK) {
-            return false;
-        }
-
-        if(!(block.getBlockData() instanceof WallSign) && !(block.getBlockData() instanceof Sign)) {
-            return false;
-        }
-        org.bukkit.block.Sign sign = (org.bukkit.block.Sign) block.getState();
-        boolean isTeachingBoard = TeachingBoardManager.isTeachingBoard(sign);
-        if(!isTeachingBoard) {
-            return false;
-        }
-
-        TeachingBoard teachingBoard = TeachingBoardManager.fetch(sign);
-        if(teachingBoard == null) {
-            return false;
-        }
-
-
-        if(player.isSneaking() && teachingBoard.getOwners().contains(player.getUniqueId().toString())) {
-            // open edit mode
-            TeachingBoardManager.getEditingPlayers().put(player, sign);
-            TeachingBoardManager.showLines(player, teachingBoard, true, false);
-            return true;
-        }
-        // open view mode
-        TeachingBoardManager.showLines(player, teachingBoard, false, false);
-        return true;
     }
 
     private void handleInstrument(@NotNull PlayerInteractEvent event, @NotNull ItemStack item) {

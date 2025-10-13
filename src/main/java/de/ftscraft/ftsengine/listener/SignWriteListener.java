@@ -3,10 +3,7 @@ package de.ftscraft.ftsengine.listener;
 import de.ftscraft.ftsengine.brett.Brett;
 import de.ftscraft.ftsengine.courier.Briefkasten;
 import de.ftscraft.ftsengine.main.Engine;
-import de.ftscraft.ftsengine.signs.TeachingBoardManager;
 import de.ftscraft.ftsengine.utils.Messages;
-import de.ftscraft.ftsutils.items.ItemBuilder;
-import de.ftscraft.ftsutils.misc.MiniMsg;
 import org.bukkit.block.Block;
 import org.bukkit.block.Container;
 import org.bukkit.block.Sign;
@@ -16,7 +13,6 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.SignChangeEvent;
-import org.bukkit.persistence.PersistentDataType;
 
 public class SignWriteListener implements Listener {
 
@@ -30,7 +26,6 @@ public class SignWriteListener implements Listener {
     @EventHandler
     public void onWirte(SignChangeEvent event) {
 
-        handleTeachingBoards(event.getPlayer(), event);
         //If player wants to create a briefkasten
         if (event.getLine(0).equalsIgnoreCase("[Briefkasten]")) {
 
@@ -141,17 +136,4 @@ public class SignWriteListener implements Listener {
         }
     }
 
-    private void handleTeachingBoards(Player player, SignChangeEvent event) {
-        if(event.getLine(3).equalsIgnoreCase("[Lehrtafel]")) {
-            org.bukkit.block.Sign sign = (org.bukkit.block.Sign) event.getBlock().getState();
-            if(!TeachingBoardManager.isTeachingBoard(sign)) {
-                player.sendMessage("§7Dies ist keine Lehrtafel");
-                return;
-            }
-
-            event.setLine(3, "");
-            TeachingBoardManager.create(player, sign);
-            player.sendMessage("§aLehrtafel erfolgreich erstellt. §fMit Shift-Rechtsklick auf das Schild, kannst du den Inhalt bearbeiten.");
-        }
-    }
 }
