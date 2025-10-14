@@ -110,7 +110,7 @@
         <dependency>
             <groupId>de.FTSCraft</groupId>
             <artifactId>FTSUtils</artifactId>
-            <version>1.7</version>
+            <version>v1.7</version>
         </dependency>
         <dependency>
             <groupId>de.FTSCraft</groupId>
