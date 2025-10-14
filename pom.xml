@@ -110,7 +110,12 @@
         <dependency>
             <groupId>de.FTSCraft</groupId>
             <artifactId>FTSUtils</artifactId>
-            <version>v1.7</version>
+            <version>1.7</version>
+        </dependency>
+        <dependency>
+            <groupId>de.FTSCraft</groupId>
+            <artifactId>FTSTools</artifactId>
+            <version>1.1</version>
         </dependency>
         <dependency>
             <groupId>org.black_ixx</groupId>

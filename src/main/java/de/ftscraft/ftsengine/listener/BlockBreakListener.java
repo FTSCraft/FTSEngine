@@ -2,7 +2,9 @@ package de.ftscraft.ftsengine.listener;
 
 import de.ftscraft.ftsengine.brett.Brett;
 import de.ftscraft.ftsengine.main.Engine;
+import de.ftscraft.ftsengine.signs.TeachingBoardManager;
 import de.ftscraft.ftsengine.utils.Messages;
+import de.ftscraft.ftstools.items.ItemStore;
 import de.ftscraft.ftsutils.items.ItemReader;
 import org.bukkit.*;
 import org.bukkit.block.Block;
@@ -53,6 +55,33 @@ public class BlockBreakListener implements Listener {
         handleBriefkasten(event);
         handleEmeraldPickaxe(event);
         handleSense(event);
+        handleTeachingBoard(event);
+    }
+
+    private void handleTeachingBoard(BlockBreakEvent event) {
+        Player player = event.getPlayer();
+        Block brokenBlock = event.getBlock();
+
+        if(!(brokenBlock.getBlockData() instanceof WallSign) && !(brokenBlock.getBlockData() instanceof org.bukkit.block.data.type.Sign)) {
+            return;
+        }
+        org.bukkit.block.Sign sign = (org.bukkit.block.Sign) brokenBlock.getState();
+        if(!TeachingBoardManager.isTeachingBoard(sign)) {
+            return;
+        }
+        if(!TeachingBoardManager.mainOwner(sign, player) && !player.hasPermission("ftsengine.teaching-board.bypass")){
+            event.setCancelled(true);
+            player.sendMessage("§cDu kannst diese Lehrtafel nicht abbauen");
+            return;
+        }
+        ItemStack teachingBoard = ItemStore.getItem("teaching-board");
+        if(teachingBoard == null) {
+            return;
+        }
+        TeachingBoardManager.copyPDCToItemStack(sign, teachingBoard);
+        event.setDropItems(false);
+        Location blockLoc = event.getBlock().getLocation();
+        blockLoc.getWorld().dropItemNaturally(blockLoc, teachingBoard);
     }
 
     private void handleSense(BlockBreakEvent event) {

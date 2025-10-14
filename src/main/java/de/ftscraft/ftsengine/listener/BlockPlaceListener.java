@@ -53,6 +53,12 @@ public class BlockPlaceListener implements Listener {
         }
         org.bukkit.block.Sign sign = (org.bukkit.block.Sign) placedBlock.getState();
         sign.getPersistentDataContainer().set(ItemBuilder.getSignKey(), PersistentDataType.STRING, "teaching-board");
+
+        if(!TeachingBoardManager.copyPDCToSign(player, itemStack, sign)) {
+            TeachingBoardManager.create(player, sign);
+        }
+
+        player.sendMessage("§aLehrtafel erfolgreich erstellt. §fMit Shift-Rechtsklick auf das Schild, kannst du den Inhalt bearbeiten.");
         sign.update(true, false);
     }
 }
