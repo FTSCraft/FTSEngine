@@ -4,6 +4,7 @@ import com.jeff_media.morepersistentdatatypes.DataType;
 import de.ftscraft.ftsengine.main.Engine;
 import de.ftscraft.ftsutils.FTSUtils;
 import de.ftscraft.ftsutils.items.ItemBuilder;
+import de.ftscraft.ftsutils.items.ItemReader;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.event.ClickEvent;
 import net.kyori.adventure.text.event.HoverEvent;
@@ -15,6 +16,7 @@ import org.bukkit.Location;
 import org.bukkit.NamespacedKey;
 import org.bukkit.block.Sign;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.persistence.PersistentDataType;
 
 import java.util.*;
@@ -42,6 +44,21 @@ public class TeachingBoardManager {
         writePDCList(sign, "teaching-board-owners", teachingBoard.getOwners().toArray(new String[0]));
         writePDCList(sign, "teaching-board-lines", teachingBoard.getLines().toArray(new String[0]));
         sign.update(true, false);
+    }
+
+    public static void copyPDCToItemStack(Sign sign, ItemStack itemStack) {
+        ItemReader.addPDC(itemStack, "teaching-board-lines", fetchPDCList(sign, "teaching-board-lines"), DataType.STRING_ARRAY);
+    }
+
+    public static boolean copyPDCToSign(Player player, ItemStack itemStack, Sign sign) {
+        String[] lines = ItemReader.getPDC(itemStack, "teaching-board-lines", DataType.STRING_ARRAY);
+        String[] owners = new String[]{player.getUniqueId().toString()};
+        if(lines == null) {
+            return false;
+        }
+        TeachingBoard teachingBoard = new TeachingBoard(new ArrayList<>(Arrays.asList(lines)), new ArrayList<>(Arrays.asList(owners)));
+        save(sign, teachingBoard);
+        return true;
     }
 
     public static boolean near(Sign sign, Location location, int radius) {
@@ -117,11 +134,16 @@ public class TeachingBoardManager {
                     .decorate(TextDecoration.BOLD)
                     .hoverEvent(HoverEvent.showText(Component.text("Klicke zum Hinzufügen einer Zeile")))
                     .clickEvent(ClickEvent.runCommand("/lehrtafel add"));
-            Component saveBtn = Component.text("✅ Speichern")
+            Component saveBtn = Component.text("✅ Speichern & Schließen")
                     .color(NamedTextColor.GREEN)
                     .decorate(TextDecoration.UNDERLINED)
                     .hoverEvent(HoverEvent.showText(Component.text("Klicke um die Änderungen zu speichern")))
                     .clickEvent(ClickEvent.runCommand("/lehrtafel save"));
+            Component cancelBtn = Component.text("♻ Verwerfen")
+                    .color(NamedTextColor.RED)
+                    .decorate(TextDecoration.BOLD)
+                    .hoverEvent(HoverEvent.showText(Component.text("Klicke um die Änderungen zu verwerfen")))
+                    .clickEvent(ClickEvent.runCommand("/lehrtafel cancel"));
             Component bottomEditLine = Component.empty()
                     .append(addBtn);
 
@@ -132,6 +154,9 @@ public class TeachingBoardManager {
             }
 
             player.sendMessage(bottomEditLine);
+            if(saveNeeded) {
+                player.sendMessage(cancelBtn);
+            }
             return;
         }
         for(String line : teachingBoard.getLines()) {

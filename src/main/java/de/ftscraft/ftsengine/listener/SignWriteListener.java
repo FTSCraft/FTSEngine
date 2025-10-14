@@ -30,7 +30,6 @@ public class SignWriteListener implements Listener {
     @EventHandler
     public void onWirte(SignChangeEvent event) {
 
-        handleTeachingBoards(event.getPlayer(), event);
         //If player wants to create a briefkasten
         if (event.getLine(0).equalsIgnoreCase("[Briefkasten]")) {
 
@@ -138,20 +137,6 @@ public class SignWriteListener implements Listener {
                 event.setCancelled(true);
                 event.getPlayer().sendMessage("§7[§bSchwarzes Brett§7] Mach sowas nicht! Das könnte Fehler verursachen!");
             }
-        }
-    }
-
-    private void handleTeachingBoards(Player player, SignChangeEvent event) {
-        if(event.getLine(3).equalsIgnoreCase("[Lehrtafel]")) {
-            org.bukkit.block.Sign sign = (org.bukkit.block.Sign) event.getBlock().getState();
-            if(!TeachingBoardManager.isTeachingBoard(sign)) {
-                player.sendMessage("§7Dies ist keine Lehrtafel");
-                return;
-            }
-
-            event.setLine(3, "");
-            TeachingBoardManager.create(player, sign);
-            player.sendMessage("§aLehrtafel erfolgreich erstellt. §fMit Shift-Rechtsklick auf das Schild, kannst du den Inhalt bearbeiten.");
         }
     }
 }

@@ -39,7 +39,7 @@ public class CMDlehrtafel implements CommandExecutor, TabCompleter {
         }
 
         if(!TeachingBoardManager.getEditingPlayers().containsKey(player)) {
-            player.sendMessage("§cKlicke zuerst mit Shift-Rechtsklick eine Lehrtafel an");
+            player.sendMessage("§cKlicke zuerst mit Shift-Rechtsklick eine deiner Lehrtafeln an");
             return true;
         }
         Sign teachingBoardSign = TeachingBoardManager.getEditingPlayers().get(player);
@@ -75,8 +75,12 @@ public class CMDlehrtafel implements CommandExecutor, TabCompleter {
                 return true;
             } else if(args[0].equalsIgnoreCase("save")) {
                 TeachingBoardManager.save(teachingBoardSign, teachingBoard);
+                TeachingBoardManager.getEditingPlayers().remove(player);
                 player.sendMessage("§aDie Änderungen wurden erfolgreich gespeichert.");
-                TeachingBoardManager.showLines(player, teachingBoardSign, true, false);
+                return true;
+            } else if(args[0].equalsIgnoreCase("cancel")) {
+                TeachingBoardManager.getEditingPlayers().remove(player);
+                player.sendMessage("§aDie Änderungen wurden erfolgreich verworfen.");
                 return true;
             }
         } else if(args.length == 2) {
