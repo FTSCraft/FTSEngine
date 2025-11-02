@@ -176,7 +176,13 @@ public class PlayerInteractListener implements Listener {
     private void openOrRegisterBackpack(@NotNull Player player, @NotNull BackpackType type, @NotNull ItemStack chestplate) {
         Integer id = Var.getBackpackID(chestplate);
         if (id == null) {
-            id = Var.getLegacyBackpackID(chestplate);
+            try {
+                id = Var.getLegacyBackpackID(chestplate);
+            } catch (RuntimeException ex) {
+                player.sendMessage("Bitte wende dich an einen Admin. Es gab einen großen Fehler.");
+                Engine.getInstance().getLogger().severe("Player " + player.getName() + "got a backpack with no legacy id nor pdc");
+                return;
+            }
             if (id == -1) {
                 new Backpack(plugin, type, player, chestplate);
                 return;
@@ -186,7 +192,7 @@ public class PlayerInteractListener implements Listener {
         Backpack bp = plugin.backpacks.get(id);
 
         if (bp == null) {
-            player.sendMessage(Messages.PREFIX + "Dieser Rucksack ist (warum auch immer) nicht registriert?");
+            player.sendMessage(Messages.PREFIX + "Dieser Rucksack ist (warum auch immer) nicht registriert? Bitte melde dich bei einem Admin.");
             return;
         }
 
