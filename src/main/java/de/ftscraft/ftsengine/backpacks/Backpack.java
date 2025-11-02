@@ -2,12 +2,17 @@ package de.ftscraft.ftsengine.backpacks;
 
 import de.ftscraft.ftsengine.main.Engine;
 import de.ftscraft.ftsengine.utils.Messages;
+import de.ftscraft.ftsengine.utils.Var;
+import de.ftscraft.ftsutils.items.ItemBuilder;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.NamedTextColor;
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.persistence.PersistentDataType;
 
 import java.io.File;
 import java.io.IOException;
@@ -33,19 +38,14 @@ public class Backpack {
     }
 
 
-    public Backpack(Engine plugin, BackpackType type, Player p) {
+    public Backpack(Engine plugin, BackpackType type, Player p, ItemStack backpack) {
         this.plugin = plugin;
         this.type = type;
         this.inventory = Bukkit.createInventory(null, type.getSize(), type.getName());
         this.id = plugin.biggestBpId + 1;
         plugin.biggestBpId = this.id;
 
-        ItemStack is = p.getInventory().getChestplate().clone();
-        ItemMeta im = is.getItemMeta();
-        im.setLore(Arrays.asList(type.getLore(), "ID: #" + this.id));
-        is.setItemMeta(im);
-        p.getInventory().setChestplate(is);
-
+        Var.setBackpackId(backpack, id);
         p.sendMessage(Messages.PREFIX + "Dein Rucksack ist nun Registriert. (ID: " + this.id + ")");
 
         plugin.backpacks.put(this.id, this);

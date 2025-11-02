@@ -1,13 +1,16 @@
 package de.ftscraft.ftsengine.utils;
 
+import de.ftscraft.ftsutils.items.ItemReader;
 import de.ftscraft.ftsutils.uuidfetcher.UUIDFetcher;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.event.ClickEvent;
 import net.kyori.adventure.text.format.NamedTextColor;
+import net.kyori.adventure.text.format.TextDecoration;
 import org.bukkit.Location;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.persistence.PersistentDataType;
 
 public class Var {
 
@@ -49,8 +52,20 @@ public class Var {
         }
     }
 
+    public static void setBackpackId(ItemStack backpack, int id) {
+        ItemReader.addPDC(backpack, "BACKPACK_ID", id, PersistentDataType.INTEGER);
+        var lore = backpack.lore();
+        lore.set(1, Component.text("ID: " + id)
+                .decoration(TextDecoration.ITALIC, false)
+                .color(NamedTextColor.GRAY));
+        backpack.lore(lore);
+    }
 
-    public static int getBackpackID(ItemStack backpack) {
+    public static Integer getBackpackID(ItemStack backpack) {
+        return ItemReader.getPDC(backpack, "BACKPACK_ID", PersistentDataType.INTEGER);
+    }
+
+    public static int getLegacyBackpackID(ItemStack backpack) {
 
         String lore = backpack.getItemMeta().getLore().get(1);
         String idS = lore.replaceAll(".*#", "");
@@ -60,7 +75,7 @@ public class Var {
         try {
             id = Integer.parseInt(idS);
         } catch (NumberFormatException e) {
-            return -1;
+            throw new RuntimeException("We got a backpack that has no PDC and no legacy id. Lore: " + lore);
         }
 
         return id;

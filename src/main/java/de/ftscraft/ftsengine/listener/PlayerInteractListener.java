@@ -163,36 +163,46 @@ public class PlayerInteractListener implements Listener {
     }
 
     private void handleBackpack(Player player, ItemStack item) {
-        if (player.getInventory().getChestplate() != null && item != null && "BACKPACK_KEY".equals(ItemReader.getSign(item))) {
-            BackpackType type = BackpackType.getBackpackByItem(player.getInventory().getChestplate());
-            if (type != null) {
-                if (type == BackpackType.ENDER) {
-                    player.openInventory(player.getEnderChest());
-                    return;
-                }
-                openOrRegisterBackpack(player, type);
-            }
+        if (player.getInventory().getChestplate() == null || item == null || !"BACKPACK_KEY".equals(ItemReader.getSign(item))) {
+            return;
         }
+        BackpackType type = BackpackType.getBackpackByItem(player.getInventory().getChestplate());
+        if (type == null) {
+            return;
+        }
+        if (type == BackpackType.ENDER) {
+            player.openInventory(player.getEnderChest());
+            return;
+        }
+        openOrRegisterBackpack(player, type, player.getInventory().getChestplate());
     }
 
-    private void openOrRegisterBackpack(Player player, BackpackType type) {
-        ItemStack chest = player.getInventory().getChestplate();
-        int id = Var.getBackpackID(chest);
-
-        if (id == -1) {
-            new Backpack(plugin, type, player);
-        } else {
-            Backpack bp = plugin.backpacks.get(id);
-
-            if (bp == null) {
-                player.sendMessage(Messages.PREFIX + "Dieser Rucksack ist (warum auch immer) nicht registriert?");
+    private void openOrRegisterBackpack(@NotNull Player player, @NotNull BackpackType type, @NotNull ItemStack chestplate) {
+        Integer id = Var.getBackpackID(chestplate);
+        if (id == null) {
+            try {
+                id = Var.getLegacyBackpackID(chestplate);
+            } catch (RuntimeException ex) {
+                player.sendMessage("Bitte wende dich an einen Admin. Es gab einen großen Fehler.");
+                Engine.getInstance().getLogger().severe("Player " + player.getName() + "got a backpack with no legacy id nor pdc");
                 return;
             }
-
-            bp.open(player);
-
-            giveBackpackDamageByChance(chest, player);
+            if (id == -1) {
+                new Backpack(plugin, type, player, chestplate);
+                return;
+            }
+            Var.setBackpackId(chestplate, id);
         }
+        Backpack bp = plugin.backpacks.get(id);
+
+        if (bp == null) {
+            player.sendMessage(Messages.PREFIX + "Dieser Rucksack ist (warum auch immer) nicht registriert? Bitte melde dich bei einem Admin.");
+            return;
+        }
+
+        bp.open(player);
+
+        giveBackpackDamageByChance(chestplate, player);
     }
 
     static final int[] WARNING_THRESHOLDS = {30, 20, 10, 5, 3};
