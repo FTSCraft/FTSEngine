@@ -200,7 +200,7 @@ public class PlayerInteractListener implements Listener {
             return;
         }
         bp.open(player);
-        giveBackpackDamageByChance(chest, player);
+        giveBackpackDamageByChance(chestplate, player);
     }
 
     static final int[] WARNING_THRESHOLDS = {30, 20, 10, 5, 3};
