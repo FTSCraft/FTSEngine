@@ -2,6 +2,7 @@ package de.ftscraft.ftsengine.signs;
 
 import com.jeff_media.morepersistentdatatypes.DataType;
 import de.ftscraft.ftsengine.main.Engine;
+import de.ftscraft.ftsengine.utils.LegacyLinkParser;
 import de.ftscraft.ftsutils.FTSUtils;
 import de.ftscraft.ftsutils.items.ItemBuilder;
 import de.ftscraft.ftsutils.items.ItemReader;
@@ -10,7 +11,6 @@ import net.kyori.adventure.text.event.ClickEvent;
 import net.kyori.adventure.text.event.HoverEvent;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.TextDecoration;
-import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.NamespacedKey;
@@ -123,7 +123,7 @@ public class TeachingBoardManager {
                             .append(lineEditBtn)
                             .append(lineDeleteBtn)
                             .append(Component.space())
-                            .append(LegacyComponentSerializer.legacyAmpersand().deserialize(teachingBoard.getLines().get(i)));
+                            .append(LegacyLinkParser.parse(teachingBoard.getLines().get(i)));
                     player.sendMessage(editModeLine);
                 }
             }
@@ -160,7 +160,7 @@ public class TeachingBoardManager {
             return;
         }
         for(String line : teachingBoard.getLines()) {
-            player.sendMessage(LegacyComponentSerializer.legacyAmpersand().deserialize(line));
+            player.sendMessage(LegacyLinkParser.parse(line));
         }
     }
 
