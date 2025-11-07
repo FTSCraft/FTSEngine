@@ -116,6 +116,10 @@ public class PlayerInteractListener implements Listener {
     private void handleCallHorn(Player player, ItemStack item) {
         if("call-horn".equals(ItemReader.getSign(item)) && !player.hasCooldown(item.getType())) {
             for(Player pl : Bukkit.getOnlinePlayers()) {
+                if(pl.equals(player)) {
+                    pl.sendMessage(Messages.PREFIX + "§eDu hast ins Horn geblasen!");
+                    continue;
+                }
                 if(pl.getWorld().equals(player.getWorld()) && pl.getLocation().distance(player.getLocation()) <= 1000) {
                     pl.sendMessage(Component.text("Du hörst das Echo eines Rufhorns in der Ferne. Ein Ruf nach Hilfe, ein Gruß oder doch der Klang eines Hinterhalts?"));
                 }
