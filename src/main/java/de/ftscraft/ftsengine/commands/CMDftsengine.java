@@ -25,11 +25,19 @@ public class CMDftsengine implements CommandExecutor {
     @Override
     public boolean onCommand(@NotNull CommandSender cs, @NotNull Command cmd, @NotNull String label, String[] args) {
 
-        if (args.length > 0 && args[0].equals("debug")) {
-            if (args[1].equals("instrument")) {
-                Player p = (Player) cs;
-                Instrument instrument = new SimpleInstrument(Sound.BLOCK_NOTE_BLOCK_GUITAR, "Gitarre");
-                p.openInventory(instrument.getInventory());
+        if (args.length > 0) {
+            if(args[0].equals("debug")) {
+                if (args[1].equals("instrument")) {
+                    Player p = (Player) cs;
+                    Instrument instrument = new SimpleInstrument(Sound.BLOCK_NOTE_BLOCK_GUITAR, "Gitarre");
+                    p.openInventory(instrument.getInventory());
+                }
+            } else if(args[0].equals("reload")) {
+                if(!cs.hasPermission("ftsengine.reload")) {
+                    return true;
+                }
+                Engine.getConfigManager().invalidateCache();
+                cs.sendMessage(Messages.PREFIX + "Config Cache geleert");
             }
         }
 

@@ -81,6 +81,10 @@ public class ConfigManager {
         saveCalendar();
     }
 
+    public void invalidateCache() {
+        cache.clear();
+    }
+
     private void saveCalendar() {
         Calendar calendar = TimeManager.getCalendar();
         setCalendarYear(calendar.get(Calendar.YEAR));

@@ -1,7 +1,10 @@
 package de.ftscraft.ftsengine.main;
 
+import com.comphenix.protocol.PacketType;
 import com.comphenix.protocol.ProtocolLibrary;
 import com.comphenix.protocol.ProtocolManager;
+import com.comphenix.protocol.events.PacketContainer;
+import com.comphenix.protocol.wrappers.WrappedChatComponent;
 import com.nisovin.shopkeepers.api.ShopkeepersPlugin;
 import de.ftscraft.ftsengine.backpacks.Backpack;
 import de.ftscraft.ftsengine.brett.Brett;
@@ -26,6 +29,7 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -33,6 +37,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
+import java.util.logging.Level;
 
 public class Engine extends JavaPlugin implements Listener {
 
@@ -74,6 +79,19 @@ public class Engine extends JavaPlugin implements Listener {
         for (Player a : Bukkit.getOnlinePlayers()) {
             FTSUser user = new FTSUser(this, a);
             this.getPlayer().put(a, user);
+
+            if (getProtocolManager() != null)
+                sendTablistHeaderAndFooter(a, " §cHeutiger Tipp: \nGeht voten!", "");
+
+            //Map
+            a.getInventory().getItemInMainHand();
+            if (a.getInventory().getItemInMainHand().getType() == Material.FILLED_MAP) {
+                ItemStack itemMap = a.getInventory().getItemInMainHand();
+                Brief brief = briefe.get((int) itemMap.getDurability());
+                if (brief != null) {
+                    brief.loadMap(itemMap);
+                }
+            }
         }
     }
 
@@ -188,6 +206,18 @@ public class Engine extends JavaPlugin implements Listener {
 
         new UserIO(this, true);
 
+    }
+
+    public void sendTablistHeaderAndFooter(Player p, String header, String footer) {
+        PacketContainer pc = getProtocolManager().createPacket(PacketType.Play.Server.PLAYER_LIST_HEADER_FOOTER);
+
+        pc.getChatComponents().write(0, WrappedChatComponent.fromText(header)).write(1, WrappedChatComponent.fromText(footer));
+
+        try {
+            getProtocolManager().sendServerPacket(p, pc);
+        } catch (Exception ex) {
+            getLogger().log(Level.WARNING, "Was not able to send header and footer package to player.");
+        }
     }
 
     public DataHandler getStorage() {

@@ -1,8 +1,5 @@
 package de.ftscraft.ftsengine.listener;
 
-import com.comphenix.protocol.PacketType;
-import com.comphenix.protocol.events.PacketContainer;
-import com.comphenix.protocol.wrappers.WrappedChatComponent;
 import de.ftscraft.ftsengine.courier.Brief;
 import de.ftscraft.ftsengine.main.Engine;
 import de.ftscraft.ftsengine.main.FTSUser;
@@ -13,8 +10,6 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.inventory.ItemStack;
-
-import java.util.logging.Level;
 
 public class PlayerJoinListener implements Listener {
 
@@ -32,7 +27,7 @@ public class PlayerJoinListener implements Listener {
         plugin.getPlayer().put(e.getPlayer(), user);
 
         if (plugin.getProtocolManager() != null)
-            sendTablistHeaderAndFooter(p, " §cHeutiger Tipp: \nGeht voten!", "");
+            Engine.getInstance().sendTablistHeaderAndFooter(p, " §cHeutiger Tipp: \nGeht voten!", "");
 
         //Map
         p.getInventory().getItemInMainHand();
@@ -42,18 +37,6 @@ public class PlayerJoinListener implements Listener {
             if (brief != null) {
                 brief.loadMap(itemMap);
             }
-        }
-    }
-
-    public void sendTablistHeaderAndFooter(Player p, String header, String footer) {
-        PacketContainer pc = plugin.getProtocolManager().createPacket(PacketType.Play.Server.PLAYER_LIST_HEADER_FOOTER);
-
-        pc.getChatComponents().write(0, WrappedChatComponent.fromText(header)).write(1, WrappedChatComponent.fromText(footer));
-
-        try {
-            plugin.getProtocolManager().sendServerPacket(p, pc);
-        } catch (Exception ex) {
-            plugin.getLogger().log(Level.WARNING, "Was not able to send header and footer package to player.");
         }
     }
 
