@@ -214,7 +214,7 @@ public class PlayerInteractListener implements Listener {
         Damageable itemMeta = (Damageable) backpackItem.getItemMeta();
         itemMeta.setDamage(itemMeta.getDamage() + 1);
 
-        int remainingDurability = itemMeta.getMaxDamage() - itemMeta.getDamage();
+        int remainingDurability = backpackItem.getType().getMaxDurability() - itemMeta.getDamage();
 
         for (int threshold : WARNING_THRESHOLDS) {
             if (remainingDurability != threshold) {
