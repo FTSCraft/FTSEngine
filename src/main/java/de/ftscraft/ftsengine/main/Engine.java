@@ -11,6 +11,7 @@ import de.ftscraft.ftsengine.commands.emotes.*;
 import de.ftscraft.ftsengine.courier.Brief;
 import de.ftscraft.ftsengine.courier.Briefkasten;
 import de.ftscraft.ftsengine.feature.time.TimeManager;
+import de.ftscraft.ftsengine.feature.weather.WeatherManager;
 import de.ftscraft.ftsengine.listener.*;
 import de.ftscraft.ftsengine.logport.LogportManager;
 import de.ftscraft.ftsengine.utils.Ausweis;
@@ -67,6 +68,7 @@ public class Engine extends JavaPlugin implements Listener {
         chatInputService = Bukkit.getServicesManager().load(IChatInputService.class);
         storage = DataHandler.forPlugin(this);
         configManager = new ConfigManager();
+        WeatherManager.init();
         setupEconomy();
         init();
         for (Player a : Bukkit.getOnlinePlayers()) {

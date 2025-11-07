@@ -67,6 +67,16 @@ public class ConfigManager {
         return (List<String>) getObjectValue("cal.worlds");
     }
 
+    public String getWeatherCooldownSpec() {
+        try {
+            return (String) getObjectValue("weather.cooldown");
+        } catch (IllegalArgumentException ignored) {
+            String weatherCooldownSpec = "1m";
+            setValueAndSave("weather.cooldown", weatherCooldownSpec); // Set default if empty
+            return weatherCooldownSpec;
+        }
+    }
+
     public void save() {
         saveCalendar();
     }
