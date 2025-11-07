@@ -27,7 +27,7 @@ public class EntityClickListener implements Listener {
     @EventHandler
     public void onEntityClick(PlayerInteractEntityEvent e) {
         if (plugin.getReiter().contains(e.getPlayer())) {
-            if (e.getRightClicked().getType() == EntityType.PHANTOM || e.getRightClicked().getType() == EntityType.WOLF) {
+            if (e.getRightClicked().getType() == EntityType.PHANTOM || e.getRightClicked().getType() == EntityType.WOLF || e.getRightClicked().getType() == EntityType.BEE) {
                 e.getPlayer().sendMessage("§cne ne ne.");
                 return;
             }
