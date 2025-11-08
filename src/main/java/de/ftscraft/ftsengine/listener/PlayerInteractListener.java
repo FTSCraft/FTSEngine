@@ -14,6 +14,8 @@ import de.ftscraft.ftsutils.items.ItemReader;
 import de.ftscraft.ftsutils.misc.MiniMsg;
 import net.kyori.adventure.key.Key;
 import net.kyori.adventure.sound.Sound;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.NamedTextColor;
 import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
@@ -59,6 +61,7 @@ public class PlayerInteractListener implements Listener {
 
         if (itemInHand != null) {
             handleHorn(player, itemInHand);
+            handleCallHorn(player, itemInHand);
             handleMeissel(player, itemInHand);
             handleLogport(e, player, itemInHand);
             handleWeihrauchlaterne(player, itemInHand);
@@ -109,6 +112,20 @@ public class PlayerInteractListener implements Listener {
         }
 
         Bukkit.getScheduler().runTaskLater(plugin, () -> hornCooldown.remove(player), 20 * 2);
+    }
+
+    private void handleCallHorn(Player player, ItemStack item) {
+        if("call-horn".equals(ItemReader.getSign(item)) && !player.hasCooldown(item.getType())) {
+            for(Player pl : Bukkit.getOnlinePlayers()) {
+                if(pl.equals(player)) {
+                    pl.sendMessage(Messages.PREFIX + "§eDu hast ins Horn geblasen!");
+                    continue;
+                }
+                if(pl.getWorld().equals(player.getWorld()) && pl.getLocation().distance(player.getLocation()) <= 1000) {
+                    pl.sendMessage(Component.text("Du hörst das Echo eines Rufhorns in der Ferne. Ein Ruf nach Hilfe, ein Gruß oder doch der Klang eines Hinterhalts?").color(NamedTextColor.YELLOW));
+                }
+            }
+        }
     }
 
     private void handleMeissel(Player player, ItemStack item) {
