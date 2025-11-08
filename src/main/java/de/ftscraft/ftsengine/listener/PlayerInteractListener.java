@@ -15,6 +15,7 @@ import de.ftscraft.ftsutils.misc.MiniMsg;
 import net.kyori.adventure.key.Key;
 import net.kyori.adventure.sound.Sound;
 import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.NamedTextColor;
 import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
@@ -121,7 +122,7 @@ public class PlayerInteractListener implements Listener {
                     continue;
                 }
                 if(pl.getWorld().equals(player.getWorld()) && pl.getLocation().distance(player.getLocation()) <= 1000) {
-                    pl.sendMessage(Component.text("Du hörst das Echo eines Rufhorns in der Ferne. Ein Ruf nach Hilfe, ein Gruß oder doch der Klang eines Hinterhalts?"));
+                    pl.sendMessage(Component.text("Du hörst das Echo eines Rufhorns in der Ferne. Ein Ruf nach Hilfe, ein Gruß oder doch der Klang eines Hinterhalts?").color(NamedTextColor.YELLOW));
                 }
             }
         }
