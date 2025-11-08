@@ -159,8 +159,9 @@ public class UserIO {
                         String content = cfg.getString("brett.note." + keys + ".content");
                         String note_creator = cfg.getString("brett.note." + keys + ".creator");
                         long time = cfg.getLong("brett.note." + keys + ".creation");
+                        boolean anonym = cfg.getBoolean("brett.note." + keys + ".anonym");
                         if (!title.equalsIgnoreCase("null"))
-                            brett.addNote(title, content, note_creator, time, Integer.parseInt(keys));
+                            brett.addNote(title, content, note_creator, time, Integer.parseInt(keys), anonym);
                     }
                     brett.checkForRunOut();
                 } catch (Exception ignored) {
