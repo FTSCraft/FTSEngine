@@ -45,6 +45,7 @@ public class ItemStacks {
 
         disabledDefaultRecipes = new ArrayList<>();
         disabledDefaultRecipes.addAll(Arrays.asList(
+                Material.LEAD,
                 Material.DIAMOND_BOOTS,
                 Material.DIAMOND_LEGGINGS,
                 Material.DIAMOND_CHESTPLATE,
