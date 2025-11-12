@@ -20,13 +20,14 @@ public class BrettNote {
     private String title;
     private String content;
     private boolean create;
+    private boolean anonym;
     private int id;
     public int invslot;
     private ItemStack item;
     private long time;
     private Brett brett;
 
-    public BrettNote(Brett brett, String title, String content, String creator, int id, long time) {
+    public BrettNote(Brett brett, String title, String content, String creator, int id, long time, boolean anonym) {
         this.title = title;
         this.brett = brett;
         this.content = content;
@@ -34,6 +35,7 @@ public class BrettNote {
         this.creator = creator;
         create = false;
         this.id = id;
+        this.anonym = anonym;
 
         getRPName();
         this.item = generateItem();
@@ -41,12 +43,13 @@ public class BrettNote {
 
     }
 
-    public BrettNote(Brett brett, String creator, boolean create) {
+    public BrettNote(Brett brett, String creator, boolean create, boolean anonym) {
         if (create) {
             this.brett = brett;
             this.creator = creator;
             this.time = System.currentTimeMillis();
             this.create = true;
+            this.anonym = anonym;
 
             YamlConfiguration cfg = brett.getCfg();
             getRPName();
@@ -65,7 +68,11 @@ public class BrettNote {
         im.setDisplayName("§6" + StringUtils.abbreviate(title, 30));
         List<String> lore = new ArrayList<>();
         lore.add("§7" + StringUtils.abbreviate(content, 30));
-        lore.add("§8Von: §2" + rpName + " (" + creator + ")");
+        if(anonym) {
+            lore.add("§8Von: §2Anonym");
+        } else {
+            lore.add("§8Von: §2" + rpName + " (" + creator + ")");
+        }
         im.setLore(lore);
         item.setItemMeta(im);
         return item;
@@ -78,6 +85,7 @@ public class BrettNote {
             brett.getCfg().set("brett.note." + id + ".content", content);
             brett.getCfg().set("brett.note." + id + ".creator", creator);
             brett.getCfg().set("brett.note." + id + ".creation", time);
+            brett.getCfg().set("brett.note." + id + ".anonym", anonym);
             brett.saveCfg();
             item = generateItem();
         }
@@ -121,6 +129,9 @@ public class BrettNote {
         return content != null;
     }
 
+    public boolean isAnonym() {
+        return anonym;
+    }
 
     public void remove() {
         brett.getNotes().remove(this);
@@ -129,6 +140,7 @@ public class BrettNote {
         brett.getCfg().set("brett.note." + id + ".content", "null");
         brett.getCfg().set("brett.note." + id + ".creator", "null");
         brett.getCfg().set("brett.note." + id + ".creation", "null");
+        brett.getCfg().set("brett.note." + id + ".anonym", "null");
         brett.saveCfg();
     }
 

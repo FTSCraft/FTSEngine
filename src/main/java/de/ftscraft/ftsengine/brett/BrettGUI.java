@@ -8,6 +8,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class BrettGUI {
@@ -44,8 +45,7 @@ public class BrettGUI {
         ItemStack create = new ItemStack(Material.PAPER, 1);
         ItemMeta createMeta = create.getItemMeta();
         createMeta.setDisplayName("§cErstelle Notiz");
-        List<String> createLore = new ArrayList<>();
-        createLore.add("§bErstelle eine Notiz! \n §cAchte auf einen RPlichen Schreibstil");
+        List<String> createLore = new ArrayList<>(Arrays.asList("§bErstelle eine Notiz!", "§cAchte auf einen RPlichen Schreibstil", " ", "§7Rechtsklick für Anonym"));
 
         createMeta.setLore(createLore);
         create.setItemMeta(createMeta);

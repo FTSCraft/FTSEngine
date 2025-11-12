@@ -112,8 +112,8 @@ public class Brett {
         return this.cfg;
     }
 
-    public void addNote(String title, String content, String creator, long time, int id) {
-        new BrettNote(this, title, content, creator, id, time);
+    public void addNote(String title, String content, String creator, long time, int id, boolean anonym) {
+        new BrettNote(this, title, content, creator, id, time, anonym);
     }
 
     public void saveCfg() {

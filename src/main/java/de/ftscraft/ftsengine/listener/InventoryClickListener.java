@@ -146,7 +146,7 @@ public class InventoryClickListener implements Listener {
             if (clickeditem == null)
                 return true;
 
-            if (handleCreateNode(p, clickeditem, name)) return true;
+            if (handleCreateNode(event, p, clickeditem, name)) return true;
 
             String item_name = clickeditem.getItemMeta().getDisplayName();
 
@@ -205,7 +205,7 @@ public class InventoryClickListener implements Listener {
         return false;
     }
 
-    private boolean handleCreateNode(Player p, ItemStack clickeditem, String name) {
+    private boolean handleCreateNode(InventoryClickEvent event, Player p, ItemStack clickeditem, String name) {
         if (Objects.requireNonNull(clickeditem.getItemMeta()).getDisplayName().equalsIgnoreCase("§cErstelle Notiz")) {
 
             Brett brett = null;
@@ -235,7 +235,7 @@ public class InventoryClickListener implements Listener {
             p.sendMessage(Messages.PREFIX + "Bitte achte auf einen RPlichen Schreibstil \n §7[§bSchwarzes Brett§7] §bBitte gebe jetzt den Titel ein. §c(Max. 50 Zeichen)");
             p.sendMessage(Messages.PREFIX + "Um die Erstellung abzubrechen gebe 'exit' ein!");
 
-            BrettNote brettNote = new BrettNote(brett, p.getName(), true);
+            BrettNote brettNote = new BrettNote(brett, p.getName(), true, event.isRightClick());
             plugin.playerBrettNote.put(p, brettNote);
             return true;
         }
@@ -270,7 +270,11 @@ public class InventoryClickListener implements Listener {
         p.sendMessage("§6" + note_title);
         p.sendMessage(note_cont);
         p.sendMessage(" ");
-        p.sendMessage("§7§nNotiz von " + note_creator);
+        if(note.isAnonym()) {
+            p.sendMessage("§7§nNotiz von Anonym");
+        } else {
+            p.sendMessage("§7§nNotiz von " + note_creator);
+        }
         if (p.hasPermission("brett.admin") || note_creator.equals(p.getName())) {
             ComponentBuilder componentBuilder = new ComponentBuilder("§4Löschen");
             componentBuilder.event(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/ftsengine brett delete " + inv_slot + " " + page + " " + brett.getName().replace(" ", "_")));
