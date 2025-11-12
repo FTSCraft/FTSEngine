@@ -16,7 +16,7 @@ import java.util.List;
 
 public class ItemStacks {
 
-    private ItemStack ironHelmet, ironChestplate, ironLeggings, ironBoots,
+    private ItemStack lead, ironHelmet, ironChestplate, ironLeggings, ironBoots,
             chainmailHelmet, chainmailChestplate, chainmailLeggings, chainmailBoots,
             diamondHelmet, diamondChestplate, diamondLeggings, diamondBoots;
     private ItemStack diamondHelmetReplacement, diamondChestplateReplacement, diamondLeggingsReplacement, diamondBootsReplacement;
@@ -45,6 +45,7 @@ public class ItemStacks {
 
         disabledDefaultRecipes = new ArrayList<>();
         disabledDefaultRecipes.addAll(Arrays.asList(
+                Material.LEAD,
                 Material.DIAMOND_BOOTS,
                 Material.DIAMOND_LEGGINGS,
                 Material.DIAMOND_CHESTPLATE,
@@ -60,6 +61,8 @@ public class ItemStacks {
                 .name("§6Horn")
                 .sign("HORN")
                 .build();
+
+        lead = new ItemStack(Material.LEAD, 1);
 
         ironHelmet = new ItemStack(Material.IRON_HELMET, 1);
         ironChestplate = new ItemStack(Material.IRON_CHESTPLATE, 1);
@@ -124,6 +127,14 @@ public class ItemStacks {
     }
 
     private void initRecipes() {
+
+        {
+            NamespacedKey key = new NamespacedKey(plugin, "FTSlead");
+            ShapedRecipe recipe = new ShapedRecipe(key, lead);
+            recipe.shape(" AA", " AA", "A  ");
+            recipe.setIngredient('A', Material.STRING);
+            Bukkit.addRecipe(recipe);
+        }
 
         {
             NamespacedKey key = new NamespacedKey(plugin, "FTSharp");
