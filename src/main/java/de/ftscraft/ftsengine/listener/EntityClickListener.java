@@ -3,6 +3,7 @@ package de.ftscraft.ftsengine.listener;
 import com.destroystokyo.paper.event.entity.EntityPathfindEvent;
 import de.ftscraft.ftsengine.commands.emotes.CMDstreicheln;
 import de.ftscraft.ftsengine.main.Engine;
+import de.ftscraft.ftsengine.utils.Messages;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.attribute.AttributeInstance;
 import org.bukkit.entity.Entity;
@@ -26,13 +27,18 @@ public class EntityClickListener implements Listener {
 
     @EventHandler
     public void onEntityClick(PlayerInteractEntityEvent e) {
-        if (plugin.getReiter().contains(e.getPlayer())) {
-            if (e.getRightClicked().getType() == EntityType.PHANTOM || e.getRightClicked().getType() == EntityType.WOLF || e.getRightClicked().getType() == EntityType.BEE) {
-                e.getPlayer().sendMessage("§cne ne ne.");
+        Player player = e.getPlayer();
+        if (plugin.getReiter().contains(player)) {
+            if(e.getRightClicked().hasMetadata("NPC")) {
+                player.sendMessage(Messages.PREFIX + "§cDu kannst nicht auf einem NPC reiten.");
                 return;
             }
-            e.getRightClicked().addPassenger(e.getPlayer());
-            plugin.getReiter().remove(e.getPlayer());
+            if (e.getRightClicked().getType() == EntityType.PHANTOM || e.getRightClicked().getType() == EntityType.WOLF || e.getRightClicked().getType() == EntityType.BEE) {
+                player.sendMessage(Messages.PREFIX + "§cDu kannst hierauf nicht reichten.");
+                return;
+            }
+            e.getRightClicked().addPassenger(player);
+            plugin.getReiter().remove(player);
         }
     }
 
