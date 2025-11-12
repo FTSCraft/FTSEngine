@@ -129,14 +129,6 @@ public class ItemStacks {
     private void initRecipes() {
 
         {
-            NamespacedKey key = new NamespacedKey(plugin, "FTSlead");
-            ShapedRecipe recipe = new ShapedRecipe(key, lead);
-            recipe.shape(" AA", " AA", "A  ");
-            recipe.setIngredient('A', Material.STRING);
-            Bukkit.addRecipe(recipe);
-        }
-
-        {
             NamespacedKey key = new NamespacedKey(plugin, "FTSharp");
             ShapedRecipe recipe = new ShapedRecipe(key, harp);
             recipe.shape(" AB", "ACB", "AB ");
@@ -264,6 +256,13 @@ public class ItemStacks {
 
         }
 
+        {
+            NamespacedKey key = new NamespacedKey(plugin, "FTSlead");
+            ShapedRecipe recipe = new ShapedRecipe(key, lead);
+            recipe.shape(" AA", " AA", "A  ");
+            recipe.setIngredient('A', Material.STRING);
+            Bukkit.addRecipe(recipe);
+        }
 
         //Iron Helmet
 
