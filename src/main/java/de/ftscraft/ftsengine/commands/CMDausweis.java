@@ -268,7 +268,7 @@ public class CMDausweis implements CommandExecutor, TabCompleter {
 
         if (ausweis.getLastHeightChange() + HEIGHT_COOLDOWN >= System.currentTimeMillis()) {
             if (!p.hasPermission("ftssurvival.bypass") && !p.hasPermission("ftsengine.mod")) {
-                MiniMsg.msg(p, Messages.MINI_PREFIX + "Du darfst deine Größe jede stunde ändern");
+                MiniMsg.msg(p, Messages.MINI_PREFIX + "Du darfst deine Größe jede Stunde ändern");
                 return true;
             }
         }
