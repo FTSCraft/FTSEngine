@@ -205,7 +205,9 @@ public class Engine extends JavaPlugin implements Listener {
         }
 
         new UserIO(this, true);
-
+        CMDgehen.speed.forEach((abstractHorse) -> {
+            CMDgehen.setHorseSpeed(abstractHorse, CMDgehen.getHorseDefaultSpeed(abstractHorse));
+        });
     }
 
     public void sendTablistHeaderAndFooter(Player p, String header, String footer) {
