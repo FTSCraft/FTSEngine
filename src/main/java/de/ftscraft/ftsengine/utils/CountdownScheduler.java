@@ -20,7 +20,7 @@ public class CountdownScheduler implements Runnable {
     private CMDtaube.TaubeMessage msg;
     private int seconds;
     private final int taskid;
-    private SchedulerType type;
+    private SchedulerType type = SchedulerType.Countdown; // Default to Countdown to avoid null pointer if not set
 
     public CountdownScheduler(Engine plugin, int seconds, Player p) {
         this.plugin = plugin;
@@ -42,7 +42,7 @@ public class CountdownScheduler implements Runnable {
     private boolean shouldReceiveTaubeNotification(Player player) {
         return player.getGameMode() != GameMode.SPECTATOR && !isPlayerVanished(player);
     }
-    
+
     private boolean isPlayerVanished(Player player) {
         for (Player onlinePlayer : Bukkit.getOnlinePlayers()) {
             if (!onlinePlayer.equals(player) && !onlinePlayer.canSee(player)) {
@@ -68,48 +68,57 @@ public class CountdownScheduler implements Runnable {
                 }
             } else {
                 plugin.getServer().getScheduler().cancelTask(taskid);
-                for (Entity e : p.getNearbyEntities(15, 15, 15)) {
-                    if (e instanceof Player) {
-                        e.sendMessage("§cDer Countdown ist abgelaufen!");
+                if (p != null) {
+                    for (Entity e : p.getNearbyEntities(15, 15, 15)) {
+                        if (e instanceof Player) {
+                            e.sendMessage("§cDer Countdown ist abgelaufen!");
+                        }
                     }
+                    p.sendMessage("§cDer Countdown ist abgelaufen!");
                 }
-                p.sendMessage("§cDer Countdown ist abgelaufen!");
-
             }
 
         } else if (type == SchedulerType.Taube) {
 
             seconds--;
 
-            if (seconds == 0) {
-                t.playSound(t.getLocation(), Sound.ENTITY_BAT_LOOP, 3, -20);
-                p.sendMessage(Messages.PREFIX + "Deine Taube ist angekommen!");
-                t.sendMessage(Component.text("§c---------------"));
-                t.sendMessage(Component.text("§eEine Brieftaube von §c" + p.getName() + "§e hat dich erreicht!"));
-                t.sendMessage(Component.text(" "));
-                t.sendMessage(Component.text(msg.getMessage(), NamedTextColor.YELLOW));
-                t.sendMessage(Component.text("§c---------------"));
+            if (seconds <= 0) { // Safety check: <= 0 instead of == 0
+                if (t != null && t.isOnline()) {
+                    t.playSound(t.getLocation(), Sound.ENTITY_BAT_LOOP, 3, -20);
 
-                // clickable message for Brief
-                Component clickableMessage = Component.text()
+                    if (p != null && p.isOnline()) {
+                        p.sendMessage(Messages.PREFIX + "Deine Taube ist angekommen!");
+                    }
+
+                    t.sendMessage(Component.text("§c---------------"));
+
+                    // FIX IS HERE: We use msg.senderDisplayName() instead of p.getName()
+                    t.sendMessage(Component.text("§eEine Brieftaube von §c" + msg.senderDisplayName() + "§e hat dich erreicht!"));
+
+                    t.sendMessage(Component.text(" "));
+                    t.sendMessage(Component.text(msg.message(), NamedTextColor.YELLOW));
+                    t.sendMessage(Component.text("§c---------------"));
+
+                    // clickable message for Brief
+                    Component clickableMessage = Component.text()
                             .append(Component.text(Messages.PREFIX + "§7[§aBrief!§7]", NamedTextColor.YELLOW))
-                            .clickEvent(ClickEvent.runCommand("/taube get " + msg.getUuid()))
+                            .clickEvent(ClickEvent.runCommand("/taube get " + msg.uuid()))
                             .hoverEvent(HoverEvent.showText(Component.text("§7Klicke um den Brief von der Taube zu nehmen.", NamedTextColor.GRAY)))
                             .build();
 
-                t.sendMessage(clickableMessage);
+                    t.sendMessage(clickableMessage);
 
-                if (shouldReceiveTaubeNotification(t)) {
-                    for (Player playerInRadius : t.getLocation().getNearbyEntitiesByType(Player.class, 10)) {
-                        if (!playerInRadius.equals(t)) {
-                            playerInRadius.sendMessage(Component.text(t.getName() + " erhielt eine Brieftaube!", NamedTextColor.RED));
+                    if (shouldReceiveTaubeNotification(t)) {
+                        for (Player playerInRadius : t.getLocation().getNearbyEntitiesByType(Player.class, 10)) {
+                            if (!playerInRadius.equals(t)) {
+                                playerInRadius.sendMessage(Component.text(t.getName() + " erhielt eine Brieftaube!", NamedTextColor.RED));
+                            }
                         }
                     }
                 }
 
                 Bukkit.getScheduler().cancelTask(taskid);
             }
-
         }
     }
 }
