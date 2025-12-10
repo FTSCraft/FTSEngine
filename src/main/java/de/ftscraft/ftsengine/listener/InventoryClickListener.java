@@ -252,7 +252,7 @@ public class InventoryClickListener implements Listener {
         }
         if (i >= 4) {
             p.sendMessage("§7[§bSchwarzes Brett§7] Du hast bereits (mehr als) 4 Notizen geschriben. Es reicht!");
-            if (p.hasPermission("brett.admin")) {
+            if (p.hasPermission("ftsengine.brett.admin")) {
                 p.sendMessage("§7[§bSchwarzes Brett§7] Aber du hast die Rechte also darfst du das");
             } else
                 return true;
@@ -275,7 +275,7 @@ public class InventoryClickListener implements Listener {
         } else {
             p.sendMessage("§7§nNotiz von " + note_creator);
         }
-        if (p.hasPermission("brett.admin") || note_creator.equals(p.getName())) {
+        if (p.hasPermission("ftsengine.brett.delete") || note_creator.equals(p.getName())) {
             ComponentBuilder componentBuilder = new ComponentBuilder("§4Löschen");
             componentBuilder.event(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/ftsengine brett delete " + inv_slot + " " + page + " " + brett.getName().replace(" ", "_")));
             p.sendMessage(componentBuilder.create());

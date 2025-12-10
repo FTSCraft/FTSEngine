@@ -151,7 +151,7 @@ public class BlockBreakListener implements Listener {
         if (block.getBlockData() instanceof WallSign || block.getBlockData() instanceof org.bukkit.block.data.type.Sign) {
             Sign sign = (Sign) block.getState();
             if (sign.getLine(0).equalsIgnoreCase("§4Schwarzes Brett")) {
-                if (!event.getPlayer().hasPermission("blackboard.remove") && !plugin.bretter.get(sign.getLocation()).getCreator().toString().equals(event.getPlayer().getUniqueId().toString())) {
+                if (!event.getPlayer().hasPermission("ftsengine.brett.remove") && !plugin.bretter.get(sign.getLocation()).getCreator().toString().equals(event.getPlayer().getUniqueId().toString())) {
                     event.setCancelled(true);
                     event.getPlayer().sendMessage("§7[§bSchwarzes Brett§7] Du darfst das nicht kaputt machen!");
                 } else {

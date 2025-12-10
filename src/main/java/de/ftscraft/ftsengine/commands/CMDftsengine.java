@@ -79,7 +79,7 @@ public class CMDftsengine implements CommandExecutor {
                         return true;
                     }
 
-                    if (note.getCreator().equals(cs.getName()) || cs.hasPermission("brett.admin")) {
+                    if (note.getCreator().equals(cs.getName()) || cs.hasPermission("ftsengine.brett.delete")) {
                         note.remove();
                         cs.sendMessage(Messages.PREFIX + "Die Notiz wurde entfernt.");
                     } else {
