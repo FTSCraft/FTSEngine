@@ -132,7 +132,7 @@ public class SignWriteListener implements Listener {
                 }
             } else
                 event.getPlayer().sendMessage("§7[§bSchwarzes Brett§7] Der Name (2. Zeile) muss mind. 4 Zeichen haben!");
-        if (!(event.getPlayer().hasPermission("blackboard.create"))) {
+        if (!(event.getPlayer().hasPermission("ftsengine.brett.create"))) {
             if (event.getLine(0).equalsIgnoreCase("&4Schwarzes Brett")) {
                 event.setCancelled(true);
                 event.getPlayer().sendMessage("§7[§bSchwarzes Brett§7] Mach sowas nicht! Das könnte Fehler verursachen!");

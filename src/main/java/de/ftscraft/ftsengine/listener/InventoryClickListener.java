@@ -252,7 +252,7 @@ public class InventoryClickListener implements Listener {
         }
         if (i >= 4) {
             p.sendMessage("§7[§bSchwarzes Brett§7] Du hast bereits (mehr als) 4 Notizen geschriben. Es reicht!");
-            if (p.hasPermission("brett.admin")) {
+            if (p.hasPermission("ftsengine.brett.admin")) {
                 p.sendMessage("§7[§bSchwarzes Brett§7] Aber du hast die Rechte also darfst du das");
             } else
                 return true;
