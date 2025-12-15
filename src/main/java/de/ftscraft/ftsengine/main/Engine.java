@@ -273,7 +273,7 @@ public class Engine extends JavaPlugin implements Listener {
     public LogportManager getLogportManager() {
         return logportManager;
     }
-    
+
     public static Engine getInstance() {
         return instance;
     }

@@ -15,6 +15,7 @@ import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
+import java.util.Objects;
 import java.util.UUID;
 
 public class CMDbrief implements CommandExecutor {
@@ -23,7 +24,10 @@ public class CMDbrief implements CommandExecutor {
 
     public CMDbrief(Engine plugin) {
         this.plugin = plugin;
-        plugin.getCommand("brief").setExecutor(this);
+        Objects.requireNonNull(
+                        plugin.getCommand("brief"),
+                        "tried registering brief command but does exist")
+                .setExecutor(this);
     }
 
     @Override
@@ -88,7 +92,8 @@ public class CMDbrief implements CommandExecutor {
 
                 if (file.delete()) {
                     p.sendMessage(Messages.PREFIX + "Du hast deinen Briefkasten erfolgreich entfernt!");
-                } else MiniMsg.msg(p, Messages.MINI_PREFIX + "Dein Briefkasten konnte nicht entfernt werden. Bitte kontaktiere einen Admin.");
+                } else
+                    MiniMsg.msg(p, Messages.MINI_PREFIX + "Dein Briefkasten konnte nicht entfernt werden. Bitte kontaktiere einen Admin.");
 
                 return true;
 
