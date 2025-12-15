@@ -3,11 +3,8 @@ package de.ftscraft.ftsengine.feature.roleplay.durchsuchen;
 import de.ftscraft.ftsengine.main.Engine;
 import de.ftscraft.ftsengine.utils.Messages;
 import de.ftscraft.ftsutils.items.ItemReader;
+import de.ftscraft.ftsutils.misc.MiniMsg;
 import net.kyori.adventure.text.Component;
-import net.md_5.bungee.api.chat.ClickEvent;
-import net.md_5.bungee.api.chat.ComponentBuilder;
-import net.md_5.bungee.api.chat.HoverEvent;
-import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -56,25 +53,15 @@ public class DurchsuchenManager {
 
         requester.sendMessage(Messages.PREFIX + "Anfrage zum Durchsuchen von §6" + target.getName() + " §7gesendet!");
 
-        TextComponent message1 = new TextComponent(Messages.PREFIX + "§6" + requester.getName() + " §7möchte dich durchsuchen! Klicke hier zum ");
-        TextComponent reaction1 = new TextComponent("§a[Annehmen]");
-        reaction1.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/searchreact accept"));
-        reaction1.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ComponentBuilder("§aAnnehmen").create()));
-        TextComponent message2 = new TextComponent(" §7oder ");
-        TextComponent reaction2 = new TextComponent("§c[Ablehnen]§7.");
-        reaction2.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/searchreact deny"));
-        reaction2.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ComponentBuilder("§cAblehnen").create()));
-        TextComponent message3 = new TextComponent(" §7Du kannst aber auch versuchen etwas zu ");
-        TextComponent reaction3 = new TextComponent("§6[Verstecken]§7.");
-        reaction3.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/searchreact hide"));
-        reaction3.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ComponentBuilder("§6Verstecken - Jedes Item hat eine 50% Chance entdeckt zu werden.").create()));
-        TextComponent text = message1;
-        text.addExtra(reaction1);
-        text.addExtra(message2);
-        text.addExtra(reaction2);
-        text.addExtra(message3);
-        text.addExtra(reaction3);
-        target.sendMessage(text);
+        Component message = MiniMsg.c(
+                Messages.PREFIX + "<gold>" + requester.getName() + "</gold> <gray>möchte dich durchsuchen! Klicke hier zum </gray>" +
+                "<click:run_command:'/searchreact accept'><hover:show_text:'<green>Annehmen</green>'><green>[Annehmen]</green></hover></click>" +
+                "<gray> oder </gray>" +
+                "<click:run_command:'/searchreact deny'><hover:show_text:'<red>Ablehnen</red>'><red>[Ablehnen]</red></hover></click><gray>.</gray>" +
+                "<gray> Du kannst aber auch versuchen etwas zu </gray>" +
+                "<click:run_command:'/searchreact hide'><hover:show_text:'<gold>Verstecken - Jedes Item hat eine 50% Chance entdeckt zu werden.</gold>'><gold>[Verstecken]</gold></hover></click><gray>.</gray>"
+        );
+        target.sendMessage(message);
     }
 
     public static void accept(Player target) {
