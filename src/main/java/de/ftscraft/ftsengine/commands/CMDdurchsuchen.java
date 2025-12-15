@@ -24,12 +24,10 @@ public class CMDdurchsuchen implements CommandExecutor {
     @Override
     public boolean onCommand(@NotNull CommandSender cs, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
 
-        if (!(cs instanceof Player)) {
+        if (!(cs instanceof Player player)) {
             cs.sendMessage(Messages.ONLY_PLAYER);
             return true;
         }
-
-        Player player = ((Player) cs).getPlayer();
 
         if (args.length != 1) {
             player.sendMessage(Messages.PREFIX + "§6Bitte verwende den Befehl so: §c/durchsuchen [Spielername]");

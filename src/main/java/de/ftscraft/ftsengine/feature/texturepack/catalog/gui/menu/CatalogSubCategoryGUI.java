@@ -38,9 +38,7 @@ public class CatalogSubCategoryGUI extends CatalogScrollingGUI {
                     continue;
                 }
                 GuiItem guiItem = new GuiItem(CatalogItemStackBuilder.generateItemStack(item));
-                guiItem.setAction(e -> {
-                    new CatalogChooseItemGUI(catalog, item, gui).getGui().open(e.getWhoClicked());
-                });
+                guiItem.setAction(e -> new CatalogChooseItemGUI(catalog, item, gui).getGui().open(e.getWhoClicked()));
                 gui.addItem(guiItem);
             }
 
