@@ -1,116 +1,187 @@
 package de.ftscraft.ftsengine.commands;
 
+import com.mojang.brigadier.Command;
+import com.mojang.brigadier.arguments.IntegerArgumentType;
+import com.mojang.brigadier.arguments.StringArgumentType;
+import com.mojang.brigadier.tree.LiteralCommandNode;
 import de.ftscraft.ftsengine.main.Engine;
 import de.ftscraft.ftsengine.utils.Ausweis;
 import de.ftscraft.ftsengine.utils.Messages;
 import de.ftscraft.ftsengine.utils.Var;
 import de.ftscraft.ftsutils.misc.MiniMsg;
 import de.ftscraft.ftsutils.uuidfetcher.UUIDFetcher;
+import io.papermc.paper.command.brigadier.CommandSourceStack;
+import io.papermc.paper.command.brigadier.Commands;
+import io.papermc.paper.plugin.lifecycle.event.types.LifecycleEvents;
 import org.bukkit.Bukkit;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.attribute.AttributeInstance;
-import org.bukkit.command.Command;
-import org.bukkit.command.CommandExecutor;
-import org.bukkit.command.CommandSender;
-import org.bukkit.command.TabCompleter;
 import org.bukkit.entity.Player;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-
-public class CMDausweis implements CommandExecutor, TabCompleter {
+@SuppressWarnings("ALL")
+public class CMDausweis {
 
     private final Engine plugin;
-    private final ArrayList<String> arguments;
 
     private static final double HEIGHT_COOLDOWN = 1000 * 60 * 60;
 
     public CMDausweis(Engine plugin) {
         this.plugin = plugin;
-        this.arguments = new ArrayList<>(Arrays.asList("name", "geschlecht", "rasse", "aussehen", "größe",
-                "link", "anschauen", "deckname", "resetcooldown"));
-        plugin.getCommand("ausweis").setExecutor(this);
+        registerCommand();
     }
 
     private static final int MAX_HEIGHT = 300, MIN_HEIGHT = 90;
 
-    public boolean onCommand(@NotNull CommandSender cs, @NotNull Command cmd, @NotNull String label, String[] args) {
-        if (!(cs instanceof Player p)) {
-            cs.sendPlainMessage(Messages.ONLY_PLAYER);
-            return true;
-        }
-
-        if (args.length > 0) {
-            String sub = args[0];
-            switch (sub) {
-                case "name":
-                    handleName(args, p);
-                    break;
-                case "link":
-                    if (handleLink(args, p)) return true;
-                    break;
-                case "geschlecht":
-                    if (handleSex(args, p)) return true;
-                    break;
-                case "rasse":
-                    if (handleRace(args, p)) return true;
-                    break;
-                case "größe":
-                    if (handleSize(args, p)) return true;
-                    break;
-                case "aussehen":
-                    if (handleLooks(args, p)) return true;
-                    break;
-                case "anschauen":
-                    handleInspect(args, p);
-                    break;
-                case "deckname":
-                    if (handleUndercoverName(args, p)) return true;
-                    break;
-                case "resetcooldown":
-                    if (handleResetCooldown(args, p)) return true;
-                    break;
-                default:
-                    sendHelpMsg(p);
-                    break;
-            }
-
-        } else sendHelpMsg(p);
-        return false;
+    public void registerCommand() {
+        Engine.getInstance().getLifecycleManager().registerEventHandler(
+                LifecycleEvents.COMMANDS,
+                commands -> commands.registrar().register(createAusweisCommand())
+        );
     }
 
-    private boolean handleUndercoverName(String[] args, Player p) {
-        if (!plugin.hasAusweis(p)) {
-            p.sendPlainMessage(Messages.NEED_AUSWEIS);
-            return true;
-        }
-        if (args.length > 1) {
-            String deckname = args[1].replace("_", " ");
-            plugin.getAusweis(p).setSpitzname(deckname);
-            p.sendMessage(Messages.PREFIX + "Du hast deinen Decknamen als " + deckname + " gesetzt!");
+    private LiteralCommandNode<CommandSourceStack> createAusweisCommand() {
+        return Commands.literal("ausweis")
+                .requires(sender -> sender.getExecutor() instanceof Player)
+                .executes(ctx -> {
+                    Player player = (Player) ctx.getSource().getExecutor();
+                    sendHelpMsg(player);
+                    return Command.SINGLE_SUCCESS;
+                })
+                .then(Commands.literal("name")
+                        .then(Commands.argument("vorname", StringArgumentType.word())
+                                .then(Commands.argument("nachname", StringArgumentType.word())
+                                        .executes(this::handleName)
+                                )
+                        )
+                )
+                .then(Commands.literal("geschlecht")
+                        .then(Commands.argument("gender", StringArgumentType.word())
+                                .suggests((ctx, builder) -> {
+                                    builder.suggest("m");
+                                    builder.suggest("f");
+                                    return builder.buildFuture();
+                                })
+                                .executes(this::handleGender)
+                        )
+                )
+                .then(Commands.literal("rasse")
+                        .then(Commands.argument("rasse", StringArgumentType.word())
+                                .suggests((ctx, builder) -> {
+                                    builder.suggest("Ork");
+                                    builder.suggest("Zwerg");
+                                    builder.suggest("Mensch");
+                                    builder.suggest("Elf");
+                                    return builder.buildFuture();
+                                })
+                                .executes(this::handleRace)
+                        )
+                )
+                .then(Commands.literal("aussehen")
+                        .then(Commands.argument("beschreibung", StringArgumentType.greedyString())
+                                .executes(this::handleAppearance)
+                        )
+                )
+                .then(Commands.literal("größe")
+                        .then(Commands.argument("größe", IntegerArgumentType.integer(MIN_HEIGHT, MAX_HEIGHT))
+                                .executes(this::handleHeight)
+                        )
+                )
+                .then(Commands.literal("link")
+                        .then(Commands.argument("url", StringArgumentType.greedyString())
+                                .executes(this::handleLink)
+                        )
+                )
+                .then(Commands.literal("anschauen")
+                        .requires(sender -> sender.getExecutor() instanceof Player &&
+                                sender.getExecutor().hasPermission("ftsengine.ausweis.anschauen"))
+                        .executes(this::handleInspectSelf)
+                        .then(Commands.argument("spieler", StringArgumentType.word())
+                                .suggests((ctx, builder) -> {
+                                    for (Player onlinePlayer : Bukkit.getOnlinePlayers()) {
+                                        builder.suggest(onlinePlayer.getName());
+                                    }
+                                    return builder.buildFuture();
+                                })
+                                .executes(this::handleInspectOther)
+                        )
+                )
+                .then(Commands.literal("deckname")
+                        .then(Commands.argument("name", StringArgumentType.greedyString())
+                                .executes(this::handleCoverName)
+                        )
+                )
+                .then(Commands.literal("resetcooldown")
+                        .requires(sender -> sender.getExecutor() instanceof Player &&
+                                sender.getExecutor().hasPermission("ftsengine.resetcooldown"))
+                        .then(Commands.argument("ziel", StringArgumentType.word())
+                                .suggests((ctx, builder) -> {
+                                    builder.suggest("all");
+                                    for (Player onlinePlayer : Bukkit.getOnlinePlayers()) {
+                                        builder.suggest(onlinePlayer.getName());
+                                    }
+                                    return builder.buildFuture();
+                                })
+                                .executes(this::handleResetCooldown)
+                        )
+                )
+                .build();
+    }
+
+    private int handleName(com.mojang.brigadier.context.CommandContext<CommandSourceStack> ctx) {
+        Player p = (Player) ctx.getSource().getExecutor();
+        String fName = StringArgumentType.getString(ctx, "vorname");
+        String lName = StringArgumentType.getString(ctx, "nachname");
+
+        if (plugin.hasAusweis(p)) {
+            plugin.getAusweis(p).setFirstName(fName);
+            plugin.getAusweis(p).setLastName(lName);
         } else {
-            p.sendPlainMessage(Messages.PREFIX +
-                    "Bitte benutze den Befehl so:" + " §c/ausweis deckname [Deckname]");
+            Ausweis a = new Ausweis(plugin, p);
+            a.setFirstName(fName);
+            a.setLastName(lName);
+            plugin.addAusweis(a);
         }
-        return false;
+        p.sendPlainMessage(Messages.SUCC_CMD_AUSWEIS.replace("%s", "Name")
+                .replace("%v", fName + " " + lName));
+        return Command.SINGLE_SUCCESS;
     }
 
-    private boolean handleRace(String[] args, Player p) {
+    private int handleGender(com.mojang.brigadier.context.CommandContext<CommandSourceStack> ctx) {
+        Player p = (Player) ctx.getSource().getExecutor();
+        String genderStr = StringArgumentType.getString(ctx, "gender");
+
         if (!plugin.hasAusweis(p)) {
             p.sendPlainMessage(Messages.NEED_AUSWEIS);
-            return true;
-        }
-        if (args.length != 2) {
-            p.sendPlainMessage(Messages.PREFIX + "Bitte benutze den Befehl so:" +
-                    " §c/ausweis rasse [Ork/Zwerg/Mensch/Elf]");
-            return true;
+            return Command.SINGLE_SUCCESS;
         }
 
-        String race = args[1];
-        race = race.substring(0, 1).toUpperCase() + race.substring(1).toLowerCase();
+        Ausweis.Gender g;
+        if (genderStr.equalsIgnoreCase("m")) {
+            g = Ausweis.Gender.MALE;
+        } else if (genderStr.equalsIgnoreCase("f")) {
+            g = Ausweis.Gender.FEMALE;
+        } else {
+            p.sendPlainMessage(Messages.PREFIX + "Bitte benutze den Befehl so:" +
+                    " §c/ausweis geschlecht [\"m\"/\"f\"]");
+            return Command.SINGLE_SUCCESS;
+        }
+
+        plugin.getAusweis(p).setGender(g);
+        p.sendPlainMessage(Messages.SUCC_CMD_AUSWEIS.replace("%s", "Geschlecht")
+                .replace("%v", (g == Ausweis.Gender.MALE ? "Mann" : "Frau")));
+        return Command.SINGLE_SUCCESS;
+    }
+
+    private int handleRace(com.mojang.brigadier.context.CommandContext<CommandSourceStack> ctx) {
+        Player p = (Player) ctx.getSource().getExecutor();
+        String raceStr = StringArgumentType.getString(ctx, "rasse");
+
+        if (!plugin.hasAusweis(p)) {
+            p.sendPlainMessage(Messages.NEED_AUSWEIS);
+            return Command.SINGLE_SUCCESS;
+        }
+
+        String race = raceStr.substring(0, 1).toUpperCase() + raceStr.substring(1).toLowerCase();
 
         switch (race) {
             case "Ork":
@@ -123,145 +194,38 @@ public class CMDausweis implements CommandExecutor, TabCompleter {
             default:
                 p.sendMessage(Messages.PREFIX + "Bitte benutze den Befehl so:" + " §c/ausweis rasse [Ork/Zwerg/Mensch/Elf].");
         }
-        return false;
+        return Command.SINGLE_SUCCESS;
     }
 
-    private boolean handleSex(String[] args, Player p) {
+    private int handleAppearance(com.mojang.brigadier.context.CommandContext<CommandSourceStack> ctx) {
+        Player p = (Player) ctx.getSource().getExecutor();
+        String desc = StringArgumentType.getString(ctx, "beschreibung");
+
         if (!plugin.hasAusweis(p)) {
             p.sendPlainMessage(Messages.NEED_AUSWEIS);
-            return true;
+            return Command.SINGLE_SUCCESS;
         }
-        if (args.length == 2) {
-            Ausweis.Gender g = null;
-            if (args[1].equalsIgnoreCase("m") ||
-                    args[1].equalsIgnoreCase("f")) {
-                if (args[1].equalsIgnoreCase("m"))
-                    g = Ausweis.Gender.MALE;
-                else if (args[1].equalsIgnoreCase("f"))
-                    g = Ausweis.Gender.FEMALE;
 
-                if (g == null) {
-                    p.sendPlainMessage(Messages.PREFIX + "Fehler!");
-                }
-                plugin.getAusweis(p).setGender(g);
-                p.sendPlainMessage(Messages.SUCC_CMD_AUSWEIS.replace("%s", "Geschlecht")
-                        .replace("%v", (g == Ausweis.Gender.MALE ? "Mann" : "Frau")));
-            } else
-                p.sendPlainMessage(Messages.PREFIX + "Bitte benutze den Befehl so:" +
-                        " §c/ausweis geschlecht [\"m\"/\"f\"]");
-        } else
+        // Mindestens 4 Wörter prüfen
+        String[] words = desc.split("\\s+");
+        if (words.length < 4) {
             p.sendPlainMessage(Messages.PREFIX + "Bitte benutze den Befehl so:" +
-                    " §c/ausweis geschlecht [\"m\"/\"f\"]");
-        return false;
+                    " §c/ausweis aussehen [Aussehen (mind. 4 Wörter)]");
+            return Command.SINGLE_SUCCESS;
+        }
+
+        plugin.getAusweis(p).setDesc(desc);
+        p.sendPlainMessage(Messages.SUCC_CMD_AUSWEIS.replace("%s", "Aussehen").replace("%v", desc));
+        return Command.SINGLE_SUCCESS;
     }
 
-    private boolean handleLink(String[] args, Player p) {
+    private int handleHeight(com.mojang.brigadier.context.CommandContext<CommandSourceStack> ctx) {
+        Player p = (Player) ctx.getSource().getExecutor();
+        int height = IntegerArgumentType.getInteger(ctx, "größe");
+
         if (!plugin.hasAusweis(p)) {
             p.sendPlainMessage(Messages.NEED_AUSWEIS);
-            return true;
-        }
-        if (args.length == 2) {
-            String link = args[1];
-            if (!link.startsWith("https://forum.ftscraft.de/")) {
-                p.sendPlainMessage("§cDer Link muss mit unserer URL des Forums anfangen! " +
-                        "(https://forum.ftscraft.de/)");
-                return true;
-            }
-            plugin.getAusweis(p).setForumLink(link);
-            p.sendPlainMessage(Messages.SUCC_CMD_AUSWEIS
-                    .replace("%s", "Charaktervorstellung").replace("%v", link));
-        } else
-            p.sendPlainMessage(Messages.PREFIX +
-                    "Bitte benutze den Befehl so: §c/ausweis link [Forumlink deiner Charvorstellung]");
-        return false;
-    }
-
-    private void handleName(String[] args, Player p) {
-        if (args.length == 3) {
-            String fName = args[1];
-            String lName = args[2];
-
-            if (plugin.hasAusweis(p)) {
-                plugin.getAusweis(p).setFirstName(fName);
-                plugin.getAusweis(p).setLastName(lName);
-            } else {
-                Ausweis a = new Ausweis(plugin, p);
-                a.setFirstName(fName);
-                a.setLastName(lName);
-                plugin.addAusweis(a);
-            }
-            p.sendPlainMessage(Messages.SUCC_CMD_AUSWEIS.replace("%s", "Name")
-                    .replace("%v", fName + " " + lName));
-        } else
-            p.sendPlainMessage(Messages.PREFIX + "Bitte benutze den Befehl so:" +
-                    " §c/ausweis name [Vorname] [Nachname]");
-    }
-
-    private void handleInspect(String[] args, Player p) {
-        if (!p.hasPermission("ftsengine.ausweis.anschauen")) {
-            p.sendPlainMessage("§cDafür hast du keine Rechte");
-            return;
-        }
-
-        if (args.length == 2) {
-            Ausweis a;
-            if ((a = plugin.getAusweis(UUIDFetcher.getUUID(args[1]))) != null) {
-                Var.sendAusweisMsg(p, a);
-            } else p.sendPlainMessage(Messages.TARGET_NO_AUSWEIS);
-        } else {
-            Var.sendAusweisMsg(p, plugin.getAusweis(p));
-        }
-
-    }
-
-    private boolean handleLooks(String[] args, Player p) {
-        if (!plugin.hasAusweis(p)) {
-            p.sendPlainMessage(Messages.NEED_AUSWEIS);
-            return true;
-        }
-
-        if (args.length > 4) {
-
-            StringBuilder desc = new StringBuilder();
-            for (int i = 1; i < args.length; i++) {
-                desc.append(" ").append(args[i]);
-            }
-
-            desc = new StringBuilder(desc.toString().replaceFirst(" ", ""));
-
-            plugin.getAusweis(p).setDesc(desc.toString());
-
-            p.sendPlainMessage(Messages.SUCC_CMD_AUSWEIS.replace("%s", "Aussehen").replace("%v", desc.toString()));
-
-        } else
-            p.sendPlainMessage(Messages.PREFIX + "Bitte benutze den Befehl so:" + " §c/ausweis aussehen [Aussehen (mind. 4 Wörter)]");
-        return false;
-    }
-
-    private boolean handleSize(String[] args, Player p) {
-        if (!plugin.hasAusweis(p)) {
-            p.sendPlainMessage(Messages.NEED_AUSWEIS);
-            return true;
-        }
-
-        if (args.length != 2) {
-            p.sendPlainMessage(Messages.PREFIX + "Bitte benutze den Befehl so:" + " §c/ausweis größe [Größe]");
-            return true;
-        }
-
-        int height;
-        try {
-            height = Integer.parseInt(args[1]);
-        } catch (NumberFormatException ex) {
-            p.sendMessage(Messages.PREFIX + "Bitte gebe eine natürliche Zahl für deine Größe (in cm) an.");
-            return true;
-        }
-
-        if (height < MIN_HEIGHT || height > MAX_HEIGHT) {
-            p.sendMessage(Messages.PREFIX +
-                    "Deine Größe müss zwischen %d cm und %d cm liegen."
-                            .formatted(MIN_HEIGHT, MAX_HEIGHT));
-            return true;
+            return Command.SINGLE_SUCCESS;
         }
 
         Ausweis ausweis = plugin.getAusweis(p);
@@ -269,7 +233,7 @@ public class CMDausweis implements CommandExecutor, TabCompleter {
         if (ausweis.getLastHeightChange() + HEIGHT_COOLDOWN >= System.currentTimeMillis()) {
             if (!p.hasPermission("ftssurvival.bypass") && !p.hasPermission("ftsengine.mod")) {
                 MiniMsg.msg(p, Messages.MINI_PREFIX + "Du darfst deine Größe jede Stunde ändern");
-                return true;
+                return Command.SINGLE_SUCCESS;
             }
         }
 
@@ -279,113 +243,121 @@ public class CMDausweis implements CommandExecutor, TabCompleter {
 
         if (scaleAttr == null) {
             MiniMsg.msg(p, "Da ist was schiefgelaufen.");
-            return true;
+            return Command.SINGLE_SUCCESS;
         }
 
         scaleAttr.setBaseValue(height / 200d);
-        return false;
+        return Command.SINGLE_SUCCESS;
     }
 
-    private boolean handleResetCooldown(String[] args, Player p) {
-        if (!p.hasPermission("ftsengine.resetcooldown")) {
-            p.sendMessage(Messages.PREFIX + "§cDafür hast du keine Rechte!");
-            return true;
+    private int handleLink(com.mojang.brigadier.context.CommandContext<CommandSourceStack> ctx) {
+        Player p = (Player) ctx.getSource().getExecutor();
+        String link = StringArgumentType.getString(ctx, "url");
+
+        if (!plugin.hasAusweis(p)) {
+            p.sendPlainMessage(Messages.NEED_AUSWEIS);
+            return Command.SINGLE_SUCCESS;
         }
 
-        if (args.length < 2) {
-            p.sendMessage(Messages.PREFIX + "Bitte benutze den Befehl so: §c/ausweis resetcooldown [Spielername]");
-            return true;
+        if (!link.startsWith("https://forum.ftscraft.de/")) {
+            p.sendPlainMessage("§cDer Link muss mit unserer URL des Forums anfangen! " +
+                    "(https://forum.ftscraft.de/)");
+            return Command.SINGLE_SUCCESS;
         }
 
-        String targetName = args[1];
+        plugin.getAusweis(p).setForumLink(link);
+        p.sendPlainMessage(Messages.SUCC_CMD_AUSWEIS
+                .replace("%s", "Charaktervorstellung").replace("%v", link));
+        return Command.SINGLE_SUCCESS;
+    }
+
+    private int handleInspectSelf(com.mojang.brigadier.context.CommandContext<CommandSourceStack> ctx) {
+        Player p = (Player) ctx.getSource().getExecutor();
+        Var.sendAusweisMsg(p, plugin.getAusweis(p));
+        return Command.SINGLE_SUCCESS;
+    }
+
+    private int handleInspectOther(com.mojang.brigadier.context.CommandContext<CommandSourceStack> ctx) {
+        Player p = (Player) ctx.getSource().getExecutor();
+        String targetName = StringArgumentType.getString(ctx, "spieler");
+
+        Ausweis a = plugin.getAusweis(UUIDFetcher.getUUID(targetName));
+        if (a != null) {
+            Var.sendAusweisMsg(p, a);
+        } else {
+            p.sendPlainMessage(Messages.TARGET_NO_AUSWEIS);
+        }
+        return Command.SINGLE_SUCCESS;
+    }
+
+    private int handleCoverName(com.mojang.brigadier.context.CommandContext<CommandSourceStack> ctx) {
+        Player p = (Player) ctx.getSource().getExecutor();
+        String deckname = StringArgumentType.getString(ctx, "name").replace("_", " ");
+
+        if (!plugin.hasAusweis(p)) {
+            p.sendPlainMessage(Messages.NEED_AUSWEIS);
+            return Command.SINGLE_SUCCESS;
+        }
+
+        plugin.getAusweis(p).setSpitzname(deckname);
+        p.sendMessage(Messages.PREFIX + "Du hast deinen Decknamen als " + deckname + " gesetzt!");
+        return Command.SINGLE_SUCCESS;
+    }
+
+    private int handleResetCooldown(com.mojang.brigadier.context.CommandContext<CommandSourceStack> ctx) {
+        Player p = (Player) ctx.getSource().getExecutor();
+        String targetName = StringArgumentType.getString(ctx, "ziel");
 
         if (targetName.equalsIgnoreCase("all")) {
-            int resetCount = 0;
-            for (Ausweis ausweis : plugin.ausweis.values()) {
-                ausweis.setLastHeightChange(0);
-                resetCount++;
-            }
-            p.sendMessage(Messages.PREFIX + "§7Größen-Cooldown für §e" + resetCount + " §7Spieler wurde erfolgreich zurückgesetzt!");
-
-            for (Player onlinePlayer : Bukkit.getOnlinePlayers()) {
-                if (plugin.hasAusweis(onlinePlayer)) {
-                    onlinePlayer.sendMessage(Messages.PREFIX + "§7Dein Größen-Cooldown wurde von einem Admin zurückgesetzt. Du kannst deine Größe jetzt wieder ändern!");
-                }
-            }
-            return false;
+            return handleResetCooldownAll(p);
+        } else {
+            return handleResetCooldownPlayer(p, targetName);
         }
+    }
 
+    private int handleResetCooldownAll(Player p) {
+        int resetCount = 0;
+        for (Ausweis ausweis : plugin.ausweis.values()) {
+            ausweis.setLastHeightChange(0);
+            resetCount++;
+        }
+        p.sendMessage(Messages.PREFIX + "§7Größen-Cooldown für §e" + resetCount +
+                " §7Spieler wurde erfolgreich zurückgesetzt!");
+
+        for (Player onlinePlayer : Bukkit.getOnlinePlayers()) {
+            if (plugin.hasAusweis(onlinePlayer)) {
+                onlinePlayer.sendMessage(Messages.PREFIX +
+                        "§7Dein Größen-Cooldown wurde von einem Admin zurückgesetzt. " +
+                        "Du kannst deine Größe jetzt wieder ändern!");
+            }
+        }
+        return Command.SINGLE_SUCCESS;
+    }
+
+    private int handleResetCooldownPlayer(Player p, String targetName) {
         Player target = Bukkit.getPlayer(targetName);
 
         if (target == null) {
-            p.sendMessage(Messages.PREFIX + "Spieler §c" + targetName + " §7ist nicht online oder existiert nicht!");
-            return true;
+            p.sendMessage(Messages.PREFIX + "Spieler §c" + targetName +
+                    " §7ist nicht online oder existiert nicht!");
+            return Command.SINGLE_SUCCESS;
         }
 
         if (!plugin.hasAusweis(target)) {
             p.sendMessage(Messages.TARGET_NO_AUSWEIS);
-            return true;
+            return Command.SINGLE_SUCCESS;
         }
 
         Ausweis targetAusweis = plugin.getAusweis(target);
         targetAusweis.setLastHeightChange(0);
 
-        p.sendMessage(Messages.PREFIX + "§7Größen-Cooldown für §e" + targetName + " §7wurde erfolgreich zurückgesetzt!");
-        target.sendMessage(Messages.PREFIX + "§7Dein Größen-Cooldown wurde von einem Admin zurückgesetzt. Du kannst deine Größe jetzt wieder ändern!");
+        p.sendMessage(Messages.PREFIX + "§7Größen-Cooldown für §e" + targetName +
+                " §7wurde erfolgreich zurückgesetzt!");
+        target.sendMessage(Messages.PREFIX +
+                "§7Dein Größen-Cooldown wurde von einem Admin zurückgesetzt. " +
+                "Du kannst deine Größe jetzt wieder ändern!");
 
-        return false;
-    }
-
-    @Override
-    public @Nullable List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command command, @NotNull String alias, @NotNull String[] args) {
-
-        ArrayList<String> result = new ArrayList<>();
-
-        if (args.length == 1) {
-            for (String argument : arguments) {
-                if (argument.toLowerCase().startsWith(args[0].toLowerCase()))
-                    result.add(argument);
-            }
-            return result;
-        }
-
-        if (args.length == 2) {
-            String subCommand = args[0].toLowerCase();
-            String currentInput = args[1].toLowerCase();
-
-            switch (subCommand) {
-                case "geschlecht":
-                    ArrayList<String> genderOptions = new ArrayList<>(Arrays.asList("m", "f"));
-                    for (String option : genderOptions) {
-                        if (option.startsWith(currentInput))
-                            result.add(option);
-                    }
-                    break;
-                case "rasse":
-                    ArrayList<String> raceOptions = new ArrayList<>(Arrays.asList("Ork", "Zwerg", "Mensch", "Elf"));
-                    for (String option : raceOptions) {
-                        if (option.toLowerCase().startsWith(currentInput))
-                            result.add(option);
-                    }
-                    break;
-                case "resetcooldown":
-                    if (sender.hasPermission("ftsengine.resetcooldown")) {
-                        if ("all".toLowerCase().startsWith(currentInput)) {
-                            result.add("all");
-                        }
-                        for (Player onlinePlayer : Bukkit.getOnlinePlayers()) {
-                            String playerName = onlinePlayer.getName();
-                            if (playerName.toLowerCase().startsWith(currentInput)) {
-                                result.add(playerName);
-                            }
-                        }
-                    }
-                    break;
-            }
-        }
-
-        return result;
-
+        return Command.SINGLE_SUCCESS;
     }
 
     public static void sendHelpMsg(Player p) {
