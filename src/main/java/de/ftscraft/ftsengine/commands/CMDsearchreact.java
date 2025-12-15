@@ -9,10 +9,12 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.Objects;
+
 public class CMDsearchreact implements CommandExecutor {
 
     public CMDsearchreact(Engine plugin) {
-        plugin.getCommand("searchreact").setExecutor(this);
+        Objects.requireNonNull(plugin.getCommand("searchreact"), "tried registering searchreact command but is null").setExecutor(this);
     }
 
     @Override

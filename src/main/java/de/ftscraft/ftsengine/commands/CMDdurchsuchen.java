@@ -10,13 +10,15 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.Objects;
+
 public class CMDdurchsuchen implements CommandExecutor {
 
     private final Engine plugin;
 
     public CMDdurchsuchen(Engine plugin) {
         this.plugin = plugin;
-        plugin.getCommand("durchsuchen").setExecutor(this);
+        Objects.requireNonNull(plugin.getCommand("durchsuchen"), "tried registering durchsuchen command but is null").setExecutor(this);
     }
 
     @Override

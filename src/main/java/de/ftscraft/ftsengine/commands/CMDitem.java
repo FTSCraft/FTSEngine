@@ -24,6 +24,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 
 public class CMDitem implements CommandExecutor {
 
@@ -34,7 +35,7 @@ public class CMDitem implements CommandExecutor {
     private final static int COST_NAME = 15, COST_LORE = 10, COST_GLOW = 20;
 
     public CMDitem(Engine plugin) {
-        plugin.getCommand("item").setExecutor(this);
+        Objects.requireNonNull(plugin.getCommand("item"), "tried registering item command but is null").setExecutor(this);
 
         if (Bukkit.getPluginManager().isPluginEnabled("PlayerPoints")) pointsAPI = PlayerPoints.getInstance().getAPI();
         else plugin.getLogger().warning("PlayerPoints is not enabled. Thus the functionality of /item is limited.");

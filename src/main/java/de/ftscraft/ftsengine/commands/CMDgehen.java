@@ -10,10 +10,12 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.Objects;
+
 public class CMDgehen implements CommandExecutor {
 
     public CMDgehen(Engine plugin) {
-        plugin.getCommand("gehen").setExecutor(this);
+        Objects.requireNonNull(plugin.getCommand("gehen"), "tried registering gehen command but is null").setExecutor(this);
     }
 
     final float SLOW_SPEED = 0.1f;

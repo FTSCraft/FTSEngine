@@ -22,13 +22,14 @@ import java.time.Duration;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
+import java.util.Objects;
 
 public class CMDlehrtafel implements CommandExecutor, TabCompleter {
     private final Engine plugin;
 
     public CMDlehrtafel(Engine plugin) {
         this.plugin = plugin;
-        plugin.getCommand("lehrtafel").setExecutor(this);
+        Objects.requireNonNull(plugin.getCommand("lehrtafel"), "tried registering lehrtafel command but is null").setExecutor(this);
     }
 
     @Override

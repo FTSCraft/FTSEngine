@@ -31,7 +31,7 @@ public class CMDstreicheln implements CommandExecutor {
     public CMDstreicheln(Engine plugin) {
         this.plugin = plugin;
         //noinspection DataFlowIssue
-        plugin.getCommand("streicheln").setExecutor(this);
+        Objects.requireNonNull(plugin.getCommand("streicheln"), "tried registering streicheln command but is null").setExecutor(this);
     }
 
     @Override

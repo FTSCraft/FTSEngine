@@ -23,6 +23,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
+import java.util.Objects;
 
 public class CMDtaube implements CommandExecutor, TabCompleter {
 
@@ -32,7 +33,7 @@ public class CMDtaube implements CommandExecutor, TabCompleter {
 
     public CMDtaube(Engine plugin) {
         this.plugin = plugin;
-        plugin.getCommand("taube").setExecutor(this);
+        Objects.requireNonNull(plugin.getCommand("taube"), "tried registering taube command but is null").setExecutor(this);
     }
 
     @Override

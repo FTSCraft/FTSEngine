@@ -8,10 +8,12 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.Objects;
+
 public class CMDfasten implements CommandExecutor {
 
     public CMDfasten(Engine plugin) {
-        plugin.getCommand("fasten").setExecutor(this);
+        Objects.requireNonNull(plugin.getCommand("fasten"), "tried registering fasten command but is null").setExecutor(this);
     }
 
     @Override

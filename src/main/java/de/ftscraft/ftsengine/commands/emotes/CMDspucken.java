@@ -12,10 +12,12 @@ import org.bukkit.entity.LlamaSpit;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.Objects;
+
 public class CMDspucken implements CommandExecutor {
 
     public CMDspucken(Engine plugin) {
-        plugin.getCommand("spucken").setExecutor(this);
+        Objects.requireNonNull(plugin.getCommand("spucken"), "tried registering spucken command but is null").setExecutor(this);
     }
 
     @Override
