@@ -5,13 +5,9 @@ import org.bukkit.entity.Player;
 
 public class FTSUser {
 
-    private final Engine plugin;
-    private final Player player;
     private Brett currentBrett = null;
 
-    public FTSUser(Engine plugin, Player player) {
-        this.plugin = plugin;
-        this.player = player;
+    public FTSUser() {
     }
 
     private int lanzenschlaege;

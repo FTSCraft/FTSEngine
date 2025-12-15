@@ -81,7 +81,7 @@ public class Engine extends JavaPlugin implements Listener {
         setupEconomy();
         init();
         for (Player a : Bukkit.getOnlinePlayers()) {
-            FTSUser user = new FTSUser(this, a);
+            FTSUser user = new FTSUser();
             this.getPlayer().put(a, user);
 
             if (getProtocolManager() != null)

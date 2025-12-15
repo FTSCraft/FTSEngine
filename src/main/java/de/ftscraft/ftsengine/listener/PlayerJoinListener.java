@@ -23,7 +23,7 @@ public class PlayerJoinListener implements Listener {
     @EventHandler(priority = EventPriority.LOW)
     public void onJoin(PlayerJoinEvent e) {
         Player p = e.getPlayer();
-        FTSUser user = new FTSUser(plugin, p);
+        FTSUser user = new FTSUser();
         plugin.getPlayer().put(e.getPlayer(), user);
 
         if (plugin.getProtocolManager() != null)
