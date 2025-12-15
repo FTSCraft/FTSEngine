@@ -142,12 +142,6 @@
             <version>3.18.0</version>
         </dependency>
         <dependency>
-            <groupId>com.github.DieReicheErethons</groupId>
-            <artifactId>Brewery</artifactId>
-            <version>3.1.1</version>
-            <scope>provided</scope>
-        </dependency>
-        <dependency>
             <groupId>com.github.FTSCraft</groupId>
             <artifactId>FTSUtils</artifactId>
             <version>7a8ad9d7df</version>
