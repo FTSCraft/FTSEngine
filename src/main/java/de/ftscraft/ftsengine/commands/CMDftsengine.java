@@ -13,13 +13,18 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.Objects;
+
 public class CMDftsengine implements CommandExecutor {
 
     final Engine plugin;
 
     public CMDftsengine(Engine plugin) {
         this.plugin = plugin;
-        this.plugin.getCommand("ftsengine").setExecutor(this);
+        Objects.requireNonNull(
+                        plugin.getCommand("ftsengine"),
+                        "tried registering ftsengine command but does exist")
+                .setExecutor(this);
     }
 
     @Override
