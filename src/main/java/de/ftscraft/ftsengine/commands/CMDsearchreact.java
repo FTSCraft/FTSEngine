@@ -11,10 +11,7 @@ import org.jetbrains.annotations.NotNull;
 
 public class CMDsearchreact implements CommandExecutor {
 
-    private final Engine plugin;
-
     public CMDsearchreact(Engine plugin) {
-        this.plugin = plugin;
         plugin.getCommand("searchreact").setExecutor(this);
     }
 
