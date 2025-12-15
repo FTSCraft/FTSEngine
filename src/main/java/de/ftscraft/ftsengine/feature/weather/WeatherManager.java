@@ -12,9 +12,8 @@ public class WeatherManager implements Listener {
     private static final WeatherManager instance = new WeatherManager();
     private Date latestWeatherChange;
 
-    public static WeatherManager init() {
+    public static void init() {
         Bukkit.getPluginManager().registerEvents(instance, Engine.getInstance());
-        return instance;
     }
 
 
