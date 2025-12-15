@@ -3,7 +3,6 @@ package de.ftscraft.ftsengine.feature.courier;
 import de.ftscraft.ftsengine.main.Engine;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
-import org.bukkit.World;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.MapMeta;
 import org.bukkit.map.MapRenderer;
@@ -46,7 +45,7 @@ public class Brief {
         this.renderer = new FTSMapRenderer(id, plugin);
     }
 
-    public ItemStack getMap(World w) {
+    public ItemStack getMap() {
 
         ItemStack map = new ItemStack(Material.FILLED_MAP, 1);
         MapMeta mapMeta = (MapMeta) map.getItemMeta();

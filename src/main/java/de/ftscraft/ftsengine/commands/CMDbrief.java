@@ -122,7 +122,7 @@ public class CMDbrief implements CommandExecutor {
 
 
             Brief brief = new Brief(plugin, name, msg.toString(), p.getWorld().getName());
-            if (!brief.isError()) p.getInventory().addItem(brief.getMap(p.getWorld()));
+            if (!brief.isError()) p.getInventory().addItem(brief.getMap());
 
             return false;
         }
