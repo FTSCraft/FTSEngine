@@ -262,10 +262,6 @@ public class Engine extends JavaPlugin implements Listener {
         return player;
     }
 
-    public HashMap<Integer, Backpack> getBackpacks() {
-        return backpacks;
-    }
-
     public ProtocolManager getProtocolManager() {
         return protocolManager;
     }
@@ -277,15 +273,7 @@ public class Engine extends JavaPlugin implements Listener {
     public LogportManager getLogportManager() {
         return logportManager;
     }
-
-    public EntityClickListener getEntityClickListener() {
-        return entityClickListener;
-    }
-
-    public CMDstreicheln getStreicheln() {
-        return streicheln;
-    }
-
+    
     public static Engine getInstance() {
         return instance;
     }
