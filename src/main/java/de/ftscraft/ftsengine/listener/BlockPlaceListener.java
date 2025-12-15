@@ -5,6 +5,7 @@ import de.ftscraft.ftsengine.main.Engine;
 import de.ftscraft.ftsutils.items.ItemBuilder;
 import de.ftscraft.ftsutils.items.ItemReader;
 import org.bukkit.block.Block;
+import org.bukkit.block.data.type.Sign;
 import org.bukkit.block.data.type.WallSign;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -13,9 +14,7 @@ import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.persistence.PersistentDataType;
 
-public class BlockPlaceListener implements Listener {
-
-    public final Engine plugin;
+public record BlockPlaceListener(Engine plugin) implements Listener {
 
     public BlockPlaceListener(Engine plugin) {
         this.plugin = plugin;
@@ -32,7 +31,7 @@ public class BlockPlaceListener implements Listener {
         if (!"teaching-board".equals(ItemReader.getSign(itemStack))) {
             return;
         }
-        if (!(placedBlock.getBlockData() instanceof WallSign) && !(placedBlock.getBlockData() instanceof org.bukkit.block.data.type.Sign)) {
+        if (!(placedBlock.getBlockData() instanceof WallSign) && !(placedBlock.getBlockData() instanceof Sign)) {
             return;
         }
         org.bukkit.block.Sign sign = (org.bukkit.block.Sign) placedBlock.getState();
