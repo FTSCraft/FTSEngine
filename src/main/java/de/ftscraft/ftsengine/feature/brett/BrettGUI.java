@@ -27,7 +27,7 @@ public class BrettGUI {
         this.plugin = Engine.getInstance();
         gui = Gui.scrolling()
                 .title(MiniMsg.c("<dark_red>Schwarzes-Brett " + brett.getName()))
-                .rows(6)
+                .rows(5)
                 .pageSize(27)
                 .disableAllInteractions()
                 .create();
@@ -70,11 +70,11 @@ public class BrettGUI {
         // Add navigation items
         GuiItem previousPageItem = new GuiItem(previousPage);
         previousPageItem.setAction(e -> gui.previous());
-        gui.setItem(6, 3, previousPageItem);
+        gui.setItem(5, 3, previousPageItem);
 
         GuiItem nextPageItem = new GuiItem(nextPage);
         nextPageItem.setAction(e -> gui.next());
-        gui.setItem(6, 7, nextPageItem);
+        gui.setItem(5, 7, nextPageItem);
 
         // Add create button
         GuiItem createItem = new GuiItem(create);
@@ -118,7 +118,7 @@ public class BrettGUI {
             BrettNote brettNote = new BrettNote(brett, p.getName(), true, e.isRightClick());
             plugin.playerBrettNote.put(p, brettNote);
         });
-        gui.setItem(6, 5, createItem);
+        gui.setItem(5, 5, createItem);
 
         // Fill top and bottom rows with pinnwand
         GuiItem pinnwandItem = new GuiItem(pinnwand);
