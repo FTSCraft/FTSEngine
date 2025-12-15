@@ -4,7 +4,7 @@ main: de.ftscraft.ftsengine.main.Engine
 version: ${project.version}
 api-version: 1.21
 depend: [ Vault, FTSUtils ]
-softdepend: [ ProtocolLib, Shopkeepers, Dynmap ]
+softdepend: [ ProtocolLib, Shopkeepers ]
 
 commands:
   ausweis:
