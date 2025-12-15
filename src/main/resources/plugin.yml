@@ -10,7 +10,6 @@ commands:
   ausweis:
   countdown:
   spielzeit:
-  #roleplay:
   reiten:
   taube:
   schlagen:
@@ -18,7 +17,6 @@ commands:
   removearmorstand:
     premission: ftsengine.armorstand
   durchsuchen:
-  #pferd:
   reisepunkt:
   brief:
   gehen:
@@ -34,7 +32,6 @@ commands:
   küssen:
   ewürfel:
   zeit:
-  #system
   searchreact:
   streicheln:
   lehrtafel:
