@@ -2,6 +2,7 @@ package de.ftscraft.ftsengine.feature.items.logport;
 
 import de.ftscraft.ftsengine.main.Engine;
 import de.ftscraft.ftsengine.utils.Messages;
+import de.ftscraft.ftsutils.misc.MiniMsg;
 import org.bukkit.*;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -47,20 +48,29 @@ public class LogportManager {
         ItemMeta meta = item.getItemMeta();
         PersistentDataContainer data = meta.getPersistentDataContainer();
 
-        if (data.has(new NamespacedKey(plugin, LOCATION_KEY + "_world"), PersistentDataType.STRING)) {
-            String worldName = data.get(new NamespacedKey(plugin, LOCATION_KEY + "_world"), PersistentDataType.STRING);
-            double x = data.get(new NamespacedKey(plugin, LOCATION_KEY + "_x"), PersistentDataType.DOUBLE);
-            double y = data.get(new NamespacedKey(plugin, LOCATION_KEY + "_y"), PersistentDataType.DOUBLE);
-            double z = data.get(new NamespacedKey(plugin, LOCATION_KEY + "_z"), PersistentDataType.DOUBLE);
-            float yaw = data.get(new NamespacedKey(plugin, LOCATION_KEY + "_yaw"), PersistentDataType.FLOAT);
-            float pitch = data.get(new NamespacedKey(plugin, LOCATION_KEY + "_pitch"), PersistentDataType.FLOAT);
+        NamespacedKey world_loc_key = new NamespacedKey(plugin, LOCATION_KEY + "_world");
+        if (data.has(world_loc_key, PersistentDataType.STRING)) {
+            String worldName = data.get(world_loc_key, PersistentDataType.STRING);
 
+            NamespacedKey x_loc_key = new NamespacedKey(plugin, LOCATION_KEY + "_x");
+            NamespacedKey y_loc_key = new NamespacedKey(plugin, LOCATION_KEY + "_y");
+            NamespacedKey z_loc_key = new NamespacedKey(plugin, LOCATION_KEY + "_z");
+            NamespacedKey yaw_loc_key = new NamespacedKey(plugin, LOCATION_KEY + "_yaw");
+            NamespacedKey pitch_loc_key = new NamespacedKey(plugin, LOCATION_KEY + "_pitch");
+
+            double x = Objects.requireNonNull(data.get(x_loc_key, PersistentDataType.DOUBLE), "x coordinate in logport is null");
+            double y = Objects.requireNonNull(data.get(y_loc_key, PersistentDataType.DOUBLE), "y coordinate in logport is null");
+            double z = Objects.requireNonNull(data.get(z_loc_key, PersistentDataType.DOUBLE), "z coordinate in logport is null");
+            float yaw = Objects.requireNonNull(data.get(yaw_loc_key, PersistentDataType.FLOAT), "yaw in logport is null");
+            float pitch = Objects.requireNonNull(data.get(pitch_loc_key, PersistentDataType.FLOAT), "pitch in logport is null");
+
+            //noinspection DataFlowIssue - checked above
             Location savedLocation = new Location(Bukkit.getWorld(worldName), x, y, z, yaw, pitch);
 
             player.teleport(savedLocation);
-            player.sendMessage(Messages.PREFIX + ChatColor.GREEN + "Zum gespeicherten Ort teleportiert!");
+            MiniMsg.msg(player, Messages.MINI_PREFIX + "<green>Zum gespeicherten Ort teleportiert!</green>");
         } else {
-            player.sendMessage(Messages.PREFIX + ChatColor.RED + "Keine Position im Logport gespeichert!");
+            MiniMsg.msg(player, Messages.MINI_PREFIX + "<red>Keine Position im Logport gespeichert!</red>");
         }
     }
 
@@ -68,23 +78,23 @@ public class LogportManager {
         UUID playerId = player.getUniqueId();
 
         if (teleportTasks.containsKey(playerId)) {
-            player.sendMessage(Messages.PREFIX + ChatColor.RED + "Ein Teleport ist bereits in Bearbeitung!");
+            MiniMsg.msg(player, Messages.MINI_PREFIX + "<red>Ein Teleport ist bereits in Bearbeitung!</red>");
             return;
         }
 
         if (!hasSavedLocation(item)) {
-            player.sendMessage(ChatColor.RED + "Keine Position im Logport gespeichert!");
+            MiniMsg.msg(player, Messages.MINI_PREFIX + "<red>Speichere zuerst eine Position im Logport!</red>");
             return;
         }
 
         if (getUsesLeft(item) <= 0) {
-            player.sendMessage(Messages.PREFIX + ChatColor.RED + "Der Logport ist aufgebraucht und kann nicht verwendet werden!");
+            MiniMsg.msg(player, Messages.MINI_PREFIX + "<red>Der Logport ist aufgebraucht und kann nicht verwendet werden!</red>");
             return;
         }
 
         Location initialLocation = player.getLocation();
         initialLocations.put(playerId, initialLocation);
-        player.sendMessage(Messages.PREFIX + ChatColor.YELLOW + "Teleport in 5 Sekunden... nicht bewegen oder Schaden erleiden!");
+        MiniMsg.msg(player, Messages.MINI_PREFIX + "<yellow>Teleport in 5 Sekunden... nicht bewegen oder Schaden erleiden!</yellow>");
 
         BukkitRunnable task = new BukkitRunnable() {
             @Override
@@ -93,7 +103,7 @@ public class LogportManager {
                     Location currentLocation = player.getLocation();
                     Location initialLoc = initialLocations.get(playerId);
                     if (hasMoved(initialLoc, currentLocation)) {
-                        player.sendMessage(Messages.PREFIX + ChatColor.RED + "Teleport abgebrochen: Du hast dich bewegt!");
+                        MiniMsg.msg(player, Messages.MINI_PREFIX + "<red>Teleport abgebrochen: Du hast dich bewegt!</red>");
                     } else {
                         teleportToSavedLocation(player, item);
                         decrementUses(item, player);
@@ -139,15 +149,15 @@ public class LogportManager {
         ItemMeta meta = item.getItemMeta();
         PersistentDataContainer data = meta.getPersistentDataContainer();
 
-        int usesLeft = data.get(new NamespacedKey(plugin, USES_LEFT_KEY), PersistentDataType.INTEGER);
+        int usesLeft = Objects.requireNonNull(data.get(new NamespacedKey(plugin, USES_LEFT_KEY), PersistentDataType.INTEGER), "uses_left in logport is null");
         usesLeft--;
 
         if (usesLeft <= 0) {
             data.set(new NamespacedKey(plugin, USES_LEFT_KEY), PersistentDataType.INTEGER, 0);
-            player.sendMessage(Messages.PREFIX + ChatColor.RED + "Der Logport ist aufgebraucht!");
+            MiniMsg.msg(player, Messages.MINI_PREFIX + "<red>Der Logport ist aufgebraucht!</red>");
         } else {
             data.set(new NamespacedKey(plugin, USES_LEFT_KEY), PersistentDataType.INTEGER, usesLeft);
-            player.sendMessage(Messages.PREFIX + ChatColor.GREEN + "Verbleibende Verwendungen: " + usesLeft);
+            MiniMsg.msg(player, Messages.MINI_PREFIX + "<green>Verbleibende Verwendungen im Logport: " + usesLeft + "</green>");
         }
 
         updateLogportLore(meta);
@@ -157,7 +167,7 @@ public class LogportManager {
     public void reloadLogport(Player player, ItemStack item) {
         int emeralds = countEmeralds(player);
         if (emeralds <= 0) {
-            player.sendMessage(Messages.PREFIX + ChatColor.RED + "Du hast keine Smaragde, um den Logport aufzuladen!");
+            MiniMsg.msg(player, Messages.MINI_PREFIX + "<red>Du hast keine Smaragde, um den Logport aufzuladen!</red>");
             return;
         }
 
@@ -175,9 +185,9 @@ public class LogportManager {
             updateLogportLore(meta);
             item.setItemMeta(meta);
 
-            player.sendMessage(Messages.PREFIX + ChatColor.GREEN + "Logport aufgeladen. Verbleibende Verwendungen: " + usesLeft);
+            MiniMsg.msg(player, Messages.MINI_PREFIX + "<green>Logport aufgeladen. Verbleibende Verwendungen: " + usesLeft + "</green>");
         } else {
-            player.sendMessage(Messages.PREFIX + ChatColor.RED + "Der Logport ist bereits voll aufgeladen.");
+            MiniMsg.msg(player, Messages.MINI_PREFIX + "<red>Der Logport ist bereits voll aufgeladen.</red>");
         }
     }
 
@@ -227,8 +237,8 @@ public class LogportManager {
     public void updateLogportLore(ItemMeta meta) {
         PersistentDataContainer data = meta.getPersistentDataContainer();
 
-        int usesLeft = data.get(new NamespacedKey(plugin, USES_LEFT_KEY), PersistentDataType.INTEGER);
-        int maxUses = data.get(new NamespacedKey(plugin, MAX_USES_KEY), PersistentDataType.INTEGER);
+        int usesLeft = Objects.requireNonNull(data.get(new NamespacedKey(plugin, USES_LEFT_KEY), PersistentDataType.INTEGER), "uses_left in logport is null");
+        int maxUses = Objects.requireNonNull(data.get(new NamespacedKey(plugin, MAX_USES_KEY), PersistentDataType.INTEGER), "max_uses in logport is null");
 
         List<String> lore = new ArrayList<>();
         lore.add("§7Teleportiert dich zu einem vorher festgelegten Punkt");
