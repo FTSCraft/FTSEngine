@@ -9,7 +9,6 @@ import de.ftscraft.ftsengine.feature.texturepack.catalog.storage.CatalogCategory
 import de.ftscraft.ftsengine.feature.texturepack.catalog.storage.CatalogSubCategory;
 import de.ftscraft.ftsengine.utils.Messages;
 import de.ftscraft.ftsutils.items.ItemBuilder;
-import de.ftscraft.ftsutils.misc.MiniMsg;
 import dev.triumphteam.gui.guis.Gui;
 import dev.triumphteam.gui.guis.GuiItem;
 import org.bukkit.Material;
@@ -74,9 +73,7 @@ public class CatalogMainMenuGUI extends CatalogGUI {
 
     private void setAllItemsItem() {
         GuiItem allItemsItem = new GuiItem(new ItemBuilder(Material.BOOK).name("Alle Items anzeigen").build());
-        allItemsItem.setAction(e -> {
-            new CatalogAllItemsGUI(catalog, filter, gui).getGui().open(e.getWhoClicked());
-        });
+        allItemsItem.setAction(e -> new CatalogAllItemsGUI(catalog, filter, gui).getGui().open(e.getWhoClicked()));
         gui.setItem(6, 5, allItemsItem);
     }
 

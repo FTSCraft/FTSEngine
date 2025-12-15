@@ -14,7 +14,6 @@ import java.util.List;
 
 public class BrettNote {
 
-    public int page;
     private String creator;
     private String rpName;
     private String title;
@@ -22,7 +21,6 @@ public class BrettNote {
     private boolean create;
     private boolean anonym;
     private int id;
-    public int invslot;
     private ItemStack item;
     private long time;
     private Brett brett;
@@ -133,9 +131,17 @@ public class BrettNote {
         return anonym;
     }
 
+    public ItemStack getItem() {
+        return item;
+    }
+
+    public int getId() {
+        return id;
+    }
+
     public void remove() {
         brett.getNotes().remove(this);
-        brett.getGui().removeNote(invslot, page);
+        brett.getGui().removeNote(this);
         brett.getCfg().set("brett.note." + id + ".title", "null");
         brett.getCfg().set("brett.note." + id + ".content", "null");
         brett.getCfg().set("brett.note." + id + ".creator", "null");

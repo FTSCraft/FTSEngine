@@ -1,9 +1,14 @@
 package de.ftscraft.ftsengine.feature.brett;
 
-import org.bukkit.Bukkit;
+import de.ftscraft.ftsengine.main.Engine;
+import de.ftscraft.ftsengine.utils.Messages;
+import de.ftscraft.ftsutils.misc.MiniMsg;
+import dev.triumphteam.gui.guis.Gui;
+import dev.triumphteam.gui.guis.GuiItem;
+import dev.triumphteam.gui.guis.ScrollingGui;
+import net.kyori.adventure.text.Component;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
-import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
@@ -13,212 +18,196 @@ import java.util.List;
 
 public class BrettGUI {
 
-    private final Inventory inv_page1;
-    private final Inventory inv_page2;
-    private final Inventory inv_page3;
-    private final Inventory inv_page4;
-    private final Inventory inv_page5;
-
+    private final ScrollingGui gui;
     private final Brett brett;
+    private final Engine plugin;
 
     public BrettGUI(Brett brett) {
         this.brett = brett;
-        inv_page1 = Bukkit.createInventory(null, 9 * 5, "§4Schwarzes-Brett " + brett.getName());
-        inv_page2 = Bukkit.createInventory(null, 9 * 5, "§4Schwarzes-Brett " + brett.getName());
-        inv_page3 = Bukkit.createInventory(null, 9 * 5, "§4Schwarzes-Brett " + brett.getName());
-        inv_page4 = Bukkit.createInventory(null, 9 * 5, "§4Schwarzes-Brett " + brett.getName());
-        inv_page5 = Bukkit.createInventory(null, 9 * 5, "§4Schwarzes-Brett " + brett.getName());
+        this.plugin = Engine.getInstance();
+        gui = Gui.scrolling()
+                .title(MiniMsg.c("<dark_red>Schwarzes-Brett " + brett.getName()))
+                .rows(6)
+                .pageSize(27)
+                .disableAllInteractions()
+                .create();
         setupGui();
     }
 
+
     private void setupGui() {
+        // Pinnwand (Filler für obere und untere Zeilen)
         ItemStack pinnwand = new ItemStack(Material.WHITE_STAINED_GLASS_PANE, 1);
         ItemMeta pinnwandMeta = pinnwand.getItemMeta();
         pinnwandMeta.setDisplayName("§7Pinnwand");
         pinnwand.setItemMeta(pinnwandMeta);
 
-        ItemStack emptyNote = new ItemStack(Material.WHITE_STAINED_GLASS_PANE, 1);
-        ItemMeta emptyNoteMeta = emptyNote.getItemMeta();
-        emptyNoteMeta.setDisplayName("§8Leere Notiz");
-        emptyNote.setItemMeta(emptyNoteMeta);
-
+        // Create Note Button
         ItemStack create = new ItemStack(Material.PAPER, 1);
         ItemMeta createMeta = create.getItemMeta();
         createMeta.setDisplayName("§cErstelle Notiz");
-        List<String> createLore = new ArrayList<>(Arrays.asList("§bErstelle eine Notiz!", "§cAchte auf einen RPlichen Schreibstil", " ", "§7Rechtsklick für Anonym"));
-
+        List<String> createLore = new ArrayList<>(Arrays.asList(
+                "§bErstelle eine Notiz!",
+                "§cAchte auf einen RPlichen Schreibstil",
+                " ",
+                "§7Rechtsklick für Anonym"
+        ));
         createMeta.setLore(createLore);
         create.setItemMeta(createMeta);
 
-        ItemStack page1Item = new ItemStack(Material.FLOWER_BANNER_PATTERN);
-        ItemMeta page1Meta = page1Item.getItemMeta();
-        page1Meta.setDisplayName("§cSeite 1");
-        page1Item.setItemMeta(page1Meta);
+        // Navigation: Previous Page
+        ItemStack previousPage = new ItemStack(Material.ARROW);
+        ItemMeta previousMeta = previousPage.getItemMeta();
+        previousMeta.setDisplayName("§cVorherige Seite");
+        previousPage.setItemMeta(previousMeta);
 
-        ItemStack page2Item = new ItemStack(Material.FLOWER_BANNER_PATTERN);
-        ItemMeta page2Meta = page1Item.getItemMeta();
-        page2Meta.setDisplayName("§cSeite 2");
-        page2Item.setItemMeta(page2Meta);
+        // Navigation: Next Page
+        ItemStack nextPage = new ItemStack(Material.ARROW);
+        ItemMeta nextMeta = nextPage.getItemMeta();
+        nextMeta.setDisplayName("§cNächste Seite");
+        nextPage.setItemMeta(nextMeta);
 
-        ItemStack page3Item = new ItemStack(Material.FLOWER_BANNER_PATTERN);
-        ItemMeta page3Meta = page1Item.getItemMeta();
-        page3Meta.setDisplayName("§cSeite 3");
-        page3Item.setItemMeta(page3Meta);
+        // Add navigation items
+        GuiItem previousPageItem = new GuiItem(previousPage);
+        previousPageItem.setAction(e -> gui.previous());
+        gui.setItem(6, 3, previousPageItem);
 
-        ItemStack page4Item = new ItemStack(Material.FLOWER_BANNER_PATTERN);
-        ItemMeta page4Meta = page1Item.getItemMeta();
-        page4Meta.setDisplayName("§cSeite 4");
-        page4Item.setItemMeta(page4Meta);
+        GuiItem nextPageItem = new GuiItem(nextPage);
+        nextPageItem.setAction(e -> gui.next());
+        gui.setItem(6, 7, nextPageItem);
 
-        ItemStack page5Item = new ItemStack(Material.FLOWER_BANNER_PATTERN);
-        ItemMeta page5Meta = page1Item.getItemMeta();
-        page5Meta.setDisplayName("§cSeite 5");
-        page5Item.setItemMeta(page5Meta);
+        // Add create button
+        GuiItem createItem = new GuiItem(create);
+        createItem.setAction(e -> {
+            if (!(e.getWhoClicked() instanceof Player p)) return;
 
-        for (int i = 0; i < 9 * 5; i++) {
-            if (i < 9 || i > 35) {
-                inv_page1.setItem(i, pinnwand);
-            } else inv_page1.setItem(i, emptyNote);
-        }
-        inv_page1.setItem(41, create);
-        inv_page1.setItem(37, page2Item);
-        inv_page1.setItem(38, page3Item);
-        inv_page1.setItem(39, page4Item);
-        inv_page1.setItem(40, page5Item);
+            // Check if brett is full
+            if (isFull()) {
+                p.sendMessage("§7[§bSchwarzes Brett§7] Es gibt keine freien Plätze mehr!");
+                p.sendMessage("§7[§bSchwarzes Brett§7] Warte bis ein Platz frei ist");
+                return;
+            }
 
+            // Check if player has too many notes
+            int noteCount = 0;
+            for (BrettNote note : brett.getNotes()) {
+                if (note.getCreator().equals(p.getName())) {
+                    noteCount++;
+                }
+            }
+            if (noteCount >= 4) {
+                p.sendMessage("§7[§bSchwarzes Brett§7] Du hast bereits (mehr als) 4 Notizen geschriben. Es reicht!");
+                if (p.hasPermission("ftsengine.brett.admin")) {
+                    p.sendMessage("§7[§bSchwarzes Brett§7] Aber du hast die Rechte also darfst du das");
+                } else {
+                    return;
+                }
+            }
 
-        for (int i = 0; i < 9 * 5; i++) {
-            if (i < 9 || i > 35) {
-                inv_page2.setItem(i, pinnwand);
-            } else inv_page2.setItem(i, emptyNote);
-        }
-        inv_page2.setItem(41, create);
-        inv_page2.setItem(36, page1Item);
-        inv_page2.setItem(38, page3Item);
-        inv_page2.setItem(39, page4Item);
-        inv_page2.setItem(40, page5Item);
+            // Check economy (price is 0, but keeping for consistency)
+            int price = 0;
+            if (!plugin.getEcon().has(p, price)) {
+                p.sendMessage(Messages.PREFIX + "Du hast nicht genug Geld!");
+                return;
+            }
 
+            p.closeInventory();
+            p.sendMessage(Messages.PREFIX + "Bitte achte auf einen RPlichen Schreibstil \n §7[§bSchwarzes Brett§7] §bBitte gebe jetzt den Titel ein. §c(Max. 50 Zeichen)");
+            p.sendMessage(Messages.PREFIX + "Um die Erstellung abzubrechen gebe 'exit' ein!");
 
-        for (int i = 0; i < 9 * 5; i++) {
-            if (i < 9 || i > 35) {
-                inv_page3.setItem(i, pinnwand);
-            } else inv_page3.setItem(i, emptyNote);
-        }
-        inv_page3.setItem(41, create);
-        inv_page3.setItem(36, page1Item);
-        inv_page3.setItem(37, page2Item);
-        inv_page3.setItem(39, page4Item);
-        inv_page3.setItem(40, page5Item);
+            BrettNote brettNote = new BrettNote(brett, p.getName(), true, e.isRightClick());
+            plugin.playerBrettNote.put(p, brettNote);
+        });
+        gui.setItem(6, 5, createItem);
 
-        for (int i = 0; i < 9 * 5; i++) {
-            if (i < 9 || i > 35) {
-                inv_page4.setItem(i, pinnwand);
-            } else inv_page4.setItem(i, emptyNote);
-        }
-        inv_page4.setItem(41, create);
-        inv_page4.setItem(36, page1Item);
-        inv_page4.setItem(37, page2Item);
-        inv_page4.setItem(38, page3Item);
-        inv_page4.setItem(40, page5Item);
-
-
-        for (int i = 0; i < 9 * 5; i++) {
-            if (i < 9 || i > 35) {
-                inv_page5.setItem(i, pinnwand);
-            } else inv_page5.setItem(i, emptyNote);
-        }
-        inv_page5.setItem(41, create);
-        inv_page5.setItem(36, page1Item);
-        inv_page5.setItem(37, page2Item);
-        inv_page5.setItem(38, page3Item);
-        inv_page5.setItem(39, page4Item);
+        // Fill top and bottom rows with pinnwand
+        GuiItem pinnwandItem = new GuiItem(pinnwand);
+        gui.getFiller().fillTop(pinnwandItem);
+        gui.getFiller().fillBottom(pinnwandItem);
     }
+
 
     public void addNote(ItemStack itemStack, BrettNote note) {
+        GuiItem noteItem = new GuiItem(itemStack);
+        noteItem.setAction(e -> {
+            if (!(e.getWhoClicked() instanceof Player p)) return;
 
-        for (int i = 0; i < 9 * 5; i++) {
-            if (inv_page1.getItem(i).getItemMeta().getDisplayName().equalsIgnoreCase("§8Leere Notiz")) {
-                inv_page1.setItem(i, itemStack);
-                note.invslot = i;
-                note.page = 1;
-                return;
-            }
-        }
-        for (int i = 0; i < 9 * 5; i++) {
-            if (inv_page2.getItem(i).getItemMeta().getDisplayName().equalsIgnoreCase("§8Leere Notiz")) {
-                inv_page2.setItem(i, itemStack);
-                note.invslot = i;
-                note.page = 2;
-                return;
-            }
-        }
-        for (int i = 0; i < 9 * 5; i++) {
-            if (inv_page3.getItem(i).getItemMeta().getDisplayName().equalsIgnoreCase("§8Leere Notiz")) {
-                inv_page3.setItem(i, itemStack);
-                note.invslot = i;
-                note.page = 3;
-                return;
-            }
-        }
-        for (int i = 0; i < 9 * 5; i++) {
-            if (inv_page4.getItem(i).getItemMeta().getDisplayName().equalsIgnoreCase("§8Leere Notiz")) {
-                inv_page4.setItem(i, itemStack);
-                note.invslot = i;
-                note.page = 4;
-                return;
-            }
-        }
-        for (int i = 0; i < 9 * 5; i++) {
-            if (inv_page5.getItem(i).getItemMeta().getDisplayName().equalsIgnoreCase("§8Leere Notiz")) {
-                inv_page5.setItem(i, itemStack);
-                note.invslot = i;
-                note.page = 5;
-                return;
-            }
-        }
+            String note_title = note.getTitle();
+            String note_cont = note.getContent();
+            String note_creator = note.getCreator();
 
+            p.sendMessage("§7**********************************");
+            p.sendMessage("§6" + note_title);
+            p.sendMessage(note_cont);
+            p.sendMessage(" ");
+            if (note.isAnonym()) {
+                p.sendMessage("§7§nNotiz von Anonym");
+            } else {
+                p.sendMessage("§7§nNotiz von " + note_creator);
+            }
+            if (p.hasPermission("ftsengine.brett.delete") || note_creator.equals(p.getName())) {
+                Component deleteMessage = MiniMsg.c(
+                        "<click:run_command:'/ftsengine brett delete " + note.getId() + " " + brett.getName().replace(" ", "_") + "'>" +
+                        "<dark_red>Löschen</dark_red>" +
+                        "</click>"
+                );
+                p.sendMessage(deleteMessage);
+            }
+            p.sendMessage("§7**********************************");
+        });
+        gui.addItem(noteItem);
+        gui.update();
     }
 
-    public void removeNote(int itemSlot, int page) {
-        ItemStack emptyNote = new ItemStack(Material.WHITE_STAINED_GLASS_PANE, 1);
-        ItemMeta emptyNoteMeta = emptyNote.getItemMeta();
-        emptyNoteMeta.setDisplayName("§8Leere Notiz");
-        emptyNote.setItemMeta(emptyNoteMeta);
+    public void removeNote(BrettNote note) {
+        // Rebuild the GUI with all notes except the removed one
+        gui.clearPageItems();
+        for (BrettNote n : brett.getNotes()) {
+            if (n != note) {
+                GuiItem noteItem = new GuiItem(n.getItem());
+                noteItem.setAction(e -> {
+                    if (!(e.getWhoClicked() instanceof Player p)) return;
 
-        if (page == 1)
-            inv_page1.setItem(itemSlot, emptyNote);
-        if (page == 2)
-            inv_page2.setItem(itemSlot, emptyNote);
-        if (page == 3)
-            inv_page3.setItem(itemSlot, emptyNote);
-        if (page == 4)
-            inv_page4.setItem(itemSlot, emptyNote);
-        if (page == 5)
-            inv_page5.setItem(itemSlot, emptyNote);
+                    String note_title = n.getTitle();
+                    String note_cont = n.getContent();
+                    String note_creator = n.getCreator();
+
+                    p.sendMessage("§7**********************************");
+                    p.sendMessage("§6" + note_title);
+                    p.sendMessage(note_cont);
+                    p.sendMessage(" ");
+                    if (n.isAnonym()) {
+                        p.sendMessage("§7§nNotiz von Anonym");
+                    } else {
+                        p.sendMessage("§7§nNotiz von " + note_creator);
+                    }
+                    if (p.hasPermission("ftsengine.brett.delete") || note_creator.equals(p.getName())) {
+                        Component deleteMessage = MiniMsg.c(
+                                "<click:run_command:'/ftsengine brett delete " + n.getId() + " " + brett.getName().replace(" ", "_") + "'>" +
+                                "<dark_red>Löschen</dark_red>" +
+                                "</click>"
+                        );
+                        p.sendMessage(deleteMessage);
+                    }
+                    p.sendMessage("§7**********************************");
+                });
+                gui.addItem(noteItem);
+            }
+        }
+        gui.update();
+    }
+
+    public void open(Player player) {
+        gui.open(player);
     }
 
     public void open(Player player, int page) {
-        switch (page) {
-            case 1:
-                player.openInventory(inv_page1);
-                break;
-            case 2:
-                player.openInventory(inv_page2);
-                break;
-            case 3:
-                player.openInventory(inv_page3);
-                break;
-            case 4:
-                player.openInventory(inv_page4);
-                break;
-            case 5:
-                player.openInventory(inv_page5);
-                break;
-        }
+        // Für Rückwärtskompatibilität - page wird ignoriert, da ScrollingGui eigene Pagination hat
+        gui.open(player);
     }
 
     public boolean isFull() {
-        return brett.getNotes().size() >= 134;
+        return brett.getNotes().size() >= 135; // 27 items per page * 5 pages
     }
 
 }

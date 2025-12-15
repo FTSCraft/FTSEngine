@@ -46,16 +46,13 @@ public class CMDftsengine implements CommandExecutor {
             }
         }
 
-        if (args.length == 5) {
-
+        if (args.length == 4) {
             if (args[0].equals("brett")) {
                 if (args[1].equals("delete")) {
-                    String slotS = args[2];
-                    String pageS = args[3];
-                    String name = args[4].replace("_", " ");
+                    String idS = args[2];
+                    String name = args[3].replace("_", " ");
 
-                    int slot = Integer.parseInt(slotS);
-                    int page = Integer.parseInt(pageS);
+                    int id = Integer.parseInt(idS);
 
                     Brett brett = null;
 
@@ -73,7 +70,7 @@ public class CMDftsengine implements CommandExecutor {
 
                     BrettNote note = null;
                     for (BrettNote notes : brett.getNotes()) {
-                        if (notes.invslot == slot && notes.page == page) {
+                        if (notes.getId() == id) {
                             note = notes;
                             break;
                         }
@@ -91,11 +88,8 @@ public class CMDftsengine implements CommandExecutor {
                         cs.sendMessage(Messages.PREFIX + "Du bist nicht dazu in der Lage diese Notiz zu löschen. Tut mir leid, aber so sind die Regeln");
                     }
                     return true;
-
-
                 }
             }
-
 
         }
 
