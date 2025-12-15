@@ -37,7 +37,6 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.UUID;
 import java.util.logging.Level;
 
@@ -64,7 +63,6 @@ public class Engine extends JavaPlugin implements Listener {
 
     private static Economy econ = null;
 
-    public List<Material> mats = new ArrayList<>();
     private ProtocolManager protocolManager = null;
     private ShopkeepersPlugin shopkeepersPlugin = null;
     private DataHandler storage;
