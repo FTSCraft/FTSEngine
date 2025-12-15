@@ -11,8 +11,8 @@ import de.ftscraft.ftsengine.main.Engine;
 import de.ftscraft.ftsengine.main.FTSUser;
 import de.ftscraft.ftsengine.utils.Messages;
 import de.ftscraft.ftsutils.items.ItemReader;
-import net.md_5.bungee.api.chat.ClickEvent;
-import net.md_5.bungee.api.chat.ComponentBuilder;
+import de.ftscraft.ftsutils.misc.MiniMsg;
+import net.kyori.adventure.text.Component;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -276,9 +276,12 @@ public class InventoryClickListener implements Listener {
             p.sendMessage("§7§nNotiz von " + note_creator);
         }
         if (p.hasPermission("ftsengine.brett.delete") || note_creator.equals(p.getName())) {
-            ComponentBuilder componentBuilder = new ComponentBuilder("§4Löschen");
-            componentBuilder.event(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/ftsengine brett delete " + inv_slot + " " + page + " " + brett.getName().replace(" ", "_")));
-            p.sendMessage(componentBuilder.create());
+            Component deleteMessage = MiniMsg.c(
+                    "<click:run_command:'/ftsengine brett delete " + inv_slot + " " + page + " " + brett.getName().replace(" ", "_") + "'>" +
+                    "<dark_red>Löschen</dark_red>" +
+                    "</click>"
+            );
+            p.sendMessage(deleteMessage);
         }
         p.sendMessage("§7**********************************");
     }
