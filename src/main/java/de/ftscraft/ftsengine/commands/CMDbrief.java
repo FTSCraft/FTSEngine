@@ -4,6 +4,7 @@ import de.ftscraft.ftsengine.feature.courier.Brief;
 import de.ftscraft.ftsengine.feature.courier.Briefkasten;
 import de.ftscraft.ftsengine.main.Engine;
 import de.ftscraft.ftsengine.utils.Messages;
+import de.ftscraft.ftsutils.misc.MiniMsg;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.command.Command;
@@ -85,11 +86,9 @@ public class CMDbrief implements CommandExecutor {
 
                 File file = new File(plugin.getDataFolder() + "//briefkasten//" + p.getUniqueId() + ".yml");
 
-                file.getName();
-
-                file.delete();
-
-                p.sendMessage(Messages.PREFIX + "Du hast deinen Briefkasten erfolgreich entfernt!");
+                if (file.delete()) {
+                    p.sendMessage(Messages.PREFIX + "Du hast deinen Briefkasten erfolgreich entfernt!");
+                } else MiniMsg.msg(p, Messages.MINI_PREFIX + "Dein Briefkasten konnte nicht entfernt werden. Bitte kontaktiere einen Admin.");
 
                 return true;
 
