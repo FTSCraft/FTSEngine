@@ -31,7 +31,7 @@ public class FeatureHandler {
     }
 
     public static FeatureHandler getInstance() {
-        return Engine.getInstance().getFeatureHandler();
+        return Engine.getFeatureHandler();
     }
 
 }
