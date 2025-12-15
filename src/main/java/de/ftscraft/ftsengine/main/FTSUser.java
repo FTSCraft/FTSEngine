@@ -1,7 +1,6 @@
 package de.ftscraft.ftsengine.main;
 
 import de.ftscraft.ftsengine.feature.brett.Brett;
-import org.bukkit.entity.Player;
 
 public class FTSUser {
 

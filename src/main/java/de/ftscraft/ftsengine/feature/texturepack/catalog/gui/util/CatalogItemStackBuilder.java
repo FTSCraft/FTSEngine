@@ -4,7 +4,6 @@ import de.ftscraft.ftsengine.feature.texturepack.catalog.storage.CatalogCategory
 import de.ftscraft.ftsengine.feature.texturepack.catalog.storage.CatalogItem;
 import de.ftscraft.ftsengine.feature.texturepack.catalog.storage.CatalogSubCategory;
 import de.ftscraft.ftsutils.items.ItemBuilder;
-import dev.triumphteam.gui.guis.GuiItem;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.persistence.PersistentDataType;

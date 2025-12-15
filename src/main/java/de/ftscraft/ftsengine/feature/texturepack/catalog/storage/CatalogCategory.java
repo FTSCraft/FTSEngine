@@ -5,6 +5,7 @@ import org.bukkit.Material;
 import java.util.ArrayList;
 import java.util.List;
 
+@SuppressWarnings({"FieldMayBeFinal", "FieldCanBeLocal"})
 public class CatalogCategory {
 
     private String name = "Schwerter";
