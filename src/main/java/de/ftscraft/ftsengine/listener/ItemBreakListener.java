@@ -1,7 +1,7 @@
 package de.ftscraft.ftsengine.listener;
 
-import de.ftscraft.ftsengine.backpacks.Backpack;
-import de.ftscraft.ftsengine.backpacks.BackpackType;
+import de.ftscraft.ftsengine.feature.items.backpacks.Backpack;
+import de.ftscraft.ftsengine.feature.items.backpacks.BackpackType;
 import de.ftscraft.ftsengine.main.Engine;
 import de.ftscraft.ftsengine.utils.Messages;
 import de.ftscraft.ftsengine.utils.Var;

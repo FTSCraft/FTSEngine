@@ -1,6 +1,6 @@
 package de.ftscraft.ftsengine.commands;
 
-import de.ftscraft.ftsengine.feature.durchsuchen.DurchsuchenManager;
+import de.ftscraft.ftsengine.feature.roleplay.durchsuchen.DurchsuchenManager;
 import de.ftscraft.ftsengine.main.Engine;
 import de.ftscraft.ftsengine.utils.Messages;
 import org.bukkit.command.Command;

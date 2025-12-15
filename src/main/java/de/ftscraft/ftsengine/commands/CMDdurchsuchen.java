@@ -1,6 +1,6 @@
 package de.ftscraft.ftsengine.commands;
 
-import de.ftscraft.ftsengine.feature.durchsuchen.DurchsuchenManager;
+import de.ftscraft.ftsengine.feature.roleplay.durchsuchen.DurchsuchenManager;
 import de.ftscraft.ftsengine.main.Engine;
 import de.ftscraft.ftsengine.utils.Messages;
 import org.bukkit.Bukkit;
@@ -35,12 +35,12 @@ public class CMDdurchsuchen implements CommandExecutor {
         }
 
         Player target = Bukkit.getPlayer(args[0]);
-        if(target == null) {
+        if (target == null) {
             player.sendMessage(Messages.IS_NOT_ON);
             return true;
         }
 
-        if(target.equals(player)) {
+        if (target.equals(player)) {
             player.sendMessage(Messages.PREFIX + "§6Du kannst dich nicht selbst durchsuchen!");
             return true;
         }

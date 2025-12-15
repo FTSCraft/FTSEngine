@@ -1,6 +1,6 @@
 package de.ftscraft.ftsengine.listener;
 
-import de.ftscraft.ftsengine.courier.Brief;
+import de.ftscraft.ftsengine.feature.courier.Brief;
 import de.ftscraft.ftsengine.main.Engine;
 import de.ftscraft.ftsengine.main.FTSUser;
 import org.bukkit.Material;

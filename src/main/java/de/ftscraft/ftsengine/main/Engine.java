@@ -6,17 +6,19 @@ import com.comphenix.protocol.ProtocolManager;
 import com.comphenix.protocol.events.PacketContainer;
 import com.comphenix.protocol.wrappers.WrappedChatComponent;
 import com.nisovin.shopkeepers.api.ShopkeepersPlugin;
-import de.ftscraft.ftsengine.backpacks.Backpack;
-import de.ftscraft.ftsengine.brett.Brett;
-import de.ftscraft.ftsengine.brett.BrettNote;
 import de.ftscraft.ftsengine.commands.*;
 import de.ftscraft.ftsengine.commands.emotes.*;
-import de.ftscraft.ftsengine.courier.Brief;
-import de.ftscraft.ftsengine.courier.Briefkasten;
+import de.ftscraft.ftsengine.feature.FeatureHandler;
+import de.ftscraft.ftsengine.feature.brett.Brett;
+import de.ftscraft.ftsengine.feature.brett.BrettNote;
+import de.ftscraft.ftsengine.feature.courier.Brief;
+import de.ftscraft.ftsengine.feature.courier.Briefkasten;
+import de.ftscraft.ftsengine.feature.items.backpacks.Backpack;
+import de.ftscraft.ftsengine.feature.items.logport.LogportManager;
+import de.ftscraft.ftsengine.feature.texturepack.catalog.command.CatalogCommand;
 import de.ftscraft.ftsengine.feature.time.TimeManager;
 import de.ftscraft.ftsengine.feature.weather.WeatherManager;
 import de.ftscraft.ftsengine.listener.*;
-import de.ftscraft.ftsengine.logport.LogportManager;
 import de.ftscraft.ftsengine.utils.Ausweis;
 import de.ftscraft.ftsengine.utils.ConfigManager;
 import de.ftscraft.ftsengine.utils.ItemStacks;
@@ -44,6 +46,7 @@ public class Engine extends JavaPlugin implements Listener {
     private static Engine instance;
 
     private ConfigManager configManager;
+    private FeatureHandler featureHandler;
 
     public HashMap<UUID, Ausweis> ausweis;
     private HashMap<Player, FTSUser> player;
@@ -74,6 +77,7 @@ public class Engine extends JavaPlugin implements Listener {
         storage = DataHandler.forPlugin(this);
         configManager = new ConfigManager();
         WeatherManager.init();
+        featureHandler = new FeatureHandler(this);
         setupEconomy();
         init();
         for (Player a : Bukkit.getOnlinePlayers()) {
@@ -157,6 +161,7 @@ public class Engine extends JavaPlugin implements Listener {
         new CMDdurchsuchen(this);
         new CMDsearchreact(this);
         new CMDlehrtafel(this);
+        new CatalogCommand();
         streicheln = new CMDstreicheln(this);
     }
 
@@ -164,7 +169,6 @@ public class Engine extends JavaPlugin implements Listener {
         new AnvilEntchamentBlockingListener(this);
         entityClickListener = new EntityClickListener(this);
         new DamageListener(this);
-        //new HorseListener(this);
         new PlayerJoinListener(this);
         new SignWriteListener(this);
         new BlockBreakListener(this);
@@ -286,6 +290,10 @@ public class Engine extends JavaPlugin implements Listener {
 
     public static Engine getInstance() {
         return instance;
+    }
+
+    public static FeatureHandler getFeatureHandler() {
+        return getInstance().featureHandler;
     }
 
     public static ConfigManager getConfigManager() {

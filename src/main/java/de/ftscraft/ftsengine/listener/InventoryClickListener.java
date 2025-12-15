@@ -1,12 +1,12 @@
 package de.ftscraft.ftsengine.listener;
 
-import de.ftscraft.ftsengine.backpacks.BackpackType;
-import de.ftscraft.ftsengine.brett.Brett;
-import de.ftscraft.ftsengine.brett.BrettNote;
-import de.ftscraft.ftsengine.feature.durchsuchen.DurchsuchenManager;
-import de.ftscraft.ftsengine.feature.instruments.CustomInstrument;
-import de.ftscraft.ftsengine.feature.instruments.Instrument;
-import de.ftscraft.ftsengine.feature.instruments.SimpleInstrument;
+import de.ftscraft.ftsengine.feature.brett.Brett;
+import de.ftscraft.ftsengine.feature.brett.BrettNote;
+import de.ftscraft.ftsengine.feature.items.backpacks.BackpackType;
+import de.ftscraft.ftsengine.feature.items.instruments.CustomInstrument;
+import de.ftscraft.ftsengine.feature.items.instruments.Instrument;
+import de.ftscraft.ftsengine.feature.items.instruments.SimpleInstrument;
+import de.ftscraft.ftsengine.feature.roleplay.durchsuchen.DurchsuchenManager;
 import de.ftscraft.ftsengine.main.Engine;
 import de.ftscraft.ftsengine.main.FTSUser;
 import de.ftscraft.ftsengine.utils.Messages;
@@ -46,7 +46,7 @@ public class InventoryClickListener implements Listener {
         if (handleSchwarzesBrett(event)) return;
 
         //Anti Backpack
-       if (event.getCurrentItem() != null) {
+        if (event.getCurrentItem() != null) {
 
             if (event.getInventory().getType() == InventoryType.ENDER_CHEST || event.getInventory().getType() == InventoryType.SHULKER_BOX) {
                 if (event.getClick() == ClickType.NUMBER_KEY) {
@@ -65,7 +65,7 @@ public class InventoryClickListener implements Listener {
                             return;
                         }
 
-                        if(isBundle(event.getCurrentItem())) {
+                        if (isBundle(event.getCurrentItem())) {
                             event.getWhoClicked().sendMessage(Messages.PREFIX + "Du kannst kein Bündel in deiner Enderchest oder Shulkerchests verstauen!");
                             event.setCancelled(true);
                             return;
@@ -119,7 +119,7 @@ public class InventoryClickListener implements Listener {
 
             ItemStack stack = event.getCurrentItem();
             if ("HIDDEN_BUNDLE".equals(ItemReader.getSign(stack))) {
-                if(DurchsuchenManager.isHideInventory(event.getInventory())) {
+                if (DurchsuchenManager.isHideInventory(event.getInventory())) {
                     event.setCancelled(true);
                     event.getWhoClicked().sendMessage(Messages.PREFIX + "Du brauchst das versteckte Bündel nicht verstecken, es ist schon versteckt!");
                 }
@@ -270,7 +270,7 @@ public class InventoryClickListener implements Listener {
         p.sendMessage("§6" + note_title);
         p.sendMessage(note_cont);
         p.sendMessage(" ");
-        if(note.isAnonym()) {
+        if (note.isAnonym()) {
             p.sendMessage("§7§nNotiz von Anonym");
         } else {
             p.sendMessage("§7§nNotiz von " + note_creator);

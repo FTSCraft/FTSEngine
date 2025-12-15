@@ -1,9 +1,9 @@
 package de.ftscraft.ftsengine.commands;
 
-import de.ftscraft.ftsengine.brett.Brett;
-import de.ftscraft.ftsengine.brett.BrettNote;
-import de.ftscraft.ftsengine.feature.instruments.Instrument;
-import de.ftscraft.ftsengine.feature.instruments.SimpleInstrument;
+import de.ftscraft.ftsengine.feature.brett.Brett;
+import de.ftscraft.ftsengine.feature.brett.BrettNote;
+import de.ftscraft.ftsengine.feature.items.instruments.Instrument;
+import de.ftscraft.ftsengine.feature.items.instruments.SimpleInstrument;
 import de.ftscraft.ftsengine.main.Engine;
 import de.ftscraft.ftsengine.utils.Messages;
 import org.bukkit.Sound;
@@ -26,14 +26,14 @@ public class CMDftsengine implements CommandExecutor {
     public boolean onCommand(@NotNull CommandSender cs, @NotNull Command cmd, @NotNull String label, String[] args) {
 
         if (args.length > 0) {
-            if(args[0].equals("debug")) {
+            if (args[0].equals("debug")) {
                 if (args[1].equals("instrument")) {
                     Player p = (Player) cs;
                     Instrument instrument = new SimpleInstrument(Sound.BLOCK_NOTE_BLOCK_GUITAR, "Gitarre");
                     p.openInventory(instrument.getInventory());
                 }
-            } else if(args[0].equals("reload")) {
-                if(!cs.hasPermission("ftsengine.reload")) {
+            } else if (args[0].equals("reload")) {
+                if (!cs.hasPermission("ftsengine.reload")) {
                     return true;
                 }
                 Engine.getConfigManager().invalidateCache();

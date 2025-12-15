@@ -1,10 +1,10 @@
 package de.ftscraft.ftsengine.utils;
 
-import de.ftscraft.ftsengine.backpacks.Backpack;
-import de.ftscraft.ftsengine.backpacks.BackpackType;
-import de.ftscraft.ftsengine.brett.Brett;
-import de.ftscraft.ftsengine.courier.Brief;
-import de.ftscraft.ftsengine.courier.Briefkasten;
+import de.ftscraft.ftsengine.feature.brett.Brett;
+import de.ftscraft.ftsengine.feature.courier.Brief;
+import de.ftscraft.ftsengine.feature.courier.Briefkasten;
+import de.ftscraft.ftsengine.feature.items.backpacks.Backpack;
+import de.ftscraft.ftsengine.feature.items.backpacks.BackpackType;
 import de.ftscraft.ftsengine.main.Engine;
 import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 import org.bukkit.Bukkit;

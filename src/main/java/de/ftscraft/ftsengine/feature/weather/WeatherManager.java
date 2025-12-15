@@ -21,8 +21,8 @@ public class WeatherManager implements Listener {
     @EventHandler
     public void onWeatherChange(WeatherChangeEvent event) {
         String weatherCooldownSpec = Engine.getConfigManager().getWeatherCooldownSpec();
-        if(latestWeatherChange == null || hasTimePassed(latestWeatherChange, weatherCooldownSpec)
-            || !event.getCause().equals(WeatherChangeEvent.Cause.NATURAL) || !event.getCause().equals(WeatherChangeEvent.Cause.SLEEP)) {
+        if (latestWeatherChange == null || hasTimePassed(latestWeatherChange, weatherCooldownSpec)
+                || !event.getCause().equals(WeatherChangeEvent.Cause.NATURAL) || !event.getCause().equals(WeatherChangeEvent.Cause.SLEEP)) {
             latestWeatherChange = new Date();
             return;
         }
@@ -57,7 +57,6 @@ public class WeatherManager implements Listener {
             default -> throw new IllegalArgumentException("Unknown time unit: " + unit);
         };
     }
-
 
 
 }

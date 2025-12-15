@@ -1,7 +1,7 @@
 package de.ftscraft.ftsengine.commands;
 
-import de.ftscraft.ftsengine.courier.Brief;
-import de.ftscraft.ftsengine.courier.Briefkasten;
+import de.ftscraft.ftsengine.feature.courier.Brief;
+import de.ftscraft.ftsengine.feature.courier.Briefkasten;
 import de.ftscraft.ftsengine.main.Engine;
 import de.ftscraft.ftsengine.utils.Messages;
 import org.bukkit.Bukkit;

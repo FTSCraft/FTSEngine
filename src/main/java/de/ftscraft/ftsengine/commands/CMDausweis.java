@@ -291,14 +291,14 @@ public class CMDausweis implements CommandExecutor, TabCompleter {
             p.sendMessage(Messages.PREFIX + "§cDafür hast du keine Rechte!");
             return true;
         }
-        
+
         if (args.length < 2) {
             p.sendMessage(Messages.PREFIX + "Bitte benutze den Befehl so: §c/ausweis resetcooldown [Spielername]");
             return true;
         }
-        
+
         String targetName = args[1];
-        
+
         if (targetName.equalsIgnoreCase("all")) {
             int resetCount = 0;
             for (Ausweis ausweis : plugin.ausweis.values()) {
@@ -306,7 +306,7 @@ public class CMDausweis implements CommandExecutor, TabCompleter {
                 resetCount++;
             }
             p.sendMessage(Messages.PREFIX + "§7Größen-Cooldown für §e" + resetCount + " §7Spieler wurde erfolgreich zurückgesetzt!");
-            
+
             for (Player onlinePlayer : Bukkit.getOnlinePlayers()) {
                 if (plugin.hasAusweis(onlinePlayer)) {
                     onlinePlayer.sendMessage(Messages.PREFIX + "§7Dein Größen-Cooldown wurde von einem Admin zurückgesetzt. Du kannst deine Größe jetzt wieder ändern!");
@@ -314,9 +314,9 @@ public class CMDausweis implements CommandExecutor, TabCompleter {
             }
             return false;
         }
-        
+
         Player target = Bukkit.getPlayer(targetName);
-        
+
         if (target == null) {
             p.sendMessage(Messages.PREFIX + "Spieler §c" + targetName + " §7ist nicht online oder existiert nicht!");
             return true;
@@ -329,10 +329,10 @@ public class CMDausweis implements CommandExecutor, TabCompleter {
 
         Ausweis targetAusweis = plugin.getAusweis(target);
         targetAusweis.setLastHeightChange(0);
-        
+
         p.sendMessage(Messages.PREFIX + "§7Größen-Cooldown für §e" + targetName + " §7wurde erfolgreich zurückgesetzt!");
         target.sendMessage(Messages.PREFIX + "§7Dein Größen-Cooldown wurde von einem Admin zurückgesetzt. Du kannst deine Größe jetzt wieder ändern!");
-        
+
         return false;
     }
 

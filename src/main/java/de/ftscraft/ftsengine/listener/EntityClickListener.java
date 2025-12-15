@@ -29,7 +29,7 @@ public class EntityClickListener implements Listener {
     public void onEntityClick(PlayerInteractEntityEvent e) {
         Player player = e.getPlayer();
         if (plugin.getReiter().contains(player)) {
-            if(e.getRightClicked().hasMetadata("NPC")) {
+            if (e.getRightClicked().hasMetadata("NPC")) {
                 player.sendMessage(Messages.PREFIX + "§cDu kannst nicht auf einem NPC reiten.");
                 return;
             }

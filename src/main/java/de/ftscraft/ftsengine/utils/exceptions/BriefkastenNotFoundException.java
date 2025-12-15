@@ -1,6 +1,6 @@
 package de.ftscraft.ftsengine.utils.exceptions;
 
-import de.ftscraft.ftsengine.courier.Briefkasten;
+import de.ftscraft.ftsengine.feature.courier.Briefkasten;
 
 import java.util.logging.Level;
 import java.util.logging.Logger;

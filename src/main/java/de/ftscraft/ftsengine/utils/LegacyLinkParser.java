@@ -2,11 +2,11 @@ package de.ftscraft.ftsengine.utils;
 
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.TextComponent;
+import net.kyori.adventure.text.event.ClickEvent;
 import net.kyori.adventure.text.format.NamedTextColor;
+import net.kyori.adventure.text.format.Style;
 import net.kyori.adventure.text.format.TextColor;
 import net.kyori.adventure.text.format.TextDecoration;
-import net.kyori.adventure.text.format.Style;
-import net.kyori.adventure.text.event.ClickEvent;
 
 import java.util.EnumSet;
 import java.util.Set;
@@ -21,7 +21,8 @@ public final class LegacyLinkParser {
                     "|([\\p{L}0-9\\-._~%]+\\.[a-zA-Z]{2,}\\S*)"
     );
 
-    private LegacyLinkParser() {}
+    private LegacyLinkParser() {
+    }
 
     public static Component parse(String input) {
         TextComponent.Builder root = Component.text();
