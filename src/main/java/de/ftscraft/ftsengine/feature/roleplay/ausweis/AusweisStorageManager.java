@@ -98,19 +98,4 @@ public class AusweisStorageManager {
         return ausweisCache;
     }
 
-    /**
-     * Loads all Ausweise from the database into the cache (on server start)
-     */
-    public void loadAllIntoCache() {
-        try {
-            List<Ausweis> allAusweise = ausweisDao.queryForAll();
-            ausweisCache.clear();
-            for (Ausweis ausweis : allAusweise) {
-                ausweisCache.put(ausweis.getUuid(), ausweis);
-            }
-            Engine.getInstance().getLogger().info("Loaded " + allAusweise.size() + " Ausweise into cache.");
-        } catch (SQLException e) {
-            Engine.getInstance().getLogger().severe("Could not load Ausweise into cache: " + e.getMessage());
-        }
-    }
 }

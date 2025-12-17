@@ -7,6 +7,7 @@ import com.comphenix.protocol.events.PacketContainer;
 import com.comphenix.protocol.wrappers.WrappedChatComponent;
 import com.nisovin.shopkeepers.api.ShopkeepersPlugin;
 import de.ftscraft.ftsengine.commands.*;
+import de.ftscraft.ftsengine.commands.ausweis.CMDausweis;
 import de.ftscraft.ftsengine.commands.emotes.*;
 import de.ftscraft.ftsengine.feature.FeatureHandler;
 import de.ftscraft.ftsengine.feature.brett.Brett;

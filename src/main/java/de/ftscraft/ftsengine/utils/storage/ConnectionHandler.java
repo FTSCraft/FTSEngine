@@ -19,7 +19,6 @@ public class ConnectionHandler {
     private final Engine plugin;
     private final EngineConfig engineConfig;
     private ConnectionSource connectionSource;
-    private String databaseUrl;
 
     public ConnectionHandler(Engine plugin, EngineConfig engineConfig) {
         this.plugin = plugin;
@@ -39,7 +38,7 @@ public class ConnectionHandler {
         String password = dbAuth.password;
 
         // MySQL JDBC URL with timezone and SSL settings
-        databaseUrl = String.format("jdbc:mysql://%s:%d/%s?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true",
+        String databaseUrl = String.format("jdbc:mysql://%s:%d/%s?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true",
                 host, port, database);
 
         plugin.getLogger().info("Connecting to database: " + host + ":" + port + "/" + database);
