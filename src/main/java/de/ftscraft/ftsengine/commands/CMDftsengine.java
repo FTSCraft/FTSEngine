@@ -39,7 +39,7 @@ public class CMDftsengine implements CommandExecutor {
         if (args.length > 0) {
             // Versteckter Command zum Wechseln von Ausweisen
             if (args[0].equals("_switchausweis")) {
-                if (!(cs instanceof Player)) {
+                if (!(cs instanceof Player p)) {
                     return true;
                 }
 
@@ -47,7 +47,6 @@ public class CMDftsengine implements CommandExecutor {
                     return true;
                 }
 
-                Player p = (Player) cs;
                 int ausweisId;
 
                 try {

@@ -4,7 +4,6 @@ import de.ftscraft.ftsutils.items.ItemReader;
 import de.ftscraft.ftsutils.misc.MiniMsg;
 import de.ftscraft.ftsutils.uuidfetcher.UUIDFetcher;
 import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.event.ClickEvent;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.TextDecoration;
 import org.bukkit.Location;
