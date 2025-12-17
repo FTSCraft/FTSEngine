@@ -11,13 +11,15 @@ import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.Objects;
+
 public class CMDkussen implements CommandExecutor {
 
     private final Engine plugin;
 
     public CMDkussen(Engine plugin) {
         this.plugin = plugin;
-        plugin.getCommand("küssen").setExecutor(this);
+        Objects.requireNonNull(plugin.getCommand("küssen"), "tried registering küssen command but is null").setExecutor(this);
     }
 
     @Override

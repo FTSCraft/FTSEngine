@@ -9,13 +9,15 @@ import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.Objects;
+
 public class CMDklopfen implements CommandExecutor {
 
     private final Engine plugin;
 
     public CMDklopfen(Engine plugin) {
         this.plugin = plugin;
-        plugin.getCommand("klopfen").setExecutor(this);
+        Objects.requireNonNull(plugin.getCommand("klopfen"), "tried registering klopfen command but is null").setExecutor(this);
     }
 
     @Override

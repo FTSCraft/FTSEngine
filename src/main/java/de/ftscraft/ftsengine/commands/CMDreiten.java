@@ -17,6 +17,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.Objects;
 
 public class CMDreiten implements CommandExecutor {
 
@@ -26,7 +27,7 @@ public class CMDreiten implements CommandExecutor {
     public CMDreiten(Engine plugin) {
         this.plugin = plugin;
         //noinspection DataFlowIssue
-        plugin.getCommand("reiten").setExecutor(this);
+        Objects.requireNonNull(plugin.getCommand("reiten"), "tried registering reiten command but is null").setExecutor(this);
         addPacketListener();
         startLoop();
     }

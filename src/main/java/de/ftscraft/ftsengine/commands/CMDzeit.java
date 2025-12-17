@@ -11,12 +11,13 @@ import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Calendar;
+import java.util.Objects;
 
 public class CMDzeit implements CommandExecutor {
 
     public CMDzeit(Engine plugin) {
         //noinspection DataFlowIssue
-        plugin.getCommand("zeit").setExecutor(this);
+        Objects.requireNonNull(plugin.getCommand("zeit"), "tried registering zeit command but is null").setExecutor(this);
     }
 
     @Override

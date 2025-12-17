@@ -1,13 +1,13 @@
 package de.ftscraft.ftsengine.listener;
 
-import de.ftscraft.ftsengine.backpacks.Backpack;
-import de.ftscraft.ftsengine.backpacks.BackpackType;
-import de.ftscraft.ftsengine.brett.Brett;
-import de.ftscraft.ftsengine.feature.instruments.InstrumentManager;
-import de.ftscraft.ftsengine.logport.LogportManager;
+import de.ftscraft.ftsengine.feature.brett.Brett;
+import de.ftscraft.ftsengine.feature.items.backpacks.Backpack;
+import de.ftscraft.ftsengine.feature.items.backpacks.BackpackType;
+import de.ftscraft.ftsengine.feature.items.instruments.InstrumentManager;
+import de.ftscraft.ftsengine.feature.items.logport.LogportManager;
+import de.ftscraft.ftsengine.feature.items.signs.TeachingBoard;
+import de.ftscraft.ftsengine.feature.items.signs.TeachingBoardManager;
 import de.ftscraft.ftsengine.main.Engine;
-import de.ftscraft.ftsengine.signs.TeachingBoard;
-import de.ftscraft.ftsengine.signs.TeachingBoardManager;
 import de.ftscraft.ftsengine.utils.Messages;
 import de.ftscraft.ftsengine.utils.Var;
 import de.ftscraft.ftsutils.items.ItemReader;
@@ -16,7 +16,10 @@ import net.kyori.adventure.key.Key;
 import net.kyori.adventure.sound.Sound;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
-import org.bukkit.*;
+import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
+import org.bukkit.Material;
+import org.bukkit.Particle;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.block.data.type.Sign;
@@ -72,7 +75,7 @@ public class PlayerInteractListener implements Listener {
 
         if (clickedBlock != null) {
             handleSchwarzesBrett(player, clickedBlock, e.getAction());
-            if(handleTeachingBoards(player, clickedBlock, e.getAction())) {
+            if (handleTeachingBoards(player, clickedBlock, e.getAction())) {
                 e.setCancelled(true);
             }
         }
@@ -115,13 +118,13 @@ public class PlayerInteractListener implements Listener {
     }
 
     private void handleCallHorn(Player player, ItemStack item) {
-        if("call-horn".equals(ItemReader.getSign(item)) && !player.hasCooldown(item.getType())) {
-            for(Player pl : Bukkit.getOnlinePlayers()) {
-                if(pl.equals(player)) {
+        if ("call-horn".equals(ItemReader.getSign(item)) && !player.hasCooldown(item.getType())) {
+            for (Player pl : Bukkit.getOnlinePlayers()) {
+                if (pl.equals(player)) {
                     pl.sendMessage(Messages.PREFIX + "§eDu hast ins Horn geblasen!");
                     continue;
                 }
-                if(pl.getWorld().equals(player.getWorld()) && pl.getLocation().distance(player.getLocation()) <= 1000) {
+                if (pl.getWorld().equals(player.getWorld()) && pl.getLocation().distance(player.getLocation()) <= 1000) {
                     pl.sendMessage(Component.text("Du hörst das Echo eines Rufhorns in der Ferne. Ein Ruf nach Hilfe, ein Gruß oder doch der Klang eines Hinterhalts?").color(NamedTextColor.YELLOW));
                 }
             }
@@ -284,26 +287,26 @@ public class PlayerInteractListener implements Listener {
     }
 
     private boolean handleTeachingBoards(Player player, Block block, Action action) {
-        if(action != Action.RIGHT_CLICK_BLOCK) {
+        if (action != Action.RIGHT_CLICK_BLOCK) {
             return false;
         }
 
-        if(!(block.getBlockData() instanceof WallSign) && !(block.getBlockData() instanceof Sign)) {
+        if (!(block.getBlockData() instanceof WallSign) && !(block.getBlockData() instanceof Sign)) {
             return false;
         }
         org.bukkit.block.Sign sign = (org.bukkit.block.Sign) block.getState();
         boolean isTeachingBoard = TeachingBoardManager.isTeachingBoard(sign);
-        if(!isTeachingBoard) {
+        if (!isTeachingBoard) {
             return false;
         }
 
         TeachingBoard teachingBoard = TeachingBoardManager.fetch(sign);
-        if(teachingBoard == null) {
+        if (teachingBoard == null) {
             return false;
         }
 
 
-        if(player.isSneaking() && teachingBoard.getOwners().contains(player.getUniqueId().toString())) {
+        if (player.isSneaking() && teachingBoard.getOwners().contains(player.getUniqueId().toString())) {
             // open edit mode
             TeachingBoardManager.getEditingPlayers().put(player, sign);
             TeachingBoardManager.showLines(player, teachingBoard, true, false);

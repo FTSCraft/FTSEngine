@@ -9,12 +9,14 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.Objects;
+
 
 public class CMDplaytime implements CommandExecutor {
 
 
     public CMDplaytime(Engine plugin) {
-        plugin.getCommand("spielzeit").setExecutor(this);
+        Objects.requireNonNull(plugin.getCommand("spielzeit"), "tried registering spielzeit command but is null").setExecutor(this);
     }
 
     @Override

@@ -12,12 +12,12 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.Arrays;
 import java.util.Random;
+import java.util.Objects;
 
 public class CMDewuerfel implements CommandExecutor {
 
     public CMDewuerfel(Engine plugin) {
-
-        plugin.getCommand("ewürfel").setExecutor(this);
+        Objects.requireNonNull(plugin.getCommand("ewürfel"), "tried registering ewürfel command but is null").setExecutor(this);
     }
 
     @Override

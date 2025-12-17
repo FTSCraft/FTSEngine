@@ -9,6 +9,8 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.Objects;
+
 public class CMDcountdown implements CommandExecutor {
 
     private final Engine plugin;
@@ -16,7 +18,7 @@ public class CMDcountdown implements CommandExecutor {
 
     public CMDcountdown(Engine plugin) {
         this.plugin = plugin;
-        plugin.getCommand("countdown").setExecutor(this);
+        Objects.requireNonNull(plugin.getCommand("countdown"), "tried registering countdown command but is null").setExecutor(this);
     }
 
     @Override

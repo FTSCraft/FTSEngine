@@ -16,6 +16,7 @@ import org.bukkit.inventory.meta.BookMeta;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
+import java.util.Objects;
 
 public class CMDbuch implements CommandExecutor {
 
@@ -24,7 +25,7 @@ public class CMDbuch implements CommandExecutor {
 
     public CMDbuch(Engine plugin) {
         this.plugin = plugin;
-        plugin.getCommand("buch").setExecutor(this);
+        Objects.requireNonNull(plugin.getCommand("buch"), "tried registering buch command but is null").setExecutor(this);
     }
 
     @Override

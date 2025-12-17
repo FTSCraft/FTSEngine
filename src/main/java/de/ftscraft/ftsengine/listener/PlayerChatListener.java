@@ -1,6 +1,6 @@
 package de.ftscraft.ftsengine.listener;
 
-import de.ftscraft.ftsengine.brett.BrettNote;
+import de.ftscraft.ftsengine.feature.brett.BrettNote;
 import de.ftscraft.ftsengine.main.Engine;
 import de.ftscraft.ftsengine.utils.Ausweis;
 import org.bukkit.entity.Player;

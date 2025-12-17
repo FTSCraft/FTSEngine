@@ -1,18 +1,13 @@
 package de.ftscraft.ftsengine.listener;
 
-import de.ftscraft.ftsengine.backpacks.BackpackType;
-import de.ftscraft.ftsengine.brett.Brett;
-import de.ftscraft.ftsengine.brett.BrettNote;
-import de.ftscraft.ftsengine.feature.durchsuchen.DurchsuchenManager;
-import de.ftscraft.ftsengine.feature.instruments.CustomInstrument;
-import de.ftscraft.ftsengine.feature.instruments.Instrument;
-import de.ftscraft.ftsengine.feature.instruments.SimpleInstrument;
+import de.ftscraft.ftsengine.feature.items.backpacks.BackpackType;
+import de.ftscraft.ftsengine.feature.items.instruments.CustomInstrument;
+import de.ftscraft.ftsengine.feature.items.instruments.Instrument;
+import de.ftscraft.ftsengine.feature.items.instruments.SimpleInstrument;
+import de.ftscraft.ftsengine.feature.roleplay.durchsuchen.DurchsuchenManager;
 import de.ftscraft.ftsengine.main.Engine;
-import de.ftscraft.ftsengine.main.FTSUser;
 import de.ftscraft.ftsengine.utils.Messages;
 import de.ftscraft.ftsutils.items.ItemReader;
-import net.md_5.bungee.api.chat.ClickEvent;
-import net.md_5.bungee.api.chat.ComponentBuilder;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -23,8 +18,6 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.InventoryView;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.persistence.PersistentDataType;
-
-import java.util.Objects;
 
 public class InventoryClickListener implements Listener {
 
@@ -41,12 +34,9 @@ public class InventoryClickListener implements Listener {
 
         handleInstrument(event);
 
-        //SCHWAZES BRETT
-
-        if (handleSchwarzesBrett(event)) return;
 
         //Anti Backpack
-       if (event.getCurrentItem() != null) {
+        if (event.getCurrentItem() != null) {
 
             if (event.getInventory().getType() == InventoryType.ENDER_CHEST || event.getInventory().getType() == InventoryType.SHULKER_BOX) {
                 if (event.getClick() == ClickType.NUMBER_KEY) {
@@ -65,7 +55,7 @@ public class InventoryClickListener implements Listener {
                             return;
                         }
 
-                        if(isBundle(event.getCurrentItem())) {
+                        if (isBundle(event.getCurrentItem())) {
                             event.getWhoClicked().sendMessage(Messages.PREFIX + "Du kannst kein Bündel in deiner Enderchest oder Shulkerchests verstauen!");
                             event.setCancelled(true);
                             return;
@@ -119,7 +109,7 @@ public class InventoryClickListener implements Listener {
 
             ItemStack stack = event.getCurrentItem();
             if ("HIDDEN_BUNDLE".equals(ItemReader.getSign(stack))) {
-                if(DurchsuchenManager.isHideInventory(event.getInventory())) {
+                if (DurchsuchenManager.isHideInventory(event.getInventory())) {
                     event.setCancelled(true);
                     event.getWhoClicked().sendMessage(Messages.PREFIX + "Du brauchst das versteckte Bündel nicht verstecken, es ist schon versteckt!");
                 }
@@ -132,156 +122,6 @@ public class InventoryClickListener implements Listener {
         }
     }
 
-    private boolean handleSchwarzesBrett(InventoryClickEvent event) {
-
-        if (!(event.getWhoClicked() instanceof Player p)) {
-            return false;
-        }
-
-        if (event.getView().getTitle().startsWith("§4Schwarzes-Brett")) {
-            event.setCancelled(true);
-            ItemStack clickeditem = event.getCurrentItem();
-            String name = event.getView().getTitle().replace("§4Schwarzes-Brett ", "");
-
-            if (clickeditem == null)
-                return true;
-
-            if (handleCreateNode(event, p, clickeditem, name)) return true;
-
-            String item_name = clickeditem.getItemMeta().getDisplayName();
-
-            if (item_name.startsWith("§cSeite")) {
-                String pageS = item_name.substring(8);
-                if (!clickeditem.getType().equals(Material.FLOWER_BANNER_PATTERN))
-                    return true;
-                int page;
-                try {
-                    page = Integer.parseInt(pageS);
-                } catch (NumberFormatException e) {
-                    return true;
-                }
-
-                FTSUser user = plugin.getPlayer().get(p);
-
-                user.getBrett().getGui().open(p, page);
-
-            }
-
-            if (!(item_name.equalsIgnoreCase("&7Pinnwand") || item_name.equalsIgnoreCase("&8Leere Notiz"))) {
-                Brett brett = null;
-                int inv_slot = event.getSlot();
-                int page = 0;
-
-                if (event.getInventory().getItem(36).getType() == Material.WHITE_STAINED_GLASS_PANE)
-                    page = 1;
-                if (event.getInventory().getItem(37).getType() == Material.WHITE_STAINED_GLASS_PANE)
-                    page = 2;
-                if (event.getInventory().getItem(38).getType() == Material.WHITE_STAINED_GLASS_PANE)
-                    page = 3;
-                if (event.getInventory().getItem(39).getType() == Material.WHITE_STAINED_GLASS_PANE)
-                    page = 4;
-                if (event.getInventory().getItem(40).getType() == Material.WHITE_STAINED_GLASS_PANE)
-                    page = 5;
-
-                for (Brett bretter : plugin.bretter.values())
-                    if (bretter.getName().equalsIgnoreCase(name)) {
-                        brett = bretter;
-                        break;
-                    }
-                BrettNote note = null;
-                for (BrettNote notes : brett.getNotes())
-                    if (notes.invslot == inv_slot && notes.page == page) {
-                        note = notes;
-                        break;
-                    }
-                if (note == null) {
-                    return true;
-                }
-
-                sendNoteMessage(p, note, inv_slot, page, brett);
-
-            }
-        }
-        return false;
-    }
-
-    private boolean handleCreateNode(InventoryClickEvent event, Player p, ItemStack clickeditem, String name) {
-        if (Objects.requireNonNull(clickeditem.getItemMeta()).getDisplayName().equalsIgnoreCase("§cErstelle Notiz")) {
-
-            Brett brett = null;
-            for (Brett bretter : plugin.bretter.values()) {
-                if (bretter.getName().equalsIgnoreCase(name)) {
-                    brett = bretter;
-                    break;
-                }
-            }
-
-            int price;
-            price = 0;
-            if (!plugin.getEcon().has(p, price)) {
-                p.sendMessage(Messages.PREFIX + "Du hast nicht genug Geld!");
-                return true;
-            }
-
-            if (brett.getGui().isFull()) {
-                p.sendMessage("§7[§bSchwarzes Brett§7] Es gibt keine freien Plätze mehr!");
-                p.sendMessage("§7[§bSchwarzes Brett§7] Warte bis ein Platz frei ist");
-                return true;
-            }
-
-            if (isNotAbleToWriteMoreNodes(p, brett)) return true;
-
-            p.closeInventory();
-            p.sendMessage(Messages.PREFIX + "Bitte achte auf einen RPlichen Schreibstil \n §7[§bSchwarzes Brett§7] §bBitte gebe jetzt den Titel ein. §c(Max. 50 Zeichen)");
-            p.sendMessage(Messages.PREFIX + "Um die Erstellung abzubrechen gebe 'exit' ein!");
-
-            BrettNote brettNote = new BrettNote(brett, p.getName(), true, event.isRightClick());
-            plugin.playerBrettNote.put(p, brettNote);
-            return true;
-        }
-        return false;
-    }
-
-    private static boolean isNotAbleToWriteMoreNodes(Player p, Brett brett) {
-        //Check if player has more than 4 Notes
-        int i = 0;
-        for (BrettNote note : brett.getNotes()) {
-            if (note.getCreator().equals(p.getName())) {
-                i++;
-            }
-        }
-        if (i >= 4) {
-            p.sendMessage("§7[§bSchwarzes Brett§7] Du hast bereits (mehr als) 4 Notizen geschriben. Es reicht!");
-            if (p.hasPermission("ftsengine.brett.admin")) {
-                p.sendMessage("§7[§bSchwarzes Brett§7] Aber du hast die Rechte also darfst du das");
-            } else
-                return true;
-        }
-        return false;
-    }
-
-    private static void sendNoteMessage(Player p, BrettNote note, int inv_slot, int page, Brett brett) {
-        String note_title = note.getTitle();
-        String note_cont = note.getContent();
-        String note_creator = note.getCreator();
-
-
-        p.sendMessage("§7**********************************");
-        p.sendMessage("§6" + note_title);
-        p.sendMessage(note_cont);
-        p.sendMessage(" ");
-        if(note.isAnonym()) {
-            p.sendMessage("§7§nNotiz von Anonym");
-        } else {
-            p.sendMessage("§7§nNotiz von " + note_creator);
-        }
-        if (p.hasPermission("ftsengine.brett.delete") || note_creator.equals(p.getName())) {
-            ComponentBuilder componentBuilder = new ComponentBuilder("§4Löschen");
-            componentBuilder.event(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/ftsengine brett delete " + inv_slot + " " + page + " " + brett.getName().replace(" ", "_")));
-            p.sendMessage(componentBuilder.create());
-        }
-        p.sendMessage("§7**********************************");
-    }
 
     private void handleInstrument(InventoryClickEvent event) {
 

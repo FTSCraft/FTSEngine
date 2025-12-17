@@ -1,11 +1,12 @@
 package de.ftscraft.ftsengine.utils;
 
-import de.ftscraft.ftsengine.backpacks.Backpack;
-import de.ftscraft.ftsengine.backpacks.BackpackType;
-import de.ftscraft.ftsengine.brett.Brett;
-import de.ftscraft.ftsengine.courier.Brief;
-import de.ftscraft.ftsengine.courier.Briefkasten;
+import de.ftscraft.ftsengine.feature.brett.Brett;
+import de.ftscraft.ftsengine.feature.courier.Brief;
+import de.ftscraft.ftsengine.feature.courier.Briefkasten;
+import de.ftscraft.ftsengine.feature.items.backpacks.Backpack;
+import de.ftscraft.ftsengine.feature.items.backpacks.BackpackType;
 import de.ftscraft.ftsengine.main.Engine;
+import de.ftscraft.ftsengine.utils.deprecated.AusweisOld;
 import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -30,7 +31,7 @@ public class UserIO {
     public UserIO(Engine plugin) {
         this.plugin = plugin;
         folder = plugin.getDataFolder();
-        getAusweise();
+        getOldAusweise();
         getBackpacks();
         getBretter();
         loadBriefe();
@@ -43,7 +44,7 @@ public class UserIO {
         saveBriefkasten();
     }
 
-    public void getAusweise() {
+    public void getOldAusweise() {
         File aFolder = new File(folder + "//ausweise//");
         if (!aFolder.exists()) {
             aFolder.mkdirs();
@@ -58,9 +59,9 @@ public class UserIO {
                 String lastName = cfg.getString("lastName");
                 String firstName = cfg.getString("firstName");
 
-                Ausweis.Gender gender = null;
+                AusweisOld.Gender gender = null;
                 if (cfg.isSet("gender"))
-                    gender = Ausweis.Gender.valueOf(cfg.getString("gender"));
+                    gender = AusweisOld.Gender.valueOf(cfg.getString("gender"));
 
                 String race = cfg.getString("race");
                 String desc = cfg.getString("desc");
@@ -73,7 +74,7 @@ public class UserIO {
 
                 double lastHeightChange = cfg.getDouble("lastHeightChange", -1);
 
-                new Ausweis(plugin, UUID.fromString(uuid), firstName, lastName, spitzname, gender, race, desc, height, link, lastHeightChange);
+                new AusweisOld(plugin, UUID.fromString(uuid), firstName, lastName, spitzname, gender, race, desc, height, link, lastHeightChange);
             }
         } catch (Exception e) {
             e.printStackTrace();

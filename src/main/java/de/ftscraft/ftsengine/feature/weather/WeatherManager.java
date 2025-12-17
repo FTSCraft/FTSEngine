@@ -12,17 +12,21 @@ public class WeatherManager implements Listener {
     private static final WeatherManager instance = new WeatherManager();
     private Date latestWeatherChange;
 
-    public static WeatherManager init() {
+    public static void init() {
         Bukkit.getPluginManager().registerEvents(instance, Engine.getInstance());
-        return instance;
     }
 
 
     @EventHandler
     public void onWeatherChange(WeatherChangeEvent event) {
-        String weatherCooldownSpec = Engine.getConfigManager().getWeatherCooldownSpec();
-        if(latestWeatherChange == null || hasTimePassed(latestWeatherChange, weatherCooldownSpec)
-            || !event.getCause().equals(WeatherChangeEvent.Cause.NATURAL) || !event.getCause().equals(WeatherChangeEvent.Cause.SLEEP)) {
+        String weatherCooldownSpec = Engine.getEngineConfig().weatherCooldown;
+        if (weatherCooldownSpec == null || weatherCooldownSpec.isEmpty()) {
+            weatherCooldownSpec = "1m";
+            Engine.getEngineConfig().weatherCooldown = weatherCooldownSpec;
+        }
+
+        if (latestWeatherChange == null || hasTimePassed(latestWeatherChange, weatherCooldownSpec)
+                || !event.getCause().equals(WeatherChangeEvent.Cause.NATURAL) || !event.getCause().equals(WeatherChangeEvent.Cause.SLEEP)) {
             latestWeatherChange = new Date();
             return;
         }
@@ -57,7 +61,6 @@ public class WeatherManager implements Listener {
             default -> throw new IllegalArgumentException("Unknown time unit: " + unit);
         };
     }
-
 
 
 }

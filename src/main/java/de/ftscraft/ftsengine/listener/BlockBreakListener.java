@@ -1,8 +1,8 @@
 package de.ftscraft.ftsengine.listener;
 
-import de.ftscraft.ftsengine.brett.Brett;
+import de.ftscraft.ftsengine.feature.brett.Brett;
+import de.ftscraft.ftsengine.feature.items.signs.TeachingBoardManager;
 import de.ftscraft.ftsengine.main.Engine;
-import de.ftscraft.ftsengine.signs.TeachingBoardManager;
 import de.ftscraft.ftsengine.utils.Messages;
 import de.ftscraft.ftstools.items.ItemStore;
 import de.ftscraft.ftsutils.items.ItemReader;
@@ -62,20 +62,20 @@ public class BlockBreakListener implements Listener {
         Player player = event.getPlayer();
         Block brokenBlock = event.getBlock();
 
-        if(!(brokenBlock.getBlockData() instanceof WallSign) && !(brokenBlock.getBlockData() instanceof org.bukkit.block.data.type.Sign)) {
+        if (!(brokenBlock.getBlockData() instanceof WallSign) && !(brokenBlock.getBlockData() instanceof org.bukkit.block.data.type.Sign)) {
             return;
         }
         org.bukkit.block.Sign sign = (org.bukkit.block.Sign) brokenBlock.getState();
-        if(!TeachingBoardManager.isTeachingBoard(sign)) {
+        if (!TeachingBoardManager.isTeachingBoard(sign)) {
             return;
         }
-        if(!TeachingBoardManager.mainOwner(sign, player) && !player.hasPermission("ftsengine.teaching-board.bypass")){
+        if (!TeachingBoardManager.mainOwner(sign, player) && !player.hasPermission("ftsengine.teaching-board.bypass")) {
             event.setCancelled(true);
             player.sendMessage("§cDu kannst diese Lehrtafel nicht abbauen");
             return;
         }
         ItemStack teachingBoard = ItemStore.getItem("teaching-board");
-        if(teachingBoard == null) {
+        if (teachingBoard == null) {
             return;
         }
         TeachingBoardManager.copyPDCToItemStack(sign, teachingBoard);
@@ -214,7 +214,7 @@ public class BlockBreakListener implements Listener {
     private void handleEmeraldPickaxe(BlockBreakEvent event) {
         if (emeraldPickaxeUsers.contains(event.getPlayer())) return;
         ItemStack itemInHand = event.getPlayer().getInventory().getItemInMainHand();
-        if (itemInHand.isEmpty() || itemInHand == null) return;
+        if (itemInHand.isEmpty()) return;
 
         if (itemInHand.getType() == Material.DIAMOND_PICKAXE) {
             String sign = ItemReader.getSign(itemInHand);

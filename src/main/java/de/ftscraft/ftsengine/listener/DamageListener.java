@@ -1,6 +1,6 @@
 package de.ftscraft.ftsengine.listener;
 
-import de.ftscraft.ftsengine.logport.LogportManager;
+import de.ftscraft.ftsengine.feature.items.logport.LogportManager;
 import de.ftscraft.ftsengine.main.Engine;
 import de.ftscraft.ftsengine.utils.Messages;
 import org.bukkit.ChatColor;

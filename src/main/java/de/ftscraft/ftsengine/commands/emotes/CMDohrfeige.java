@@ -11,13 +11,15 @@ import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.Objects;
+
 public class CMDohrfeige implements CommandExecutor {
 
     private final Engine plugin;
 
     public CMDohrfeige(Engine plugin) {
         this.plugin = plugin;
-        plugin.getCommand("ohrfeige").setExecutor(this);
+        Objects.requireNonNull(plugin.getCommand("ohrfeige"), "tried registering ohrfeige command but is null").setExecutor(this);
     }
 
     @Override

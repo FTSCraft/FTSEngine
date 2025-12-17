@@ -6,7 +6,7 @@
 
     <groupId>de.ftscraft.ftsengine</groupId>
     <artifactId>FTSEngine</artifactId>
-    <version>2.14.0</version>
+    <version>3.0.0</version>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -16,6 +16,47 @@
 
     <build>
         <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-shade-plugin</artifactId>
+                <version>3.6.0</version>
+                <configuration>
+                    <artifactSet>
+                        <includes>
+                            <include>dev.triumphteam:triumph-gui</include>
+                            <include>com.j256.ormlite:ormlite-jdbc</include>
+                            <include>com.j256.ormlite:ormlite-core</include>
+                            <include>mysql:mysql-connector-java</include>
+                        </includes>
+                    </artifactSet>
+                    <relocations>
+                        <relocation>
+                            <pattern>dev.triumphteam.gui</pattern>
+                            <shadedPattern>de.ftscraft.ftsengine.gui</shadedPattern>
+                        </relocation>
+                        <!-- ORMLite und MySQL-Treiber NICHT relocaten, da sie über Klassennamen geladen werden -->
+                    </relocations>
+                    <filters>
+                        <filter>
+                            <artifact>*:*</artifact>
+                            <excludes>
+                                <exclude>META-INF/MANIFEST.MF</exclude>
+                                <exclude>META-INF/*.SF</exclude>
+                                <exclude>META-INF/*.DSA</exclude>
+                                <exclude>META-INF/*.RSA</exclude>
+                            </excludes>
+                        </filter>
+                    </filters>
+                </configuration>
+                <executions>
+                    <execution>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>shade</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
@@ -31,6 +72,15 @@
                 <artifactId>versions-maven-plugin</artifactId>
                 <version>2.16.0</version>
             </plugin>
+            <!-- Surefire für JUnit 5 -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <version>3.2.5</version>
+                <configuration>
+                    <useModulePath>false</useModulePath>
+                </configuration>
+            </plugin>
         </plugins>
         <resources>
             <resource>
@@ -42,6 +92,11 @@
 
 
     <repositories>
+        <repository>
+            <id>central</id>
+            <name>Maven Central</name>
+            <url>https://repo1.maven.org/maven2/</url>
+        </repository>
         <repository>
             <id>jitpack.io</id>
             <url>https://jitpack.io</url>
@@ -63,12 +118,16 @@
             <id>rosewood-repo</id>
             <url>https://repo.rosewooddev.io/repository/public/</url>
         </repository>
+        <repository>
+            <id>placeholderapi</id>
+            <url>https://repo.extendedclip.com/releases/</url>
+        </repository>
     </repositories>
     <dependencies>
         <dependency>
             <groupId>io.papermc.paper</groupId>
             <artifactId>paper-api</artifactId>
-            <version>1.21.4-R0.1-SNAPSHOT</version>
+            <version>1.21.10-R0.1-SNAPSHOT</version>
             <scope>provided</scope>
         </dependency>
         <!--Protocol Lib-->
@@ -76,6 +135,12 @@
             <groupId>net.dmulloy2</groupId>
             <artifactId>ProtocolLib</artifactId>
             <version>5.4.0</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>me.clip</groupId>
+            <artifactId>placeholderapi</artifactId>
+            <version>2.11.7</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
@@ -102,15 +167,9 @@
             <version>3.18.0</version>
         </dependency>
         <dependency>
-            <groupId>com.github.DieReicheErethons</groupId>
-            <artifactId>Brewery</artifactId>
-            <version>3.1.1</version>
-            <scope>provided</scope>
-        </dependency>
-        <dependency>
             <groupId>com.github.FTSCraft</groupId>
             <artifactId>FTSUtils</artifactId>
-            <version>v1.7</version>
+            <version>7a8ad9d7df</version>
         </dependency>
         <dependency>
             <groupId>com.github.FTSCraft</groupId>
@@ -129,7 +188,46 @@
             <version>24.1.0</version>
             <scope>compile</scope>
         </dependency>
-
+        <dependency>
+            <groupId>dev.triumphteam</groupId>
+            <artifactId>triumph-gui</artifactId>
+            <version>3.1.13</version>
+        </dependency>
+        <!-- Test-Abhängigkeiten -->
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter-api</artifactId>
+            <version>5.9.3</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter-engine</artifactId>
+            <version>5.9.3</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.mockito</groupId>
+            <artifactId>mockito-core</artifactId>
+            <version>5.3.1</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.mockbukkit.mockbukkit</groupId>
+            <artifactId>mockbukkit-v1.21</artifactId>
+            <version>4.98.0</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.j256.ormlite</groupId>
+            <artifactId>ormlite-jdbc</artifactId>
+            <version>6.1</version>
+        </dependency>
+        <dependency>
+            <groupId>mysql</groupId>
+            <artifactId>mysql-connector-java</artifactId>
+            <version>8.0.33</version>
+        </dependency>
     </dependencies>
 
 

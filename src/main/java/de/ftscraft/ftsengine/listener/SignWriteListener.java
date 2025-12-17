@@ -1,12 +1,9 @@
 package de.ftscraft.ftsengine.listener;
 
-import de.ftscraft.ftsengine.brett.Brett;
-import de.ftscraft.ftsengine.courier.Briefkasten;
+import de.ftscraft.ftsengine.feature.brett.Brett;
+import de.ftscraft.ftsengine.feature.courier.Briefkasten;
 import de.ftscraft.ftsengine.main.Engine;
-import de.ftscraft.ftsengine.signs.TeachingBoardManager;
 import de.ftscraft.ftsengine.utils.Messages;
-import de.ftscraft.ftsutils.items.ItemBuilder;
-import de.ftscraft.ftsutils.misc.MiniMsg;
 import org.bukkit.block.Block;
 import org.bukkit.block.Container;
 import org.bukkit.block.Sign;
@@ -16,7 +13,6 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.SignChangeEvent;
-import org.bukkit.persistence.PersistentDataType;
 
 public class SignWriteListener implements Listener {
 

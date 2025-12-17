@@ -1,6 +1,6 @@
 package de.ftscraft.ftsengine.listener;
 
-import de.ftscraft.ftsengine.feature.durchsuchen.DurchsuchenManager;
+import de.ftscraft.ftsengine.feature.roleplay.durchsuchen.DurchsuchenManager;
 import de.ftscraft.ftsengine.main.Engine;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -14,7 +14,7 @@ public class PlayerDropListener implements Listener {
 
     @EventHandler
     public void onItemDrop(PlayerDropItemEvent event) {
-        if(DurchsuchenManager.isHideInventory(event.getPlayer().getOpenInventory().getTopInventory()))
+        if (DurchsuchenManager.isHideInventory(event.getPlayer().getOpenInventory().getTopInventory()))
             event.setCancelled(true);
     }
 }

@@ -11,10 +11,12 @@ import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.Objects;
+
 public class CMDschlagen implements CommandExecutor {
 
     public CMDschlagen(Engine plugin) {
-        plugin.getCommand("schlagen").setExecutor(this);
+        Objects.requireNonNull(plugin.getCommand("schlagen"), "tried registering schlagen command but is null").setExecutor(this);
     }
 
     @Override

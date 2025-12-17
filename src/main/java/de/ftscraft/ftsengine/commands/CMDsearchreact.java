@@ -1,6 +1,6 @@
 package de.ftscraft.ftsengine.commands;
 
-import de.ftscraft.ftsengine.feature.durchsuchen.DurchsuchenManager;
+import de.ftscraft.ftsengine.feature.roleplay.durchsuchen.DurchsuchenManager;
 import de.ftscraft.ftsengine.main.Engine;
 import de.ftscraft.ftsengine.utils.Messages;
 import org.bukkit.command.Command;
@@ -9,13 +9,12 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.Objects;
+
 public class CMDsearchreact implements CommandExecutor {
 
-    private final Engine plugin;
-
     public CMDsearchreact(Engine plugin) {
-        this.plugin = plugin;
-        plugin.getCommand("searchreact").setExecutor(this);
+        Objects.requireNonNull(plugin.getCommand("searchreact"), "tried registering searchreact command but is null").setExecutor(this);
     }
 
     @Override

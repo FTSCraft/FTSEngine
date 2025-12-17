@@ -4,13 +4,12 @@ main: de.ftscraft.ftsengine.main.Engine
 version: ${project.version}
 api-version: 1.21
 depend: [ Vault, FTSUtils ]
-softdepend: [ ProtocolLib, Shopkeepers, Dynmap ]
+softdepend: [ ProtocolLib, Shopkeepers ]
 
 commands:
   ausweis:
   countdown:
   spielzeit:
-  #roleplay:
   reiten:
   taube:
   schlagen:
@@ -18,7 +17,6 @@ commands:
   removearmorstand:
     premission: ftsengine.armorstand
   durchsuchen:
-  #pferd:
   reisepunkt:
   brief:
   gehen:
@@ -34,7 +32,6 @@ commands:
   küssen:
   ewürfel:
   zeit:
-  #system
   searchreact:
   streicheln:
   lehrtafel:
