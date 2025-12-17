@@ -7,7 +7,7 @@ import de.ftscraft.ftsengine.main.Engine;
 import de.ftscraft.ftsengine.main.EngineUser;
 import de.ftscraft.ftsengine.utils.Ausweis;
 import de.ftscraft.ftsengine.feature.roleplay.ausweis.AusweisSkin;
-import org.bukkit.configuration.file.FileConfiguration;
+import de.ftscraft.ftsengine.utils.EngineConfig;
 
 import java.sql.SQLException;
 
@@ -17,24 +17,26 @@ import java.sql.SQLException;
 public class ConnectionHandler {
 
     private final Engine plugin;
+    private final EngineConfig engineConfig;
     private ConnectionSource connectionSource;
     private String databaseUrl;
 
-    public ConnectionHandler(Engine plugin) {
+    public ConnectionHandler(Engine plugin, EngineConfig engineConfig) {
         this.plugin = plugin;
+        this.engineConfig = engineConfig;
     }
 
     /**
      * Stellt die Verbindung zur Datenbank her
      */
     public void connect() throws SQLException {
-        FileConfiguration config = plugin.getConfig();
+        DatabaseAuthStorage dbAuth = engineConfig.databaseAuth;
 
-        String host = config.getString("database.host", "localhost");
-        int port = config.getInt("database.port", 3306);
-        String database = config.getString("database.name", "ftsengine");
-        String username = config.getString("database.username", "root");
-        String password = config.getString("database.password", "password");
+        String host = dbAuth.host;
+        int port = dbAuth.port;
+        String database = dbAuth.database;
+        String username = dbAuth.username;
+        String password = dbAuth.password;
 
         // MySQL JDBC URL mit Zeitzone und SSL-Einstellungen
         databaseUrl = String.format("jdbc:mysql://%s:%d/%s?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true",

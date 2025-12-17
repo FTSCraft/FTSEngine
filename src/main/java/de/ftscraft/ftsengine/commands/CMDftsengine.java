@@ -111,8 +111,9 @@ public class CMDftsengine implements CommandExecutor {
                 if (!cs.hasPermission("ftsengine.reload")) {
                     return true;
                 }
-                Engine.getConfigManager().invalidateCache();
-                cs.sendMessage(Messages.PREFIX + "Config Cache geleert");
+                // Config wird automatisch aus der JSON-Datei geladen
+                Engine.getInstance().getStorage().loadStorages(de.ftscraft.ftsengine.utils.EngineConfig.class);
+                cs.sendMessage(Messages.PREFIX + "Config neu geladen");
             }
         }
 

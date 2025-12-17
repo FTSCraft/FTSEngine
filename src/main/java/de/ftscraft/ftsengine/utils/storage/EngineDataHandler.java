@@ -3,6 +3,7 @@ package de.ftscraft.ftsengine.utils.storage;
 import de.ftscraft.ftsengine.feature.roleplay.ausweis.AusweisSkinStorageManager;
 import de.ftscraft.ftsengine.feature.roleplay.ausweis.AusweisStorageManager;
 import de.ftscraft.ftsengine.main.Engine;
+import de.ftscraft.ftsengine.utils.EngineConfig;
 
 import java.sql.SQLException;
 
@@ -21,9 +22,9 @@ public class EngineDataHandler {
 
     private boolean initialized = false;
 
-    public EngineDataHandler(Engine plugin) {
+    public EngineDataHandler(Engine plugin, EngineConfig engineConfig) {
         this.plugin = plugin;
-        this.connectionHandler = new ConnectionHandler(plugin);
+        this.connectionHandler = new ConnectionHandler(plugin, engineConfig);
     }
 
     /**

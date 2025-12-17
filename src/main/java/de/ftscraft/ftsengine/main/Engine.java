@@ -21,7 +21,7 @@ import de.ftscraft.ftsengine.feature.time.TimeManager;
 import de.ftscraft.ftsengine.feature.weather.WeatherManager;
 import de.ftscraft.ftsengine.listener.*;
 import de.ftscraft.ftsengine.utils.Ausweis;
-import de.ftscraft.ftsengine.utils.ConfigManager;
+import de.ftscraft.ftsengine.utils.EngineConfig;
 import de.ftscraft.ftsengine.utils.ItemStacks;
 import de.ftscraft.ftsengine.utils.UserIO;
 import de.ftscraft.ftsengine.utils.storage.EngineDataHandler;
@@ -38,6 +38,7 @@ import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.UUID;
 import java.util.logging.Level;
@@ -46,7 +47,7 @@ public class Engine extends JavaPlugin implements Listener {
 
     private static Engine instance;
 
-    private ConfigManager configManager;
+    private EngineConfig engineConfig;
     private FeatureHandler featureHandler;
     private AusweisManager ausweisManager;
 
@@ -78,13 +79,17 @@ public class Engine extends JavaPlugin implements Listener {
         // Config laden (wichtig für Datenbankverbindung)
         saveDefaultConfig();
 
-        // Database-Handler ZUERST initialisieren
-        databaseHandler = new EngineDataHandler(this);
-        databaseHandler.initialize();
-
+        // Storage und EngineConfig initialisieren
         chatInputService = Bukkit.getServicesManager().load(IChatInputService.class);
         storage = DataHandler.forPlugin(this);
-        configManager = new ConfigManager();
+        storage.registerClass(EngineConfig.class);
+        storage.loadStorages(EngineConfig.class);
+        engineConfig = storage.get(EngineConfig.class);
+
+        // Database-Handler mit EngineConfig initialisieren
+        databaseHandler = new EngineDataHandler(this, engineConfig);
+        databaseHandler.initialize();
+
         WeatherManager.init();
         featureHandler = new FeatureHandler(this);
         setupEconomy();
@@ -215,7 +220,15 @@ public class Engine extends JavaPlugin implements Listener {
     }
 
     private void saveAll() {
-        configManager.save();
+        // Kalender speichern
+        Calendar calendar = TimeManager.getCalendar();
+        engineConfig.calendar.year = calendar.get(Calendar.YEAR);
+        engineConfig.calendar.month = calendar.get(Calendar.MONTH);
+        engineConfig.calendar.day = calendar.get(Calendar.DAY_OF_MONTH);
+        engineConfig.calendar.hour = calendar.get(Calendar.HOUR_OF_DAY);
+        engineConfig.calendar.minute = calendar.get(Calendar.MINUTE);
+
+        storage.saveStorages();
 
         for (Backpack a : backpacks.values()) {
             a.safe();
@@ -302,8 +315,8 @@ public class Engine extends JavaPlugin implements Listener {
         return getInstance().featureHandler;
     }
 
-    public static ConfigManager getConfigManager() {
-        return instance.configManager;
+    public static EngineConfig getEngineConfig() {
+        return instance.engineConfig;
     }
 
     public EngineDataHandler getDatabaseHandler() {
@@ -315,3 +328,4 @@ public class Engine extends JavaPlugin implements Listener {
     }
 
 }
+

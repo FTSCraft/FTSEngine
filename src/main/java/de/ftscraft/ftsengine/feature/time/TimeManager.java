@@ -1,7 +1,7 @@
 package de.ftscraft.ftsengine.feature.time;
 
 import de.ftscraft.ftsengine.main.Engine;
-import de.ftscraft.ftsengine.utils.ConfigManager;
+import de.ftscraft.ftsengine.utils.EngineConfig;
 import org.bukkit.Bukkit;
 import org.bukkit.World;
 
@@ -16,9 +16,9 @@ public class TimeManager {
     private static final SimpleDateFormat format = new SimpleDateFormat("dd.MM - HH:mm");
 
     public static void init() {
-        ConfigManager configManager = Engine.getConfigManager();
+        EngineConfig config = Engine.getEngineConfig();
         //noinspection MagicConstant
-        calendar = new GregorianCalendar(configManager.getCalendarYear(), configManager.getCalendarMonth(), configManager.getCalendarDay(), configManager.getCalendarHour(), configManager.getCalendarMinute());
+        calendar = new GregorianCalendar(config.calendar.year, config.calendar.month, config.calendar.day, config.calendar.hour, config.calendar.minute);
 
         Bukkit.getScheduler().runTaskTimer(Engine.getInstance(), TimeManager::incrementTime, 0, 40);
     }
@@ -27,7 +27,7 @@ public class TimeManager {
 
         calendar.add(Calendar.SECOND, 8);
 
-        Engine.getConfigManager().getTimeWorlds()
+        Engine.getEngineConfig().calendar.worlds
                 .stream()
                 .map(Bukkit::getWorld)
                 .filter(Objects::nonNull)
