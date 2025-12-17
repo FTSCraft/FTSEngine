@@ -196,7 +196,7 @@ public class CMDausweis implements CommandExecutor, TabCompleter {
         List<Ausweis> ausweise = service.getPlayerAusweise(p);
 
         if (ausweise == null || ausweise.isEmpty()) {
-            MiniMsg.msg(p, Messages.MINI_PREFIX + "<red>Du hast keine Ausweise! Erstelle einen mit <yellow>/ausweis neu [Vorname] [Nachname]</yellow></red>");
+            MiniMsg.msg(p, Messages.MINI_PREFIX + "<red>Du hast keine Ausweise! Erstelle einen <blue><click:suggest_command:/ausweis neu >[hier]</click></blue>");
             return;
         }
 
@@ -266,7 +266,7 @@ public class CMDausweis implements CommandExecutor, TabCompleter {
 
     private void showAusweisOverview(Player p) {
         if (!plugin.hasAusweis(p)) {
-            MiniMsg.msg(p, Messages.MINI_PREFIX + "<red>Du hast noch keinen Ausweis! Erstelle einen mit <yellow>/ausweis neu [Vorname] [Nachname]</yellow></red>");
+            MiniMsg.msg(p, Messages.MINI_PREFIX + "<red>Du hast keine Ausweise! Erstelle einen <blue><click:suggest_command:/ausweis neu >[hier]</click></blue>");
             return;
         }
         Ausweis ausweis = plugin.getAusweis(p);
