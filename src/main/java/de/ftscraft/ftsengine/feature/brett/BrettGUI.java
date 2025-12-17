@@ -96,7 +96,7 @@ public class BrettGUI {
                 }
             }
             if (noteCount >= 4) {
-                p.sendMessage("§7[§bSchwarzes Brett§7] Du hast bereits (mehr als) 4 Notizen geschriben. Es reicht!");
+                p.sendMessage("§7[§bSchwarzes Brett§7] Du hast bereits (mehr als) 4 Notizen geschrieben. Es reicht!");
                 if (p.hasPermission("ftsengine.brett.admin")) {
                     p.sendMessage("§7[§bSchwarzes Brett§7] Aber du hast die Rechte also darfst du das");
                 } else {
