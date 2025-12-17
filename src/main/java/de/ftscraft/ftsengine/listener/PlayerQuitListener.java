@@ -20,11 +20,11 @@ public class PlayerQuitListener implements Listener {
         }
 
         // User in Datenbank speichern
-        if (plugin.getPlayer().containsKey(e.getPlayer())) {
-            plugin.getDatabaseHandler().getUserStorageManager().saveUser(plugin.getPlayer().get(e.getPlayer()));
+        if (plugin.getPlayer().containsKey(e.getPlayer().getUniqueId())) {
+            plugin.getDatabaseHandler().getUserStorageManager().saveUser(plugin.getPlayer().get(e.getPlayer().getUniqueId()));
         }
 
-        plugin.getPlayer().remove(e.getPlayer());
+        plugin.getPlayer().remove(e.getPlayer().getUniqueId());
     }
 
 }
