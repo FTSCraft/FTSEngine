@@ -18,6 +18,12 @@ public class PlayerQuitListener implements Listener {
         if (e.getPlayer().getVehicle() != null) {
             e.getPlayer().getVehicle().removePassenger(e.getPlayer());
         }
+
+        // User in Datenbank speichern
+        if (plugin.getPlayer().containsKey(e.getPlayer())) {
+            plugin.getDatabaseHandler().getUserStorageManager().saveUser(plugin.getPlayer().get(e.getPlayer()));
+        }
+
         plugin.getPlayer().remove(e.getPlayer());
     }
 

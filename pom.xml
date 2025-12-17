@@ -48,6 +48,9 @@
                     <artifactSet>
                         <includes>
                             <include>dev.triumphteam:triumph-gui</include>
+                            <include>com.j256.ormlite:ormlite-jdbc</include>
+                            <include>com.j256.ormlite:ormlite-core</include>
+                            <include>mysql:mysql-connector-java</include>
                         </includes>
                     </artifactSet>
                     <relocations>
@@ -55,6 +58,7 @@
                             <pattern>dev.triumphteam.gui</pattern>
                             <shadedPattern>de.ftscraft.ftsengine.gui</shadedPattern>
                         </relocation>
+                        <!-- ORMLite und MySQL-Treiber NICHT relocaten, da sie über Klassennamen geladen werden -->
                     </relocations>
                     <filters>
                         <filter>
@@ -237,6 +241,16 @@
             <artifactId>mockbukkit-v1.21</artifactId>
             <version>4.98.0</version>
             <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.j256.ormlite</groupId>
+            <artifactId>ormlite-jdbc</artifactId>
+            <version>6.1</version>
+        </dependency>
+        <dependency>
+            <groupId>mysql</groupId>
+            <artifactId>mysql-connector-java</artifactId>
+            <version>8.0.33</version>
         </dependency>
     </dependencies>
 

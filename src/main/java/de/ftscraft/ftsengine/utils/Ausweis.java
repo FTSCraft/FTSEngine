@@ -1,108 +1,102 @@
 package de.ftscraft.ftsengine.utils;
 
+import com.j256.ormlite.field.DatabaseField;
+import com.j256.ormlite.table.DatabaseTable;
+import de.ftscraft.ftsengine.feature.roleplay.ausweis.AusweisSkin;
+import de.ftscraft.ftsengine.feature.roleplay.ausweis.AusweisSkinStorageManager;
+import de.ftscraft.ftsengine.feature.roleplay.ausweis.SkinService;
 import de.ftscraft.ftsengine.main.Engine;
-import org.bukkit.configuration.file.FileConfiguration;
-import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 
-import java.io.File;
-import java.io.IOException;
 import java.util.UUID;
 
+@DatabaseTable(tableName = "ausweis")
 public class Ausweis {
 
-    private final UUID uuid;
-    private String firstName,
-            lastName,
-            spitzname;
+    @DatabaseField(canBeNull = false)
+    private UUID uuid;
 
+    @DatabaseField(generatedId = true)
+    private int id;
+
+    @DatabaseField
+    private String firstName;
+
+    @DatabaseField
+    private String lastName;
+
+    @DatabaseField
+    private String spitzname;
+
+    @DatabaseField
     private Gender gender;
 
+    @DatabaseField
     private String race;
+
+    @DatabaseField
     private String desc;
+
+    @DatabaseField
     private String forumLink;
-    private int height;
+
+    @DatabaseField
+    private int height = 200;
+
+    @DatabaseField
     private double lastHeightChange;
 
-    private final Engine plugin;
 
-    public Ausweis(Engine plugin, UUID uuid, String firstName, String lastName, String spitzname, Gender gender, String race, String desc, int height, String link, double lastHeightChange) {
-        this.plugin = plugin;
+    public Ausweis() {
+
+    }
+
+    public Ausweis(UUID uuid) {
         this.uuid = uuid;
-        this.firstName = firstName;
-        this.spitzname = spitzname;
-        this.lastName = lastName;
-        this.gender = gender;
-        this.race = race;
-        this.forumLink = link;
-        this.desc = desc;
-        this.height = height;
-        this.lastHeightChange = lastHeightChange;
-        plugin.addAusweis(this);
-    }
-
-    public Ausweis(Engine plugin, Player player) {
-        this.uuid = player.getUniqueId();
-        this.plugin = plugin;
-        plugin.addAusweis(this);
-    }
-
-    public void save() {
-
-        File file = new File(plugin.getDataFolder() + "//ausweise//" + getUuid() + ".yml");
-        FileConfiguration cfg = YamlConfiguration.loadConfiguration(file);
-
-        cfg.set("firstName", firstName);
-        cfg.set("lastName", lastName);
-        if (gender != null)
-            cfg.set("gender", gender.toString());
-        cfg.set("spitzname", spitzname);
-        cfg.set("race", race);
-        cfg.set("desc", desc);
-        cfg.set("height", height);
-        cfg.set("link", forumLink);
-        cfg.set("lastHeightChange", lastHeightChange);
-
-        try {
-            cfg.save(file);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
     }
 
     public UUID getUuid() {
         return uuid;
     }
 
+    public int getId() {
+        return id;
+    }
+
     public String getFirstName() {
-        if (firstName == null)
-            return null;
-        return firstName.replace('_', ' ');
+        return firstName;
     }
 
     public String getLastName() {
-        if (lastName == null)
-            return null;
-        return lastName.replace('_', ' ');
+        return lastName;
+    }
+
+    public String getSpitzname() {
+        return spitzname;
     }
 
     public Gender getGender() {
-        if (gender == null)
-            return null;
         return gender;
     }
 
     public String getRace() {
-        if (race == null)
-            return null;
-        return race.replace('_', ' ');
+        return race;
     }
 
     public String getDesc() {
-        if (desc == null)
-            return null;
         return desc;
+    }
+
+    public String getForumLink() {
+        return forumLink;
+    }
+
+    public int getHeight() {
+        return height;
+    }
+
+    public double getLastHeightChange() {
+        return lastHeightChange;
     }
 
     public void setFirstName(String firstName) {
@@ -111,6 +105,10 @@ public class Ausweis {
 
     public void setLastName(String lastName) {
         this.lastName = lastName;
+    }
+
+    public void setSpitzname(String spitzname) {
+        this.spitzname = spitzname;
     }
 
     public void setGender(Gender gender) {
@@ -125,40 +123,64 @@ public class Ausweis {
         this.desc = desc;
     }
 
-    public void setSpitzname(String spitzname) {
-        this.spitzname = spitzname;
-    }
-
-    public String getSpitzname() {
-        return spitzname;
-    }
-
     public void setForumLink(String forumLink) {
         this.forumLink = forumLink;
     }
 
-    public String getForumLink() {
-        return forumLink;
-    }
-
-    public double getLastHeightChange() {
-        return lastHeightChange;
+    public void setHeight(int height) {
+        this.height = height;
     }
 
     public void setLastHeightChange(double lastHeightChange) {
         this.lastHeightChange = lastHeightChange;
     }
 
-    public void setHeight(int height) {
-        this.height = height;
-        this.lastHeightChange = System.currentTimeMillis();
-    }
-
-    public int getHeight() {
-        return height;
-    }
-
     public enum Gender {
         MALE, FEMALE, DIVERS
+    }
+
+    /**
+     * Lädt die Skin-Daten lazy (nur wenn benötigt)
+     */
+    public SkinService.SkinData getSkinData() {
+        Engine plugin = Engine.getInstance();
+        if (plugin == null || plugin.getDatabaseHandler() == null) {
+            return null;
+        }
+
+        AusweisSkin skin = plugin.getDatabaseHandler().getAusweisSkinStorageManager().getSkinByAusweisId(this.id);
+        return skin != null ? skin.toSkinData() : null;
+    }
+
+    /**
+     * Speichert die Skin-Daten in der separaten Tabelle
+     */
+    public void setSkinData(SkinService.SkinData skinData) {
+        Engine plugin = Engine.getInstance();
+        if (plugin == null || plugin.getDatabaseHandler() == null) {
+            return;
+        }
+
+        AusweisSkinStorageManager ausweisSkinStorageManager = plugin.getDatabaseHandler().getAusweisSkinStorageManager();
+        AusweisSkin skin = ausweisSkinStorageManager.getSkinByAusweisId(this.id);
+
+        if (skinData == null) {
+            // Skin-Daten löschen
+            if (skin != null) {
+                ausweisSkinStorageManager.deleteSkin(this.id);
+            }
+        } else {
+            // Skin-Daten speichern oder aktualisieren
+            if (skin == null) {
+                skin = new AusweisSkin(this.id);
+            }
+            skin.fromSkinData(skinData);
+            ausweisSkinStorageManager.saveSkin(skin);
+        }
+    }
+
+    public void applySkinToPlayer(Player player) {
+        SkinService.SkinData skinData = getSkinData();
+        SkinService.applySkinToPlayer(player, skinData);
     }
 }

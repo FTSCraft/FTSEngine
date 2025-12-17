@@ -3,7 +3,9 @@ package de.ftscraft.ftsengine.commands;
 import com.mojang.brigadier.Command;
 import com.mojang.brigadier.arguments.IntegerArgumentType;
 import com.mojang.brigadier.arguments.StringArgumentType;
+import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.tree.LiteralCommandNode;
+import de.ftscraft.ftsengine.feature.roleplay.ausweis.SkinService;
 import de.ftscraft.ftsengine.main.Engine;
 import de.ftscraft.ftsengine.utils.Ausweis;
 import de.ftscraft.ftsengine.utils.Messages;
@@ -17,6 +19,8 @@ import org.bukkit.Bukkit;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.attribute.AttributeInstance;
 import org.bukkit.entity.Player;
+
+import java.util.concurrent.CompletableFuture;
 
 public class CMDausweis {
 
@@ -46,6 +50,19 @@ public class CMDausweis {
                     sendHelpMsg(player);
                     return Command.SINGLE_SUCCESS;
                 })
+                .then(Commands.literal("neu")
+                        .requires(sender -> {
+                            if (sender.getExecutor() instanceof Player player) {
+                                return plugin.hasAusweis(player);
+                            }
+                            return false;
+                        })
+                        .then(Commands.argument("vorname", StringArgumentType.word())
+                                .then(Commands.argument("nachname", StringArgumentType.word())
+                                        .executes(this::handleNeu)
+                                )
+                        )
+                )
                 .then(Commands.literal("name")
                         .then(Commands.argument("vorname", StringArgumentType.word())
                                 .then(Commands.argument("nachname", StringArgumentType.word())
@@ -109,6 +126,9 @@ public class CMDausweis {
                                 .executes(this::handleCoverName)
                         )
                 )
+                .then(Commands.literal("wechseln")
+                        .executes(this::handleListAusweise)
+                )
                 .then(Commands.literal("resetcooldown")
                         .requires(sender -> sender.getExecutor() instanceof Player &&
                                 sender.getExecutor().hasPermission("ftsengine.resetcooldown"))
@@ -123,10 +143,66 @@ public class CMDausweis {
                                 .executes(this::handleResetCooldown)
                         )
                 )
+                .then(Commands.literal("skin")
+                        .then(Commands.argument("name", StringArgumentType.word())
+                                .executes(this::handleSkin)
+                        )
+                )
                 .build();
     }
 
-    private int handleName(com.mojang.brigadier.context.CommandContext<CommandSourceStack> ctx) {
+    private int handleSkin(CommandContext<CommandSourceStack> ctx) {
+        Player p = (Player) ctx.getSource().getExecutor();
+        if (!plugin.hasAusweis(p)) {
+            MiniMsg.msg(p, Messages.MINI_PREFIX + "<red>Du hast noch keinen Ausweis! Erstelle einen mit <yellow>/ausweis neu [Vorname] [Nachname]</yellow></red>");
+            return Command.SINGLE_SUCCESS;
+        }
+
+        String targetName = StringArgumentType.getString(ctx, "name");
+        MiniMsg.msg(p, Messages.MINI_PREFIX + "<gray>Dein Skin wird nun geändert, dies kann einen Moment dauern...</gray>");
+
+        Bukkit.getScheduler().runTaskAsynchronously(plugin, () -> {
+            SkinService.SkinData skinData = SkinService.getSkinData(UUIDFetcher.getUUID(targetName));
+
+            // Zurück zum Main-Thread für Datenbank-Operationen
+            Bukkit.getScheduler().runTask(plugin, () -> {
+                if (skinData == null) {
+                    MiniMsg.msg(p, Messages.MINI_PREFIX + "<red>Der angegebene Spielername ist ungültig oder der Spieler existiert nicht!</red>");
+                    return;
+                }
+
+                Ausweis ausweis = plugin.getAusweis(p);
+                if (ausweis == null) {
+                    MiniMsg.msg(p, Messages.MINI_PREFIX + "<red>Dein Ausweis konnte nicht gefunden werden!</red>");
+                    return;
+                }
+
+                ausweis.setSkinData(skinData);
+                plugin.saveAusweis(ausweis);
+                ausweis.applySkinToPlayer(p);
+                MiniMsg.msg(p, Messages.MINI_PREFIX + "<green>Dein Skin wurde erfolgreich auf den von <yellow>" + targetName + "</yellow> geändert!</green>");
+            });
+        });
+
+        return Command.SINGLE_SUCCESS;
+    }
+
+    private int handleNeu(CommandContext<CommandSourceStack> ctx) {
+        Player p = (Player) ctx.getSource().getExecutor();
+        String fName = StringArgumentType.getString(ctx, "vorname");
+        String lName = StringArgumentType.getString(ctx, "nachname");
+
+        // Die requires-Bedingung stellt sicher, dass der Spieler noch keinen Ausweis hat
+        Ausweis a = new Ausweis(p.getUniqueId());
+        a.setFirstName(fName);
+        a.setLastName(lName);
+        plugin.addAusweis(a);
+
+        MiniMsg.msg(p, Messages.MINI_PREFIX + "<green>Du hast erfolgreich einen neuen Ausweis mit dem Namen <yellow>" + fName + " " + lName + "</yellow> erstellt!</green>");
+        return Command.SINGLE_SUCCESS;
+    }
+
+    private int handleName(CommandContext<CommandSourceStack> ctx) {
         Player p = (Player) ctx.getSource().getExecutor();
         String fName = StringArgumentType.getString(ctx, "vorname");
         String lName = StringArgumentType.getString(ctx, "nachname");
@@ -134,14 +210,14 @@ public class CMDausweis {
         if (plugin.hasAusweis(p)) {
             plugin.getAusweis(p).setFirstName(fName);
             plugin.getAusweis(p).setLastName(lName);
+            plugin.saveAusweis(plugin.getAusweis(p));
         } else {
-            Ausweis a = new Ausweis(plugin, p);
+            Ausweis a = new Ausweis(p.getUniqueId());
             a.setFirstName(fName);
             a.setLastName(lName);
             plugin.addAusweis(a);
         }
-        p.sendPlainMessage(Messages.SUCC_CMD_AUSWEIS.replace("%s", "Name")
-                .replace("%v", fName + " " + lName));
+        MiniMsg.msg(p, Messages.MINI_PREFIX + "<green>Name wurde erfolgreich auf <yellow>" + fName + " " + lName + "</yellow> gesetzt!</green>");
         return Command.SINGLE_SUCCESS;
     }
 
@@ -150,7 +226,7 @@ public class CMDausweis {
         String genderStr = StringArgumentType.getString(ctx, "gender");
 
         if (!plugin.hasAusweis(p)) {
-            p.sendPlainMessage(Messages.NEED_AUSWEIS);
+            MiniMsg.msg(p, Messages.MINI_PREFIX + "<red>Du hast noch keinen Ausweis! Erstelle einen mit <yellow>/ausweis neu [Vorname] [Nachname]</yellow></red>");
             return Command.SINGLE_SUCCESS;
         }
 
@@ -160,14 +236,13 @@ public class CMDausweis {
         } else if (genderStr.equalsIgnoreCase("f")) {
             g = Ausweis.Gender.FEMALE;
         } else {
-            p.sendPlainMessage(Messages.PREFIX + "Bitte benutze den Befehl so:" +
-                    " §c/ausweis geschlecht [\"m\"/\"f\"]");
+            MiniMsg.msg(p, Messages.MINI_PREFIX + "<red>Bitte benutze den Befehl so: <yellow>/ausweis geschlecht [m/f]</yellow></red>");
             return Command.SINGLE_SUCCESS;
         }
 
         plugin.getAusweis(p).setGender(g);
-        p.sendPlainMessage(Messages.SUCC_CMD_AUSWEIS.replace("%s", "Geschlecht")
-                .replace("%v", (g == Ausweis.Gender.MALE ? "Mann" : "Frau")));
+        plugin.saveAusweis(plugin.getAusweis(p));
+        MiniMsg.msg(p, Messages.MINI_PREFIX + "<green>Geschlecht wurde erfolgreich auf <yellow>" + (g == Ausweis.Gender.MALE ? "Mann" : "Frau") + "</yellow> gesetzt!</green>");
         return Command.SINGLE_SUCCESS;
     }
 
@@ -176,7 +251,7 @@ public class CMDausweis {
         String raceStr = StringArgumentType.getString(ctx, "rasse");
 
         if (!plugin.hasAusweis(p)) {
-            p.sendPlainMessage(Messages.NEED_AUSWEIS);
+            MiniMsg.msg(p, Messages.MINI_PREFIX + "<red>Du hast noch keinen Ausweis! Erstelle einen mit <yellow>/ausweis neu [Vorname] [Nachname]</yellow></red>");
             return Command.SINGLE_SUCCESS;
         }
 
@@ -188,10 +263,11 @@ public class CMDausweis {
             case "Mensch":
             case "Elf":
                 plugin.getAusweis(p).setRace(race);
-                p.sendPlainMessage(Messages.SUCC_CMD_AUSWEIS.replace("%s", "Rasse").replace("%v", race));
+                plugin.saveAusweis(plugin.getAusweis(p));
+                MiniMsg.msg(p, Messages.MINI_PREFIX + "<green>Rasse wurde erfolgreich auf <yellow>" + race + "</yellow> gesetzt!</green>");
                 break;
             default:
-                p.sendMessage(Messages.PREFIX + "Bitte benutze den Befehl so:" + " §c/ausweis rasse [Ork/Zwerg/Mensch/Elf].");
+                MiniMsg.msg(p, Messages.MINI_PREFIX + "<red>Bitte benutze den Befehl so: <yellow>/ausweis rasse [Ork/Zwerg/Mensch/Elf]</yellow></red>");
         }
         return Command.SINGLE_SUCCESS;
     }
@@ -201,20 +277,20 @@ public class CMDausweis {
         String desc = StringArgumentType.getString(ctx, "beschreibung");
 
         if (!plugin.hasAusweis(p)) {
-            p.sendPlainMessage(Messages.NEED_AUSWEIS);
+            MiniMsg.msg(p, Messages.MINI_PREFIX + "<red>Du hast noch keinen Ausweis! Erstelle einen mit <yellow>/ausweis neu [Vorname] [Nachname]</yellow></red>");
             return Command.SINGLE_SUCCESS;
         }
 
         // Mindestens 4 Wörter prüfen
         String[] words = desc.split("\\s+");
         if (words.length < 4) {
-            p.sendPlainMessage(Messages.PREFIX + "Bitte benutze den Befehl so:" +
-                    " §c/ausweis aussehen [Aussehen (mind. 4 Wörter)]");
+            MiniMsg.msg(p, Messages.MINI_PREFIX + "<red>Bitte benutze den Befehl so: <yellow>/ausweis aussehen [Aussehen (mind. 4 Wörter)]</yellow></red>");
             return Command.SINGLE_SUCCESS;
         }
 
         plugin.getAusweis(p).setDesc(desc);
-        p.sendPlainMessage(Messages.SUCC_CMD_AUSWEIS.replace("%s", "Aussehen").replace("%v", desc));
+        plugin.saveAusweis(plugin.getAusweis(p));
+        MiniMsg.msg(p, Messages.MINI_PREFIX + "<green>Aussehen wurde erfolgreich auf <yellow>" + desc + "</yellow> gesetzt!</green>");
         return Command.SINGLE_SUCCESS;
     }
 
@@ -223,7 +299,7 @@ public class CMDausweis {
         int height = IntegerArgumentType.getInteger(ctx, "größe");
 
         if (!plugin.hasAusweis(p)) {
-            p.sendPlainMessage(Messages.NEED_AUSWEIS);
+            MiniMsg.msg(p, Messages.MINI_PREFIX + "<red>Du hast noch keinen Ausweis! Erstelle einen mit <yellow>/ausweis neu [Vorname] [Nachname]</yellow></red>");
             return Command.SINGLE_SUCCESS;
         }
 
@@ -231,17 +307,18 @@ public class CMDausweis {
 
         if (ausweis.getLastHeightChange() + HEIGHT_COOLDOWN >= System.currentTimeMillis()) {
             if (!p.hasPermission("ftssurvival.bypass") && !p.hasPermission("ftsengine.mod")) {
-                MiniMsg.msg(p, Messages.MINI_PREFIX + "Du darfst deine Größe jede Stunde ändern");
+                MiniMsg.msg(p, Messages.MINI_PREFIX + "<red>Du darfst deine Größe jede Stunde ändern</red>");
                 return Command.SINGLE_SUCCESS;
             }
         }
 
         ausweis.setHeight(height);
-        p.sendMessage(Messages.SUCC_CMD_AUSWEIS.replace("%s", "Größe").replace("%v", String.valueOf(height)));
+        plugin.saveAusweis(ausweis);
+        MiniMsg.msg(p, Messages.MINI_PREFIX + "<green>Größe wurde erfolgreich auf <yellow>" + height + "</yellow> gesetzt!</green>");
         AttributeInstance scaleAttr = p.getAttribute(Attribute.SCALE);
 
         if (scaleAttr == null) {
-            MiniMsg.msg(p, "Da ist was schiefgelaufen.");
+            MiniMsg.msg(p, Messages.MINI_PREFIX + "<red>Da ist was schiefgelaufen.</red>");
             return Command.SINGLE_SUCCESS;
         }
 
@@ -254,24 +331,56 @@ public class CMDausweis {
         String link = StringArgumentType.getString(ctx, "url");
 
         if (!plugin.hasAusweis(p)) {
-            p.sendPlainMessage(Messages.NEED_AUSWEIS);
+            MiniMsg.msg(p, Messages.MINI_PREFIX + "<red>Du hast noch keinen Ausweis! Erstelle einen mit <yellow>/ausweis neu [Vorname] [Nachname]</yellow></red>");
+            return Command.SINGLE_SUCCESS;
+        }
+
+        // Prüfen ob es ein gültiger Link ist
+        if (!isValidUrl(link)) {
+            MiniMsg.msg(p, Messages.MINI_PREFIX + "<red>Das ist kein gültiger Link! Bitte überprüfe den Link und versuche es erneut.</red>");
             return Command.SINGLE_SUCCESS;
         }
 
         if (!link.startsWith("https://forum.ftscraft.de/")) {
-            p.sendPlainMessage("§cDer Link muss mit unserer URL des Forums anfangen! " +
-                    "(https://forum.ftscraft.de/)");
+            MiniMsg.msg(p, Messages.MINI_PREFIX + "<red>Der Link muss mit unserer URL des Forums anfangen! (https://forum.ftscraft.de/)</red>");
             return Command.SINGLE_SUCCESS;
         }
 
         plugin.getAusweis(p).setForumLink(link);
-        p.sendPlainMessage(Messages.SUCC_CMD_AUSWEIS
-                .replace("%s", "Charaktervorstellung").replace("%v", link));
+        plugin.saveAusweis(plugin.getAusweis(p));
+        MiniMsg.msg(p, Messages.MINI_PREFIX + "<green>Charaktervorstellung wurde erfolgreich auf <yellow>" + link + "</yellow> gesetzt!</green>");
         return Command.SINGLE_SUCCESS;
+    }
+
+    private boolean isValidUrl(String url) {
+        if (url == null || url.trim().isEmpty()) {
+            return false;
+        }
+
+        // Prüfen ob der String mit http:// oder https:// beginnt
+        if (!url.startsWith("http://") && !url.startsWith("https://")) {
+            return false;
+        }
+
+        if (url.contains(" ")) {
+            return false;
+        }
+
+        // Versuchen, die URL zu parsen
+        try {
+            new java.net.URL(url);
+            return true;
+        } catch (java.net.MalformedURLException e) {
+            return false;
+        }
     }
 
     private int handleInspectSelf(com.mojang.brigadier.context.CommandContext<CommandSourceStack> ctx) {
         Player p = (Player) ctx.getSource().getExecutor();
+        if (!plugin.hasAusweis(p)) {
+            MiniMsg.msg(p, Messages.MINI_PREFIX + "<red>Du hast keinen Ausweis!</red>");
+            return Command.SINGLE_SUCCESS;
+        }
         Var.sendAusweisMsg(p, plugin.getAusweis(p));
         return Command.SINGLE_SUCCESS;
     }
@@ -284,7 +393,7 @@ public class CMDausweis {
         if (a != null) {
             Var.sendAusweisMsg(p, a);
         } else {
-            p.sendPlainMessage(Messages.TARGET_NO_AUSWEIS);
+            MiniMsg.msg(p, Messages.MINI_PREFIX + "<red>Dieser Spieler hat keinen Ausweis!</red>");
         }
         return Command.SINGLE_SUCCESS;
     }
@@ -294,12 +403,58 @@ public class CMDausweis {
         String deckname = StringArgumentType.getString(ctx, "name").replace("_", " ");
 
         if (!plugin.hasAusweis(p)) {
-            p.sendPlainMessage(Messages.NEED_AUSWEIS);
+            MiniMsg.msg(p, Messages.MINI_PREFIX + "<red>Du hast noch keinen Ausweis! Erstelle einen mit <yellow>/ausweis neu [Vorname] [Nachname]</yellow></red>");
             return Command.SINGLE_SUCCESS;
         }
 
         plugin.getAusweis(p).setSpitzname(deckname);
-        p.sendMessage(Messages.PREFIX + "Du hast deinen Decknamen als " + deckname + " gesetzt!");
+        plugin.saveAusweis(plugin.getAusweis(p));
+        MiniMsg.msg(p, Messages.MINI_PREFIX + "<green>Du hast deinen Decknamen als <yellow>" + deckname + "</yellow> gesetzt!</green>");
+        return Command.SINGLE_SUCCESS;
+    }
+
+    private int handleListAusweise(com.mojang.brigadier.context.CommandContext<CommandSourceStack> ctx) {
+        Player p = (Player) ctx.getSource().getExecutor();
+
+        java.util.List<Ausweis> ausweise = plugin.getDatabaseHandler()
+                .getAusweisStorageManager()
+                .getAusweiseByUUID(p.getUniqueId());
+
+        if (ausweise == null || ausweise.isEmpty()) {
+            MiniMsg.msg(p, Messages.MINI_PREFIX + "<red>Du hast keine Ausweise! Erstelle einen mit <yellow>/ausweis neu [Vorname] [Nachname]</yellow></red>");
+            return Command.SINGLE_SUCCESS;
+        }
+
+        Ausweis activeAusweis = plugin.getAusweis(p);
+
+        p.sendMessage(" ");
+        MiniMsg.msg(p, Messages.MINI_PREFIX + "<red>----- Deine Ausweise -----</red>");
+        MiniMsg.msg(p, Messages.MINI_PREFIX + "<gray>Klicke auf einen Ausweis, um zu diesem zu wechseln:</gray>");
+        p.sendMessage(" ");
+
+        for (Ausweis ausweis : ausweise) {
+            boolean isActive = activeAusweis != null && activeAusweis.getId() == ausweis.getId();
+
+            net.kyori.adventure.text.Component ausweisComponent = net.kyori.adventure.text.Component.text()
+                    .append(net.kyori.adventure.text.Component.text("  " + (isActive ? "➤ " : "  "))
+                            .color(isActive ? net.kyori.adventure.text.format.NamedTextColor.GREEN : net.kyori.adventure.text.format.NamedTextColor.GRAY))
+                    .append(net.kyori.adventure.text.Component.text(ausweis.getFirstName() + " " + ausweis.getLastName())
+                            .color(isActive ? net.kyori.adventure.text.format.NamedTextColor.YELLOW : net.kyori.adventure.text.format.NamedTextColor.WHITE)
+                            .decorate(isActive ? net.kyori.adventure.text.format.TextDecoration.BOLD : net.kyori.adventure.text.format.TextDecoration.ITALIC))
+                    .append(net.kyori.adventure.text.Component.text(" " + (isActive ? "(Aktiv)" : "[Wechseln]"))
+                            .color(isActive ? net.kyori.adventure.text.format.NamedTextColor.GREEN : net.kyori.adventure.text.format.NamedTextColor.AQUA)
+                            .clickEvent(isActive ? null : net.kyori.adventure.text.event.ClickEvent.runCommand("/ftsengine _switchausweis " + ausweis.getId()))
+                            .hoverEvent(isActive ? null : net.kyori.adventure.text.event.HoverEvent.showText(
+                                    net.kyori.adventure.text.Component.text("Zu " + ausweis.getFirstName() + " " + ausweis.getLastName() + " wechseln")
+                                            .color(net.kyori.adventure.text.format.NamedTextColor.YELLOW)
+                            )))
+                    .build();
+
+            p.sendMessage(ausweisComponent);
+        }
+
+        p.sendMessage(" ");
+
         return Command.SINGLE_SUCCESS;
     }
 
@@ -316,18 +471,20 @@ public class CMDausweis {
 
     private int handleResetCooldownAll(Player p) {
         int resetCount = 0;
-        for (Ausweis ausweis : plugin.ausweis.values()) {
+        // Über den Ausweis-Cache im AusweisStorageManager iterieren
+        for (Ausweis ausweis : plugin.getDatabaseHandler().getAusweisStorageManager().getAusweisCache().values()) {
             ausweis.setLastHeightChange(0);
+            plugin.saveAusweis(ausweis);
             resetCount++;
         }
-        p.sendMessage(Messages.PREFIX + "§7Größen-Cooldown für §e" + resetCount +
-                " §7Spieler wurde erfolgreich zurückgesetzt!");
+        MiniMsg.msg(p, Messages.MINI_PREFIX + "<gray>Größen-Cooldown für <yellow>" + resetCount +
+                "</yellow> Spieler wurde erfolgreich zurückgesetzt!</gray>");
 
         for (Player onlinePlayer : Bukkit.getOnlinePlayers()) {
             if (plugin.hasAusweis(onlinePlayer)) {
-                onlinePlayer.sendMessage(Messages.PREFIX +
-                        "§7Dein Größen-Cooldown wurde von einem Admin zurückgesetzt. " +
-                        "Du kannst deine Größe jetzt wieder ändern!");
+                MiniMsg.msg(onlinePlayer, Messages.MINI_PREFIX +
+                        "<gray>Dein Größen-Cooldown wurde von einem Admin zurückgesetzt. " +
+                        "Du kannst deine Größe jetzt wieder ändern!</gray>");
             }
         }
         return Command.SINGLE_SUCCESS;
@@ -337,38 +494,41 @@ public class CMDausweis {
         Player target = Bukkit.getPlayer(targetName);
 
         if (target == null) {
-            p.sendMessage(Messages.PREFIX + "Spieler §c" + targetName +
-                    " §7ist nicht online oder existiert nicht!");
+            MiniMsg.msg(p, Messages.MINI_PREFIX + "<gray>Spieler <red>" + targetName +
+                    "</red> ist nicht online oder existiert nicht!</gray>");
             return Command.SINGLE_SUCCESS;
         }
 
         if (!plugin.hasAusweis(target)) {
-            p.sendMessage(Messages.TARGET_NO_AUSWEIS);
+            MiniMsg.msg(p, Messages.MINI_PREFIX + "<red>Dieser Spieler hat keinen Ausweis!</red>");
             return Command.SINGLE_SUCCESS;
         }
 
         Ausweis targetAusweis = plugin.getAusweis(target);
         targetAusweis.setLastHeightChange(0);
+        plugin.saveAusweis(targetAusweis);
 
-        p.sendMessage(Messages.PREFIX + "§7Größen-Cooldown für §e" + targetName +
-                " §7wurde erfolgreich zurückgesetzt!");
-        target.sendMessage(Messages.PREFIX +
-                "§7Dein Größen-Cooldown wurde von einem Admin zurückgesetzt. " +
-                "Du kannst deine Größe jetzt wieder ändern!");
+        MiniMsg.msg(p, Messages.MINI_PREFIX + "<gray>Größen-Cooldown für <yellow>" + targetName +
+                "</yellow> wurde erfolgreich zurückgesetzt!</gray>");
+        MiniMsg.msg(target, Messages.MINI_PREFIX +
+                "<gray>Dein Größen-Cooldown wurde von einem Admin zurückgesetzt. " +
+                "Du kannst deine Größe jetzt wieder ändern!</gray>");
 
         return Command.SINGLE_SUCCESS;
     }
 
     public static void sendHelpMsg(Player p) {
-        p.sendMessage(Messages.PREFIX + "----- §c/ausweis §7-----");
-        p.sendMessage("§7/ausweis name [Vorname] [Nachname] §cÄndert deinen Namen und erstellt beim 1. Mal einen Ausweis - Mit Unterstrichen könnt ihr Leerzeichen im Namen haben");
-        p.sendMessage("§7/ausweis geschlecht [m/f] §cSetzt die Ansprache (m - Männliche | f - Weibliche)");
-        p.sendMessage("§7/ausweis rasse [Ork/Zwerg/Mensch/Elf] §cSetzt deine Rasse");
-        p.sendMessage("§7/ausweis aussehen [Beschr.] §cSetzt dein Aussehen (Mind. 4 Wörter)");
-        p.sendMessage("§7/ausweis größe [Größe in cm] §cSetzt deine Größe");
-        p.sendMessage("§7/ausweis deckname [Deckname] §cSetzt deinen Decknamen");
-        p.sendMessage("§7/ausweis link [Link] §cSetzt den Link zu deiner Charvorstellung im Forum");
-        p.sendMessage("§7/ausweis anschauen [Spieler] §cSchau den Ausweis eines Spielers an");
+        MiniMsg.msg(p, Messages.MINI_PREFIX + "<gray>----- <red>/ausweis</red> -----</gray>");
+        MiniMsg.msg(p, "<gray>/ausweis neu [Vorname] [Nachname] <red>Erstellt einen neuen Ausweis</red></gray>");
+        MiniMsg.msg(p, "<gray>/ausweis wechseln <red>Zeigt alle deine Ausweise und ermöglicht das Wechseln</red></gray>");
+        MiniMsg.msg(p, "<gray>/ausweis name [Vorname] [Nachname] <red>Ändert deinen Namen und erstellt beim 1. Mal einen Ausweis - Mit Unterstrichen könnt ihr Leerzeichen im Namen haben</red></gray>");
+        MiniMsg.msg(p, "<gray>/ausweis geschlecht [m/f] <red>Setzt die Ansprache (m - Männliche | f - Weibliche)</red></gray>");
+        MiniMsg.msg(p, "<gray>/ausweis rasse [Ork/Zwerg/Mensch/Elf] <red>Setzt deine Rasse</red></gray>");
+        MiniMsg.msg(p, "<gray>/ausweis aussehen [Beschr.] <red>Setzt dein Aussehen (Mind. 4 Wörter)</red></gray>");
+        MiniMsg.msg(p, "<gray>/ausweis größe [Größe in cm] <red>Setzt deine Größe</red></gray>");
+        MiniMsg.msg(p, "<gray>/ausweis deckname [Deckname] <red>Setzt deinen Decknamen</red></gray>");
+        MiniMsg.msg(p, "<gray>/ausweis link [Link] <red>Setzt den Link zu deiner Charvorstellung im Forum</red></gray>");
+        MiniMsg.msg(p, "<gray>/ausweis anschauen [Spieler] <red>Schau den Ausweis eines Spielers an</red></gray>");
     }
 
 }
