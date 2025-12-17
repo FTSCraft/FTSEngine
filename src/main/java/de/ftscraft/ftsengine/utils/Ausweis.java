@@ -140,7 +140,7 @@ public class Ausweis {
     }
 
     /**
-     * Lädt die Skin-Daten lazy (nur wenn benötigt)
+     * Lazily loads the skin data (only when needed)
      */
     public SkinService.SkinData getSkinData() {
         Engine plugin = Engine.getInstance();
@@ -153,7 +153,7 @@ public class Ausweis {
     }
 
     /**
-     * Speichert die Skin-Daten in der separaten Tabelle
+     * Stores the skin data in a separate table
      */
     public void setSkinData(SkinService.SkinData skinData) {
         Engine plugin = Engine.getInstance();
@@ -165,12 +165,12 @@ public class Ausweis {
         AusweisSkin skin = ausweisSkinStorageManager.getSkinByAusweisId(this.id);
 
         if (skinData == null) {
-            // Skin-Daten löschen
+            // Delete skin data
             if (skin != null) {
                 ausweisSkinStorageManager.deleteSkin(this.id);
             }
         } else {
-            // Skin-Daten speichern oder aktualisieren
+            // Save or update skin data
             if (skin == null) {
                 skin = new AusweisSkin(this.id);
             }

@@ -12,7 +12,7 @@ import de.ftscraft.ftsengine.utils.EngineConfig;
 import java.sql.SQLException;
 
 /**
- * Verwaltet die Verbindung zur MySQL-Datenbank
+ * Manages the connection to the MySQL database
  */
 public class ConnectionHandler {
 
@@ -27,7 +27,7 @@ public class ConnectionHandler {
     }
 
     /**
-     * Stellt die Verbindung zur Datenbank her
+     * Establishes the connection to the database
      */
     public void connect() throws SQLException {
         DatabaseAuthStorage dbAuth = engineConfig.databaseAuth;
@@ -38,62 +38,62 @@ public class ConnectionHandler {
         String username = dbAuth.username;
         String password = dbAuth.password;
 
-        // MySQL JDBC URL mit Zeitzone und SSL-Einstellungen
+        // MySQL JDBC URL with timezone and SSL settings
         databaseUrl = String.format("jdbc:mysql://%s:%d/%s?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true",
                 host, port, database);
 
-        plugin.getLogger().info("Verbinde zur Datenbank: " + host + ":" + port + "/" + database);
+        plugin.getLogger().info("Connecting to database: " + host + ":" + port + "/" + database);
 
         try {
             connectionSource = new JdbcConnectionSource(databaseUrl, username, password);
 
-            // Tabellen erstellen, falls sie nicht existieren
+            // Create tables if they do not exist
             createTables();
 
-            plugin.getLogger().info("Datenbankverbindung erfolgreich hergestellt!");
+            plugin.getLogger().info("Database connection established successfully!");
         } catch (SQLException e) {
-            plugin.getLogger().severe("Fehler beim Verbinden zur Datenbank: " + e.getMessage());
+            plugin.getLogger().severe("Error while connecting to the database: " + e.getMessage());
             throw e;
         }
     }
 
     /**
-     * Erstellt die benötigten Tabellen in der Datenbank
+     * Creates the required tables in the database
      */
     private void createTables() throws SQLException {
         try {
             TableUtils.createTableIfNotExists(connectionSource, EngineUser.class);
             TableUtils.createTableIfNotExists(connectionSource, Ausweis.class);
             TableUtils.createTableIfNotExists(connectionSource, AusweisSkin.class);
-            plugin.getLogger().info("Datenbanktabellen wurden erfolgreich erstellt/überprüft.");
+            plugin.getLogger().info("Database tables created/verified successfully.");
         } catch (SQLException e) {
-            plugin.getLogger().severe("Fehler beim Erstellen der Tabellen: " + e.getMessage());
+            plugin.getLogger().severe("Error while creating the tables: " + e.getMessage());
             throw e;
         }
     }
     /**
-     * Schließt die Datenbankverbindung
+     * Closes the database connection
      */
     public void disconnect() {
         if (connectionSource != null) {
             try {
                 connectionSource.close();
-                plugin.getLogger().info("Datenbankverbindung wurde geschlossen.");
+                plugin.getLogger().info("Database connection closed.");
             } catch (Exception e) {
-                plugin.getLogger().severe("Fehler beim Schließen der Datenbankverbindung: " + e.getMessage());
+                plugin.getLogger().severe("Error while closing the database connection: " + e.getMessage());
             }
         }
     }
 
     /**
-     * Gibt die ConnectionSource zurück
+     * Returns the ConnectionSource
      */
     public ConnectionSource getConnectionSource() {
         return connectionSource;
     }
 
     /**
-     * Überprüft, ob die Verbindung aktiv ist
+     * Checks if the connection is active
      */
     public boolean isConnected() {
         if (connectionSource == null) {
@@ -107,15 +107,15 @@ public class ConnectionHandler {
     }
 
     /**
-     * Versucht die Verbindung wiederherzustellen
+     * Attempts to restore the connection
      */
     public void reconnect() {
-        plugin.getLogger().info("Versuche Datenbankverbindung wiederherzustellen...");
+        plugin.getLogger().info("Attempting to restore database connection...");
         disconnect();
         try {
             connect();
         } catch (SQLException e) {
-            plugin.getLogger().severe("Fehler beim Wiederherstellen der Datenbankverbindung: " + e.getMessage());
+            plugin.getLogger().severe("Error while restoring the database connection: " + e.getMessage());
         }
     }
 }

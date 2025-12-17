@@ -8,8 +8,8 @@ import de.ftscraft.ftsengine.utils.EngineConfig;
 import java.sql.SQLException;
 
 /**
- * Zentrale Verwaltungsklasse für alle StorageManager
- * Koordiniert ConnectionHandler, UserStorageManager und AusweisStorageManager
+ * Central manager for all StorageManagers
+ * Coordinates ConnectionHandler, UserStorageManager and AusweisStorageManager
  */
 public class EngineDataHandler {
 
@@ -28,107 +28,106 @@ public class EngineDataHandler {
     }
 
     /**
-     * Initialisiert die Datenbankverbindung und alle StorageManager
+     * Initializes the database connection and all StorageManagers
      */
     public void initialize() {
         try {
-            plugin.getLogger().info("Initialisiere DataHandler...");
+            plugin.getLogger().info("Initializing DataHandler...");
 
-            // Verbindung zur Datenbank herstellen
+            // Connect to the database
             connectionHandler.connect();
 
-            // StorageManager initialisieren
+            // Initialize StorageManagers
             userStorageManager = new UserStorageManager(connectionHandler.getConnectionSource());
             ausweisStorageManager = new AusweisStorageManager(connectionHandler.getConnectionSource());
             ausweisSkinStorageManager = new AusweisSkinStorageManager(connectionHandler.getConnectionSource());
 
             initialized = true;
-            plugin.getLogger().info("DataHandler erfolgreich initialisiert!");
+            plugin.getLogger().info("DataHandler initialized successfully!");
 
         } catch (SQLException e) {
-            plugin.getLogger().severe("Fehler beim Initialisieren des DataHandlers: " + e.getMessage());
-            plugin.getLogger().severe("Das Plugin wird deaktiviert!");
+            plugin.getLogger().severe("Error while initializing DataHandler: " + e.getMessage());
+            plugin.getLogger().severe("The plugin will be disabled!");
             plugin.getServer().getPluginManager().disablePlugin(plugin);
         }
     }
 
     /**
-     * Beendet die Datenbankverbindung ordnungsgemäß
+     * Properly shuts down the database connection
      */
     public void shutdown() {
-        plugin.getLogger().info("Fahre DataHandler herunter...");
+        plugin.getLogger().info("Shutting down DataHandler...");
 
         if (connectionHandler != null) {
             connectionHandler.disconnect();
         }
 
         initialized = false;
-        plugin.getLogger().info("DataHandler wurde heruntergefahren.");
+        plugin.getLogger().info("DataHandler has been shut down.");
     }
 
     /**
-     * Gibt den UserStorageManager zurück
+     * Returns the UserStorageManager
      */
     public UserStorageManager getUserStorageManager() {
         if (!initialized) {
-            throw new IllegalStateException("DataHandler ist nicht initialisiert!");
+            throw new IllegalStateException("DataHandler is not initialized!");
         }
         return userStorageManager;
     }
 
     /**
-     * Gibt den AusweisStorageManager zurück
+     * Returns the AusweisStorageManager
      */
     public AusweisStorageManager getAusweisStorageManager() {
         if (!initialized) {
-            throw new IllegalStateException("DataHandler ist nicht initialisiert!");
+            throw new IllegalStateException("DataHandler is not initialized!");
         }
         return ausweisStorageManager;
     }
 
     /**
-     * Gibt den AusweisSkinStorageManager zurück
+     * Returns the AusweisSkinStorageManager
      */
     public AusweisSkinStorageManager getAusweisSkinStorageManager() {
         if (!initialized) {
-            throw new IllegalStateException("DataHandler ist nicht initialisiert!");
+            throw new IllegalStateException("DataHandler is not initialized!");
         }
         return ausweisSkinStorageManager;
     }
 
     /**
-     * Gibt den ConnectionHandler zurück
+     * Returns the ConnectionHandler
      */
     public ConnectionHandler getConnectionHandler() {
         return connectionHandler;
     }
 
     /**
-     * Überprüft, ob der DataHandler initialisiert ist
+     * Checks if the DataHandler is initialized
      */
     public boolean isInitialized() {
         return initialized;
     }
 
     /**
-     * Überprüft die Datenbankverbindung und stellt sie bei Bedarf wieder her
+     * Checks the database connection and attempts to restore it if necessary
      */
     public void checkConnection() {
         if (!connectionHandler.isConnected()) {
-            plugin.getLogger().warning("Datenbankverbindung verloren! Versuche wiederherzustellen...");
+            plugin.getLogger().warning("Database connection lost! Attempting to restore...");
             connectionHandler.reconnect();
 
             if (connectionHandler.isConnected()) {
-                // StorageManager neu initialisieren
+                // Re-initialize StorageManagers
                 try {
                     userStorageManager = new UserStorageManager(connectionHandler.getConnectionSource());
                     ausweisStorageManager = new AusweisStorageManager(connectionHandler.getConnectionSource());
-                    plugin.getLogger().info("Datenbankverbindung erfolgreich wiederhergestellt!");
+                    plugin.getLogger().info("Database connection restored successfully!");
                 } catch (Exception e) {
-                    plugin.getLogger().severe("Fehler beim Wiederherstellen der StorageManager: " + e.getMessage());
+                    plugin.getLogger().severe("Error while restoring StorageManagers: " + e.getMessage());
                 }
             }
         }
     }
 }
-

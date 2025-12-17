@@ -25,12 +25,12 @@ public class AusweisStorageManager {
     }
 
     /**
-     * Speichert oder aktualisiert einen Ausweis in der Datenbank und im Cache
+     * Saves or updates an Ausweis in the database and cache
      */
     public void saveAusweis(Ausweis ausweis) {
         try {
             ausweisDao.createOrUpdate(ausweis);
-            // Cache aktualisieren
+            // Update cache
             ausweisCache.put(ausweis.getUuid(), ausweis);
         } catch (SQLException e) {
             e.printStackTrace();
@@ -39,7 +39,7 @@ public class AusweisStorageManager {
     }
 
     /**
-     * Lädt alle Ausweise eines Spielers anhand der UUID
+     * Loads all Ausweise of a player by UUID
      */
     public List<Ausweis> getAusweiseByUUID(UUID uuid) {
         try {
@@ -51,7 +51,7 @@ public class AusweisStorageManager {
     }
 
     /**
-     * Lädt einen Ausweis anhand der ID
+     * Loads an Ausweis by ID
      */
     public Ausweis getAusweisById(int id) {
         try {
@@ -63,12 +63,12 @@ public class AusweisStorageManager {
     }
 
     /**
-     * Löscht einen Ausweis aus der Datenbank und dem Cache
+     * Deletes an Ausweis from the database and cache
      */
     public void deleteAusweis(Ausweis ausweis) {
         try {
             ausweisDao.delete(ausweis);
-            // Aus Cache entfernen
+            // Remove from cache
             ausweisCache.remove(ausweis.getUuid());
         } catch (SQLException e) {
             Engine.getInstance().getLogger().severe("Could not delete Ausweis with ID: " + ausweis.getId());
@@ -76,14 +76,14 @@ public class AusweisStorageManager {
     }
 
     /**
-     * Löscht einen Ausweis anhand der ID
+     * Deletes an Ausweis by ID
      */
     public void deleteAusweisById(int id) {
         try {
             Ausweis ausweis = ausweisDao.queryForId(id);
             if (ausweis != null) {
                 ausweisDao.deleteById(id);
-                // Aus Cache entfernen
+                // Remove from cache
                 ausweisCache.remove(ausweis.getUuid());
             }
         } catch (SQLException e) {
@@ -92,14 +92,14 @@ public class AusweisStorageManager {
     }
 
     /**
-     * Gibt den Ausweis-Cache zurück (für Kompatibilität mit altem Code)
+     * Returns the Ausweis cache (for compatibility with older code)
      */
     public HashMap<UUID, Ausweis> getAusweisCache() {
         return ausweisCache;
     }
 
     /**
-     * Lädt alle Ausweise aus der Datenbank in den Cache (beim Server-Start)
+     * Loads all Ausweise from the database into the cache (on server start)
      */
     public void loadAllIntoCache() {
         try {

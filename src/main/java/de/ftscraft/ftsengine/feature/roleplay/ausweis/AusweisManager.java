@@ -16,29 +16,29 @@ public class AusweisManager {
     }
 
     /**
-     * Gibt den aktiven Ausweis eines Spielers zurück
-     * @param player Der Spieler
-     * @return Der aktive Ausweis oder null
+     * Returns the active Ausweis of a player
+     * @param player The player
+     * @return The active Ausweis or null
      */
     public Ausweis getAusweis(Player player) {
         return getAusweis(player.getUniqueId());
     }
 
     /**
-     * Gibt den aktiven Ausweis eines Spielers anhand der UUID zurück
-     * @param uuid Die UUID des Spielers
-     * @return Der aktive Ausweis oder null
+     * Returns the active Ausweis of a player by UUID
+     * @param uuid The player's UUID
+     * @return The active Ausweis or null
      */
     public Ausweis getAusweis(UUID uuid) {
         if (plugin.getDatabaseHandler() == null || !plugin.getDatabaseHandler().isInitialized()) {
             return null;
         }
-        // Suche den Player und hole den aktiven Ausweis aus EngineUser
+        // Find the player and get the active Ausweis from EngineUser
         EngineUser user = plugin.getPlayer().get(uuid);
         if (user != null) {
             return user.getActiveAusweis();
         }
-        // Falls Player nicht online ist, aus DB laden
+        // If player is not online, load from DB
         user = plugin.getDatabaseHandler().getUserStorageManager().getUser(uuid);
         if (user != null) {
             return user.getActiveAusweis();
@@ -47,36 +47,36 @@ public class AusweisManager {
     }
 
     /**
-     * Prüft, ob ein Spieler einen aktiven Ausweis hat
-     * @param player Der Spieler
-     * @return true wenn der Spieler einen Ausweis hat
+     * Checks whether a player has an active Ausweis
+     * @param player The player
+     * @return true if the player has an Ausweis
      */
     public boolean hasAusweis(Player player) {
         return getAusweis(player) != null;
     }
 
     /**
-     * Prüft, ob ein Spieler anhand der UUID einen aktiven Ausweis hat
-     * @param uuid Die UUID des Spielers
-     * @return true wenn der Spieler einen Ausweis hat
+     * Checks whether a player (by UUID) has an active Ausweis
+     * @param uuid The player's UUID
+     * @return true if the player has an Ausweis
      */
     public boolean hasAusweis(UUID uuid) {
         return getAusweis(uuid) != null;
     }
 
     /**
-     * Fügt einen neuen Ausweis hinzu und setzt ihn als aktiven Ausweis
-     * @param ausweis Der neue Ausweis
+     * Adds a new Ausweis and sets it as the active Ausweis
+     * @param ausweis The new Ausweis
      */
     public void addAusweis(Ausweis ausweis) {
-        // In Datenbank speichern
+        // Save to database
         if (plugin.getDatabaseHandler() != null && plugin.getDatabaseHandler().isInitialized()) {
             plugin.getDatabaseHandler().getAusweisStorageManager().saveAusweis(ausweis);
 
-            // Als aktiven Ausweis für den User setzen
+            // Set as active Ausweis for the user
             EngineUser user = plugin.getPlayer().get(ausweis.getUuid());
 
-            // Falls User nicht online ist, aus DB laden
+            // If user is not online, load from DB
             if (user == null) {
                 user = plugin.getDatabaseHandler().getUserStorageManager().getOrCreateUser(ausweis.getUuid());
             }
@@ -89,8 +89,8 @@ public class AusweisManager {
     }
 
     /**
-     * Speichert einen Ausweis in der Datenbank
-     * @param ausweis Der zu speichernde Ausweis
+     * Saves an Ausweis to the database
+     * @param ausweis The Ausweis to save
      */
     public void saveAusweis(Ausweis ausweis) {
         if (plugin.getDatabaseHandler() != null && plugin.getDatabaseHandler().isInitialized()) {

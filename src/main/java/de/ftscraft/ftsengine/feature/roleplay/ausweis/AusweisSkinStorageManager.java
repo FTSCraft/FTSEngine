@@ -20,19 +20,19 @@ public class AusweisSkinStorageManager {
     }
 
     /**
-     * Speichert oder aktualisiert Skin-Daten für einen Ausweis
+     * Saves or updates skin data for an Ausweis
      */
     public void saveSkin(AusweisSkin skin) {
         try {
             skinDao.createOrUpdate(skin);
         } catch (SQLException e) {
             Engine.getInstance().getLogger().severe("Could not save AusweisSkin for Ausweis ID: " + skin.getAusweisId());
-            e.printStackTrace();
+            Engine.getInstance().getLogger().severe(e.getMessage());
         }
     }
 
     /**
-     * Lädt Skin-Daten für einen Ausweis (Lazy Loading)
+     * Loads skin data for an Ausweis (lazy loading)
      */
     public AusweisSkin getSkinByAusweisId(int ausweisId) {
         try {
@@ -47,7 +47,7 @@ public class AusweisSkinStorageManager {
     }
 
     /**
-     * Löscht Skin-Daten für einen Ausweis
+     * Deletes skin data for an Ausweis
      */
     public void deleteSkin(int ausweisId) {
         try {
@@ -60,4 +60,3 @@ public class AusweisSkinStorageManager {
         }
     }
 }
-
