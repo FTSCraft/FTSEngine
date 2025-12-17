@@ -20,14 +20,14 @@ public class GuiNavigationItems {
      * Creates a "Next Page" button
      */
     public static GuiItem createNextPageButton() {
-        return new GuiItem(new ItemBuilder(Material.PAPER).name("Nächste Seite").build());
+        return new GuiItem(new ItemBuilder(Material.PAPER).name("Weiter scrollen").build());
     }
 
     /**
      * Creates a "Previous Page" button
      */
     public static GuiItem createPreviousPageButton() {
-        return new GuiItem(new ItemBuilder(Material.PAPER).name("Vorherige Seite").build());
+        return new GuiItem(new ItemBuilder(Material.PAPER).name("Zurück scrollen").build());
     }
 
     /**

@@ -22,7 +22,7 @@ public class UserStorageManager {
     }
 
     /**
-     * Lädt einen User aus der Datenbank oder erstellt einen neuen, falls nicht vorhanden
+     * Loads a user from the database or creates a new one if not present
      */
     public EngineUser getOrCreateUser(UUID uuid) {
         try {
@@ -39,7 +39,7 @@ public class UserStorageManager {
     }
 
     /**
-     * Speichert oder aktualisiert einen User in der Datenbank
+     * Saves or updates a user in the database
      */
     public void saveUser(EngineUser user) {
         try {
@@ -50,7 +50,7 @@ public class UserStorageManager {
     }
 
     /**
-     * Lädt einen User aus der Datenbank
+     * Loads a user from the database
      */
     public EngineUser getUser(UUID uuid) {
         try {
@@ -62,7 +62,7 @@ public class UserStorageManager {
     }
 
     /**
-     * Löscht einen User aus der Datenbank
+     * Deletes a user from the database
      */
     public void deleteUser(UUID uuid) {
         try {
@@ -73,7 +73,7 @@ public class UserStorageManager {
     }
 
     /**
-     * Überprüft, ob ein User in der Datenbank existiert
+     * Checks whether a user exists in the database
      */
     public boolean userExists(UUID uuid) {
         try {
