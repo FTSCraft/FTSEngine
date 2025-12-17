@@ -1,12 +1,8 @@
 package de.ftscraft.ftsengine.utils.deprecated;
 
 import de.ftscraft.ftsengine.main.Engine;
-import org.bukkit.configuration.file.FileConfiguration;
-import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 
-import java.io.File;
-import java.io.IOException;
 import java.util.UUID;
 
 public class AusweisOld {
