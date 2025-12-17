@@ -28,7 +28,7 @@ public class AusweisMessageFormatter {
         MiniMsg.msg(player, getFieldEditMessage("Charaktervorstellung", "link",
                 ausweis.getForumLink() != null ? ausweis.getForumLink() : "Nicht gesetzt"));
         MiniMsg.msg(player, "<gray>[<click:run_command:/ausweis wechseln><green>Wechseln ⇔</green></click>] " +
-                "[<red><click:suggest_command:/ausweis skin >Skin ändern ✎</click></red>]</gray>");
+                "[<red><hover:show_text:'<aqua>Spielernamen angeben, dessen Skin beim Spielen dieses Charakters übernommen wird (auch dein eigener).</aqua>'><click:suggest_command:/ausweis skin >Skin ändern ✎</click></red>]</gray>");
     }
 
     /**
