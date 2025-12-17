@@ -30,7 +30,10 @@ public class DamageListener implements Listener {
             if (p.getInventory().getItemInMainHand().getType() == Material.STICK) {
                 if (p.getInventory().getItemInMainHand().getItemMeta().getDisplayName().equalsIgnoreCase("§6Lanze")) {
 
-                    if (plugin.getPlayer().get(e.getDamager()).getLanzenschlaege() > 2) {
+                    de.ftscraft.ftsengine.main.EngineUser damagerUser = plugin.getPlayer().get(p.getUniqueId());
+                    if (damagerUser == null) return;
+
+                    if (damagerUser.getLanzenschlaege() > 2) {
 
                         Random random = new Random();
                         int r = random.nextInt(2) + 1;
@@ -43,14 +46,14 @@ public class DamageListener implements Listener {
                                         t.getVehicle().removePassenger(t);
                                 }
 
-                                plugin.getPlayer().get(p).setLanzenschlaege(0);
+                                damagerUser.setLanzenschlaege(0);
 
                             }
 
                         } else
-                            plugin.getPlayer().get(p).setLanzenschlaege(plugin.getPlayer().get(p).getLanzenschlaege() + 1);
+                            damagerUser.setLanzenschlaege(damagerUser.getLanzenschlaege() + 1);
                     } else
-                        plugin.getPlayer().get(p).setLanzenschlaege(plugin.getPlayer().get(p).getLanzenschlaege() + 1);
+                        damagerUser.setLanzenschlaege(damagerUser.getLanzenschlaege() + 1);
                 }
             }
 

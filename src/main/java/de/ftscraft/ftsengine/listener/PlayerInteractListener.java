@@ -279,8 +279,13 @@ public class PlayerInteractListener implements Listener {
             if ("§4Schwarzes Brett".equalsIgnoreCase(sign.getLine(0))) {
                 Brett brett = plugin.bretter.get(block.getLocation());
                 if (brett != null) {
-                    Engine.getInstance().getPlayer().get(player).setBrett(brett);
-                    brett.getGui().open(player, 1);
+                    de.ftscraft.ftsengine.main.EngineUser user = Engine.getInstance().getPlayer().get(player.getUniqueId());
+                    if (user != null) {
+                        user.setBrett(brett);
+                        brett.getGui().open(player, 1);
+                    } else {
+                        player.sendMessage("§cFehler: Bitte logge dich neu ein.");
+                    }
                 }
             }
         }
