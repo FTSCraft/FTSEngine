@@ -1,6 +1,7 @@
 package de.ftscraft.ftsengine.utils;
 
 import de.ftscraft.ftsutils.items.ItemReader;
+import de.ftscraft.ftsutils.misc.MiniMsg;
 import de.ftscraft.ftsutils.uuidfetcher.UUIDFetcher;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.event.ClickEvent;
@@ -25,13 +26,9 @@ public class Var {
         p.sendMessage("§cDeckname: §e" + (a.getSpitzname() != null ? a.getSpitzname() : "Kein Eintrag"));
         p.sendMessage("§cGröße: §e" + (a.getHeight() != -1 ? a.getHeight() : "Kein Eintrag"));
         if (a.getForumLink() != null) {
-            Component click = Component.text("[CLICK]")
-                    .color(NamedTextColor.YELLOW)
-                    .clickEvent(ClickEvent.clickEvent(ClickEvent.Action.OPEN_URL, a.getForumLink()));
-            p.sendMessage(Component.text("Vorstellung: ").color(NamedTextColor.RED).append(click));
+            p.sendMessage(MiniMsg.c("<red>Vorstellung: <yellow><click:open_url:'" + a.getForumLink() + "'>[KLICK]</click></yellow></red>"));
         } else {
-            Component noEntry = Component.text("[Kein Eintrag]").color(NamedTextColor.YELLOW);
-            p.sendMessage(Component.text("Vorstellung: ").color(NamedTextColor.RED).append(noEntry));
+            p.sendMessage(MiniMsg.c("<red>Vorstellung: <yellow>[Kein Eintrag]</yellow></red>"));
         }
     }
 

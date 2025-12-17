@@ -15,6 +15,7 @@ import de.ftscraft.ftsengine.feature.courier.Brief;
 import de.ftscraft.ftsengine.feature.courier.Briefkasten;
 import de.ftscraft.ftsengine.feature.items.backpacks.Backpack;
 import de.ftscraft.ftsengine.feature.items.logport.LogportManager;
+import de.ftscraft.ftsengine.feature.roleplay.ausweis.AusweisManager;
 import de.ftscraft.ftsengine.feature.texturepack.catalog.command.CatalogCommand;
 import de.ftscraft.ftsengine.feature.time.TimeManager;
 import de.ftscraft.ftsengine.feature.weather.WeatherManager;
@@ -23,6 +24,7 @@ import de.ftscraft.ftsengine.utils.Ausweis;
 import de.ftscraft.ftsengine.utils.ConfigManager;
 import de.ftscraft.ftsengine.utils.ItemStacks;
 import de.ftscraft.ftsengine.utils.UserIO;
+import de.ftscraft.ftsengine.utils.storage.EngineDataHandler;
 import de.ftscraft.ftsutils.services.IChatInputService;
 import de.ftscraft.ftsutils.storage.DataHandler;
 import net.milkbowl.vault.economy.Economy;
@@ -46,9 +48,9 @@ public class Engine extends JavaPlugin implements Listener {
 
     private ConfigManager configManager;
     private FeatureHandler featureHandler;
+    private AusweisManager ausweisManager;
 
-    public HashMap<UUID, Ausweis> ausweis;
-    private HashMap<Player, FTSUser> player;
+    private HashMap<UUID, EngineUser> player;
     public int biggestBpId;
     public int biggestBriefId;
     private ArrayList<Player> reiter;
@@ -66,11 +68,20 @@ public class Engine extends JavaPlugin implements Listener {
     private ProtocolManager protocolManager = null;
     private ShopkeepersPlugin shopkeepersPlugin = null;
     private DataHandler storage;
+    private EngineDataHandler databaseHandler;
     private IChatInputService chatInputService;
 
     @Override
     public void onEnable() {
         instance = this;
+
+        // Config laden (wichtig für Datenbankverbindung)
+        saveDefaultConfig();
+
+        // Database-Handler ZUERST initialisieren
+        databaseHandler = new EngineDataHandler(this);
+        databaseHandler.initialize();
+
         chatInputService = Bukkit.getServicesManager().load(IChatInputService.class);
         storage = DataHandler.forPlugin(this);
         configManager = new ConfigManager();
@@ -79,8 +90,8 @@ public class Engine extends JavaPlugin implements Listener {
         setupEconomy();
         init();
         for (Player a : Bukkit.getOnlinePlayers()) {
-            FTSUser user = new FTSUser();
-            this.getPlayer().put(a, user);
+            EngineUser user = databaseHandler.getUserStorageManager().getOrCreateUser(a.getUniqueId());
+            this.getPlayer().put(a.getUniqueId(), user);
 
             if (getProtocolManager() != null)
                 sendTablistHeaderAndFooter(a, " §cHeutiger Tipp: \nGeht voten!", "");
@@ -101,6 +112,12 @@ public class Engine extends JavaPlugin implements Listener {
     public void onDisable() {
         saveAll();
         logportManager.onDisableLogic();
+
+        // Database-Handler herunterfahren
+        if (databaseHandler != null) {
+            databaseHandler.shutdown();
+        }
+
         storage.saveStorages();
     }
 
@@ -109,6 +126,8 @@ public class Engine extends JavaPlugin implements Listener {
             this.protocolManager = ProtocolLibrary.getProtocolManager();
         if (getServer().getPluginManager().isPluginEnabled("Shopkeepers"))
             this.shopkeepersPlugin = ShopkeepersPlugin.getInstance();
+        ausweisManager = new de.ftscraft.ftsengine.feature.roleplay.ausweis.AusweisManager(this);
+
         logportManager = new LogportManager(this);
         biggestBpId = 0;
         biggestBriefId = 0;
@@ -116,7 +135,6 @@ public class Engine extends JavaPlugin implements Listener {
         bretter = new HashMap<>();
         backpacks = new HashMap<>();
         briefkasten = new HashMap<>();
-        ausweis = new HashMap<>();
         briefe = new HashMap<>();
         new ItemStacks(this);
         reiter = new ArrayList<>();
@@ -198,9 +216,6 @@ public class Engine extends JavaPlugin implements Listener {
 
     private void saveAll() {
         configManager.save();
-        for (Ausweis a : ausweis.values()) {
-            a.save();
-        }
 
         for (Backpack a : backpacks.values()) {
             a.safe();
@@ -230,24 +245,29 @@ public class Engine extends JavaPlugin implements Listener {
         return chatInputService;
     }
 
+
     public Ausweis getAusweis(Player player) {
-        return ausweis.getOrDefault(player.getUniqueId(), null);
+        return ausweisManager.getAusweis(player);
     }
 
-    public Ausweis getAusweis(UUID player) {
-        return ausweis.getOrDefault(player, null);
+    public Ausweis getAusweis(UUID uuid) {
+        return ausweisManager.getAusweis(uuid);
     }
 
     public boolean hasAusweis(Player player) {
-        return ausweis.containsKey(player.getUniqueId());
+        return ausweisManager.hasAusweis(player);
     }
 
     public boolean hasAusweis(UUID player) {
-        return ausweis.containsKey(player);
+        return ausweisManager.hasAusweis(player);
     }
 
     public void addAusweis(Ausweis a) {
-        ausweis.put(a.getUuid(), a);
+        ausweisManager.addAusweis(a);
+    }
+
+    public void saveAusweis(Ausweis a) {
+        ausweisManager.saveAusweis(a);
     }
 
     public Economy getEcon() {
@@ -258,7 +278,7 @@ public class Engine extends JavaPlugin implements Listener {
         return reiter;
     }
 
-    public HashMap<Player, FTSUser> getPlayer() {
+    public HashMap<UUID, EngineUser> getPlayer() {
         return player;
     }
 
@@ -284,6 +304,14 @@ public class Engine extends JavaPlugin implements Listener {
 
     public static ConfigManager getConfigManager() {
         return instance.configManager;
+    }
+
+    public EngineDataHandler getDatabaseHandler() {
+        return databaseHandler;
+    }
+
+    public AusweisManager getAusweisManager() {
+        return ausweisManager;
     }
 
 }
