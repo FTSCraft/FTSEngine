@@ -17,7 +17,7 @@ public class AusweisTabCompleter implements TabCompleter {
 
     private static final String[] SUBCOMMANDS = {
             "neu", "name", "geschlecht", "rasse", "aussehen", "größe", "große",
-            "link", "anschauen", "deckname", "wechseln", "resetcooldown", "skin", "help"
+            "link", "anschauen", "deckname", "wechseln", "switchausweis", "löschen", "resetcooldown", "skin", "list", "help"
     };
 
     private static final String[] RACES = {"Ork", "Zwerg", "Mensch", "Elf"};
@@ -31,6 +31,8 @@ public class AusweisTabCompleter implements TabCompleter {
             String prefix = args[0].toLowerCase();
             if ("anschauen".startsWith(prefix)) {
                 completions.add("anschauen");
+            } else if("list".startsWith(prefix) && sender.hasPermission("ftsengine.ausweis.list")) {
+                completions.add("list");
             }
             return completions;
         }
@@ -45,7 +47,8 @@ public class AusweisTabCompleter implements TabCompleter {
             case "aussehen" -> handleAppearanceCompletion(args);
             case "link" -> handleLinkCompletion(args);
             case "deckname" -> handleCoverNameCompletion(args);
-            case "anschauen", "skin" -> handlePlayerNameCompletion(args);
+            case "anschauen", "skin", "list" -> handlePlayerNameCompletion(args);
+            case "switchausweis", "löschen" -> handleSwitchAusweisCompletion(args);
             case "resetcooldown" -> handleResetCooldownCompletion(args);
             case "größe", "große" -> handleHeightCompletion(args);
             default -> completions;
@@ -142,6 +145,14 @@ public class AusweisTabCompleter implements TabCompleter {
                     completions.add(name);
                 }
             }
+        }
+        return completions;
+    }
+
+    private List<String> handleSwitchAusweisCompletion(String[] args) {
+        List<String> completions = new ArrayList<>();
+        if (args.length == 2) {
+            completions.add("<Ausweis-ID>");
         }
         return completions;
     }
