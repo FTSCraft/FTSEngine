@@ -1,7 +1,9 @@
 package de.ftscraft.ftsengine.commands.ausweis;
 
+import de.ftscraft.ftsengine.feature.roleplay.ausweis.AusweisStorageManager;
 import de.ftscraft.ftsengine.feature.roleplay.ausweis.SkinService;
 import de.ftscraft.ftsengine.main.Engine;
+import de.ftscraft.ftsengine.main.EngineUser;
 import de.ftscraft.ftsengine.utils.Ausweis;
 import de.ftscraft.ftsengine.utils.Messages;
 import de.ftscraft.ftsengine.utils.Var;
@@ -15,15 +17,17 @@ import org.bukkit.entity.Player;
 import java.util.List;
 import java.util.UUID;
 
-public class AusweisService {
+public class AusweisCommandService {
 
     private final Engine plugin;
     private final AusweisValidator validator;
+    private final AusweisMessageFormatter formatter;
     private static final double HEIGHT_COOLDOWN = 1000 * 60 * 60; // 1 hour
 
-    public AusweisService(Engine plugin) {
+    public AusweisCommandService(Engine plugin, AusweisMessageFormatter formatter) {
         this.plugin = plugin;
         this.validator = new AusweisValidator();
+        this.formatter = formatter;
     }
 
     // ===== Ausweis creation and management =====
@@ -39,6 +43,40 @@ public class AusweisService {
 
         MiniMsg.msg(player, Messages.MINI_PREFIX + "<green>Du hast erfolgreich einen neuen Ausweis mit dem Namen <yellow>"
                 + firstName + " " + lastName + "</yellow> erstellt!</green>");
+    }
+
+    public void sendAusweisDeleteConfirmation(Player player, int ausweisId) {
+        MiniMsg.msg(player, Messages.MINI_PREFIX +
+                "<gray>Bist du sicher, dass du diesen Ausweis löschen möchtest? " +
+                "Dies kann nicht rückgängig gemacht werden! " +
+                "[<red><hover:show_text:'<aqua>Ja, ich möchte diesen Ausweis löschen.</aqua>'>" +
+                "<click:run_command:/ausweis löschen " + ausweisId + " confirm>Löschen ✖</click></red>] ");
+    }
+
+    public void deleteAusweis(Player player, int ausweisId) {
+        AusweisStorageManager ausweisStorageManager = plugin.getDatabaseHandler()
+                .getAusweisStorageManager();
+
+        Ausweis targetAusweis = ausweisStorageManager.getAusweisById(ausweisId);
+
+        if (!validator.ausweisExists(targetAusweis)) {
+            MiniMsg.msg(player, Messages.MINI_PREFIX + "<red>Dieser Ausweis existiert nicht!</red>");
+            return;
+        }
+
+        if (!validator.isAusweisOwner(targetAusweis, player.getUniqueId())) {
+            MiniMsg.msg(player, Messages.MINI_PREFIX + "<red>Dieser Ausweis gehört dir nicht!</red>");
+            return;
+        }
+
+        if (plugin.getAusweis(player).getId() == ausweisId) {
+            MiniMsg.msg(player, Messages.MINI_PREFIX + "<red>Du kannst deinen aktiven Ausweis nicht löschen.</red>");
+            return;
+        }
+
+        ausweisStorageManager.deleteAusweis(targetAusweis);
+        MiniMsg.msg(player, Messages.MINI_PREFIX + "<green>Dein Ausweis von <yellow>"
+                + targetAusweis.getFirstName() + " " + targetAusweis.getLastName() + "</yellow> wurde erfolgreich gelöscht!</green>");
     }
 
     /**
@@ -248,6 +286,20 @@ public class AusweisService {
     }
 
     /**
+     * Displays an Ausweis by ID (for admins with list permission).
+     */
+    public void showAusweisByID(Player viewer, int ausweisId) {
+        AusweisStorageManager storageManager = plugin.getDatabaseHandler().getAusweisStorageManager();
+        Ausweis ausweis = storageManager.getAusweisById(ausweisId);
+
+        if (ausweis != null) {
+            Var.sendAusweisMsg(viewer, ausweis);
+        } else {
+            MiniMsg.msg(viewer, Messages.MINI_PREFIX + "<red>Ein Ausweis mit der ID <yellow>" + ausweisId + "</yellow> existiert nicht!</red>");
+        }
+    }
+
+    /**
      * Returns all Ausweise of a player.
      */
     public List<Ausweis> getPlayerAusweise(Player player) {
@@ -261,6 +313,57 @@ public class AusweisService {
      */
     public Ausweis getActiveAusweis(Player player) {
         return plugin.getAusweis(player);
+    }
+
+    public void sendSwitchAusweisList(Player player) {
+        List<Ausweis> ausweise = getPlayerAusweise(player);
+
+        if (ausweise == null || ausweise.isEmpty()) {
+            MiniMsg.msg(player, Messages.MINI_PREFIX + "<red>Du hast keine Ausweise! Erstelle einen <blue><click:suggest_command:/ausweis neu >[hier]</click></blue>");
+            return;
+        }
+
+        Ausweis activeAusweis = getActiveAusweis(player);
+        formatter.sendAusweiseList(player, ausweise, activeAusweis);
+    }
+
+    /**
+     * Switches the player's active Ausweis to the one with the given ID.
+     * @return true if the switch was successful, false otherwise
+     */
+    public boolean switchAusweis(Player player, int ausweisId) {
+        Ausweis targetAusweis = plugin.getDatabaseHandler()
+                .getAusweisStorageManager()
+                .getAusweisById(ausweisId);
+
+        if (!validator.ausweisExists(targetAusweis)) {
+            MiniMsg.msg(player, Messages.MINI_PREFIX + "<red>Dieser Ausweis existiert nicht!</red>");
+            return false;
+        }
+
+        if (!validator.isAusweisOwner(targetAusweis, player.getUniqueId())) {
+            MiniMsg.msg(player, Messages.MINI_PREFIX + "<red>Dieser Ausweis gehört dir nicht!</red>");
+            return false;
+        }
+
+        // Ausweis wechseln
+        EngineUser user = plugin.getPlayer().get(player.getUniqueId());
+        if (user == null) {
+            user = plugin.getDatabaseHandler().getUserStorageManager().getOrCreateUser(player.getUniqueId());
+        }
+
+        if (user != null) {
+            user.setActiveAusweis(targetAusweis);
+            plugin.getDatabaseHandler().getUserStorageManager().saveUser(user);
+
+            sendSwitchAusweisList(player);
+            targetAusweis.applySkinToPlayer(player);
+            applyHeightScale(player, targetAusweis.getHeight());
+            return true;
+        } else {
+            MiniMsg.msg(player, Messages.MINI_PREFIX + "<red>Es ist ein Fehler aufgetreten!</red>");
+            return false;
+        }
     }
 
     // ===== Cooldown management =====
@@ -303,6 +406,34 @@ public class AusweisService {
                         "Du kannst deine Größe jetzt wieder ändern!</gray>");
             }
         }
+    }
+
+    /**
+     * Lists all Ausweise of a specific player.
+     */
+    public void listPlayerAusweise(Player sender, String targetPlayerName) {
+        UUID targetUUID;
+        try {
+            targetUUID = UUIDFetcher.getUUID(targetPlayerName);
+        } catch (Exception e) {
+            MiniMsg.msg(sender, Messages.MINI_PREFIX + "<red>Spieler <yellow>" + targetPlayerName + "</yellow> wurde nicht gefunden!</red>");
+            return;
+        }
+
+        if (targetUUID == null) {
+            MiniMsg.msg(sender, Messages.MINI_PREFIX + "<red>Spieler <yellow>" + targetPlayerName + "</yellow> wurde nicht gefunden!</red>");
+            return;
+        }
+
+        AusweisStorageManager storageManager = plugin.getDatabaseHandler().getAusweisStorageManager();
+        List<Ausweis> ausweise = storageManager.getAusweiseByUUID(targetUUID);
+
+        if (ausweise == null || ausweise.isEmpty()) {
+            MiniMsg.msg(sender, Messages.MINI_PREFIX + "<red>Spieler <yellow>" + targetPlayerName + "</yellow> hat keine Ausweise!</red>");
+            return;
+        }
+
+        formatter.sendPlayerAusweiseList(sender, targetPlayerName, ausweise);
     }
 
     // ===== Private helper methods =====

@@ -53,7 +53,7 @@ public class AusweisMessageFormatter {
      */
     public void sendAusweiseList(Player player, java.util.List<Ausweis> ausweise, Ausweis activeAusweis) {
         player.sendMessage(" ");
-        MiniMsg.msg(player, Messages.MINI_PREFIX + "<red>----- Deine Ausweise -----</red>");
+        MiniMsg.msg(player, Messages.MINI_PREFIX + "<gray>----- Deine Ausweise -----</gray>");
         MiniMsg.msg(player, Messages.MINI_PREFIX + "<gray>Klicke auf einen Ausweis, um zu diesem zu wechseln:</gray>");
         player.sendMessage(" ");
 
@@ -64,6 +64,24 @@ public class AusweisMessageFormatter {
 
         MiniMsg.msg(player, "<green>  <click:suggest_command:/ausweis neu >[➕ Neu]</click> </green>");
         player.sendMessage(" ");
+    }
+
+    /**
+     * Sends a list of all Ausweise for a specific player (for admins).
+     */
+    public void sendPlayerAusweiseList(Player viewer, String playerName, java.util.List<Ausweis> ausweise) {
+        viewer.sendMessage(" ");
+        MiniMsg.msg(viewer, Messages.MINI_PREFIX + "<gray>----- Ausweise von <yellow>" + playerName + "</yellow> -----</gray>");
+        viewer.sendMessage(" ");
+
+        for (Ausweis ausweis : ausweise) {
+            String message = getAusweisInfoMessage(ausweis);
+            viewer.sendMessage(MiniMsg.c(message));
+        }
+
+        viewer.sendMessage(" ");
+        MiniMsg.msg(viewer, Messages.MINI_PREFIX + "<gray>Gesamt: <yellow>" + ausweise.size() + "</yellow> Ausweis(e)</gray>");
+        viewer.sendMessage(" ");
     }
 
     // ===== Private helper methods =====
@@ -86,12 +104,27 @@ public class AusweisMessageFormatter {
         if (isActive) {
             partAction = "<green>(Aktiv)</green>";
         } else {
-            partAction = "<click:run_command:'/ftsengine _switchausweis " + ausweis.getId() + "'>"
+            partAction = "<click:run_command:'/ausweis switchausweis " + ausweis.getId() + "'>"
                     + "<hover:show_text:'<yellow>Zu " + ausweis.getFirstName() + " " + ausweis.getLastName() + " wechseln</yellow>'>"
-                    + "<aqua>[Wechseln]</aqua></hover></click>";
+                    + "<aqua>[Wechseln]</aqua></hover></click> " +
+                    "<click:run_command:'/ausweis löschen " + ausweis.getId() + "'>" +
+                    "<hover:show_text:'<red>Löscht den Ausweis von " + ausweis.getFirstName() + " " + ausweis.getLastName() + "</red>'>" +
+                    "<red>[Löschen]</red></hover></click>";
         }
 
         return partPrefix + partName + " " + partAction;
+    }
+
+    private @NotNull String getAusweisInfoMessage(Ausweis ausweis) {
+        String name = ausweis.getFirstName() + " " + ausweis.getLastName();
+        String gender = ausweis.getGender() != null ? (ausweis.getGender() == Ausweis.Gender.MALE ? "Mann" : "Frau") : "?";
+        String race = ausweis.getRace() != null ? ausweis.getRace() : "?";
+
+        return "<gray>  <yellow>ID " + ausweis.getId() + "</yellow>: " +
+                "<click:run_command:/ausweis anschauen " + ausweis.getId() + ">" +
+                "<hover:show_text:'<green>Klicke um diesen Ausweis anzuschauen</green>'>" +
+                "<white>" + name + "</white></hover></click>" +
+                " - <aqua>" + gender + "</aqua>, <green>" + race + "</green>, <gold>" + ausweis.getHeight() + "cm</gold></gray>";
     }
 }
 
