@@ -1,7 +1,10 @@
 package de.ftscraft.ftsengine.commands.ausweis;
 
+import de.ftscraft.ftsengine.utils.Ausweis;
+
 import java.net.MalformedURLException;
 import java.net.URI;
+import java.util.UUID;
 
 
 public class AusweisValidator {
@@ -111,6 +114,23 @@ public class AusweisValidator {
     public String normalizeRace(String race) {
         if (race == null || race.isEmpty()) return null;
         return race.substring(0, 1).toUpperCase() + race.substring(1).toLowerCase();
+    }
+
+    /**
+     * Checks if an Ausweis exists (is not null).
+     */
+    public boolean ausweisExists(Ausweis ausweis) {
+        return ausweis != null;
+    }
+
+    /**
+     * Checks if an Ausweis belongs to a specific player.
+     */
+    public boolean isAusweisOwner(Ausweis ausweis, UUID playerUUID) {
+        if (ausweis == null || playerUUID == null) {
+            return false;
+        }
+        return ausweis.getUuid().equals(playerUUID);
     }
 }
 

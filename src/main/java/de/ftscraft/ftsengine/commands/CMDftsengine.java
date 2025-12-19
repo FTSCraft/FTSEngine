@@ -37,57 +37,6 @@ public class CMDftsengine implements CommandExecutor {
     public boolean onCommand(@NotNull CommandSender cs, @NotNull Command cmd, @NotNull String label, String[] args) {
 
         if (args.length > 0) {
-            // Versteckter Command zum Wechseln von Ausweisen
-            if (args[0].equals("_switchausweis")) {
-                if (!(cs instanceof Player p)) {
-                    return true;
-                }
-
-                if (args.length < 2) {
-                    return true;
-                }
-
-                int ausweisId;
-
-                try {
-                    ausweisId = Integer.parseInt(args[1]);
-                } catch (NumberFormatException e) {
-                    return true;
-                }
-
-                Ausweis targetAusweis = plugin.getDatabaseHandler()
-                        .getAusweisStorageManager()
-                        .getAusweisById(ausweisId);
-
-                if (targetAusweis == null) {
-                    p.sendPlainMessage(Messages.PREFIX + "§cDieser Ausweis existiert nicht!");
-                    return true;
-                }
-
-                // Prüfen ob der Ausweis dem Spieler gehört
-                if (!targetAusweis.getUuid().equals(p.getUniqueId())) {
-                    p.sendPlainMessage(Messages.PREFIX + "§cDieser Ausweis gehört dir nicht!");
-                    return true;
-                }
-
-                // Ausweis wechseln
-                de.ftscraft.ftsengine.main.EngineUser user = plugin.getPlayer().get(p.getUniqueId());
-                if (user == null) {
-                    user = plugin.getDatabaseHandler().getUserStorageManager().getOrCreateUser(p.getUniqueId());
-                }
-
-                if (user != null) {
-                    user.setActiveAusweis(targetAusweis);
-                    plugin.getDatabaseHandler().getUserStorageManager().saveUser(user);
-
-                    p.sendPlainMessage(Messages.PREFIX + "§aDu hast zu dem Ausweis von §e" +
-                            targetAusweis.getFirstName() + " " + targetAusweis.getLastName() + " §agewechselt!");
-                } else {
-                    p.sendPlainMessage(Messages.PREFIX + "§cEs ist ein Fehler aufgetreten!");
-                }
-
-                return true;
-            }
 
             // Konvertiere alte YAML-Ausweise zu neuer DB-Struktur
             if (args[0].equalsIgnoreCase("convertoldausweise")) {

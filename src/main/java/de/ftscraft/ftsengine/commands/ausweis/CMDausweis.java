@@ -16,14 +16,14 @@ import java.util.List;
 public class CMDausweis implements CommandExecutor, TabCompleter {
 
     private final Engine plugin;
-    private final AusweisService service;
+    private final AusweisCommandService service;
     private final AusweisMessageFormatter formatter;
     private final AusweisTabCompleter tabCompleter;
 
     public CMDausweis(Engine plugin) {
         this.plugin = plugin;
-        this.service = new AusweisService(plugin);
         this.formatter = new AusweisMessageFormatter();
+        this.service = new AusweisCommandService(plugin, formatter);
         this.tabCompleter = new AusweisTabCompleter();
         registerCommand();
     }
@@ -62,13 +62,41 @@ public class CMDausweis implements CommandExecutor, TabCompleter {
             case "anschauen" -> handleAnschauen(sender, args);
             case "deckname" -> handleDeckname(sender, args);
             case "wechseln" -> handleWechseln(sender);
+            case "switchausweis" -> handleSwitchAusweis(sender, args);
+            case "löschen" -> handleDeletion(sender, args);
             case "resetcooldown" -> handleResetCooldown(sender, args);
             case "skin" -> handleSkin(sender, args);
+            case "list" -> handleList(sender, args);
             case "help" -> handleHelp(sender);
             default -> handleHelp(sender);
         }
 
         return true;
+    }
+
+    private void handleDeletion(CommandSender sender, String[] args) {
+        if (!requiresPlayer(sender)) return;
+        Player p = (Player) sender;
+
+        if (args.length == 2) {
+            Integer i;
+            try {
+                i = Integer.valueOf(args[1]);
+            } catch (NumberFormatException e) {
+                MiniMsg.msg(p, Messages.MINI_PREFIX + "<red>Bitte gib eine gültige Ausweis-ID an!</red>");
+                return;
+            }
+            service.sendAusweisDeleteConfirmation(p, i);
+        } else if(args.length == 3 && args[2].equalsIgnoreCase("confirm")) {
+            Integer i;
+            try {
+                i = Integer.valueOf(args[1]);
+            } catch (NumberFormatException e) {
+                MiniMsg.msg(p, Messages.MINI_PREFIX + "<red>Bitte gib eine gültige Ausweis-ID an!</red>");
+                return;
+            }
+            service.deleteAusweis(p, i);
+        }
     }
 
     private void handleNeu(CommandSender sender, String[] args) {
@@ -173,7 +201,18 @@ public class CMDausweis implements CommandExecutor, TabCompleter {
         if (args.length == 1) {
             service.showOwnAusweis(p);
         } else {
-            service.showOtherAusweis(p, args[1]);
+            // Check if argument is a number (ID) and player has list permission
+            try {
+                int ausweisId = Integer.parseInt(args[1]);
+                if (p.hasPermission("ftsengine.ausweis.list")) {
+                    service.showAusweisByID(p, ausweisId);
+                } else {
+                    MiniMsg.msg(p, Messages.MINI_PREFIX + "<red>Du hast keine Berechtigung, Ausweise über ID anzuschauen.</red>");
+                }
+            } catch (NumberFormatException e) {
+                // Not a number, treat as player name
+                service.showOtherAusweis(p, args[1]);
+            }
         }
     }
 
@@ -192,16 +231,27 @@ public class CMDausweis implements CommandExecutor, TabCompleter {
     private void handleWechseln(CommandSender sender) {
         if (!requiresPlayer(sender)) return;
         Player p = (Player) sender;
+        service.sendSwitchAusweisList(p);
+    }
 
-        List<Ausweis> ausweise = service.getPlayerAusweise(p);
+    private void handleSwitchAusweis(CommandSender sender, String[] args) {
+        if (!requiresPlayer(sender)) return;
+        Player p = (Player) sender;
 
-        if (ausweise == null || ausweise.isEmpty()) {
-            MiniMsg.msg(p, Messages.MINI_PREFIX + "<red>Du hast keine Ausweise! Erstelle einen <blue><click:suggest_command:/ausweis neu >[hier]</click></blue>");
+        if (args.length < 2) {
+            MiniMsg.msg(p, Messages.MINI_PREFIX + "<red>Benutzung: /ausweis switchausweis <ID></red>");
             return;
         }
 
-        Ausweis activeAusweis = service.getActiveAusweis(p);
-        formatter.sendAusweiseList(p, ausweise, activeAusweis);
+        int ausweisId;
+        try {
+            ausweisId = Integer.parseInt(args[1]);
+        } catch (NumberFormatException e) {
+            MiniMsg.msg(p, Messages.MINI_PREFIX + "<red>Bitte gib eine gültige Ausweis-ID an!</red>");
+            return;
+        }
+
+        service.switchAusweis(p, ausweisId);
     }
 
     private void handleResetCooldown(CommandSender sender, String[] args) {
@@ -254,6 +304,23 @@ public class CMDausweis implements CommandExecutor, TabCompleter {
         }
 
         service.changeSkin(p, args[1]);
+    }
+
+    private void handleList(CommandSender sender, String[] args) {
+        if (!requiresPlayer(sender)) return;
+        Player p = (Player) sender;
+
+        if (!p.hasPermission("ftsengine.ausweis.list")) {
+            MiniMsg.msg(p, Messages.MINI_PREFIX + "<red>Du hast keine Berechtigung hierfür.</red>");
+            return;
+        }
+
+        if (args.length < 2) {
+            MiniMsg.msg(p, Messages.MINI_PREFIX + "<red>Benutzung: /ausweis list <Spielername></red>");
+            return;
+        }
+
+        service.listPlayerAusweise(p, args[1]);
     }
 
     private void handleHelp(CommandSender sender) {
