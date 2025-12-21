@@ -79,7 +79,7 @@ public class DurchsuchenManager {
         target.sendMessage(Messages.PREFIX + "Du hast die Durchsuchung angenommen. §6" + requester.getName() + " §7sieht jetzt dein Inventar");
 
         Inventory targetInventoryCopy = Bukkit.createInventory(null, 45,
-                "Inventar von " + target.getName());
+                MiniMsg.c("Inventar von " + target.getName()));
 
         boolean hideFailed = false;
         boolean hideTried = false;
@@ -156,7 +156,7 @@ public class DurchsuchenManager {
         int taskId = Bukkit.getScheduler().scheduleSyncRepeatingTask(plugin, new DurchsuchenRunner(target, DurchsuchenRunner.RunnerType.HIDE_RUNNER), 20L, 20L);
         hideTasks.put(target, taskId);
 
-        Inventory targetHideInventory = Bukkit.createInventory(null, 45, "Versteck-Inventar");
+        Inventory targetHideInventory = Bukkit.createInventory(null, 45, MiniMsg.c("Versteck-Inventar"));
         hideInventorys.put(target, targetHideInventory);
 
         originalInventorys.put(target, copyInventory(target.getInventory()));

@@ -2,8 +2,9 @@ package de.ftscraft.ftsengine.commands.emotes;
 
 import de.ftscraft.ftsengine.main.Engine;
 import de.ftscraft.ftsengine.utils.Messages;
+import de.ftscraft.ftsutils.misc.MiniMsg;
+
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -49,9 +50,8 @@ public class CMDspucken implements CommandExecutor {
             LlamaSpit llamaSpit = p.launchProjectile(LlamaSpit.class, pLoc.getDirection().multiply(0.5));
             llamaSpit.setShooter(p);
 
-            p.sendMessage("§eDu hast den Spieler " + ChatColor.RED + t.getName() + ChatColor.GRAY + " angespuckt");
-            t.sendMessage("§eDer Spieler " + ChatColor.RED + p.getName() + ChatColor.GRAY + " hat dich angespuckt!");
-
+            MiniMsg.msg(p, "<yellow>Du hast den Spieler <red>%s</red> angespuckt".formatted(t.getName()));
+            MiniMsg.msg(t, "<yellow>Der Spieler <red>%s</red> hat dich angespuckt!".formatted(p.getName()));
 
         } else p.sendMessage(Messages.NO_PLAYER_GIVEN);
 

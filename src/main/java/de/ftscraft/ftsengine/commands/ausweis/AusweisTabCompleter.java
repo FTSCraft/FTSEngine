@@ -15,11 +15,6 @@ import java.util.List;
  */
 public class AusweisTabCompleter implements TabCompleter {
 
-    private static final String[] SUBCOMMANDS = {
-            "neu", "name", "geschlecht", "rasse", "aussehen", "größe", "große",
-            "link", "anschauen", "deckname", "wechseln", "switchausweis", "löschen", "resetcooldown", "skin", "list", "help"
-    };
-
     private static final String[] RACES = {"Ork", "Zwerg", "Mensch", "Elf"};
 
     @Override

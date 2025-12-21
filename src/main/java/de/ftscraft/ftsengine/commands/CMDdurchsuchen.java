@@ -14,10 +14,7 @@ import java.util.Objects;
 
 public class CMDdurchsuchen implements CommandExecutor {
 
-    private final Engine plugin;
-
     public CMDdurchsuchen(Engine plugin) {
-        this.plugin = plugin;
         Objects.requireNonNull(plugin.getCommand("durchsuchen"), "tried registering durchsuchen command but is null").setExecutor(this);
     }
 

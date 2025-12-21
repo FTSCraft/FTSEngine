@@ -149,7 +149,7 @@ public class UserIO {
                     Location locaton = new Location(Bukkit.getWorld(world), loc_X, loc_Y, loc_Z);
 
                     BlockState bs = Bukkit.getWorld(world).getBlockAt(locaton).getState();
-                    if (!(bs instanceof Sign sign)) {
+                    if (!(bs instanceof Sign)) {
                         continue;
                     }
 
