@@ -18,6 +18,7 @@ import de.ftscraft.ftsengine.feature.items.backpacks.Backpack;
 import de.ftscraft.ftsengine.feature.items.logport.LogportManager;
 import de.ftscraft.ftsengine.feature.roleplay.ausweis.AusweisManager;
 import de.ftscraft.ftsengine.feature.texturepack.catalog.command.CatalogCommand;
+import de.ftscraft.ftsengine.feature.time.CalendarStorage;
 import de.ftscraft.ftsengine.feature.time.TimeManager;
 import de.ftscraft.ftsengine.feature.weather.WeatherManager;
 import de.ftscraft.ftsengine.listener.*;
@@ -223,11 +224,12 @@ public class Engine extends JavaPlugin implements Listener {
     private void saveAll() {
         // Kalender speichern
         Calendar calendar = TimeManager.getCalendar();
-        engineConfig.calendar.year = calendar.get(Calendar.YEAR);
-        engineConfig.calendar.month = calendar.get(Calendar.MONTH);
-        engineConfig.calendar.day = calendar.get(Calendar.DAY_OF_MONTH);
-        engineConfig.calendar.hour = calendar.get(Calendar.HOUR_OF_DAY);
-        engineConfig.calendar.minute = calendar.get(Calendar.MINUTE);
+        CalendarStorage calendarStorage = getEngineConfig().getCalendar();
+        calendarStorage.year = calendar.get(Calendar.YEAR);
+        calendarStorage.month = calendar.get(Calendar.MONTH);
+        calendarStorage.day = calendar.get(Calendar.DAY_OF_MONTH);
+        calendarStorage.hour = calendar.get(Calendar.HOUR_OF_DAY);
+        calendarStorage.minute = calendar.get(Calendar.MINUTE);
 
         storage.saveStorages();
 

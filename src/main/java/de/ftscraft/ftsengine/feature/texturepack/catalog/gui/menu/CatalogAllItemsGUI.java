@@ -21,7 +21,7 @@ public class CatalogAllItemsGUI extends CatalogScrollingGUI {
     }
 
     @Override
-    protected void initGui() {
+    public void initGui() {
         String title = filter == null
                 ? "Alle Items"
                 : "<lang:" + filter.translationKey() + "> Items";

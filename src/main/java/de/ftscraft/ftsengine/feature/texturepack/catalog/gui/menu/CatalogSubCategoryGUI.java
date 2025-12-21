@@ -24,7 +24,7 @@ public class CatalogSubCategoryGUI extends CatalogScrollingGUI {
     }
 
     @Override
-    protected void initGui() {
+    public void initGui() {
         gui = Gui.scrolling()
                 .title(Component.text("%s".formatted(category.getName())))
                 .rows(6)

@@ -26,7 +26,7 @@ public class CatalogItemStackBuilder {
         return new ItemBuilder(category.getMaterial())
                 .name(category.getName())
                 .sign("GUI_CATEGORY_ITEM")
-                .lore(category.getDescription())
+                .mmLore(category.getDescription().split("<newline>"))
                 .addPDC("category_name", category.getName(), PersistentDataType.STRING)
                 .build();
     }
@@ -42,7 +42,7 @@ public class CatalogItemStackBuilder {
                 .sign("GUI_SUBCATEGORY_ITEM")
                 .mmLore("<gray>Filter: " + filterText)
                 .mmLore("<gray>Verfügbare Items: " + itemCount)
-                .mmLore(category.getDescription())
+                .mmLore(category.getDescription().split("<newline>"))
                 .addPDC("subcategory_name", category.getName(), PersistentDataType.STRING)
                 .build();
     }

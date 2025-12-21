@@ -8,9 +8,24 @@ import de.ftscraft.ftsutils.storage.StorageType;
 @Storage(name = "config", config = true, type = StorageType.JSON)
 public class EngineConfig {
 
-    public CalendarStorage calendar = new CalendarStorage();
-    public DatabaseAuthStorage databaseAuth = new DatabaseAuthStorage();
+    private CalendarStorage calendar = new CalendarStorage();
+    private DatabaseAuthStorage databaseAuth = new DatabaseAuthStorage();
 
-    public String weatherCooldown;
+    private String weatherCooldown;
 
+    public CalendarStorage getCalendar() {
+        return calendar;
+    }
+
+    public DatabaseAuthStorage getDatabaseAuth() {
+        return databaseAuth;
+    }
+
+    public String getWeatherCooldown() {
+        return weatherCooldown;
+    }
+
+    public void setWeatherCooldown(String weatherCooldown) {
+        this.weatherCooldown = weatherCooldown;
+    }
 }

@@ -28,7 +28,7 @@ public class CatalogChooseItemGUI extends CatalogGUI {
     }
 
     @Override
-    protected void initGui() {
+    public void initGui() {
         gui = Gui.gui()
                 .title(Component.text("Bitte klick auf das Item in deinem Inventar auf das das Item angewendet werden soll"))
                 .disableAllInteractions()

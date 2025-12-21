@@ -27,7 +27,7 @@ public class CatalogCategoryMenuGUI extends CatalogGUI {
     }
 
     @Override
-    protected void initGui() {
+    public void initGui() {
         gui = Gui.gui()
                 .title(Component.text(category.getName()))
                 .rows(6)

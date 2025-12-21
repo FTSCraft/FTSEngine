@@ -19,10 +19,10 @@ public class WeatherManager implements Listener {
 
     @EventHandler
     public void onWeatherChange(WeatherChangeEvent event) {
-        String weatherCooldownSpec = Engine.getEngineConfig().weatherCooldown;
+        String weatherCooldownSpec = Engine.getEngineConfig().getWeatherCooldown();
         if (weatherCooldownSpec == null || weatherCooldownSpec.isEmpty()) {
             weatherCooldownSpec = "1m";
-            Engine.getEngineConfig().weatherCooldown = weatherCooldownSpec;
+            Engine.getEngineConfig().setWeatherCooldown(weatherCooldownSpec);
         }
 
         if (latestWeatherChange == null || hasTimePassed(latestWeatherChange, weatherCooldownSpec)

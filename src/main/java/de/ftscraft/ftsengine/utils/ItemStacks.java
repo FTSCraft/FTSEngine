@@ -108,15 +108,15 @@ public class ItemStacks {
         logport.setItemMeta(logportMeta);
 
         final String instrumentSign = "INSTRUMENT";
-        harp = new ItemBuilder(Material.STICK).name("§6Harfe").sign(instrumentSign).addPDC("type", 0, PersistentDataType.INTEGER).build();
-        chime = new ItemBuilder(Material.STICK).name("§6Chimes").sign(instrumentSign).addPDC("type", 1, PersistentDataType.INTEGER).build();
-        flute = new ItemBuilder(Material.STICK).name("§6Flöte").sign(instrumentSign).addPDC("type", 2, PersistentDataType.INTEGER).build();
-        bell = new ItemBuilder(Material.STICK).name("§6Glockenspiel").sign(instrumentSign).addPDC("type", 3, PersistentDataType.INTEGER).build();
-        guitar = new ItemBuilder(Material.STICK).name("§6Laute").sign(instrumentSign).addPDC("type", 4, PersistentDataType.INTEGER).build();
-        cowBell = new ItemBuilder(Material.STICK).name("§6Kuhglocke").sign(instrumentSign).addPDC("type", 5, PersistentDataType.INTEGER).build();
-        xylophone = new ItemBuilder(Material.STICK).name("§6Knochenxylophon").sign(instrumentSign).addPDC("type", 6, PersistentDataType.INTEGER).build();
-        ironXylophone = new ItemBuilder(Material.STICK).name("§6Eisen-Xylophon").sign(instrumentSign).addPDC("type", 7, PersistentDataType.INTEGER).build();
-        bassGuitar = new ItemBuilder(Material.STICK).name("§6Kontrabass").sign(instrumentSign).addPDC("type", 8, PersistentDataType.INTEGER).build();
+        harp = new ItemBuilder(Material.STICK).name("§6Harfe").sign(instrumentSign).addPDC("type", 0, PersistentDataType.INTEGER).addCMD("fts_harfe").build();
+        chime = new ItemBuilder(Material.STICK).name("§6Chimes").sign(instrumentSign).addPDC("type", 1, PersistentDataType.INTEGER).addCMD("chimes").build();
+        flute = new ItemBuilder(Material.STICK).name("§6Flöte").sign(instrumentSign).addPDC("type", 2, PersistentDataType.INTEGER).addCMD("floete").build();
+        bell = new ItemBuilder(Material.STICK).name("§6Glockenspiel").sign(instrumentSign).addPDC("type", 3, PersistentDataType.INTEGER).addCMD("glockenspiel").build();
+        guitar = new ItemBuilder(Material.STICK).name("§6Laute").sign(instrumentSign).addPDC("type", 4, PersistentDataType.INTEGER).addCMD("laute").build();
+        cowBell = new ItemBuilder(Material.STICK).name("§6Kuhglocke").sign(instrumentSign).addPDC("type", 5, PersistentDataType.INTEGER).addCMD("kuhglocke").build();
+        xylophone = new ItemBuilder(Material.STICK).name("§6Knochenxylophon").sign(instrumentSign).addPDC("type", 6, PersistentDataType.INTEGER).addCMD("knochenxylophon").build();
+        ironXylophone = new ItemBuilder(Material.STICK).name("§6Eisen-Xylophon").sign(instrumentSign).addPDC("type", 7, PersistentDataType.INTEGER).addCMD("xylophon").build();
+        bassGuitar = new ItemBuilder(Material.STICK).name("§6Kontrabass").sign(instrumentSign).addPDC("type", 8, PersistentDataType.INTEGER).addCMD("kontrabass").build();
 
         hiddenBundle = new ItemBuilder(Material.BUNDLE).name("§6Verstecktes Bündel").lore("§7Dieses Bündel wird beim Durchsuchen nur mit").lore("§7einer Wahrscheinlichkeit von 10% gefunden.").sign("HIDDEN_BUNDLE").build();
 

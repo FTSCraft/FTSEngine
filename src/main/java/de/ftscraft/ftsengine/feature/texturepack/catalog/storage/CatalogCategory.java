@@ -28,4 +28,21 @@ public class CatalogCategory {
     public Material getMaterial() {
         return material;
     }
+
+    public void validate() {
+        if (name == null || name.isBlank()) {
+            throw new IllegalStateException("CatalogCategory name must not be null or blank");
+        }
+        if (description == null) {
+            throw new IllegalStateException("CatalogCategory %s description must not be null".formatted(name));
+        }
+        if (material == null) {
+            throw new IllegalStateException("CatalogCategory %s material must not be null".formatted(name));
+        }
+        if (sub_categories == null) {
+            throw new IllegalStateException("CatalogCategory %s sub_categories must not be null".formatted(name));
+        }
+        // validate sub-categories
+        sub_categories.forEach(CatalogSubCategory::validate);
+    }
 }

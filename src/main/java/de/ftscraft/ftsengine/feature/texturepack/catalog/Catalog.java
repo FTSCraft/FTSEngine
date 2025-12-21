@@ -27,6 +27,7 @@ public class Catalog {
 
     public Catalog(CatalogStorage storage) {
         this.storage = Objects.requireNonNull(storage, "storage must not be null");
+        this.storage.validate();
         this.searchService = new CatalogSearchService(storage);
     }
 

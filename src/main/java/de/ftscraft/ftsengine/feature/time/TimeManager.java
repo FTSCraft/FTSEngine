@@ -17,8 +17,9 @@ public class TimeManager {
 
     public static void init() {
         EngineConfig config = Engine.getEngineConfig();
+        CalendarStorage calendarStorage = config.getCalendar();
         //noinspection MagicConstant
-        calendar = new GregorianCalendar(config.calendar.year, config.calendar.month, config.calendar.day, config.calendar.hour, config.calendar.minute);
+        calendar = new GregorianCalendar(calendarStorage.year, calendarStorage.month, calendarStorage.day, calendarStorage.hour, calendarStorage.minute);
 
         Bukkit.getScheduler().runTaskTimer(Engine.getInstance(), TimeManager::incrementTime, 0, 40);
     }
@@ -27,7 +28,7 @@ public class TimeManager {
 
         calendar.add(Calendar.SECOND, 8);
 
-        Engine.getEngineConfig().calendar.worlds
+        Engine.getEngineConfig().getCalendar().worlds
                 .stream()
                 .map(Bukkit::getWorld)
                 .filter(Objects::nonNull)

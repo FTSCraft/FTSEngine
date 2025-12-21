@@ -4,6 +4,7 @@ import org.bukkit.Material;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 @SuppressWarnings({"FieldMayBeFinal", "FieldCanBeLocal"})
 public class CatalogItem {
@@ -22,5 +23,23 @@ public class CatalogItem {
 
     public List<Material> getMaterials() {
         return materials;
+    }
+
+    public void validate() {
+        if (name == null || name.isBlank()) {
+            throw new IllegalStateException("CatalogItem name must not be null or blank");
+        }
+        if (cmd == null || cmd.isBlank()) {
+            throw new IllegalStateException("CatalogItem %s cmd must not be null or blank".formatted(name));
+        }
+        if (materials == null || materials.isEmpty()) {
+            throw new IllegalStateException("CatalogItem %s materials must not be null or empty".formatted(name));
+        }
+        // check if any material is null
+        materials.forEach(m -> {
+            if (m == null) {
+                throw new IllegalStateException("CatalogItem %s materials must not contain null values".formatted(name));
+            }
+        });
     }
 }

@@ -2,6 +2,7 @@ package de.ftscraft.ftsengine.feature.texturepack.catalog.gui.util;
 
 import de.ftscraft.ftsutils.items.ItemBuilder;
 import dev.triumphteam.gui.guis.GuiItem;
+import org.bukkit.Color;
 import org.bukkit.Material;
 
 /**
@@ -43,4 +44,14 @@ public class GuiNavigationItems {
     public static GuiItem createEmptyFiller() {
         return new GuiItem(new ItemBuilder(Material.GRAY_STAINED_GLASS_PANE).name("").build());
     }
+
+    public static GuiItem createItemChooseExplainer() {
+        return new GuiItem(
+                new ItemBuilder(Material.LEATHER_CHESTPLATE)
+                        .addCMD("gui_fragezeichen")
+                        .color(Color.RED)
+                        .build()
+        );
+    }
+
 }

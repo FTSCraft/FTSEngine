@@ -229,7 +229,6 @@ public class AusweisCommandService {
      */
     public void changeSkin(Player player, String targetName) {
         if (!ensureHasAusweis(player)) return;
-
         MiniMsg.msg(player, Messages.MINI_PREFIX + "<gray>Dein Skin wird nun geändert, dies kann einen Moment dauern...</gray>");
 
         Bukkit.getScheduler().runTaskAsynchronously(plugin, () -> {
@@ -256,6 +255,17 @@ public class AusweisCommandService {
                         + targetName + "</yellow> geändert!</green>");
             });
         });
+    }
+
+    public void removeSkin(Player player) {
+        if (!ensureHasAusweis(player)) return;
+
+        Ausweis ausweis = plugin.getAusweis(player);
+        ausweis.setSkinData(null);
+        plugin.saveAusweis(ausweis);
+        ausweis.applySkinToPlayer(player);
+
+        MiniMsg.msg(player, Messages.MINI_PREFIX + "<green>Dein Skin wurde erfolgreich zurückgesetzt! Reconnecte ein mal um deinen Skin zu aktuallisieren.</green>");
     }
 
     // ===== Ausweis display =====

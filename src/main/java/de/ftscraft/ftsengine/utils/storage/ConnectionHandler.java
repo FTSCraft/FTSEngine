@@ -29,7 +29,7 @@ public class ConnectionHandler {
      * Establishes the connection to the database
      */
     public void connect() throws SQLException {
-        DatabaseAuthStorage dbAuth = engineConfig.databaseAuth;
+        DatabaseAuthStorage dbAuth = engineConfig.getDatabaseAuth();
 
         String host = dbAuth.host;
         int port = dbAuth.port;

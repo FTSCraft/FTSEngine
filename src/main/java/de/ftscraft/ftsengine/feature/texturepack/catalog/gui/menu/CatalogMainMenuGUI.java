@@ -31,7 +31,7 @@ public class CatalogMainMenuGUI extends CatalogGUI {
         initGui();
     }
 
-    protected void initGui() {
+    public void initGui() {
         gui = Gui.gui()
                 .title(c("<blue>Der Katalog</blue>"))
                 .rows(6)
@@ -43,7 +43,6 @@ public class CatalogMainMenuGUI extends CatalogGUI {
             addControlItems();
             setupPlayerInventoryInteraction();
             gui.getFiller().fill(GuiNavigationItems.createFiller());
-            gui.update();
         });
     }
 

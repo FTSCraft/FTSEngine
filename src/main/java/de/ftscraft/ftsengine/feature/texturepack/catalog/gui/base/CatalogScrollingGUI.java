@@ -2,23 +2,28 @@ package de.ftscraft.ftsengine.feature.texturepack.catalog.gui.base;
 
 import de.ftscraft.ftsengine.feature.texturepack.catalog.Catalog;
 import de.ftscraft.ftsengine.feature.texturepack.catalog.gui.util.GuiNavigationItems;
+import de.ftscraft.ftsengine.main.Engine;
 import dev.triumphteam.gui.guis.BaseGui;
 import dev.triumphteam.gui.guis.GuiItem;
 import dev.triumphteam.gui.guis.ScrollingGui;
+import org.bukkit.Bukkit;
 
 /**
  * Base class for scrollable catalog GUIs
  * Handles standard navigation elements
  */
-public abstract class CatalogScrollingGUI extends CatalogGUI {
+public abstract class CatalogScrollingGUI implements ICatalogGUI {
 
     protected ScrollingGui gui;
+    protected final Catalog catalog;
     protected final BaseGui parentGui;
 
     public CatalogScrollingGUI(Catalog catalog, BaseGui parentGui) {
-        super(catalog);
+        this.catalog = catalog;
         this.parentGui = parentGui;
     }
+
+    abstract public void initGui();
 
     /**
      * Adds standard navigation items to the scrolling GUI
@@ -43,8 +48,14 @@ public abstract class CatalogScrollingGUI extends CatalogGUI {
         gui.getFiller().fillBottom(GuiNavigationItems.createEmptyFiller());
     }
 
-    @Override
-    public BaseGui getGui() {
+    public ScrollingGui getGui() {
         return gui;
+    }
+
+    public void fillGui(Runnable runnable) {
+        Bukkit.getScheduler().runTaskAsynchronously(Engine.getInstance(), () -> {
+            runnable.run();
+            getGui().update();
+        });
     }
 }

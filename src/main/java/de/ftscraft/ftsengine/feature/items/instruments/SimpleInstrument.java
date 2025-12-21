@@ -50,6 +50,7 @@ public class SimpleInstrument implements Instrument {
             ItemStack item = new ItemBuilder(material)
                     .name("§fNote " + noteNames[i])
                     .addPDC("noteindex", i, PersistentDataType.INTEGER)
+                    .addCMD("note_%s".formatted(noteNames[i].replace("/", "").toLowerCase()))
                     .build();
 
             // Item in das Inventar setzen

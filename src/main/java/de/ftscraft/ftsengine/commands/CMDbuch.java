@@ -3,6 +3,7 @@ package de.ftscraft.ftsengine.commands;
 import de.ftscraft.ftsengine.main.Engine;
 import de.ftscraft.ftsengine.utils.Ausweis;
 import de.ftscraft.ftsengine.utils.Messages;
+import de.ftscraft.ftsutils.items.ItemBuilder;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import org.bukkit.Material;
@@ -78,6 +79,7 @@ public class CMDbuch implements CommandExecutor {
         bookMeta.addPages(Component.text(message.toString()));
         bookMeta.setAuthor(ausweis.getFirstName() + " " + ausweis.getLastName());
         bookItemStack.setItemMeta(bookMeta);
+        new ItemBuilder(bookItemStack).addCMD("buch_brief").build();
         inv.addItem(bookItemStack);
         p.sendMessage(Messages.PREFIX + "Das Buch sollte nun in deinem Inventar sein. Um weitere Seiten dort zu schreiben halte es in deiner (Haupt-)Hand");
         removeItemsFromInventory(inv);

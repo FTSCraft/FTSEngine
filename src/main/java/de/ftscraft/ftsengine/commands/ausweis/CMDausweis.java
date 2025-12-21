@@ -298,6 +298,11 @@ public class CMDausweis implements CommandExecutor, TabCompleter {
         if (!requiresPlayer(sender)) return;
         Player p = (Player) sender;
 
+        if (args.length == 1) {
+            service.removeSkin(p);
+            return;
+        }
+
         if (args.length < 2) {
             sender.sendMessage("Benutzung: /ausweis skin <Spielername>");
             return;

@@ -14,4 +14,10 @@ public class CatalogStorage {
     public List<CatalogCategory> getCategories() {
         return categories;
     }
+
+    public void validate() {
+        for (CatalogCategory category : categories) {
+            category.validate();
+        }
+    }
 }
